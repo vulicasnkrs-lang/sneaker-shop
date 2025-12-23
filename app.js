@@ -1,3 +1,23 @@
+// Telegram WebApp API
+if (window.Telegram && window.Telegram.WebApp) {
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+
+  const user = tg.initDataUnsafe.user;
+  if (user) {
+    const profileDiv = document.createElement("div");
+    profileDiv.className = "profile";
+    profileDiv.innerHTML = `
+      <img src="${user.photo_url || ''}" alt="avatar" />
+      <div>
+        <strong>${user.first_name} ${user.last_name || ''}</strong><br/>
+        <span>@${user.username || ''}</span>
+      </div>
+    `;
+    document.body.prepend(profileDiv);
+  }
+}
+
 const products = [
   {
     id: 1,
