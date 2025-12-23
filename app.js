@@ -1,76 +1,67 @@
 const products = [
   {
-    id: 'AF1-GTX-MED-OLIVE',
-    title: "Nike Air Force 1 High Gore-Tex Boot 'Medium Olive'",
-    brand: 'NIKE',
-    madeIn: 'Вьетнам',
-    comfort: 'до -18°',
-    deliveryDays: '1–3',
-    priceBYN: 195,
-    priceRUB: 5690,
-    stock: { 41: 1, 42: 1, 43: 1 },
-    image: 'https://via.placeholder.com/400x300?text=Nike+AF1+Gore-Tex'
+    id: 1,
+    name: "Nike Air Max 90",
+    brand: "Nike",
+    season: "Зима",
+    size: "42",
+    price: 320,
+    image: "https://example.com/nike90.jpg"
+  },
+  {
+    id: 2,
+    name: "Adidas Samba OG",
+    brand: "Adidas",
+    season: "Лето",
+    size: "41",
+    price: 280,
+    image: "https://example.com/samba.jpg"
   }
 ];
 
-const state = { cart: [] };
+let cart = [];
 
 function renderCatalog() {
-  const root = document.getElementById('catalog');
-  root.innerHTML = '';
+  const catalog = document.getElementById("catalog");
+  catalog.innerHTML = "";
 
-  products.forEach(p => {
-    const el = document.createElement('div');
-    el.className = 'card';
-    el.innerHTML = `
-      <img src="${p.image}" alt="${p.title}" />
-      <div class="row">
-        <div>
-          <div>${p.brand} • Производитель: ${p.madeIn}</div>
-          <div>Комфорт: ${p.comfort} • Доставка: ${p.deliveryDays} дня</div>
-        </div>
-        <div class="price">${p.priceBYN} BYN</div>
-      </div>
-      <div class="sizes" id="sizes-${p.id}"></div>
-      <div class="actions">
-        <button class="btn primary" data-add="${p.id}">Добавить</button>
-      </div>
+  const brand = document.getElementById("brandFilter").value;
+  const season = document.getElementById("seasonFilter").value;
+  const size = document.getElementById("sizeFilter").value;
+
+  const filtered = products.filter(p =>
+    (!brand || p.brand === brand) &&
+    (!season || p.season === season) &&
+    (!size || p.size === size)
+  );
+
+  filtered.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <h2>${product.name}</h2>
+      <p>${product.price} BYN</p>
+      <button onclick="addToCart(${product.id})">Добавить</button>
     `;
-    root.appendChild(el);
-
-    const sizesEl = el.querySelector(`#sizes-${p.id}`);
-    [41, 42, 43].forEach(s => {
-      const available = (p.stock[s] ?? 0) > 0;
-      const b = document.createElement('button');
-      b.className = `size ${available ? '' : 'disabled'}`;
-      b.textContent = `${s}`;
-      b.disabled = !available;
-      b.addEventListener('click', () => el.dataset.selectedSize = s);
-      sizesEl.appendChild(b);
-    });
-
-    el.querySelector(`[data-add="${p.id}"]`).addEventListener('click', () => addToCart(p.id, el));
+    catalog.appendChild(card);
   });
-
-  updateCartPreview();
 }
 
-function addToCart(productId, cardEl) {
-  const product = products.find(p => p.id === productId);
-  const size = cardEl.dataset.selectedSize;
-  if (!size) {
-    alert('Выберите размер');
-    return;
-  }
-  state.cart.push({ id: product.id, title: product.title, priceBYN: product.priceBYN, size });
-  updateCartPreview();
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  updateCart();
 }
 
-function updateCartPreview() {
-  const count = state.cart.length;
-  const sum = state.cart.reduce((acc, i) => acc + i.priceBYN, 0);
-  document.getElementById('cart-count').textContent = count;
-  document.getElementById('cart-sum').textContent = sum;
+function updateCart() {
+  document.getElementById("cart-count").textContent = cart.length;
+  const sum = cart.reduce((acc, p) => acc + p.price, 0);
+  document.getElementById("cart-sum").textContent = sum;
 }
 
-document.addEventListener('DOMContentLoaded', renderCatalog);
+document.getElementById("brandFilter").addEventListener("change", renderCatalog);
+document.getElementById("seasonFilter").addEventListener("change", renderCatalog);
+document.getElementById("sizeFilter").addEventListener("change", renderCatalog);
+
+renderCatalog();
