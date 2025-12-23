@@ -9,12 +9,14 @@
 <body>
   <header>
     <h1>Каталог кроссовок</h1>
+    <p class="subtitle">Можно найти нужный товар по бренду, сезону и размеру</p>
     <div class="filters">
       <select id="brandFilter">
         <option value="">Все бренды</option>
         <option value="Nike">Nike</option>
         <option value="Adidas">Adidas</option>
         <option value="New Balance">New Balance</option>
+        <option value="Jordan">Jordan</option>
       </select>
       <select id="seasonFilter">
         <option value="">Сезон</option>
@@ -26,6 +28,7 @@
         <option value="40">40</option>
         <option value="41">41</option>
         <option value="42">42</option>
+        <option value="43">43</option>
       </select>
     </div>
   </header>
@@ -36,6 +39,7 @@
     <div id="cart-preview">
       <span id="cart-count">0</span> в корзине • <span id="cart-sum">0</span> BYN
     </div>
+    <button onclick="sendOrder()">Оформить заказ</button>
   </footer>
 
   <script src="app.js"></script>
