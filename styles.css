@@ -1,87 +1,113 @@
-// Telegram WebApp API
-if (window.Telegram && window.Telegram.WebApp) {
-  const tg = window.Telegram.WebApp;
-  tg.ready();
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f0f0f0;
+  color: #222;
+}
 
-  const user = tg.initDataUnsafe.user;
-  if (user) {
-    const profileDiv = document.createElement("div");
-    profileDiv.className = "profile";
-    profileDiv.innerHTML = `
-      <img src="${user.photo_url || ''}" alt="avatar" />
-      <div>
-        <strong>${user.first_name} ${user.last_name || ''}</strong><br/>
-        <span>@${user.username || ''}</span>
-      </div>
-    `;
-    document.body.prepend(profileDiv);
+header {
+  background: #ffffff;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  padding: 6px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+main#catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 12px;
+}
+
+@media (max-width: 480px) {
+  main#catalog {
+    grid-template-columns: 1fr;
   }
 }
 
-const products = [
-  {
-    id: 1,
-    name: "Nike Air Max 90",
-    brand: "Nike",
-    season: "Зима",
-    size: "42",
-    price: 320,
-    image: "https://example.com/nike90.jpg"
-  },
-  {
-    id: 2,
-    name: "Adidas Samba OG",
-    brand: "Adidas",
-    season: "Лето",
-    size: "41",
-    price: 280,
-    image: "https://example.com/samba.jpg"
-  }
-];
-
-let cart = [];
-
-function renderCatalog() {
-  const catalog = document.getElementById("catalog");
-  catalog.innerHTML = "";
-
-  const brand = document.getElementById("brandFilter").value;
-  const season = document.getElementById("seasonFilter").value;
-  const size = document.getElementById("sizeFilter").value;
-
-  const filtered = products.filter(p =>
-    (!brand || p.brand === brand) &&
-    (!season || p.season === season) &&
-    (!size || p.size === size)
-  );
-
-  filtered.forEach(product => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-    card.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" />
-      <h2>${product.name}</h2>
-      <p>${product.price} BYN</p>
-      <button onclick="addToCart(${product.id})">Добавить</button>
-    `;
-    catalog.appendChild(card);
-  });
+.product-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  cart.push(product);
-  updateCart();
+.product-card img {
+  width: 100%;
+  max-width: 140px;
+  border-radius: 6px;
 }
 
-function updateCart() {
-  document.getElementById("cart-count").textContent = cart.length;
-  const sum = cart.reduce((acc, p) => acc + p.price, 0);
-  document.getElementById("cart-sum").textContent = sum;
+.product-card h2 {
+  font-size: 16px;
+  margin: 10px 0 6px;
 }
 
-document.getElementById("brandFilter").addEventListener("change", renderCatalog);
-document.getElementById("seasonFilter").addEventListener("change", renderCatalog);
-document.getElementById("sizeFilter").addEventListener("change", renderCatalog);
+.product-card p {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
 
-renderCatalog();
+button {
+  background: #0088cc;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #0070aa;
+}
+
+footer {
+  background: #ffffff;
+  padding: 12px;
+  border-top: 1px solid #ddd;
+  position: sticky;
+  bottom: 0;
+  font-size:
