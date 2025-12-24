@@ -13,3 +13,14 @@ async def web_app_data_handler(message: types.Message):
 
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
+# Фейковый HTTP-сервер для Render
+from aiohttp import web
+
+async def handle(request):
+    return web.Response(text="Bot is running")
+
+app = web.Application()
+app.router.add_get("/", handle)
+
+if __name__ == "__main__":
+    web.run_app(app, port=10000)
