@@ -24,10 +24,13 @@ app.router.add_get("/", handle)
 async def main():
     # Запускаем aiogram-поллинг в фоне
     asyncio.create_task(executor.start_polling(dp, skip_updates=True))
-    # Запускаем HTTP-сервер
+
+    # Берём порт из переменной окружения (Render его задаёт автоматически)
+    port = int(os.getenv("PORT", 10000))
+
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", 10000)
+    site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
 
     # Держим процесс живым
