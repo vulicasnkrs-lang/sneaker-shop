@@ -1,6 +1,6 @@
 import logging
-import asyncio
 import os
+import asyncio
 from aiogram import Bot, Dispatcher, executor, types
 from aiohttp import web
 
@@ -21,21 +21,17 @@ async def handle(request):
 app = web.Application()
 app.router.add_get("/", handle)
 
-async def main():
-    # Запускаем aiogram-поллинг в фоне
-    asyncio.create_task(executor.start_polling(dp, skip_updates=True))
-
-    # Берём порт из переменной окружения (Render его задаёт автоматически)
+async def start_webapp():
     port = int(os.getenv("PORT", 10000))
-
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
 
-    # Держим процесс живым
-    while True:
-        await asyncio.sleep(3600)
-
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Запускаем веб-сервер в фоне
+    loop = asyncio.get_event_loop()
+    loop.create_task(start_webapp())
+
+    # Запускаем aiogram-поллинг (он сам управляет циклом)
+    executor.start_polling(dp, skip_updates=True)
