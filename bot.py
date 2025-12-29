@@ -10,6 +10,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 
+# --- Хэндлеры команд ---
 @dp.message_handler(commands=["start", "help"])
 async def send_welcome(message: types.Message):
     await message.reply("Привет! Бот работает на Render 🚀")
@@ -33,5 +34,5 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.create_task(start_webapp())
 
-    # Запускаем aiogram-поллинг (он сам управляет циклом)
+    # Запускаем aiogram-поллинг (без asyncio.run!)
     executor.start_polling(dp, skip_updates=True)
