@@ -7,7 +7,8 @@ from aiohttp import web
 logging.basicConfig(level=logging.INFO)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-loop = asyncio.get_event_loop()
+loop = asyncio.new_event_loop()              # создаём новый event loop
+asyncio.set_event_loop(loop)                 # назначаем его текущим
 bot = Bot(token=BOT_TOKEN, loop=loop)
 dp = Dispatcher(bot)
 
