@@ -44,17 +44,5 @@
   </footer>
 
   <script src="/static/app.js"></script>
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-
-    function sendOrder() {
-      const payload = {
-        action: "order",
-        cart: getCartData() // функция из app.js должна вернуть корзину
-      };
-      tg.sendData(JSON.stringify(payload));
-    }
-  </script>
 </body>
 </html>
