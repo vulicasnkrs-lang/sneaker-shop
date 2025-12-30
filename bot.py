@@ -39,7 +39,6 @@ async def index(request):
 
 app = web.Application()
 app.router.add_get("/", index)
-# раздаём статику (css/js) из папки webapp
 app.router.add_static("/static/", path="webapp", name="static")
 
 async def start_webapp():
