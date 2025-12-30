@@ -7,8 +7,11 @@ from aiohttp import web
 logging.basicConfig(level=logging.INFO)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+# создаём новый event loop
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
+
 bot = Bot(token=BOT_TOKEN, loop=loop)
 dp = Dispatcher(bot)
 
@@ -47,8 +50,20 @@ async def start_webapp():
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
+    logging.info(f"WebApp запущен на порту {port}")
+
+async def main():
+    # Запускаем веб-сервер
+    await start_webapp()
+
+    # Сбрасываем webhook, чтобы polling работал
+    await bot.delete_webhook(drop_pending_updates=True)
+
+    # Запускаем aiogram-поллинг
+    executor.start_polling(dp, skip_updates=True)
 
 if __name__ == "__main__":
-    loop.create_task(start_webapp())
-    loop.run_until_complete(bot.delete_webhook(drop_pending_updates=True))
-    executor.start_polling(dp, skip_updates=True)
+    try:
+        loop.run_until_complete(main())
+    except (KeyboardInterrupt, SystemExit):
+        logging.info("Бот остановлен")
