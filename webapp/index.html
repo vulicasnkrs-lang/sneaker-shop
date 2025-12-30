@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>vulica.SNKRS</title>
-  <link rel="stylesheet" href="styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
   <header>
@@ -42,6 +43,18 @@
     <button onclick="sendOrder()">Оформить заказ</button>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="/static/app.js"></script>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function sendOrder() {
+      const payload = {
+        action: "order",
+        cart: getCartData() // функция из app.js должна вернуть корзину
+      };
+      tg.sendData(JSON.stringify(payload));
+    }
+  </script>
 </body>
 </html>
