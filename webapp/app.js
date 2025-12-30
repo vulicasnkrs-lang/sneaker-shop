@@ -18,51 +18,11 @@ if (window.Telegram && window.Telegram.WebApp) {
 }
 
 const products = [
-  {
-    id: 1,
-    name: "Nike Air Max 90",
-    brand: "Nike",
-    season: "Зима",
-    size: "42",
-    price: 320,
-    image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg"
-  },
-  {
-    id: 2,
-    name: "Adidas Samba OG",
-    brand: "Adidas",
-    season: "Лето",
-    size: "41",
-    price: 280,
-    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg"
-  },
-  {
-    id: 3,
-    name: "New Balance 550",
-    brand: "New Balance",
-    season: "Лето",
-    size: "43",
-    price: 340,
-    image: "https://nb.scene7.com/is/image/NB/550.jpg"
-  },
-  {
-    id: 4,
-    name: "Jordan 1 Mid",
-    brand: "Jordan",
-    season: "Зима",
-    size: "42",
-    price: 390,
-    image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg"
-  },
-  {
-    id: 5,
-    name: "Yeezy Boost 350",
-    brand: "Adidas",
-    season: "Лето",
-    size: "41",
-    price: 450,
-    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/yeezy-350.jpg"
-  }
+  { id: 1, name: "Nike Air Max 90", brand: "Nike", season: "Зима", size: "42", price: 320, image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg" },
+  { id: 2, name: "Adidas Samba OG", brand: "Adidas", season: "Лето", size: "41", price: 280, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg" },
+  { id: 3, name: "New Balance 550", brand: "New Balance", season: "Лето", size: "43", price: 340, image: "https://nb.scene7.com/is/image/NB/550.jpg" },
+  { id: 4, name: "Jordan 1 Mid", brand: "Jordan", season: "Зима", size: "42", price: 390, image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg" },
+  { id: 5, name: "Yeezy Boost 350", brand: "Adidas", season: "Лето", size: "41", price: 450, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/yeezy-350.jpg" }
 ];
 
 let cart = [];
@@ -106,14 +66,24 @@ function updateCart() {
   document.getElementById("cart-sum").textContent = sum;
 }
 
+function getCartData() {
+  return cart.map(p => ({
+    name: p.name,
+    price: p.price,
+    brand: p.brand,
+    size: p.size
+  }));
+}
+
 function sendOrder() {
   if (window.Telegram && window.Telegram.WebApp) {
     const tg = window.Telegram.WebApp;
-    const summary = cart.map(p => `${p.name} — ${p.price} BYN`).join('\n');
-    const total = cart.reduce((acc, p) => acc + p.price, 0);
-    const message = `🛒 Заказ:\n${summary}\n\nИтого: ${total} BYN`;
-
-    tg.sendData(message);
+    const payload = {
+      action: "order",
+      cart: getCartData(),
+      total: cart.reduce((acc, p) => acc + p.price, 0)
+    };
+    tg.sendData(JSON.stringify(payload));
     tg.close();
   }
 }
