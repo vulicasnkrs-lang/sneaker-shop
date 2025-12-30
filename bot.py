@@ -7,8 +7,8 @@ from aiohttp import web
 logging.basicConfig(level=logging.INFO)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-loop = asyncio.new_event_loop()              # создаём новый event loop
-asyncio.set_event_loop(loop)                 # назначаем его текущим
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 bot = Bot(token=BOT_TOKEN, loop=loop)
 dp = Dispatcher(bot)
 
@@ -30,7 +30,7 @@ async def start(message: types.Message):
 # --- Обработчик данных из WebApp ---
 @dp.message_handler(content_types=["web_app_data"])
 async def web_app_handler(message: types.Message):
-    data = message.web_app_data.data  # строка из tg.sendData()
+    data = message.web_app_data.data
     await message.answer(f"Получены данные из WebApp: {data}")
 
 # --- HTTP-сервер для Render ---
@@ -39,6 +39,8 @@ async def index(request):
 
 app = web.Application()
 app.router.add_get("/", index)
+# раздаём статику (css/js) из папки webapp
+app.router.add_static("/static/", path="webapp", name="static")
 
 async def start_webapp():
     port = int(os.getenv("PORT", 10000))
@@ -48,11 +50,6 @@ async def start_webapp():
     await site.start()
 
 if __name__ == "__main__":
-    # Запускаем веб-сервер в фоне
     loop.create_task(start_webapp())
-
-    # Сбрасываем webhook, чтобы polling работал
     loop.run_until_complete(bot.delete_webhook(drop_pending_updates=True))
-
-    # Запускаем aiogram-поллинг
     executor.start_polling(dp, skip_updates=True)
