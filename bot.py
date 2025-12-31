@@ -7,11 +7,9 @@ from aiohttp import web
 logging.basicConfig(level=logging.INFO)
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 
-# --- Хэндлер /start с кнопкой WebApp ---
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -26,13 +24,36 @@ async def start(message: types.Message):
         reply_markup=keyboard
     )
 
-# --- Обработчик данных из WebApp ---
 @dp.message_handler(content_types=["web_app_data"])
 async def web_app_handler(message: types.Message):
-    data = message.web_app_data.data
-    await message.answer(f"Получены данные из WebApp: {data}")
+    import json
+    try:
+        data = json.loads(message.web_app_data.data)
+        if data.get("action") == "order":
+            cart = data.get("cart", [])
+            total = data.get("total", 0)
 
-# --- HTTP-сервер для Render ---
+            if not cart:
+                await message.answer("Корзина пуста.")
+                return
+
+            summary = "\n".join([
+                f"• {item['name']} — {item['price']} BYN ({item['size']})"
+                for item in cart
+            ])
+
+            username = message.from_user.username or message.from_user.first_name
+            reply = (
+                f"🛒 Заказ от @{username}:\n"
+                f"{summary}\n\n"
+                f"Итого: {total} BYN"
+            )
+
+            await message.answer(reply)
+    except Exception as e:
+        logging.warning(f"Ошибка при обработке WebApp: {e}")
+
+# --- WebApp сервер ---
 async def index(request):
     return web.FileResponse(path=os.path.join("webapp", "index.html"))
 
@@ -50,9 +71,6 @@ async def start_webapp():
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    # запускаем веб-сервер в фоне
     loop.create_task(start_webapp())
-    # сбрасываем webhook
-    loop.run_until_complete(bot.delete_webhook(drop_pending_updates=True))
-    # запускаем polling (он сам управляет циклом)
+    asyncio.run(bot.delete_webhook(drop_pending_updates=True))
     executor.start_polling(dp, skip_updates=True)
