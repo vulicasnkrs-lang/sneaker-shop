@@ -1,21 +1,6 @@
-if (window.Telegram && window.Telegram.WebApp) {
-  const tg = window.Telegram.WebApp;
-  tg.ready();
-
-  const user = tg.initDataUnsafe.user;
-  if (user) {
-    const profileDiv = document.createElement("div");
-    profileDiv.className = "profile";
-    profileDiv.innerHTML = `
-      <img src="${user.photo_url || ''}" alt="avatar" />
-      <div>
-        <strong>${user.first_name} ${user.last_name || ''}</strong><br/>
-        <span>@${user.username || ''}</span>
-      </div>
-    `;
-    document.body.prepend(profileDiv);
-  }
-}
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
 
 const products = [
   { id: 1, name: "Nike Air Max 90", brand: "Nike", season: "Зима", size: "42", price: 320, image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg" },
@@ -76,16 +61,13 @@ function getCartData() {
 }
 
 function sendOrder() {
-  if (window.Telegram && window.Telegram.WebApp) {
-    const tg = window.Telegram.WebApp;
-    const payload = {
-      action: "order",
-      cart: getCartData(),
-      total: cart.reduce((acc, p) => acc + p.price, 0)
-    };
-    tg.sendData(JSON.stringify(payload));
-    tg.close();
-  }
+  const payload = {
+    action: "order",
+    cart: getCartData(),
+    total: cart.reduce((acc, p) => acc + p.price, 0)
+  };
+  tg.sendData(JSON.stringify(payload));
+  tg.close();
 }
 
 document.getElementById("brandFilter").addEventListener("change", renderCatalog);
