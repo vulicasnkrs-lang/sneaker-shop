@@ -1,28 +1,32 @@
+/* Общий стиль */
 body {
   font-family: system-ui, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f0f0f0;
-  color: #222;
+  background: #111; /* тёмный фон */
+  color: #eee;      /* светлый текст */
 }
 
+/* Шапка */
 header {
-  background: #ffffff;
+  background: #1a1a1a;
   padding: 16px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #333;
 }
 
 h1 {
   margin: 0 0 10px;
-  font-size: 20px;
+  font-size: 22px;
+  color: #fff;
 }
 
 .subtitle {
   font-size: 14px;
-  color: #666;
+  color: #aaa;
   margin-bottom: 10px;
 }
 
+/* Фильтры */
 .filters {
   display: flex;
   gap: 8px;
@@ -33,30 +37,34 @@ h1 {
   padding: 6px;
   font-size: 14px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #444;
+  background: #222;
+  color: #eee;
 }
 
+/* Профиль */
 .profile {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #ffffff;
+  background: #1a1a1a;
   padding: 12px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #333;
 }
 
 .profile img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid #ccc;
+  border: 1px solid #444;
 }
 
+/* Каталог */
 main#catalog {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  padding: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  padding: 16px;
 }
 
 @media (max-width: 480px) {
@@ -65,36 +73,45 @@ main#catalog {
   }
 }
 
+/* Карточка товара */
 .product-card {
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
   text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
 }
 
 .product-card img {
   width: 100%;
-  max-width: 140px;
-  border-radius: 6px;
+  max-width: 160px;
+  border-radius: 8px;
 }
 
 .product-card h2 {
   font-size: 16px;
   margin: 10px 0 6px;
+  color: #fff;
 }
 
 .product-card p {
   font-size: 14px;
   margin: 0 0 10px;
+  color: #0f0; /* цена зелёным для акцента */
 }
 
+/* Кнопки */
 button {
   background: #0088cc;
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 14px;
+  border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -104,11 +121,26 @@ button:hover {
   background: #0070aa;
 }
 
+/* Футер */
 footer {
-  background: #ffffff;
-  padding: 12px;
-  border-top: 1px solid #ddd;
+  background: #1a1a1a;
+  padding: 14px;
+  border-top: 1px solid #333;
   position: sticky;
   bottom: 0;
   font-size: 14px;
+  color: #eee;
+}
+
+/* Скидочные метки */
+.discount {
+  background: #e53935;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
