@@ -5,23 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>vulica.SNKRS</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Подключаем стили -->
   <link rel="stylesheet" href="static/styles.css" />
+  <style>
+    /* Фирменный блок */
+    .brand-block {
+      text-align: center;
+      margin: 20px auto;
+    }
+    .brand-block img {
+      height: 80px;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+    .brand-block .subtitle {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ff4500; /* яркий акцентный цвет */
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .brand-block .subtitle::before,
+    .brand-block .subtitle::after {
+      content: "—";
+      margin: 0 8px;
+      color: #ccc;
+    }
+  </style>
 </head>
 <body>
   <!-- Блок профиля -->
   <div id="profile"></div>
 
   <header>
-    <!-- Логотип с абсолютным путём -->
-    <img src="https://vulicasnkrs-lang.github.io/sneaker-shop/webapp/static/logo.png" 
-         alt="vulica.SNKRS" 
-         style="height:70px; margin:15px auto; display:block;" />
-    
-    <!-- Фирменный слоган -->
-    <p class="subtitle" style="font-size:16px; font-weight:bold; color:#222; margin-top:8px;">
-      До встречи на вулице 🏀
-    </p>
+    <!-- Фирменный блок -->
+    <div class="brand-block">
+      <img src="https://vulicasnkrs-lang.github.io/sneaker-shop/webapp/static/logo.png" alt="vulica.SNKRS" />
+      <p class="subtitle">До встречи на вулице 🏀</p>
+    </div>
 
     <div class="filters">
       <select id="brandFilter">
@@ -55,7 +75,6 @@
     <button onclick="sendOrder()">Оформить заказ</button>
   </footer>
 
-  <!-- Подключаем скрипт -->
   <script src="static/app.js"></script>
 </body>
 </html>
