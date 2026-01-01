@@ -1,14 +1,137 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
+  background: #f9f9f9;
+  color: #333;
+}
+
+header {
+  padding: 20px;
+  text-align: center;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #777;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-size: 14px;
+}
+
+main#catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.02);
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.product-card h2 {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.product-card p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #222;
+  margin: 5px 0;
+}
+
+.product-card button {
+  background: #0078d7;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.product-card button:hover {
+  background: #005fa3;
+}
+
+footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 10px 20px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#cart-preview {
+  font-size: 14px;
+  color: #444;
+}
+
+#cart-preview span {
+  font-weight: bold;
+}
+
+footer button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+footer button:hover {
+  background: #218838;
 }
 
 .profile {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background: #f5f5f5;
+  padding: 10px 20px;
+  background: #fff;
   border-bottom: 1px solid #ddd;
 }
 
@@ -21,9 +144,10 @@ body {
 
 .profile .name {
   font-weight: bold;
+  font-size: 14px;
 }
 
 .profile .username {
   color: #666;
-  font-size: 0.9em;
+  font-size: 12px;
 }
