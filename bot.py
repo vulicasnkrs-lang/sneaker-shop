@@ -1,22 +1,24 @@
 import logging
 import os
 import asyncio
+import json
 from aiogram import Bot, Dispatcher, executor, types
 from aiohttp import web
 
 logging.basicConfig(level=logging.INFO)
 
+# --- Telegram Bot ---
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
+    # Только приветствие, без лишних кнопок
     await message.answer("Добро пожаловать в vulica.SNKRS!")
 
 @dp.message_handler(content_types=["web_app_data"])
 async def web_app_handler(message: types.Message):
-    import json
     try:
         data = json.loads(message.web_app_data.data)
         if data.get("action") == "order":
@@ -27,10 +29,10 @@ async def web_app_handler(message: types.Message):
                 await message.answer("Корзина пуста.")
                 return
 
-            summary = "\n".join([
+            summary = "\n".join(
                 f"• {item['name']} — {item['price']} BYN ({item['size']})"
                 for item in cart
-            ])
+            )
 
             username = message.from_user.username or message.from_user.first_name
             reply = (
@@ -41,7 +43,7 @@ async def web_app_handler(message: types.Message):
 
             await message.answer(reply)
     except Exception as e:
-        logging.warning(f"Ошибка при обработке WebApp: {e}")
+        logging.exception("Ошибка при обработке WebApp данных")
 
 # --- WebApp сервер ---
 async def index(request):
@@ -59,10 +61,19 @@ async def start_webapp():
     await site.start()
     logging.info(f"WebApp запущен на порту {port}")
 
+# --- Main ---
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
+    # Запускаем WebApp сервер
     loop.create_task(start_webapp())
+
+    # Сбрасываем старые апдейты
     loop.run_until_complete(bot.delete_webhook(drop_pending_updates=True))
-    executor.start_polling(dp)
+
+    # Запускаем бота
+    try:
+        executor.start_polling(dp)
+    finally:
+        loop.close()
