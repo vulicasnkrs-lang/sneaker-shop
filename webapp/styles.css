@@ -52,6 +52,7 @@ main#catalog {
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   padding: 10px;
   text-align: center;
+  position: relative;
   transition: transform 0.2s ease;
 }
 
@@ -77,6 +78,13 @@ main#catalog {
   margin: 5px 0;
 }
 
+.product-card small {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
 .product-card button {
   background: #0078d7;
   color: white;
@@ -92,6 +100,32 @@ main#catalog {
   background: #005fa3;
 }
 
+/* Бейджи */
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ff4757;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.badge[data-type="Новинка"] {
+  background: #2ed573;
+}
+
+.badge[data-type="Хит"] {
+  background: #ffa502;
+}
+
+.badge[data-type="Осталось 1 шт"] {
+  background: #ff4757;
+}
+
+/* Корзина */
 footer {
   position: sticky;
   bottom: 0;
@@ -127,6 +161,7 @@ footer button:hover {
   background: #218838;
 }
 
+/* Профиль */
 .profile {
   display: flex;
   align-items: center;
