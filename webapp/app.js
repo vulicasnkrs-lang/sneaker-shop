@@ -18,11 +18,10 @@ if (user) {
 
 // --- Каталог ---
 const products = [
-  { id: 1, name: "Nike Air Max 90", brand: "Nike", season: "Зима", size: "42", price: 320, image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg" },
-  { id: 2, name: "Adidas Samba OG", brand: "Adidas", season: "Лето", size: "41", price: 280, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg" },
-  { id: 3, name: "New Balance 550", brand: "New Balance", season: "Лето", size: "43", price: 340, image: "https://nb.scene7.com/is/image/NB/550.jpg" },
-  { id: 4, name: "Jordan 1 Mid", brand: "Jordan", season: "Зима", size: "42", price: 390, image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg" },
-  { id: 5, name: "Yeezy Boost 350", brand: "Adidas", season: "Лето", size: "41", price: 450, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/yeezy-350.jpg" }
+  { id: 1, name: "Nike Air Max 90", brand: "Nike", season: "Зима", size: "42", price: 320, badge: "Хит", image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg" },
+  { id: 2, name: "Adidas Samba OG", brand: "Adidas", season: "Лето", size: "41", price: 280, badge: "Новинка", image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg" },
+  { id: 3, name: "New Balance 550", brand: "New Balance", season: "Лето", size: "43", price: 340, badge: "", image: "https://nb.scene7.com/is/image/NB/550.jpg" },
+  { id: 4, name: "Jordan 1 Mid", brand: "Jordan", season: "Зима", size: "42", price: 390, badge: "Осталось 1 шт", image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg" }
 ];
 
 let cart = [];
@@ -41,6 +40,11 @@ function renderCatalog() {
     (!size || p.size === size)
   );
 
+  if (filtered.length === 0) {
+    catalog.innerHTML = "<p style='text-align:center;color:#777;'>Нет товаров по выбранным параметрам</p>";
+    return;
+  }
+
   filtered.forEach(product => {
     const card = document.createElement("div");
     card.className = "product-card";
@@ -48,6 +52,8 @@ function renderCatalog() {
       <img src="${product.image}" alt="${product.name}" />
       <h2>${product.name}</h2>
       <p>${product.price} BYN</p>
+      <small>${product.brand}, ${product.season}, ${product.size}</small>
+      ${product.badge ? `<div class="badge">${product.badge}</div>` : ""}
       <button onclick="addToCart(${product.id})">Добавить</button>
     `;
     catalog.appendChild(card);
@@ -58,6 +64,13 @@ function addToCart(id) {
   const product = products.find(p => p.id === id);
   cart.push(product);
   updateCart();
+
+  // уведомление
+  tg.showPopup({
+    title: "Корзина",
+    message: `${product.name} добавлен в корзину`,
+    buttons: [{ text: "OK" }]
+  });
 }
 
 function updateCart() {
