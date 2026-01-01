@@ -2,6 +2,21 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
+// --- Авторизация пользователя ---
+const user = tg.initDataUnsafe?.user;
+if (user) {
+  const profileBlock = document.getElementById("profile");
+  profileBlock.className = "profile";
+  profileBlock.innerHTML = `
+    <img src="${user.photo_url || ''}" alt="avatar" class="avatar" />
+    <div>
+      <div class="name">${user.first_name} ${user.last_name || ''}</div>
+      <div class="username">@${user.username || ''}</div>
+    </div>
+  `;
+}
+
+// --- Каталог ---
 const products = [
   { id: 1, name: "Nike Air Max 90", brand: "Nike", season: "Зима", size: "42", price: 320, image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg" },
   { id: 2, name: "Adidas Samba OG", brand: "Adidas", season: "Лето", size: "41", price: 280, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg" },
