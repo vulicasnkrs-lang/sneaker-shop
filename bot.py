@@ -12,17 +12,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    web_app_button = types.KeyboardButton(
-        text="Открыть магазин 👟",
-        web_app=types.WebAppInfo(url="https://sneaker-shop-r7fa.onrender.com")
-    )
-    keyboard.add(web_app_button)
-
-    await message.answer(
-        "Добро пожаловать в vulica.SNKRS!\nОткрой магазин прямо в Telegram:",
-        reply_markup=keyboard
-    )
+    await message.answer("Добро пожаловать в vulica.SNKRS!")
 
 @dp.message_handler(content_types=["web_app_data"])
 async def web_app_handler(message: types.Message):
@@ -70,12 +60,9 @@ async def start_webapp():
     logging.info(f"WebApp запущен на порту {port}")
 
 if __name__ == "__main__":
-    # создаём новый цикл вручную (устойчиво на 3.11 и 3.13)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
     loop.create_task(start_webapp())
     loop.run_until_complete(bot.delete_webhook(drop_pending_updates=True))
-
-    # убираем skip_updates=True, чтобы не терять /start
     executor.start_polling(dp)
