@@ -70,7 +70,12 @@ async def start_webapp():
     logging.info(f"WebApp запущен на порту {port}")
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
+    # создаём новый цикл вручную (устойчиво на 3.11 и 3.13)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
     loop.create_task(start_webapp())
-    asyncio.run(bot.delete_webhook(drop_pending_updates=True))
-    executor.start_polling(dp, skip_updates=True)
+    loop.run_until_complete(bot.delete_webhook(drop_pending_updates=True))
+
+    # убираем skip_updates=True, чтобы не терять /start
+    executor.start_polling(dp)
