@@ -18,10 +18,69 @@ if (user) {
 
 // --- Каталог ---
 const products = [
-  { id: 1, name: "Nike Air Max 90", brand: "Nike", season: "Зима", size: "42", price: 320, badge: "Хит", image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg" },
-  { id: 2, name: "Adidas Samba OG", brand: "Adidas", season: "Лето", size: "41", price: 280, badge: "Новинка", image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg" },
-  { id: 3, name: "New Balance 550", brand: "New Balance", season: "Лето", size: "43", price: 340, badge: "", image: "https://nb.scene7.com/is/image/NB/550.jpg" },
-  { id: 4, name: "Jordan 1 Mid", brand: "Jordan", season: "Зима", size: "42", price: 390, badge: "Осталось 1 шт", image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg" }
+  {
+    id: 1,
+    name: "Nike Air Max 90",
+    brand: "Nike",
+    season: "Зима",
+    size: "42",
+    price: 320,
+    badge: "Хит",
+    image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg",
+    images: [
+      "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg",
+      "https://static.nike.com/a/images/t_prod/air-max-90-side.jpg"
+    ],
+    videos: ["https://www.youtube.com/embed/xxxx"],
+    sizes: ["40","41","42","43"],
+    material: "Кожа + текстиль",
+    description: "Классическая модель с амортизацией Air, удобная для зимы."
+  },
+  {
+    id: 2,
+    name: "Adidas Samba OG",
+    brand: "Adidas",
+    season: "Лето",
+    size: "41",
+    price: 280,
+    badge: "Новинка",
+    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg",
+    images: ["https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg"],
+    videos: [],
+    sizes: ["40","41","42","43"],
+    material: "Кожа",
+    description: "Легендарная Samba OG — лёгкая и стильная для лета."
+  },
+  {
+    id: 3,
+    name: "New Balance 550",
+    brand: "New Balance",
+    season: "Лето",
+    size: "43",
+    price: 340,
+    badge: "",
+    image: "https://nb.scene7.com/is/image/NB/550.jpg",
+    images: ["https://nb.scene7.com/is/image/NB/550.jpg"],
+    videos: [],
+    sizes: ["41","42","43","44"],
+    material: "Кожа + замша",
+    description: "New Balance 550 — ретро‑баскетбольный стиль с комфортом."
+  },
+  {
+    id: 4,
+    name: "Jordan 1 Mid",
+    brand: "Jordan",
+    season: "Зима",
+    size: "42",
+    price: 390,
+    badge: "Осталось 1 шт",
+    image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg",
+    images: ["https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg"],
+    videos: [],
+    sizes: ["40","41","42"],
+    material: "Кожа",
+    description: "Jordan 1 Mid — культовая модель для зимы."
+  }
 ];
 
 // --- Корзина ---
@@ -32,17 +91,15 @@ function updateCart() {
   const sum = cart.reduce((acc, p) => acc + p.price, 0);
   document.getElementById("cart-sum").textContent = sum;
 
-  // сохраняем корзину
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  // отрисовываем список товаров
   const cartItems = document.getElementById("cart-items");
   cartItems.innerHTML = "";
   cart.forEach((item, index) => {
     const div = document.createElement("div");
     div.className = "cart-item";
     div.innerHTML = `
-      ${item.name} — ${item.price} BYN
+      ${item.name} ${item.chosenSize ? `(размер ${item.chosenSize})` : ""} — ${item.price} BYN
       <button onclick="removeFromCart(${index})">Удалить</button>
     `;
     cartItems.appendChild(div);
@@ -61,6 +118,19 @@ function addToCart(id) {
   });
 }
 
+function addToCartWithSize(id, size) {
+  const product = products.find(p => p.id === id);
+  const item = { ...product, chosenSize: size };
+  cart.push(item);
+  updateCart();
+
+  tg.showPopup({
+    title: "Корзина",
+    message: `${product.name} (размер ${size}) добавлен в корзину`,
+    buttons: [{ text: "OK" }]
+  });
+}
+
 function removeFromCart(index) {
   cart.splice(index, 1);
   updateCart();
@@ -71,7 +141,7 @@ function getCartData() {
     name: p.name,
     price: p.price,
     brand: p.brand,
-    size: p.size
+    size: p.chosenSize || p.size
   }));
 }
 
@@ -107,10 +177,36 @@ function renderCatalog() {
       <p>${product.price} BYN</p>
       <small>${product.brand}, ${product.season}, ${product.size}</small>
       ${product.badge ? `<div class="badge">${product.badge}</div>` : ""}
-      <button onclick="addToCart(${product.id})">Добавить</button>
+      <button onclick="showProductDetail(${product.id})">Подробнее</button>
     `;
     catalog.appendChild(card);
   });
+}
+
+// --- Страница товара ---
+function showProductDetail(id) {
+  const product = products.find(p => p.id === id);
+  const catalog = document.getElementById("catalog");
+
+  catalog.innerHTML = `
+    <div class="product-detail">
+      <h2>${product.name}</h2>
+      <div class="gallery">
+        ${product.images.map(img => `<img src="${img}" alt="${product.name}" />`).join("")}
+      </div>
+      ${product.videos.map(v => `<iframe src="${v}" frameborder="0" allowfullscreen></iframe>`).join("")}
+      <p><strong>Материал:</strong> ${product.material}</p>
+      <p>${product.description}</p>
+      <div class="sizes">
+        <p><strong>Размеры:</strong></p>
+        ${product.sizes.map(s => `<button onclick="addToCartWithSize(${product.id}, '${s}')">${s}</button>`).join("")}
+      </div>
+      <p><strong>Цена:</strong> ${product.price} BYN</p>
+      <button onclick="addToCart(${product.id})">Добавить в корзину</button>
+      <button onclick="sendOrder()">Оформить заказ</button>
+      <button onclick="renderCatalog()">← Назад к каталогу</button>
+    </div>
+  `;
 }
 
 // --- Отправка заказа ---
@@ -140,5 +236,4 @@ document.getElementById("seasonFilter").addEventListener("change", renderCatalog
 document.getElementById("sizeFilter").addEventListener("change", renderCatalog);
 
 // --- Инициализация ---
-renderCatalog();
-updateCart();
+renderCatalog
