@@ -235,4 +235,4 @@ function showProductDetail(id) {
       </div>
       ${product.videos.map(v => `<iframe src="${v}" frameborder="0" allowfullscreen></iframe>`).join("")}
       <p><strong>Материал:</strong> ${product.material}</p>
-      <p
+      <p>${product.description}</p>
