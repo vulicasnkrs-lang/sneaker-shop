@@ -8,10 +8,10 @@ if (user) {
   const profileBlock = document.getElementById("profile");
   profileBlock.className = "profile";
   profileBlock.innerHTML = `
-    <img src="${user.photo_url || ''}" alt="avatar" class="avatar" />
+    ${user.photo_url ? `<img src="${user.photo_url}" alt="avatar" class="avatar" />` : ""}
     <div>
       <div class="name">${user.first_name} ${user.last_name || ''}</div>
-      <div class="username">@${user.username || ''}</div>
+      ${user.username ? `<div class="username">@${user.username}</div>` : ""}
     </div>
   `;
 }
@@ -24,8 +24,58 @@ const products = [
   { id: 4, name: "Jordan 1 Mid", brand: "Jordan", season: "Зима", size: "42", price: 390, badge: "Осталось 1 шт", image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg" }
 ];
 
-let cart = [];
+// --- Корзина ---
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+function updateCart() {
+  document.getElementById("cart-count").textContent = cart.length;
+  const sum = cart.reduce((acc, p) => acc + p.price, 0);
+  document.getElementById("cart-sum").textContent = sum;
+
+  // сохраняем корзину
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // отрисовываем список товаров
+  const cartItems = document.getElementById("cart-items");
+  cartItems.innerHTML = "";
+  cart.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      ${item.name} — ${item.price} BYN
+      <button onclick="removeFromCart(${index})">Удалить</button>
+    `;
+    cartItems.appendChild(div);
+  });
+}
+
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  updateCart();
+
+  tg.showPopup({
+    title: "Корзина",
+    message: `${product.name} добавлен в корзину`,
+    buttons: [{ text: "OK" }]
+  });
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+function getCartData() {
+  return cart.map(p => ({
+    name: p.name,
+    price: p.price,
+    brand: p.brand,
+    size: p.size
+  }));
+}
+
+// --- Каталог с фильтрами ---
 function renderCatalog() {
   const catalog = document.getElementById("catalog");
   catalog.innerHTML = "";
@@ -48,6 +98,9 @@ function renderCatalog() {
   filtered.forEach(product => {
     const card = document.createElement("div");
     card.className = "product-card";
+    card.dataset.brand = product.brand;
+    card.dataset.season = product.season;
+    card.dataset.size = product.size;
     card.innerHTML = `
       <img src="${product.image}" alt="${product.name}" />
       <h2>${product.name}</h2>
@@ -60,46 +113,32 @@ function renderCatalog() {
   });
 }
 
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  cart.push(product);
-  updateCart();
-
-  // уведомление
-  tg.showPopup({
-    title: "Корзина",
-    message: `${product.name} добавлен в корзину`,
-    buttons: [{ text: "OK" }]
-  });
-}
-
-function updateCart() {
-  document.getElementById("cart-count").textContent = cart.length;
-  const sum = cart.reduce((acc, p) => acc + p.price, 0);
-  document.getElementById("cart-sum").textContent = sum;
-}
-
-function getCartData() {
-  return cart.map(p => ({
-    name: p.name,
-    price: p.price,
-    brand: p.brand,
-    size: p.size
-  }));
-}
-
+// --- Отправка заказа ---
 function sendOrder() {
+  if (cart.length === 0) {
+    alert("Корзина пуста");
+    return;
+  }
+
   const payload = {
     action: "order",
     cart: getCartData(),
-    total: cart.reduce((acc, p) => acc + p.price, 0)
+    total: cart.reduce((acc, p) => acc + p.price, 0),
+    user: user
   };
+
   tg.sendData(JSON.stringify(payload));
-  tg.close();
+
+  const status = document.getElementById("order-status");
+  status.style.display = "block";
+  status.textContent = "Заказ отправлен!";
 }
 
+// --- Слушатели фильтров ---
 document.getElementById("brandFilter").addEventListener("change", renderCatalog);
 document.getElementById("seasonFilter").addEventListener("change", renderCatalog);
 document.getElementById("sizeFilter").addEventListener("change", renderCatalog);
 
+// --- Инициализация ---
 renderCatalog();
+updateCart();
