@@ -34,7 +34,8 @@ const products = [
     videos: ["https://www.youtube.com/embed/xxxx"],
     sizes: ["40","41","42","43"],
     material: "Кожа + текстиль",
-    description: "Классическая модель с амортизацией Air, удобная для зимы."
+    description: "Классическая модель с амортизацией Air, удобная для зимы.",
+    popularity: 10
   },
   {
     id: 2,
@@ -49,7 +50,8 @@ const products = [
     videos: [],
     sizes: ["40","41","42","43"],
     material: "Кожа",
-    description: "Легендарная Samba OG — лёгкая и стильная для лета."
+    description: "Легендарная Samba OG — лёгкая и стильная для лета.",
+    popularity: 8
   },
   {
     id: 3,
@@ -64,7 +66,8 @@ const products = [
     videos: [],
     sizes: ["41","42","43","44"],
     material: "Кожа + замша",
-    description: "New Balance 550 — ретро‑баскетбольный стиль с комфортом."
+    description: "New Balance 550 — ретро‑баскетбольный стиль с комфортом.",
+    popularity: 6
   },
   {
     id: 4,
@@ -79,12 +82,15 @@ const products = [
     videos: [],
     sizes: ["40","41","42"],
     material: "Кожа",
-    description: "Jordan 1 Mid — культовая модель для зимы."
+    description: "Jordan 1 Mid — культовая модель для зимы.",
+    popularity: 12
   }
 ];
 
 // --- Корзина ---
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let sortMode = null;
 
 function updateCart() {
   document.getElementById("cart-count").textContent = cart.length;
@@ -145,7 +151,28 @@ function getCartData() {
   }));
 }
 
-// --- Каталог с фильтрами ---
+// --- Избранное ---
+function toggleFavorite(id) {
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(f => f !== id);
+  } else {
+    favorites.push(id);
+  }
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  renderCatalog();
+}
+
+function isFavorite(id) {
+  return favorites.includes(id);
+}
+
+// --- Сортировка ---
+function sortCatalog(mode) {
+  sortMode = mode;
+  renderCatalog();
+}
+
+// --- Каталог с фильтрами, поиском и сортировкой ---
 function renderCatalog() {
   const catalog = document.getElementById("catalog");
   catalog.innerHTML = "";
@@ -153,12 +180,22 @@ function renderCatalog() {
   const brand = document.getElementById("brandFilter").value;
   const season = document.getElementById("seasonFilter").value;
   const size = document.getElementById("sizeFilter").value;
+  const query = document.getElementById("searchInput")?.value.toLowerCase() || "";
 
-  const filtered = products.filter(p =>
+  let filtered = products.filter(p =>
     (!brand || p.brand === brand) &&
     (!season || p.season === season) &&
-    (!size || p.size === size)
+    (!size || p.size === size) &&
+    (!query || p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query))
   );
+
+  if (sortMode === "price") {
+    filtered.sort((a, b) => a.price - b.price);
+  } else if (sortMode === "new") {
+    filtered.sort((a, b) => b.id - a.id);
+  } else if (sortMode === "popular") {
+    filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+  }
 
   if (filtered.length === 0) {
     catalog.innerHTML = "<p style='text-align:center;color:#777;'>Нет товаров по выбранным параметрам</p>";
@@ -178,6 +215,7 @@ function renderCatalog() {
       <small>${product.brand}, ${product.season}, ${product.size}</small>
       ${product.badge ? `<div class="badge">${product.badge}</div>` : ""}
       <button onclick="showProductDetail(${product.id})">Подробнее</button>
+      <button onclick="toggleFavorite(${product.id})" style="color:${isFavorite(product.id) ? 'red' : '#ccc'}">♥</button>
     `;
     catalog.appendChild(card);
   });
@@ -199,41 +237,4 @@ function showProductDetail(id) {
       <p>${product.description}</p>
       <div class="sizes">
         <p><strong>Размеры:</strong></p>
-        ${product.sizes.map(s => `<button onclick="addToCartWithSize(${product.id}, '${s}')">${s}</button>`).join("")}
-      </div>
-      <p><strong>Цена:</strong> ${product.price} BYN</p>
-      <button onclick="addToCart(${product.id})">Добавить в корзину</button>
-      <button onclick="sendOrder()">Оформить заказ</button>
-      <button onclick="renderCatalog()">← Назад к каталогу</button>
-    </div>
-  `;
-}
-
-// --- Отправка заказа ---
-function sendOrder() {
-  if (cart.length === 0) {
-    alert("Корзина пуста");
-    return;
-  }
-
-  const payload = {
-    action: "order",
-    cart: getCartData(),
-    total: cart.reduce((acc, p) => acc + p.price, 0),
-    user: user
-  };
-
-  tg.sendData(JSON.stringify(payload));
-
-  const status = document.getElementById("order-status");
-  status.style.display = "block";
-  status.textContent = "Заказ отправлен!";
-}
-
-// --- Слушатели фильтров ---
-document.getElementById("brandFilter").addEventListener("change", renderCatalog);
-document.getElementById("seasonFilter").addEventListener("change", renderCatalog);
-document.getElementById("sizeFilter").addEventListener("change", renderCatalog);
-
-// --- Инициализация ---
-renderCatalog
+        ${product.s
