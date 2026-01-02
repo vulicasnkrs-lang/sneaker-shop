@@ -39,6 +39,35 @@
     .cart-item button { font-size:12px; }
     #order-status { margin: 10px 12px; font-size: 14px; color: #1a7f37; display:none; }
     noscript { color:#b00020; padding:8px 12px; display:block; }
+
+    /* Поиск и сортировка */
+    .search-sort {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px auto;
+      padding: 0 20px;
+    }
+    #searchInput {
+      flex: 1;
+      min-width: 200px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .sort-buttons button {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .sort-buttons button:hover {
+      background: #f0f0f0;
+    }
   </style>
 </head>
 <body>
@@ -50,6 +79,16 @@
     <div class="brand-block">
       <img src="https://vulicasnkrs-lang.github.io/sneaker-shop/webapp/static/logo.png" alt="vulica.SNKRS" />
       <p class="subtitle">До встречи на вулице 🏀</p>
+    </div>
+
+    <!-- Поиск и сортировка -->
+    <div class="search-sort">
+      <input type="text" id="searchInput" placeholder="Поиск по названию или бренду..." />
+      <div class="sort-buttons">
+        <button onclick="sortCatalog('price')">По цене</button>
+        <button onclick="sortCatalog('new')">По новизне</button>
+        <button onclick="sortCatalog('popular')">По популярности</button>
+      </div>
     </div>
 
     <!-- Фильтры (JS привяжет обработчики) -->
