@@ -215,7 +215,8 @@ function renderCatalog() {
       <small>${product.brand}, ${product.season}, ${product.size}</small>
       ${product.badge ? `<div class="badge">${product.badge}</div>` : ""}
       <button onclick="showProductDetail(${product.id})">Подробнее</button>
-      <button onclick="toggleFavorite(${product.id})" style="color:${isFavorite(product.id) ? 'red' : '#ccc'}">♥</button>
+      <button class="favorite-btn ${isFavorite(product.id) ? 'active' : ''}" onclick="toggleFavorite(${product.id})">♥</button>
+      <button onclick="addToCart(${product.id})">Добавить</button>
     `;
     catalog.appendChild(card);
   });
@@ -234,7 +235,4 @@ function showProductDetail(id) {
       </div>
       ${product.videos.map(v => `<iframe src="${v}" frameborder="0" allowfullscreen></iframe>`).join("")}
       <p><strong>Материал:</strong> ${product.material}</p>
-      <p>${product.description}</p>
-      <div class="sizes">
-        <p><strong>Размеры:</strong></p>
-        ${product.s
+      <p
