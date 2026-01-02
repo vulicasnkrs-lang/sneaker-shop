@@ -30,10 +30,19 @@
       margin: 0 8px;
       color: #ccc;
     }
+
+    /* Блоки для корзины и профиля */
+    #profile { padding: 8px 12px; font-size: 14px; }
+    #cart-preview { padding: 8px 12px; font-weight: 600; }
+    #cart-items { margin: 8px 12px; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #eee; }
+    .cart-item button { font-size:12px; }
+    #order-status { margin: 10px 12px; font-size: 14px; color: #1a7f37; display:none; }
+    noscript { color:#b00020; padding:8px 12px; display:block; }
   </style>
 </head>
 <body>
-  <!-- Блок профиля -->
+  <!-- Блок профиля (JS вставит имя, username, фото) -->
   <div id="profile"></div>
 
   <header>
@@ -43,20 +52,21 @@
       <p class="subtitle">До встречи на вулице 🏀</p>
     </div>
 
+    <!-- Фильтры (JS привяжет обработчики) -->
     <div class="filters">
-      <select id="brandFilter">
+      <select id="brandFilter" aria-label="Фильтр по бренду">
         <option value="">Все бренды</option>
         <option value="Nike">Nike</option>
         <option value="Adidas">Adidas</option>
         <option value="New Balance">New Balance</option>
         <option value="Jordan">Jordan</option>
       </select>
-      <select id="seasonFilter">
+      <select id="seasonFilter" aria-label="Фильтр по сезону">
         <option value="">Сезон</option>
         <option value="Зима">Зима</option>
         <option value="Лето">Лето</option>
       </select>
-      <select id="sizeFilter">
+      <select id="sizeFilter" aria-label="Фильтр по размеру">
         <option value="">Размер</option>
         <option value="40">40</option>
         <option value="41">41</option>
@@ -66,14 +76,26 @@
     </div>
   </header>
 
+  <!-- Каталог (JS отрисует карточки с data-атрибутами для фильтров) -->
   <main id="catalog"></main>
 
-  <footer>
+  <!-- Предпросмотр и управление корзиной -->
+  <section id="cart">
     <div id="cart-preview">
       <span id="cart-count">0</span> в корзине • <span id="cart-sum">0</span> BYN
     </div>
-    <button onclick="sendOrder()">Оформить заказ</button>
+    <!-- Список товаров в корзине (JS) -->
+    <div id="cart-items"></div>
+  </section>
+
+  <!-- Статус отправки заказа -->
+  <div id="order-status"></div>
+
+  <footer>
+    <button id="checkout-btn" onclick="sendOrder()">Оформить заказ</button>
   </footer>
+
+  <noscript>Для работы магазина включите JavaScript.</noscript>
 
   <script src="static/app.js"></script>
 </body>
