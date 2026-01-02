@@ -6,6 +6,7 @@ body {
   color: #333;
 }
 
+/* Шапка */
 header {
   padding: 20px;
   text-align: center;
@@ -23,6 +24,7 @@ header h1 {
   color: #777;
 }
 
+/* Фильтры */
 .filters {
   display: flex;
   justify-content: center;
@@ -39,6 +41,7 @@ header h1 {
   font-size: 14px;
 }
 
+/* Каталог */
 main#catalog {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -113,19 +116,61 @@ main#catalog {
   border-radius: 6px;
 }
 
-.badge[data-type="Новинка"] {
-  background: #2ed573;
-}
-
-.badge[data-type="Хит"] {
-  background: #ffa502;
-}
-
-.badge[data-type="Осталось 1 шт"] {
-  background: #ff4757;
-}
-
 /* Корзина */
+#cart {
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+#cart-preview {
+  font-size: 14px;
+  color: #444;
+  padding: 10px 20px;
+}
+
+#cart-preview span {
+  font-weight: bold;
+}
+
+#cart-items {
+  padding: 10px 20px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.cart-item button {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.cart-item button:hover {
+  background: #c82333;
+}
+
+/* Статус заказа */
+#order-status {
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #1a7f37;
+  background: #e6ffed;
+  border-top: 1px solid #c3e6cb;
+  display: none;
+}
+
+/* Нижняя панель */
 footer {
   position: sticky;
   bottom: 0;
@@ -135,15 +180,6 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-#cart-preview {
-  font-size: 14px;
-  color: #444;
-}
-
-#cart-preview span {
-  font-weight: bold;
 }
 
 footer button {
