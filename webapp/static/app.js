@@ -128,3 +128,73 @@ function renderCatalog() {
 
   filtered.forEach(product=>{
     const card=document.createElement("div");
+    card.className="product-card";
+    card.innerHTML=`
+      ${product.badge ? `<div class="badge">${product.badge}</div>` : ""}
+      <img src="${product.image}" alt="${product.name}" />
+      <h2>${product.name}</h2>
+      <p>${product.price} BYN</p>
+      <small>${product.brand}, ${product.season}, ${product.size}</small>
+      <button onclick="addToCart(${product.id})">Добавить</button>
+      <button onclick="showProductDetail(${product.id})">Подробнее</button>
+      <button class="favorite-btn ${isFavorite(product.id) ? 'active' : ''}" onclick="toggleFavorite(${product.id})">♥</button>
+    `;
+    catalog.appendChild(card);
+  });
+}
+
+// --- Детальная страница ---
+function showProductDetail(id) {
+  const product = products.find(p => p.id === id);
+  const catalog = document.getElementById("catalog");
+
+  catalog.innerHTML = `
+    <div class="product-detail">
+      <h2>${product.name}</h2>
+      <div class="gallery">
+        ${product.images.map(img => `<img src="${img}" alt="${product.name}" />`).join("")}
+      </div>
+      ${product.videos.map(v => `<iframe src="${v}" frameborder="0" allowfullscreen></iframe>`).join("")}
+      <p><strong>Материал:</strong> ${product.material}</p>
+      <p>${product.description}</p>
+      <div class="sizes">
+        <p><strong>Размеры:</strong></p>
+        ${product.sizes.map(s => `<button onclick="addToCartWithSize(${product.id}, '${s}')">${s}</button>`).join("")}
+      </div>
+      <p><strong>Цена:</strong> ${product.price} BYN</p>
+      <div class="detail-actions">
+        <button onclick="addToCart(${product.id})">Добавить в корзину</button>
+        <button onclick="sendOrder()">Оформить заказ</button>
+        <button onclick="renderCatalog()">← Назад к каталогу</button>
+      </div>
+    </div>
+  `;
+}
+
+// --- Заказ ---
+function sendOrder() {
+  if (cart.length === 0) {
+    alert("Корзина пуста");
+    return;
+  }
+
+  const payload = {
+    action: "order",
+    cart: getCartData(),
+    total: cart.reduce((acc, p) => acc + p.price, 0),
+    user: user || null
+  };
+
+  tg.sendData(JSON.stringify(payload));
+
+  const status = document.getElementById("order-status");
+  if (status) {
+    status.style.display = "block";
+    status.textContent = "Заказ отправлен!";
+  }
+}
+
+// --- Привязка UI ---
+function bindUI() {
+  document.getElementById("brandFilter")?.addEventListener("change", renderCatalog);
+  document.getElementById
