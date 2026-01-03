@@ -237,3 +237,51 @@ function showProductDetail(id) {
       <p><strong>Материал:</strong> ${product.material}</p>
       <p>${product.description}</p>
       <div class="sizes">
+        <p><strong>Размеры:</strong></p>
+        ${product.sizes.map(s => `<button onclick="addToCartWithSize(${product.id}, '${s}')">${s}</button>`).join("")}
+      </div>
+      <p><strong>Цена:</strong> ${product.price} BYN</p>
+      <div class="detail-actions">
+        <button onclick="addToCart(${product.id})">Добавить в корзину</button>
+        <button onclick="sendOrder()">Оформить заказ</button>
+        <button onclick="renderCatalog()">← Назад к каталогу</button>
+      </div>
+    </div>
+  `;
+}
+
+// --- Отправка заказа ---
+function sendOrder() {
+  if (cart.length === 0) {
+    alert("Корзина пуста");
+    return;
+  }
+
+  const payload = {
+    action: "order",
+    cart: getCartData(),
+    total: cart.reduce((acc, p) => acc + p.price, 0),
+    user: user || null
+  };
+
+  tg.sendData(JSON.stringify(payload));
+
+  const status = document.getElementById("order-status");
+  if (status) {
+    status.style.display = "block";
+    status.textContent = "Заказ отправлен!";
+  }
+}
+
+// --- Слушатели фильтров и поиска ---
+function bindUI() {
+  document.getElementById("brandFilter")?.addEventListener("change", renderCatalog);
+  document.getElementById("seasonFilter")?.addEventListener("change", renderCatalog);
+  document.getElementById("sizeFilter")?.addEventListener("change", renderCatalog);
+  document.getElementById("searchInput")?.addEventListener("input", renderCatalog);
+}
+
+// --- Инициализация ---
+bindUI();
+renderCatalog();
+updateCart();
