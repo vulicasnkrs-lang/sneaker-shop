@@ -17,12 +17,12 @@ if not BOT_TOKEN or not ADMIN_ID or not WEBAPP_URL:
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 
-# Пути webhook
+# Webhook
 WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
 WEBHOOK_URL = f"{WEBAPP_URL}{WEBHOOK_PATH}"
 
 # ======================
-# Обработчики бота
+# Обработчики
 # ======================
 
 @dp.message_handler(commands=["start"])
@@ -78,11 +78,10 @@ async def on_shutdown(app):
 # ======================
 
 app = web.Application()
-app.router.add_get("/", health)
-app.router.add_post(WEBHOOK_PATH, dp.webhook_handler)
+app.router.add_get("/", health)  # healthcheck
 
 # ======================
-# Запуск
+# Запуск webhook
 # ======================
 
 if __name__ == "__main__":
