@@ -4,18 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>vulica.SNKRS</title>
+  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Стили -->
+  <link rel="stylesheet" href="static/styles.css" />
 </head>
 <body>
+  <!-- Профиль -->
   <div id="profile"></div>
 
   <header>
     <div class="brand-block">
-      <img src="https://vulicasnkrs-lang.github.io/sneaker-shop/webapp/static/logo.png" alt="vulica.SNKRS" />
+      <img src="static/logo.png" alt="vulica.SNKRS" />
       <p class="subtitle">До встречи на вулице 🏀</p>
     </div>
 
+    <!-- Поиск и сортировка -->
     <div class="search-sort">
       <input type="text" id="searchInput" placeholder="Поиск по названию или бренду..." />
       <div class="sort-buttons">
@@ -25,6 +29,7 @@
       </div>
     </div>
 
+    <!-- Фильтры -->
     <div class="filters">
       <select id="brandFilter">
         <option value="">Все бренды</option>
@@ -48,8 +53,10 @@
     </div>
   </header>
 
+  <!-- Каталог -->
   <main id="catalog"></main>
 
+  <!-- Корзина -->
   <section id="cart">
     <div id="cart-preview">
       <span id="cart-count">0</span> в корзине • <span id="cart-sum">0</span> BYN
@@ -57,12 +64,14 @@
     <div id="cart-items"></div>
   </section>
 
+  <!-- Статус заказа -->
   <div id="order-status"></div>
 
   <footer>
     <button onclick="sendOrder()">Оформить заказ</button>
   </footer>
 
-  <script src="app.js"></script>
+  <!-- Скрипт -->
+  <script src="static/app.js"></script>
 </body>
 </html>
