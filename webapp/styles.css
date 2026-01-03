@@ -14,11 +14,6 @@ header {
   border-bottom: 1px solid #ddd;
 }
 
-header h1 {
-  font-size: 24px;
-  margin-bottom: 5px;
-}
-
 .subtitle {
   font-size: 14px;
   color: #777;
@@ -273,6 +268,8 @@ footer button:hover {
   color: #666;
   font-size: 12px;
 }
+
+/* --- Страница товара --- */
 .product-detail {
   background: #fff;
   padding: 20px;
@@ -310,4 +307,3 @@ footer button:hover {
 .detail-actions button {
   margin: 4px;
 }
-
