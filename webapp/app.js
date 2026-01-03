@@ -128,6 +128,3 @@ function renderCatalog() {
 
   filtered.forEach(product=>{
     const card=document.createElement("div");
-    card.className="product-card";
-    card.innerHTML=`
-      <img src
