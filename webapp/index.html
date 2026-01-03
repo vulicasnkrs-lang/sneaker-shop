@@ -1,59 +1,46 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sneaker Shop</title>
 
-  <link rel="stylesheet" href="static/styles.css" />
+  <link rel="stylesheet" href="static/styles.css">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <img src="static/logo.png" class="logo" />
-    <button class="icon-btn">🛒</button>
-  </header>
+<header class="header">
+  <img src="static/logo.png" class="logo">
+  <button class="icon-btn">🛒</button>
+</header>
 
-  <!-- Search -->
-  <div class="search">
-    <input type="text" placeholder="Можно найти нужный товар..." />
-  </div>
+<div class="search">
+  <input placeholder="Можно найти нужный товар...">
+</div>
 
-  <!-- Filters -->
-  <div class="chips">
-    <button class="chip active">Скидки</button>
-    <button class="chip">Цена 💰</button>
-    <button class="chip">Сезон 🌍</button>
-  </div>
+<div class="chips">
+  <button class="chip active">Скидки</button>
+  <button class="chip">Цена 💰</button>
+  <button class="chip">Сезон 🌍</button>
+</div>
 
-  <!-- Sizes -->
-  <div class="sizes">
-    <button class="size active">Все</button>
-    <button class="size">39</button>
-    <button class="size">40</button>
-    <button class="size">41</button>
-    <button class="size">42</button>
-    <button class="size">43</button>
-    <button class="size">44</button>
-  </div>
+<div class="sizes">
+  <button class="size active">Все</button>
+  <button class="size">39</button>
+  <button class="size">40</button>
+  <button class="size">41</button>
+  <button class="size">42</button>
+  <button class="size">43</button>
+</div>
 
-  <!-- Products -->
-  <div class="products">
-    <div class="product">
-      <img src="https://i.imgur.com/1.png" />
-      <h4>Asics GEL-PICKAX</h4>
-      <div class="price">189 BYN</div>
-    </div>
+<div class="products" id="products"></div>
 
-    <div class="product">
-      <img src="https://i.imgur.com/2.png" />
-      <h4>Timberland 6 Inch</h4>
-      <div class="price">259 BYN</div>
-    </div>
-  </div>
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content" id="modalContent"></div>
+</div>
 
-  <script src="static/app.js"></script>
+<script src="static/app.js"></script>
 </body>
 </html>
