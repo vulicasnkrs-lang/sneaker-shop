@@ -1,7 +1,6 @@
 :root {
   --accent: #7c3aed;
   --bg: #f8f8f8;
-  --card: #ffffff;
   --text: #111;
 }
 
@@ -23,11 +22,11 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 14px 16px;
-  background: white;
+  background: #fff;
   position: sticky;
   top: 0;
-  z-index: 10;
   border-bottom: 1px solid #eee;
+  z-index: 10;
 }
 
 .logo {
@@ -54,7 +53,6 @@ body {
   border: none;
   background: #eee;
   padding: 0 16px;
-  font-size: 15px;
 }
 
 /* Chips */
@@ -70,13 +68,11 @@ body {
   border-radius: 14px;
   border: none;
   background: #eee;
-  white-space: nowrap;
-  font-weight: 500;
 }
 
 .chip.active {
   background: var(--accent);
-  color: white;
+  color: #fff;
 }
 
 /* Sizes */
@@ -90,9 +86,8 @@ body {
 .size {
   padding: 10px 0;
   border-radius: 12px;
-  background: #eee;
   border: none;
-  font-weight: 500;
+  background: #eee;
 }
 
 .size.active {
@@ -109,9 +104,10 @@ body {
 }
 
 .product {
-  background: white;
+  background: #fff;
   border-radius: 18px;
   padding: 12px;
+  position: relative;
 }
 
 .product img {
@@ -127,5 +123,54 @@ body {
 
 .price {
   font-weight: 700;
-  font-size: 15px;
+}
+
+.old {
+  font-size: 13px;
+  color: #999;
+  text-decoration: line-through;
+  margin-left: 6px;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ec4899;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: none;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-content {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 16px;
+}
+
+.buy-btn {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 16px;
+  margin-top: 12px;
 }
