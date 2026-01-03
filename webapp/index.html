@@ -1,67 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>vulica.SNKRS</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sneaker Shop</title>
+
   <link rel="stylesheet" href="static/styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div id="profile"></div>
 
-  <header>
-    <div class="brand-block">
-      <img src="static/logo.png" alt="vulica.SNKRS" />
-      <p class="subtitle">До встречи на вулице 🏀</p>
-    </div>
-
-    <div class="search-sort">
-      <input type="text" id="searchInput" placeholder="Поиск по названию или бренду..." />
-      <div class="sort-buttons">
-        <button onclick="sortCatalog('price')">По цене</button>
-        <button onclick="sortCatalog('new')">По новизне</button>
-        <button onclick="sortCatalog('popular')">По популярности</button>
-      </div>
-    </div>
-
-    <div class="filters">
-      <select id="brandFilter">
-        <option value="">Все бренды</option>
-        <option value="Nike">Nike</option>
-        <option value="Adidas">Adidas</option>
-        <option value="New Balance">New Balance</option>
-        <option value="Jordan">Jordan</option>
-      </select>
-      <select id="seasonFilter">
-        <option value="">Сезон</option>
-        <option value="Зима">Зима</option>
-        <option value="Лето">Лето</option>
-      </select>
-      <select id="sizeFilter">
-        <option value="">Размер</option>
-        <option value="40">40</option>
-        <option value="41">41</option>
-        <option value="42">42</option>
-        <option value="43">43</option>
-      </select>
-    </div>
+  <!-- Header -->
+  <header class="header">
+    <img src="static/logo.png" class="logo" />
+    <button class="icon-btn">🛒</button>
   </header>
 
-  <main id="catalog"></main>
+  <!-- Search -->
+  <div class="search">
+    <input type="text" placeholder="Можно найти нужный товар..." />
+  </div>
 
-  <section id="cart">
-    <div id="cart-preview">
-      <span id="cart-count">0</span> в корзине • <span id="cart-sum">0</span> BYN
+  <!-- Filters -->
+  <div class="chips">
+    <button class="chip active">Скидки</button>
+    <button class="chip">Цена 💰</button>
+    <button class="chip">Сезон 🌍</button>
+  </div>
+
+  <!-- Sizes -->
+  <div class="sizes">
+    <button class="size active">Все</button>
+    <button class="size">39</button>
+    <button class="size">40</button>
+    <button class="size">41</button>
+    <button class="size">42</button>
+    <button class="size">43</button>
+    <button class="size">44</button>
+  </div>
+
+  <!-- Products -->
+  <div class="products">
+    <div class="product">
+      <img src="https://i.imgur.com/1.png" />
+      <h4>Asics GEL-PICKAX</h4>
+      <div class="price">189 BYN</div>
     </div>
-    <div id="cart-items"></div>
-  </section>
 
-  <div id="order-status"></div>
-
-  <footer>
-    <button onclick="sendOrder()">Оформить заказ</button>
-  </footer>
+    <div class="product">
+      <img src="https://i.imgur.com/2.png" />
+      <h4>Timberland 6 Inch</h4>
+      <div class="price">259 BYN</div>
+    </div>
+  </div>
 
   <script src="static/app.js"></script>
 </body>
