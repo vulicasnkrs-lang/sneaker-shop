@@ -4,27 +4,27 @@ from aiohttp import web
 from aiogram import Bot, Dispatcher, types
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_ID = int(os.getenv("ADMIN_ID"))  # ТВОЙ telegram id
+ADMIN_ID = int(os.getenv("ADMIN_ID"))
 WEBAPP_URL = os.getenv("RENDER_EXTERNAL_URL")
 
-bot = Bot(BOT_TOKEN)
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 
 
 @dp.message_handler(commands=["start"])
 async def start(msg: types.Message):
-    kb = types.InlineKeyboardMarkup()
-    kb.add(
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
         types.InlineKeyboardButton(
             text="Открыть магазин 👟",
             web_app=types.WebAppInfo(url=WEBAPP_URL)
         )
     )
-    await msg.answer("Открой каталог 👇", reply_markup=kb)
+    await msg.answer("Открой каталог 👇", reply_markup=keyboard)
 
 
 @dp.message_handler(content_types=types.ContentType.WEB_APP_DATA)
-async def order(msg: types.Message):
+async def handle_order(msg: types.Message):
     data = json.loads(msg.web_app_data.data)
 
     text = (
@@ -41,10 +41,9 @@ async def order(msg: types.Message):
     await msg.answer("✅ Заказ отправлен! Мы свяжемся с вами в Telegram.")
 
 
-# ---- WEB SERVER ----
-
 async def health(request):
     return web.Response(text="OK")
+
 
 app = web.Application()
 dp.setup_aiohttp(app)
