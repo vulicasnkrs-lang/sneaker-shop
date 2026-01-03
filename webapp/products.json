@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Asics GEL-PICKAX",
+    "price": 189,
+    "old_price": 239,
+    "sizes": [39,40,41,42],
+    "image": "static/products/asics.png"
+  },
+  {
+    "id": 2,
+    "title": "Timberland 6 Inch",
+    "price": 259,
+    "old_price": null,
+    "sizes": [41,42,43,44],
+    "image": "static/products/timberland.png"
+  }
+]
