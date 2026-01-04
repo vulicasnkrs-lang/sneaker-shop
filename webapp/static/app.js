@@ -3,25 +3,49 @@ tg.ready();
 tg.expand();
 
 let cart = [];
-let products = [];
 
-// Загружаем список товаров — с CORS
-fetch("/webapp/static/products.json", { mode: "cors" })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    return res.json();
-  })
-  .then(data => {
-    console.log("✅ Загруженные товары:", data);
-    products = data;
-    renderCatalog();
-  })
-  .catch(err => {
-    console.error("❌ Ошибка загрузки products.json:", err);
-    document.getElementById("catalog").innerHTML = "<p style='color:red;'>Ошибка загрузки товаров</p>";
-  });
+// Встроенный список товаров (без fetch)
+let products = [
+  {
+    id: 1,
+    name: "Nike Air Max 90",
+    brand: "Nike",
+    season: "Зима",
+    price: 320,
+    image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg",
+    sizes: ["40", "41", "42", "43"]
+  },
+  {
+    id: 2,
+    name: "Adidas Samba OG",
+    brand: "Adidas",
+    season: "Лето",
+    price: 280,
+    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg",
+    sizes: ["40", "41", "42", "43"]
+  },
+  {
+    id: 3,
+    name: "New Balance 550",
+    brand: "New Balance",
+    season: "Лето",
+    price: 340,
+    image: "https://nb.scene7.com/is/image/NB/550.jpg",
+    sizes: ["41", "42", "43", "44"]
+  },
+  {
+    id: 4,
+    name: "Jordan 1 Mid",
+    brand: "Jordan",
+    season: "Зима",
+    price: 390,
+    image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg",
+    sizes: ["40", "41", "42"]
+  }
+];
+
+// Сразу рендерим каталог
+renderCatalog();
 
 // Рендер каталога
 function renderCatalog() {
@@ -100,12 +124,6 @@ function sendOrder() {
   showToast("📤 Заказ отправлен!");
 }
 
-// Привязка фильтров
-document.getElementById("searchInput")?.addEventListener("input", renderCatalog);
-document.getElementById("brandFilter")?.addEventListener("change", renderCatalog);
-document.getElementById("seasonFilter")?.addEventListener("change", renderCatalog);
-document.getElementById("sizeFilter")?.addEventListener("change", renderCatalog);
-
 // Всплывающее уведомление
 function showToast(message) {
   const toast = document.createElement("div");
@@ -123,3 +141,9 @@ function showToast(message) {
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2000);
 }
+
+// Привязка фильтров
+document.getElementById("searchInput")?.addEventListener("input", renderCatalog);
+document.getElementById("brandFilter")?.addEventListener("change", renderCatalog);
+document.getElementById("seasonFilter")?.addEventListener("change", renderCatalog);
+document.getElementById("sizeFilter")?.addEventListener("change", renderCatalog);
