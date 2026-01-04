@@ -45,15 +45,16 @@ async def start(msg: types.Message):
 @dp.message_handler(content_types=types.ContentType.WEB_APP_DATA)
 async def handle_order(msg: types.Message):
     data = json.loads(msg.web_app_data.data)
+    user = data.get("user", {})
     text = (
         "🆕 НОВЫЙ ЗАКАЗ\n\n"
-        f"👤 Клиент: {data['user'].get('first_name')}\n"
-        f"🔗 Username: @{data['user'].get('username')}\n\n"
+        f"👤 Клиент: {user.get('first_name', '')}\n"
+        f"🔗 Username: @{user.get('username', '')}\n\n"
         "📦 Товары:\n"
     )
-    for item in data["items"]:
+    for item in data.get("items", []):
         text += f"• {item['title']} — {item['price']} BYN\n"
-    text += f"\n💰 Итого: {data['total']} BYN"
+    text += f"\n💰 Итого: {data.get('total', 0)} BYN"
     await bot.send_message(ADMIN_ID, text)
     await msg.answer("✅ Заказ отправлен! Мы свяжемся с вами в Telegram.")
 
@@ -93,5 +94,5 @@ if __name__ == "__main__":
         on_shutdown=on_shutdown,
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
-        web_app=app  # <-- правильно: web_app, а не app
+        app=app  # для aiogram 2.x
     )
