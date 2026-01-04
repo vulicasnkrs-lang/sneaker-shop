@@ -2,7 +2,7 @@ import os
 import json
 from aiohttp import web
 from aiogram import Bot, Dispatcher, types
-from aiogram.utils.executor import start_webhook
+from aiogram.utils.executor import Executor
 from dotenv import load_dotenv
 
 # ======================
@@ -87,12 +87,8 @@ async def on_shutdown(dp):
 # Запуск
 # ======================
 if __name__ == "__main__":
-    start_webhook(
-        dispatcher=dp,
-        webhook_path=WEBHOOK_PATH,
-        on_startup=on_startup,
-        on_shutdown=on_shutdown,
-        host=WEBAPP_HOST,
-        port=WEBAPP_PORT,
-        app=app  # для aiogram 2.x
-    )
+    executor = Executor(dp)
+    executor.on_startup(on_startup)
+    executor.on_shutdown(on_shutdown)
+    executor._web_app = app  # прикрепляем aiohttp-приложение
+    web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
