@@ -53,6 +53,7 @@ async def handle_order(msg: types.Message):
     )
     for item in data["items"]:
         text += f"• {item['title']} — {item['price']} BYN\n"
+    text += f"\n💰 Итого: {data['total']} BYN"
     await bot.send_message(ADMIN_ID, text)
     await msg.answer("✅ Заказ отправлен! Мы свяжемся с вами в Telegram.")
 
@@ -61,6 +62,13 @@ async def handle_order(msg: types.Message):
 # ======================
 async def health(request):
     return web.Response(text="OK")
+
+# ======================
+# Aiohttp приложение для статики
+# ======================
+app = web.Application()
+app.router.add_get("/", health)
+app.router.add_static("/webapp", path="./webapp", name="webapp")
 
 # ======================
 # Startup / Shutdown webhook
@@ -75,14 +83,7 @@ async def on_shutdown(dp):
     print("Webhook удалён и сессия закрыта")
 
 # ======================
-# Aiohttp приложение для статических файлов
-# ======================
-app = web.Application()
-app.router.add_get("/", health)  # healthcheck
-app.router.add_static("/webapp", path="./webapp", name="webapp")  # статика для вебаппа
-
-# ======================
-# Запуск webhook
+# Запуск
 # ======================
 if __name__ == "__main__":
     start_webhook(
@@ -92,5 +93,5 @@ if __name__ == "__main__":
         on_shutdown=on_shutdown,
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
-        app=app  # aiohttp отдаёт статику и healthcheck
+        web_app=app  # <-- правильно: web_app, а не app
     )
