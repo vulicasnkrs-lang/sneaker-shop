@@ -62,7 +62,8 @@ async def health(request):
     return web.Response(text="OK")
 
 async def serve_index(request):
-    return web.FileResponse('./webapp/index.html')
+    # Явно указываем Content-Type, чтобы Telegram понял, что это HTML
+    return web.FileResponse('./webapp/index.html', headers={"Content-Type": "text/html"})
 
 app = web.Application()
 app.router.add_get("/", health)
