@@ -5,8 +5,8 @@ tg.expand();
 let cart = [];
 let products = [];
 
-// Загружаем список товаров — абсолютный путь для Telegram WebApp
-fetch("/webapp/static/products.json")
+// Загружаем список товаров — с CORS
+fetch("/webapp/static/products.json", { mode: "cors" })
   .then(res => {
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
