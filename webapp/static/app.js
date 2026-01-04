@@ -1,79 +1,74 @@
-Telegram.WebApp.ready();
-Telegram.WebApp.expand();
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
 
-const tg = Telegram.WebApp;
-const user = tg.initDataUnsafe.user;
-
-let products = [];
 let cart = [];
+let products = [];
 
-fetch('/products.json')
-  .then(r => r.json())
+fetch("static/products.json")
+  .then(res => res.json())
   .then(data => {
     products = data;
-    renderProducts(products);
+    renderCatalog();
   });
 
-function renderProducts(items) {
-  const c = document.getElementById('products');
-  c.innerHTML = '';
+function renderCatalog() {
+  const catalog = document.getElementById("catalog");
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  const brand = document.getElementById("brandFilter").value;
+  const season = document.getElementById("seasonFilter").value;
+  const size = document.getElementById("sizeFilter").value;
 
-  items.forEach(p => {
-    c.innerHTML += `
-      <div class="product" onclick="openProduct(${p.id})">
-        <img src="${p.image}">
-        <h4>${p.title}</h4>
-        <div class="price">${p.price} BYN</div>
-      </div>
+  const filtered = products.filter(p =>
+    (!query || p.name.toLowerCase().includes(query)) &&
+    (!brand || p.brand === brand) &&
+    (!season || p.season === season) &&
+    (!size || p.sizes.includes(size))
+  );
+
+  catalog.innerHTML = "";
+  filtered.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${p.image}" alt="${p.name}" />
+      <h2>${p.name}</h2>
+      <p>${p.price} BYN</p>
+      <button onclick="addToCart(${p.id})">Добавить</button>
     `;
+    catalog.appendChild(card);
   });
 }
-
-function openProduct(id) {
-  const p = products.find(x => x.id === id);
-  const modal = document.getElementById('modal');
-  const content = document.getElementById('modalContent');
-
-  content.innerHTML = `
-    <img src="${p.image}" style="width:100%;height:180px;object-fit:contain">
-    <h2>${p.title}</h2>
-    <p><b>${p.price} BYN</b></p>
-
-    <div class="sizes">
-      ${p.sizes.map(s => `<button class="size">${s}</button>`).join('')}
-    </div>
-
-    <button class="buy-btn" onclick="addToCart(${p.id})">
-      Добавить в корзину
-    </button>
-  `;
-
-  modal.classList.add('show');
-}
-
-document.getElementById('modal').onclick = e => {
-  if (e.target.id === 'modal') e.target.classList.remove('show');
-};
 
 function addToCart(id) {
-  cart.push(id);
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  updateCart();
+}
 
-  tg.MainButton.setText(`Оформить заказ (${cart.length})`);
-  tg.MainButton.show();
-
-  tg.MainButton.onClick(sendOrder);
+function updateCart() {
+  document.getElementById("cart-count").textContent = cart.length;
+  const sum = cart.reduce((acc, p) => acc + p.price, 0);
+  document.getElementById("cart-sum").textContent = sum;
 }
 
 function sendOrder() {
-  const order = {
-    user: {
-      id: user.id,
-      username: user.username,
-      first_name: user.first_name
-    },
-    items: cart.map(id => products.find(p => p.id === id)),
-    date: new Date().toISOString()
+  if (cart.length === 0) {
+    alert("Корзина пуста");
+    return;
+  }
+
+  const payload = {
+    action: "order",
+    cart: cart.map(p => ({ name: p.name, price: p.price })),
+    total: cart.reduce((acc, p) => acc + p.price, 0)
   };
 
-  tg.sendData(JSON.stringify(order));
+  tg.sendData(JSON.stringify(payload));
+  alert("Заказ отправлен!");
 }
+
+document.getElementById("searchInput").addEventListener("input", renderCatalog);
+document.getElementById("brandFilter").addEventListener("change", renderCatalog);
+document.getElementById("seasonFilter").addEventListener("change", renderCatalog);
+document.getElementById("sizeFilter").addEventListener("change", renderCatalog);
