@@ -5,6 +5,7 @@ tg.expand();
 let cart = [];
 let products = [];
 
+// Загружаем список товаров из products.json
 fetch("static/products.json")
   .then(res => res.json())
   .then(data => {
@@ -12,6 +13,7 @@ fetch("static/products.json")
     renderCatalog();
   });
 
+// Рендер каталога
 function renderCatalog() {
   const catalog = document.getElementById("catalog");
   const query = document.getElementById("searchInput").value.toLowerCase();
@@ -40,18 +42,21 @@ function renderCatalog() {
   });
 }
 
+// Добавление в корзину
 function addToCart(id) {
   const product = products.find(p => p.id === id);
   cart.push(product);
   updateCart();
 }
 
+// Обновление корзины
 function updateCart() {
   document.getElementById("cart-count").textContent = cart.length;
   const sum = cart.reduce((acc, p) => acc + p.price, 0);
   document.getElementById("cart-sum").textContent = sum;
 }
 
+// Отправка заказа в бота
 function sendOrder() {
   if (cart.length === 0) {
     alert("Корзина пуста");
@@ -59,8 +64,11 @@ function sendOrder() {
   }
 
   const payload = {
-    action: "order",
-    cart: cart.map(p => ({ name: p.name, price: p.price })),
+    user: tg.initDataUnsafe?.user || {},
+    items: cart.map(p => ({
+      title: p.name,
+      price: p.price
+    })),
     total: cart.reduce((acc, p) => acc + p.price, 0)
   };
 
@@ -68,6 +76,7 @@ function sendOrder() {
   alert("Заказ отправлен!");
 }
 
+// Привязка фильтров и поиска
 document.getElementById("searchInput").addEventListener("input", renderCatalog);
 document.getElementById("brandFilter").addEventListener("change", renderCatalog);
 document.getElementById("seasonFilter").addEventListener("change", renderCatalog);
