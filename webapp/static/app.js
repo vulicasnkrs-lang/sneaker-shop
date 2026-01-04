@@ -4,9 +4,6 @@ tg.expand();
 
 let cart = [];
 
-// ===============================
-// 1. ВСТРОЕННЫЕ ТОВАРЫ (БЕЗ FETCH)
-// ===============================
 let products = [
   {
     id: 1,
@@ -34,29 +31,15 @@ let products = [
     price: 320,
     image: "https://i.imgur.com/8g7Yt8K.jpeg",
     sizes: ["40", "41", "42", "43"]
-  },
-  {
-    id: 4,
-    name: "Adidas Samba OG",
-    brand: "Adidas",
-    season: "Лето",
-    price: 280,
-    image: "https://i.imgur.com/8g7Yt8K.jpeg",
-    sizes: ["40", "41", "42", "43"]
   }
 ];
 
-// ===============================
-// 2. РЕНДЕР КАТАЛОГА
-// ===============================
 function renderCatalog() {
-  const catalog = document.getElementById("catalog");
-  if (!catalog) return;
-
-  const query = document.getElementById("searchInput")?.value.toLowerCase() || "";
-  const brand = document.getElementById("brandFilter")?.value || "";
-  const season = document.getElementById("seasonFilter")?.value || "";
-  const size = document.getElementById("sizeFilter")?.value || "";
+  const catalog = document.querySelector(".catalog");
+  const query = document.querySelector(".searchInput")?.value.toLowerCase() || "";
+  const brand = document.querySelector(".brandFilter")?.value || "";
+  const season = document.querySelector(".seasonFilter")?.value || "";
+  const size = document.querySelector(".sizeFilter")?.value || "";
 
   const filtered = products.filter(p =>
     (!query || p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query)) &&
@@ -66,7 +49,6 @@ function renderCatalog() {
   );
 
   catalog.innerHTML = "";
-
   filtered.forEach(p => {
     const card = document.createElement("div");
     card.className = "product-card";
@@ -81,29 +63,21 @@ function renderCatalog() {
   });
 }
 
-renderCatalog();
-
-// ===============================
-// 3. КОРЗИНА
-// ===============================
 function addToCart(id) {
   const product = products.find(p => p.id === id);
-  if (!product) return;
-
-  cart.push(product);
-  updateCart();
-  showToast(`➕ ${product.name} добавлен`);
+  if (product) {
+    cart.push(product);
+    updateCart();
+    showToast(`➕ ${product.name} добавлен`);
+  }
 }
 
 function updateCart() {
-  document.getElementById("cart-count").textContent = cart.length;
+  document.querySelector(".cart-count").textContent = cart.length;
   const sum = cart.reduce((acc, p) => acc + p.price, 0);
-  document.getElementById("cart-sum").textContent = sum;
+  document.querySelector(".cart-sum").textContent = sum;
 }
 
-// ===============================
-// 4. ОТПРАВКА ЗАКАЗА
-// ===============================
 function sendOrder() {
   if (cart.length === 0) {
     alert("Корзина пуста");
@@ -117,15 +91,11 @@ function sendOrder() {
   };
 
   tg.sendData(JSON.stringify(payload));
-
   cart = [];
   updateCart();
   showToast("📤 Заказ отправлен!");
 }
 
-// ===============================
-// 5. ТОСТ-УВЕДОМЛЕНИЯ
-// ===============================
 function showToast(message) {
   const toast = document.createElement("div");
   toast.textContent = message;
@@ -143,10 +113,9 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 2000);
 }
 
-// ===============================
-// 6. ФИЛЬТРЫ
-// ===============================
-document.getElementById("searchInput")?.addEventListener("input", renderCatalog);
-document.getElementById("brandFilter")?.addEventListener("change", renderCatalog);
-document.getElementById("seasonFilter")?.addEventListener("change", renderCatalog);
-document.getElementById("sizeFilter")?.addEventListener("change", renderCatalog);
+document.querySelector(".searchInput")?.addEventListener("input", renderCatalog);
+document.querySelector(".brandFilter")?.addEventListener("change", renderCatalog);
+document.querySelector(".seasonFilter")?.addEventListener("change", renderCatalog);
+document.querySelector(".sizeFilter")?.addEventListener("change", renderCatalog);
+
+renderCatalog();
