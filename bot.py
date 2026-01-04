@@ -12,17 +12,14 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
-WEBAPP_URL = os.getenv("RENDER_EXTERNAL_URL")  # URL твоего Render проекта
+WEBAPP_URL = os.getenv("RENDER_EXTERNAL_URL")
 
 if not BOT_TOKEN or not ADMIN_ID or not WEBAPP_URL:
-    raise ValueError("Не заданы BOT_TOKEN, ADMIN_ID или WEBAPP_URL в .env")
+    raise ValueError("Не заданы BOT_TOKEN, ADMIN_ID или RENDER_EXTERNAL_URL")
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 
-# ======================
-# Webhook
-# ======================
 WEBHOOK_PATH = f"/webhook/{BOT_TOKEN}"
 WEBHOOK_URL = f"{WEBAPP_URL}{WEBHOOK_PATH}"
 WEBAPP_HOST = "0.0.0.0"
@@ -59,20 +56,22 @@ async def handle_order(msg: types.Message):
     await msg.answer("✅ Заказ отправлен! Мы свяжемся с вами в Telegram.")
 
 # ======================
-# Healthcheck
+# Aiohttp приложение
 # ======================
 async def health(request):
     return web.Response(text="OK")
 
-# ======================
-# Aiohttp приложение для статики
-# ======================
+async def serve_index(request):
+    return web.FileResponse('./webapp/index.html')
+
 app = web.Application()
 app.router.add_get("/", health)
-app.router.add_static("/webapp", path="./webapp", name="webapp")
+app.router.add_get("/webapp/", serve_index)
+app.router.add_get("/webapp/index.html", serve_index)
+app.router.add_static("/webapp/static", path="./webapp/static", name="static")
 
 # ======================
-# Startup / Shutdown webhook
+# Webhook
 # ======================
 async def on_startup(dp):
     await bot.set_webhook(WEBHOOK_URL)
@@ -90,5 +89,5 @@ if __name__ == "__main__":
     executor = Executor(dp)
     executor.on_startup(on_startup)
     executor.on_shutdown(on_shutdown)
-    executor._web_app = app  # прикрепляем aiohttp-приложение
+    executor._web_app = app
     web.run_app(app, host=WEBAPP_HOST, port=WEBAPP_PORT)
