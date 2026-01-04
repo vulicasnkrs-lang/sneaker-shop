@@ -13,8 +13,8 @@
   </header>
 
   <section class="filters">
-    <input type="text" id="searchInput" placeholder="Поиск по названию..." />
-    <select id="brandFilter">
+    <input type="text" class="searchInput" placeholder="Поиск по названию..." />
+    <select class="brandFilter">
       <option value="">Бренд ⬇</option>
       <option value="Nike">Nike</option>
       <option value="Adidas">Adidas</option>
@@ -23,12 +23,12 @@
       <option value="Asics">Asics</option>
       <option value="Timberland">Timberland</option>
     </select>
-    <select id="seasonFilter">
+    <select class="seasonFilter">
       <option value="">Сезон ⬇</option>
       <option value="Лето">Лето</option>
       <option value="Зима">Зима</option>
     </select>
-    <select id="sizeFilter">
+    <select class="sizeFilter">
       <option value="">Размер ⬇</option>
       <option value="40">40</option>
       <option value="41">41</option>
@@ -38,13 +38,13 @@
     </select>
   </section>
 
-  <section id="catalog" class="catalog">
-    <!-- карточки товаров появятся здесь -->
+  <section class="catalog">
+    <!-- карточки появятся здесь -->
   </section>
 
   <section class="cart">
-    <div id="cart-preview">
-      <span id="cart-count">0</span> в корзине • <span id="cart-sum">0</span> BYN
+    <div class="cart-preview">
+      <span class="cart-count">0</span> в корзине • <span class="cart-sum">0</span> BYN
     </div>
     <button onclick="sendOrder()">Оформить заказ</button>
   </section>
