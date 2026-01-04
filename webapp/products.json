@@ -25,5 +25,14 @@
     "price": 340,
     "image": "https://nb.scene7.com/is/image/NB/550.jpg",
     "sizes": ["41", "42", "43", "44"]
+  },
+  {
+    "id": 4,
+    "name": "Jordan 1 Mid",
+    "brand": "Jordan",
+    "season": "Зима",
+    "price": 390,
+    "image": "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg",
+    "sizes": ["40", "41", "42"]
   }
 ]
