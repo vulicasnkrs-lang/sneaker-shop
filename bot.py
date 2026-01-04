@@ -59,13 +59,19 @@ async def handle_order(msg: types.Message):
 # Aiohttp приложение
 # ======================
 async def serve_index(request):
-    # Всегда отдаём index.html как HTML
     return web.FileResponse('./webapp/index.html', headers={"Content-Type": "text/html"})
 
+async def serve_products(request):
+    return web.FileResponse('./webapp/static/products.json', headers={
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+    })
+
 app = web.Application()
-app.router.add_get("/", serve_index)  # корень сразу открывает магазин
+app.router.add_get("/", serve_index)
 app.router.add_get("/webapp/", serve_index)
 app.router.add_get("/webapp/index.html", serve_index)
+app.router.add_get("/webapp/static/products.json", serve_products)
 app.router.add_static("/webapp/static", path="./webapp/static", name="static")
 
 # ======================
