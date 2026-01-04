@@ -22,7 +22,7 @@ function renderCatalog() {
   const size = document.getElementById("sizeFilter").value;
 
   const filtered = products.filter(p =>
-    (!query || p.name.toLowerCase().includes(query)) &&
+    (!query || p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query)) &&
     (!brand || p.brand === brand) &&
     (!season || p.season === season) &&
     (!size || p.sizes.includes(size))
@@ -36,6 +36,7 @@ function renderCatalog() {
       <img src="${p.image}" alt="${p.name}" />
       <h2>${p.name}</h2>
       <p>${p.price} BYN</p>
+      <small>Размеры: ${p.sizes.join(", ")}</small>
       <button onclick="addToCart(${p.id})">Добавить</button>
     `;
     catalog.appendChild(card);
@@ -63,21 +64,4 @@ function sendOrder() {
     return;
   }
 
-  const payload = {
-    user: tg.initDataUnsafe?.user || {},
-    items: cart.map(p => ({
-      title: p.name,
-      price: p.price
-    })),
-    total: cart.reduce((acc, p) => acc + p.price, 0)
-  };
-
-  tg.sendData(JSON.stringify(payload));
-  alert("Заказ отправлен!");
-}
-
-// Привязка фильтров и поиска
-document.getElementById("searchInput").addEventListener("input", renderCatalog);
-document.getElementById("brandFilter").addEventListener("change", renderCatalog);
-document.getElementById("seasonFilter").addEventListener("change", renderCatalog);
-document.getElementById("sizeFilter").addEventListener("change", renderCatalog);
+  const payload =
