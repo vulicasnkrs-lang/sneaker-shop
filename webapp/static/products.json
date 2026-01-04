@@ -1,38 +1,22 @@
 [
   {
     "id": 1,
-    "name": "Nike Air Max 90",
-    "brand": "Nike",
+    "name": "Asics GEL-PICKAX 'Smoke Grey'",
+    "brand": "Asics",
     "season": "Зима",
-    "price": 320,
-    "image": "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg",
+    "price": 189,
+    "discount": true,
+    "image": "https://example.com/asics.jpg",
     "sizes": ["40", "41", "42", "43"]
   },
   {
     "id": 2,
-    "name": "Adidas Samba OG",
-    "brand": "Adidas",
-    "season": "Лето",
-    "price": 280,
-    "image": "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg",
-    "sizes": ["40", "41", "42", "43"]
-  },
-  {
-    "id": 3,
-    "name": "New Balance 550",
-    "brand": "New Balance",
-    "season": "Лето",
-    "price": 340,
-    "image": "https://nb.scene7.com/is/image/NB/550.jpg",
-    "sizes": ["41", "42", "43", "44"]
-  },
-  {
-    "id": 4,
-    "name": "Jordan 1 Mid",
-    "brand": "Jordan",
+    "name": "Timberland 6 Inch Premium 'Black'",
+    "brand": "Timberland",
     "season": "Зима",
-    "price": 390,
-    "image": "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg",
-    "sizes": ["40", "41", "42"]
+    "price": 259,
+    "discount": false,
+    "image": "https://example.com/timberland.jpg",
+    "sizes": ["41", "42", "43", "44"]
   }
 ]
