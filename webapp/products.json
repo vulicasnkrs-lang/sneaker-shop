@@ -1,18 +1,29 @@
 [
   {
     "id": 1,
-    "title": "Asics GEL-PICKAX",
-    "price": 189,
-    "old_price": 239,
-    "sizes": [39,40,41,42],
-    "image": "static/products/asics.png"
+    "name": "Nike Air Max 90",
+    "brand": "Nike",
+    "season": "Зима",
+    "price": 320,
+    "image": "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg",
+    "sizes": ["40", "41", "42", "43"]
   },
   {
     "id": 2,
-    "title": "Timberland 6 Inch",
-    "price": 259,
-    "old_price": null,
-    "sizes": [41,42,43,44],
-    "image": "static/products/timberland.png"
+    "name": "Adidas Samba OG",
+    "brand": "Adidas",
+    "season": "Лето",
+    "price": 280,
+    "image": "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg",
+    "sizes": ["40", "41", "42", "43"]
+  },
+  {
+    "id": 3,
+    "name": "New Balance 550",
+    "brand": "New Balance",
+    "season": "Лето",
+    "price": 340,
+    "image": "https://nb.scene7.com/is/image/NB/550.jpg",
+    "sizes": ["41", "42", "43", "44"]
   }
 ]
