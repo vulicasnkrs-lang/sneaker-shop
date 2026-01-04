@@ -5,23 +5,29 @@ tg.expand();
 let cart = [];
 let products = [];
 
-// Загружаем список товаров
-fetch("static/products.json")
-  .then(res => res.json())
+// Загружаем список товаров — абсолютный путь для Telegram WebApp
+fetch("/webapp/static/products.json")
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return res.json();
+  })
   .then(data => {
-    console.log("Загруженные товары:", data);
+    console.log("✅ Загруженные товары:", data);
     products = data;
     renderCatalog();
   })
   .catch(err => {
-    console.error("Ошибка загрузки products.json:", err);
+    console.error("❌ Ошибка загрузки products.json:", err);
+    document.getElementById("catalog").innerHTML = "<p style='color:red;'>Ошибка загрузки товаров</p>";
   });
 
 // Рендер каталога
 function renderCatalog() {
   const catalog = document.getElementById("catalog");
   if (!catalog) {
-    console.error("Элемент #catalog не найден");
+    console.error("❌ Элемент #catalog не найден");
     return;
   }
 
@@ -37,7 +43,7 @@ function renderCatalog() {
     (!size || p.sizes.includes(size))
   );
 
-  console.log("Отфильтрованные товары:", filtered);
+  console.log("📦 Отфильтрованные товары:", filtered);
 
   catalog.innerHTML = "";
   filtered.forEach(p => {
@@ -60,6 +66,7 @@ function addToCart(id) {
   if (product) {
     cart.push(product);
     updateCart();
+    showToast(`➕ ${product.name} добавлен в корзину`);
   }
 }
 
@@ -90,6 +97,7 @@ function sendOrder() {
   document.getElementById("cart-preview").innerHTML = "✅ Заказ отправлен!";
   cart = [];
   updateCart();
+  showToast("📤 Заказ отправлен!");
 }
 
 // Привязка фильтров
@@ -97,3 +105,21 @@ document.getElementById("searchInput")?.addEventListener("input", renderCatalog)
 document.getElementById("brandFilter")?.addEventListener("change", renderCatalog);
 document.getElementById("seasonFilter")?.addEventListener("change", renderCatalog);
 document.getElementById("sizeFilter")?.addEventListener("change", renderCatalog);
+
+// Всплывающее уведомление
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.textContent = message;
+  toast.style.position = "fixed";
+  toast.style.bottom = "20px";
+  toast.style.left = "50%";
+  toast.style.transform = "translateX(-50%)";
+  toast.style.background = "#333";
+  toast.style.color = "#fff";
+  toast.style.padding = "10px 20px";
+  toast.style.borderRadius = "8px";
+  toast.style.zIndex = "9999";
+  toast.style.opacity = "0.9";
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
