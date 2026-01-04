@@ -4,56 +4,54 @@ tg.expand();
 
 let cart = [];
 
-// Встроенный список товаров (без fetch)
+// ===============================
+// 1. ВСТРОЕННЫЕ ТОВАРЫ (БЕЗ FETCH)
+// ===============================
 let products = [
   {
     id: 1,
-    name: "Nike Air Max 90",
-    brand: "Nike",
+    name: "Asics GEL-PICKAX 'Smoke Grey'",
+    brand: "Asics",
     season: "Зима",
-    price: 320,
-    image: "https://static.nike.com/a/images/t_prod/w_960,c_limit,q_auto/air-max-90.jpg",
+    price: 189,
+    image: "https://i.imgur.com/8g7Yt8K.jpeg",
     sizes: ["40", "41", "42", "43"]
   },
   {
     id: 2,
+    name: "Timberland 6 Inch Premium 'Black'",
+    brand: "Timberland",
+    season: "Зима",
+    price: 259,
+    image: "https://i.imgur.com/8g7Yt8K.jpeg",
+    sizes: ["41", "42", "43", "44"]
+  },
+  {
+    id: 3,
+    name: "Nike Air Max 90",
+    brand: "Nike",
+    season: "Лето",
+    price: 320,
+    image: "https://i.imgur.com/8g7Yt8K.jpeg",
+    sizes: ["40", "41", "42", "43"]
+  },
+  {
+    id: 4,
     name: "Adidas Samba OG",
     brand: "Adidas",
     season: "Лето",
     price: 280,
-    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/samba-og.jpg",
+    image: "https://i.imgur.com/8g7Yt8K.jpeg",
     sizes: ["40", "41", "42", "43"]
-  },
-  {
-    id: 3,
-    name: "New Balance 550",
-    brand: "New Balance",
-    season: "Лето",
-    price: 340,
-    image: "https://nb.scene7.com/is/image/NB/550.jpg",
-    sizes: ["41", "42", "43", "44"]
-  },
-  {
-    id: 4,
-    name: "Jordan 1 Mid",
-    brand: "Jordan",
-    season: "Зима",
-    price: 390,
-    image: "https://static.nike.com/a/images/t_prod/jordan-1-mid.jpg",
-    sizes: ["40", "41", "42"]
   }
 ];
 
-// Сразу рендерим каталог
-renderCatalog();
-
-// Рендер каталога
+// ===============================
+// 2. РЕНДЕР КАТАЛОГА
+// ===============================
 function renderCatalog() {
   const catalog = document.getElementById("catalog");
-  if (!catalog) {
-    console.error("❌ Элемент #catalog не найден");
-    return;
-  }
+  if (!catalog) return;
 
   const query = document.getElementById("searchInput")?.value.toLowerCase() || "";
   const brand = document.getElementById("brandFilter")?.value || "";
@@ -67,9 +65,8 @@ function renderCatalog() {
     (!size || p.sizes.includes(size))
   );
 
-  console.log("📦 Отфильтрованные товары:", filtered);
-
   catalog.innerHTML = "";
+
   filtered.forEach(p => {
     const card = document.createElement("div");
     card.className = "product-card";
@@ -84,24 +81,29 @@ function renderCatalog() {
   });
 }
 
-// Добавление в корзину
+renderCatalog();
+
+// ===============================
+// 3. КОРЗИНА
+// ===============================
 function addToCart(id) {
   const product = products.find(p => p.id === id);
-  if (product) {
-    cart.push(product);
-    updateCart();
-    showToast(`➕ ${product.name} добавлен в корзину`);
-  }
+  if (!product) return;
+
+  cart.push(product);
+  updateCart();
+  showToast(`➕ ${product.name} добавлен`);
 }
 
-// Обновление корзины
 function updateCart() {
   document.getElementById("cart-count").textContent = cart.length;
   const sum = cart.reduce((acc, p) => acc + p.price, 0);
   document.getElementById("cart-sum").textContent = sum;
 }
 
-// Отправка заказа
+// ===============================
+// 4. ОТПРАВКА ЗАКАЗА
+// ===============================
 function sendOrder() {
   if (cart.length === 0) {
     alert("Корзина пуста");
@@ -110,21 +112,20 @@ function sendOrder() {
 
   const payload = {
     user: tg.initDataUnsafe?.user || {},
-    items: cart.map(p => ({
-      title: p.name,
-      price: p.price
-    })),
+    items: cart.map(p => ({ title: p.name, price: p.price })),
     total: cart.reduce((acc, p) => acc + p.price, 0)
   };
 
   tg.sendData(JSON.stringify(payload));
-  document.getElementById("cart-preview").innerHTML = "✅ Заказ отправлен!";
+
   cart = [];
   updateCart();
   showToast("📤 Заказ отправлен!");
 }
 
-// Всплывающее уведомление
+// ===============================
+// 5. ТОСТ-УВЕДОМЛЕНИЯ
+// ===============================
 function showToast(message) {
   const toast = document.createElement("div");
   toast.textContent = message;
@@ -132,7 +133,7 @@ function showToast(message) {
   toast.style.bottom = "20px";
   toast.style.left = "50%";
   toast.style.transform = "translateX(-50%)";
-  toast.style.background = "#333";
+  toast.style.background = "#222";
   toast.style.color = "#fff";
   toast.style.padding = "10px 20px";
   toast.style.borderRadius = "8px";
@@ -142,7 +143,9 @@ function showToast(message) {
   setTimeout(() => toast.remove(), 2000);
 }
 
-// Привязка фильтров
+// ===============================
+// 6. ФИЛЬТРЫ
+// ===============================
 document.getElementById("searchInput")?.addEventListener("input", renderCatalog);
 document.getElementById("brandFilter")?.addEventListener("change", renderCatalog);
 document.getElementById("seasonFilter")?.addEventListener("change", renderCatalog);
