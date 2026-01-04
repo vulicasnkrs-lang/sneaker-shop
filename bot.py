@@ -58,15 +58,12 @@ async def handle_order(msg: types.Message):
 # ======================
 # Aiohttp приложение
 # ======================
-async def health(request):
-    return web.Response(text="OK")
-
 async def serve_index(request):
-    # Явно указываем Content-Type, чтобы Telegram понял, что это HTML
+    # Всегда отдаём index.html как HTML
     return web.FileResponse('./webapp/index.html', headers={"Content-Type": "text/html"})
 
 app = web.Application()
-app.router.add_get("/", health)
+app.router.add_get("/", serve_index)  # корень сразу открывает магазин
 app.router.add_get("/webapp/", serve_index)
 app.router.add_get("/webapp/index.html", serve_index)
 app.router.add_static("/webapp/static", path="./webapp/static", name="static")
