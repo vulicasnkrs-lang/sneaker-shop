@@ -4,7 +4,6 @@ tg.expand();
 
 alert("JS работает!");
 
-// Встроенные товары
 let products = [
   {
     id: 1,
@@ -26,19 +25,23 @@ let products = [
   }
 ];
 
-// Вставляем карточки прямо в body
-products.forEach(p => {
-  const card = document.createElement("div");
-  card.style.padding = "20px";
-  card.style.margin = "10px";
-  card.style.background = "#fff";
-  card.style.borderRadius = "12px";
-  card.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
-  card.innerHTML = `
-    <img src="${p.image}" alt="${p.name}" style="width:100%; border-radius:10px;" />
-    <h2 style="font-size:16px;">${p.name}</h2>
-    <p style="font-weight:bold;">${p.price} BYN</p>
-    <small>Размеры: ${p.sizes.join(", ")}</small>
-  `;
-  document.body.appendChild(card);
-});
+function renderCatalog() {
+  const catalog = document.querySelector(".catalog");
+  console.log("🧪 catalog:", catalog);
+  if (!catalog) return;
+
+  catalog.innerHTML = "";
+  products.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${p.image}" alt="${p.name}" />
+      <h2>${p.name}</h2>
+      <p>${p.price} BYN</p>
+      <small>Размеры: ${p.sizes.join(", ")}</small>
+    `;
+    catalog.appendChild(card);
+  });
+}
+
+renderCatalog();
