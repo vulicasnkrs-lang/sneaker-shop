@@ -28,9 +28,17 @@ let products = [
 function renderCatalog() {
   const catalog = document.querySelector(".catalog");
   console.log("🧪 catalog:", catalog);
-  if (!catalog) return;
 
-  catalog.innerHTML = "";
+  if (!catalog) {
+    // если контейнер не найден — выводим красный блок
+    document.body.innerHTML += "<div style='padding:20px; background:red; color:white;'>❌ catalog не найден</div>";
+    return;
+  }
+
+  // тестовый блок, чтобы убедиться, что контейнер найден
+  catalog.innerHTML = "<div style='padding:20px; background:lime;'>✅ catalog найден</div>";
+
+  // рендерим товары
   products.forEach(p => {
     const card = document.createElement("div");
     card.className = "product-card";
