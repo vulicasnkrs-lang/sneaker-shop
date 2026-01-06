@@ -1,40 +1,35 @@
-const tg = Telegram.WebApp;
+const tg = window.Telegram.WebApp;
 tg.expand();
 
-let products = [];
 let cart = [];
 
-fetch('products.json')
+fetch("products.json")
   .then(r => r.json())
-  .then(data => {
-    products = data;
-    render();
+  .then(products => {
+    const root = document.getElementById("products");
+    products.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <h3>${p.title}</h3>
+        <p>${p.price} BYN</p>
+        <button>В корзину</button>
+      `;
+      div.querySelector("button").onclick = () => cart.push(p);
+      root.appendChild(div);
+    });
   });
 
-function render() {
-  const c = document.getElementById('catalog');
-  c.innerHTML = '';
-
-  products.forEach(p => {
-    c.innerHTML += `
-      <div class="card" onclick="add(${p.id})">
-        <img src="${p.image}">
-        <div>${p.title}</div>
-        <div class="price">${p.price} BYN</div>
-      </div>
-    `;
+document.getElementById("checkout").onclick = () => {
+  fetch("/api/order", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      user: tg.initDataUnsafe.user,
+      items: cart
+    })
+  }).then(() => {
+    tg.showAlert("Заказ отправлен!");
+    cart = [];
   });
-}
-
-function add(id) {
-  cart.push(products.find(p => p.id === id));
-  tg.MainButton.setText(`Оформить заказ (${cart.length})`);
-  tg.MainButton.show();
-}
-
-tg.MainButton.onClick(() => {
-  tg.sendData(JSON.stringify({
-    user: tg.initDataUnsafe.user,
-    items: cart
-  }));
-});
+};
