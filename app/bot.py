@@ -1,19 +1,14 @@
-from aiogram import Dispatcher, types
+from aiogram import Bot, Dispatcher
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from .config import WEBAPP_URL
+from .config import BOT_TOKEN, ADMIN_ID
 
-def register_bot(dp: Dispatcher):
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher(bot)
 
-    @dp.message_handler(commands=["start"])
-    async def start(message: types.Message):
-        kb = InlineKeyboardMarkup()
-        kb.add(
-            InlineKeyboardButton(
-                text="Открыть магазин 👟",
-                web_app=types.WebAppInfo(url=WEBAPP_URL)
-            )
-        )
-        await message.answer(
-            "Добро пожаловать в магазин кроссовок 👟",
-            reply_markup=kb
-        )
+async def start(message):
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton(
+        text="Открыть магазин 👟",
+        web_app=InlineKeyboardButton.WebAppInfo(url="https://your-app.onrender.com/web/index.html")
+    ))
+    await message.answer("Добро пожаловать в магазин 👇", reply_markup=kb)
