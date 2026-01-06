@@ -1,22 +1,14 @@
 [
   {
     "id": 1,
-    "name": "Asics GEL-PICKAX 'Smoke Grey'",
-    "brand": "Asics",
-    "season": "Зима",
-    "price": 189,
-    "discount": true,
-    "image": "https://example.com/asics.jpg",
-    "sizes": ["40", "41", "42", "43"]
+    "title": "Nike Air Force 1",
+    "price": 450,
+    "image": "https://i.imgur.com/7ZQZ6ZQ.png"
   },
   {
     "id": 2,
-    "name": "Timberland 6 Inch Premium 'Black'",
-    "brand": "Timberland",
-    "season": "Зима",
-    "price": 259,
-    "discount": false,
-    "image": "https://example.com/timberland.jpg",
-    "sizes": ["41", "42", "43", "44"]
+    "title": "New Balance 530",
+    "price": 520,
+    "image": "https://i.imgur.com/ZK8Fz5P.png"
   }
 ]
