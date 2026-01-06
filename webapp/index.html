@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Sneaker Shop</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header>
+    <img src="logo.png" />
+    <h1>Каталог</h1>
+  </header>
 
-<header>
-  <h1>Sneaker Shop</h1>
-</header>
+  <main id="products"></main>
 
-<main id="catalog"></main>
+  <button id="checkout">Оформить заказ</button>
 
-<div id="cart">
-  <button id="orderBtn">Оформить заказ</button>
-</div>
-
-<script src="app.js"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
