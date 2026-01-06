@@ -1,60 +1,23 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>vulica.SNKRS</title>
-  <link rel="stylesheet" href="/webapp/static/styles.css" />
+  <meta charset="UTF-8">
+  <title>Sneaker Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <header>
-    <h1>vulica.SNKRS</h1>
-    <p class="subtitle">мини-приложение</p>
-  </header>
 
-  <section class="filters">
-    <input type="text" class="searchInput" placeholder="Поиск по названию..." />
-    <select class="brandFilter">
-      <option value="">Бренд ⬇</option>
-      <option value="Nike">Nike</option>
-      <option value="Adidas">Adidas</option>
-      <option value="New Balance">New Balance</option>
-      <option value="Jordan">Jordan</option>
-      <option value="Asics">Asics</option>
-      <option value="Timberland">Timberland</option>
-    </select>
-    <select class="seasonFilter">
-      <option value="">Сезон ⬇</option>
-      <option value="Лето">Лето</option>
-      <option value="Зима">Зима</option>
-    </select>
-    <select class="sizeFilter">
-      <option value="">Размер ⬇</option>
-      <option value="40">40</option>
-      <option value="41">41</option>
-      <option value="42">42</option>
-      <option value="43">43</option>
-      <option value="44">44</option>
-    </select>
-  </section>
+<header>
+  <h1>Sneaker Shop</h1>
+</header>
 
-  <section class="catalog">
-    <!-- карточки появятся здесь -->
-  </section>
+<main id="catalog"></main>
 
-  <section class="cart">
-    <div class="cart-preview">
-      <span class="cart-count">0</span> в корзине • <span class="cart-sum">0</span> BYN
-    </div>
-    <button onclick="sendOrder()">Оформить заказ</button>
-  </section>
+<div id="cart">
+  <button id="orderBtn">Оформить заказ</button>
+</div>
 
-  <!-- JS‑проверка -->
-  <script>
-    alert("JS работает!");
-  </script>
-
-  <!-- Подключаем новый файл, чтобы обойти кэш -->
-  <script src="/webapp/static/app_v2.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
