@@ -1,4 +1,4 @@
 [
-  { "id": 1, "title": "Nike Air Force 1", "price": 350 },
-  { "id": 2, "title": "Adidas Samba", "price": 320 }
+  { "id": 1, "title": "Nike Air Force 1", "price": 350, "image": "https://i.imgur.com/7ZQZ6ZQ.png" },
+  { "id": 2, "title": "Adidas Samba", "price": 320, "image": "https://i.imgur.com/ZK8Fz5P.png" }
 ]
