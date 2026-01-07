@@ -1,15 +1,9 @@
-# vulica.SNKRS Telegram WebApp (RU-only)
+# vulica.SNKRS — Telegram WebApp-магазин кроссовок
 
-Единый сервис Render: статика WebApp + aiogram-бот в одном процессе.
+Полностью рабочий мини-приложение (WebApp) + Telegram-бот для оформления заказов прямо внутри Telegram.
 
-Переменные окружения:
-- BOT_TOKEN
-- ADMIN_CHAT_ID
-- WEBAPP_URL
-- BASE_URL (опционально)
-- PROMO_CODES (например, NANOGI10:10,VULICA5:5)
+## 🚀 Быстрый старт
 
-Старт локально:
-- pip install -r requirements.txt
-- python main.py
-- открыть http://localhost:10000/index.html и проверить через бота кнопку WebApp
+### 1. Установи зависимости
+```bash
+pip install -r requirements.txt
