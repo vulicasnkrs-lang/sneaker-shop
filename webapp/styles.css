@@ -1,0 +1,82 @@
+:root {
+  --bg: #0e0f12;
+  --card: #15171d;
+  --text: #eef1f7;
+  --muted: #aeb4c0;
+  --primary: #4f7cff;
+  --primary-2: #6b93ff;
+  --accent: #ffc857;
+  --danger: #ff5e5e;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+.header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; position:sticky; top:0; background:rgba(14,15,18,0.85); backdrop-filter: blur(10px); z-index:10; border-bottom:1px solid #1f2230;
+}
+.brand { font-weight:700; letter-spacing:0.5px; }
+.actions { display:flex; gap:8px; }
+button { border:none; border-radius:10px; padding:10px 12px; color:var(--text); cursor:pointer; }
+button.primary { background:var(--primary); }
+button.primary:hover { background:var(--primary-2); }
+button.secondary { background:var(--card); border:1px solid #242838; }
+button.ghost { background:transparent; border:1px solid #242838; }
+button.close { background:transparent; border:1px solid #242838; border-radius:50%; width:32px; height:32px; font-size:16px; line-height:0; }
+
+.banner { padding:18px 16px; }
+.title { margin:0 0 4px 0; font-size:20px; }
+.subtitle { margin:0; color:var(--muted); font-size:14px; }
+
+.filters { padding:8px 16px 16px; display:grid; gap:10px; }
+.filter-row { display:flex; gap:8px; flex-wrap:wrap; }
+input, select {
+  background:var(--card); color:var(--text);
+  border:1px solid #242838; border-radius:10px; padding:10px; min-width:140px;
+}
+input[type="number"] { max-width:140px; }
+#searchInput { flex:1; min-width:200px; }
+
+.catalog { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px; padding:0 16px 80px; }
+.card {
+  background:var(--card); border:1px solid #222635; border-radius:12px; overflow:hidden; display:flex; flex-direction:column;
+}
+.card img { width:100%; aspect-ratio:1/1; object-fit:cover; }
+.card .info { padding:12px; display:grid; gap:6px; }
+.card .title { font-size:16px; margin:0; }
+.card .meta { color:var(--muted); font-size:12px; display:flex; gap:6px; flex-wrap:wrap; }
+.card .row { display:flex; justify-content:space-between; align-items:center; }
+.card .price { font-weight:600; }
+.card .btns { display:flex; gap:8px; }
+
+.modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); z-index:100; }
+.modal.hidden { display:none; }
+.modal-content { background:var(--card); border:1px solid #242838; border-radius:14px; width:min(900px, 95vw); padding:10px; }
+.modal-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:12px; }
+.modal-images { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.modal-images img { width:100%; border-radius:8px; border:1px solid #242838; object-fit:cover; }
+.modal-info { display:grid; gap:8px; }
+.sizes { display:flex; flex-wrap:wrap; gap:8px; }
+.sizes .size {
+  background:transparent; border:1px solid #2b3144; border-radius:10px; padding:8px 10px; cursor:pointer;
+}
+.sizes .size.active { background:var(--primary); border-color:transparent; }
+.qty { display:flex; align-items:center; gap:8px; }
+.modal-actions { display:flex; gap:8px; }
+
+.drawer { position:fixed; right:0; top:0; height:100vh; width:min(420px, 95vw); background:var(--card); border-left:1px solid #242838; z-index:90; display:flex; flex-direction:column; }
+.drawer.hidden { display:none; }
+.drawer-header { display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #242838; }
+.drawer-list { flex:1; overflow:auto; display:grid; gap:8px; padding:10px; }
+.cart-item { display:grid; grid-template-columns:64px 1fr auto; gap:10px; border:1px solid #242838; border-radius:10px; padding:8px; }
+.cart-item img { width:64px; height:64px; object-fit:cover; border-radius:8px; }
+.cart-item .meta { font-size:12px; color:var(--muted); }
+.cart-item .qty-row { display:flex; gap:6px; align-items:center; }
+.qty-btn { width:28px; height:28px; border-radius:8px; border:1px solid #242838; background:transparent; color:var(--text); }
+.remove-btn { background:transparent; border:1px solid var(--danger); color:var(--danger); border-radius:8px; padding:6px 8px; }
+.drawer-footer { padding:12px; border-top:1px solid #242838; display:flex; justify-content:space-between; align-items:center; }
+
+@media (max-width: 780px) {
+  .modal-grid { grid-template-columns:1fr; }
+}
