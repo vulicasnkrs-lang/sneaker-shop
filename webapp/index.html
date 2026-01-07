@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>vulica.SNKRS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">vulica.SNKRS</div>
+    <div class="actions">
+      <button id="favoritesBtn" class="ghost">★</button>
+      <button id="cartBtn" class="primary">0 ₽</button>
+    </div>
+  </header>
+
+  <section class="banner">
+    <div class="banner-content">
+      <h1 class="title">Магазин кроссовок</h1>
+      <p class="subtitle">Актуальные модели, честные цены, без лишнего шума.</p>
+    </div>
+  </section>
+
+  <section class="filters">
+    <input id="searchInput" type="text" placeholder="Поиск модели..." />
+    <div class="filter-row">
+      <select id="brandFilter">
+        <option value="">Любой бренд</option>
+      </select>
+      <select id="seasonFilter">
+        <option value="">Любой сезон</option>
+        <option value="summer">Лето</option>
+        <option value="winter">Зима</option>
+        <option value="all">Круглый год</option>
+      </select>
+      <select id="discountFilter">
+        <option value="">Без фильтра скидок</option>
+        <option value="has">Со скидкой</option>
+        <option value="no">Без скидки</option>
+      </select>
+      <select id="sizeFilter">
+        <option value="">Любой размер</option>
+      </select>
+      <select id="sortSelect">
+        <option value="popular">По популярности</option>
+        <option value="price_asc">Цена ↑</option>
+        <option value="price_desc">Цена ↓</option>
+        <option value="newest">Новизна</option>
+        <option value="discount">Скидка</option>
+      </select>
+    </div>
+    <div class="filter-row">
+      <input id="minPrice" type="number" placeholder="Мин. цена" />
+      <input id="maxPrice" type="number" placeholder="Макс. цена" />
+      <input id="promoInput" type="text" placeholder="Промокод" />
+      <button id="applyFilters" class="secondary">Применить</button>
+      <button id="clearFilters" class="ghost">Сбросить</button>
+    </div>
+  </section>
+
+  <main class="catalog" id="catalog"></main>
+
+  <div id="productModal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close" id="closeProduct">×</button>
+      <div class="modal-grid">
+        <div class="modal-images" id="modalImages"></div>
+        <div class="modal-info">
+          <h2 id="modalTitle"></h2>
+          <p id="modalBrandSeason"></p>
+          <p id="modalPrice"></p>
+          <p id="modalDesc"></p>
+          <div class="sizes" id="modalSizes"></div>
+          <div class="qty">
+            <label>Количество</label>
+            <input id="modalQty" type="number" min="1" value="1" />
+          </div>
+          <div class="modal-actions">
+            <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+            <button id="toggleFavBtn" class="secondary">В избранное</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cartDrawer" class="drawer hidden">
+    <div class="drawer-header">
+      <h3>Корзина</h3>
+      <button class="close" id="closeCart">×</button>
+    </div>
+    <div id="cartList" class="drawer-list"></div>
+    <div class="drawer-footer">
+      <div class="total">
+        <span>Итого:</span>
+        <strong id="cartTotal">0 ₽</strong>
+      </div>
+      <button id="checkoutBtn" class="primary">Оформить заказ</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
