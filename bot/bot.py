@@ -6,9 +6,9 @@ from aiogram import Bot, Dispatcher, F, types
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "0"))
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://example.com/index.html")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8300602711:AAFRLntEhgV6Rep6six2vzge6_qY7DpK8og")
+ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "1426577785"))
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://sneaker-shop-r7fa.onrender.com/index.html")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 log = logging.getLogger("vulica.bot")
@@ -18,24 +18,27 @@ dp = Dispatcher()
 
 def webapp_keyboard():
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.add(types.KeyboardButton(text="Открыть магазин", web_app=types.WebAppInfo(url=WEBAPP_URL)))
+    kb.add(types.KeyboardButton(text="Открыть vulica.SNKRS", web_app=types.WebAppInfo(url=WEBAPP_URL)))
     return kb
 
 @dp.message(CommandStart())
 async def cmd_start(m: types.Message):
-    await m.answer("Привет! Жми «Открыть магазин» и оформляй заказ прямо в Telegram.", reply_markup=webapp_keyboard())
+    await m.answer(
+        "Привет! Добро пожаловать в vulica.SNKRS 👟 Жми «Открыть vulica.SNKRS» и оформляй заказ прямо в Telegram.",
+        reply_markup=webapp_keyboard()
+    )
 
 @dp.message(F.web_app_data)
 async def on_webapp_data(m: types.Message):
     try:
         data = json.loads(m.web_app_data.data)
-    except Exception as e:
+    except Exception:
         log.exception("Некорректные данные из WebApp")
         await m.answer("Ошибка чтения заказа. Попробуйте ещё раз.")
         return
 
     lines = []
-    lines.append("🛒 Новый заказ")
+    lines.append("🛒 Новый заказ в vulica.SNKRS")
     lines.append(f"👤 Пользователь: @{m.from_user.username or '—'} (ID: {m.from_user.id})")
     lines.append("")
     total = data.get("total", 0)
@@ -58,8 +61,8 @@ async def on_webapp_data(m: types.Message):
         except Exception:
             log.exception("Не удалось отправить сообщение админу")
 
-    await m.answer("Спасибо за заказ! Мы скоро свяжемся.")
+    await m.answer("Спасибо за заказ в vulica.SNKRS! Мы скоро свяжемся 👌")
 
 async def run_bot():
-    log.info("Запуск бота...")
+    log.info("Запуск бота vulica.SNKRS...")
     await dp.start_polling(bot)
