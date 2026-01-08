@@ -412,7 +412,8 @@ function checkout() {
 
   if (tg) {
     tg.sendData(JSON.stringify(order));
-    tg.close();
+    alert("✅ Заказ отправлен в бота!"); // временное подтверждение
+    // tg.close(); // пока закомментируй, чтобы видеть результат
   } else {
     alert('Заказ:\n' + JSON.stringify(order, null, 2));
   }
