@@ -6,3 +6,16 @@ services:
     startCommand: python main.py
     autoDeploy: true
     plan: starter
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: BOT_TOKEN
+        value: 8300602711:AAFRLntEhgV6Rep6six2vzge6_qY7DpK8og
+      - key: ADMIN_CHAT_ID
+        value: 1426577785
+      - key: WEBAPP_URL
+        value: https://sneaker-shop-r7fa.onrender.com/index.html
+      - key: BASE_URL
+        value: https://sneaker-shop-r7fa.onrender.com
+      - key: PROMO_CODES
+        value: NANOGI10:10,VULICA5:5
