@@ -16,24 +16,13 @@ log = logging.getLogger("vulica.bot")
 bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
 dp = Dispatcher()
 
-def webapp_keyboard():
-    return types.ReplyKeyboardMarkup(
-        keyboard=[
-            [types.KeyboardButton(
-                text="Открыть vulica.SNKRS",
-                web_app=types.WebAppInfo(url=WEBAPP_URL)
-            )]
-        ],
-        resize_keyboard=True
-    )
-
 
 @dp.message(CommandStart())
 async def cmd_start(m: types.Message):
     await m.answer(
-        "Привет! Добро пожаловать в vulica.SNKRS 👟 Жми «Открыть vulica.SNKRS» и оформляй заказ прямо в Telegram.",
-        reply_markup=webapp_keyboard()
+        "Привет! Добро пожаловать в vulica.SNKRS 👟 Оформляй заказ через синюю кнопку Telegram внизу."
     )
+
 
 @dp.message(F.web_app_data)
 async def on_webapp_data(m: types.Message):
