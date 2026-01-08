@@ -30,6 +30,9 @@ async def cmd_start(m: types.Message):
 
 @dp.message(F.web_app_data)
 async def on_webapp_data(m: types.Message):
+    # Логируем сырые данные для диагностики
+    log.info(f"RAW DATA: {m.web_app_data.data}")
+
     try:
         data = json.loads(m.web_app_data.data)
     except Exception:
@@ -37,6 +40,7 @@ async def on_webapp_data(m: types.Message):
         await m.answer("Ошибка чтения заказа. Попробуйте ещё раз.")
         return
 
+    # Формируем сообщение
     lines = []
     lines.append("🛒 Новый заказ в vulica.SNKRS")
     lines.append(f"👤 Пользователь: @{m.from_user.username or '—'} (ID: {m.from_user.id})")
@@ -55,13 +59,15 @@ async def on_webapp_data(m: types.Message):
 
     admin_msg = "\n".join(lines)
 
+    # Отправляем админу
     if ADMIN_CHAT_ID:
         try:
             await bot.send_message(chat_id=ADMIN_CHAT_ID, text=admin_msg)
         except Exception:
             log.exception("Не удалось отправить сообщение админу")
 
-    await m.answer("Спасибо за заказ в vulica.SNKRS! Мы скоро свяжемся 👌")
+    # Подтверждаем пользователю
+    await m.answer("✅ Заказ получен! Спасибо за покупку в vulica.SNKRS 👟")
 
 async def run_bot():
     log.info("Запуск бота vulica.SNKRS...")
