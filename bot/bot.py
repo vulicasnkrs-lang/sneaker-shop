@@ -17,9 +17,16 @@ bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
 dp = Dispatcher()
 
 def webapp_keyboard():
-    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.add(types.KeyboardButton(text="Открыть vulica.SNKRS", web_app=types.WebAppInfo(url=WEBAPP_URL)))
-    return kb
+    return types.ReplyKeyboardMarkup(
+        keyboard=[
+            [types.KeyboardButton(
+                text="Открыть vulica.SNKRS",
+                web_app=types.WebAppInfo(url=WEBAPP_URL)
+            )]
+        ],
+        resize_keyboard=True
+    )
+
 
 @dp.message(CommandStart())
 async def cmd_start(m: types.Message):
