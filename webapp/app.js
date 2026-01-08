@@ -410,14 +410,58 @@ function checkout() {
     ts: new Date().toISOString()
   };
 
-  if (tg) {
-    tg.sendData(JSON.stringify(order));
-    alert("✅ Заказ отправлен в бота!"); // временное подтверждение
-    // tg.close(); // пока закомментируй, чтобы видеть результат
-  } else {
-    alert('Заказ:\n' + JSON.stringify(order, null, 2));
+  async function checkout() {
+  if (!state.cart.length) {
+    alert('Корзина пуста');
+    return;
+  }
+
+  const order = {
+    items: state.cart.map(x => ({
+      id: x.id,
+      title: x.title,
+      brand: x.brand,
+      season: x.season,
+      size: x.size,
+      qty: x.qty,
+      price: finalPrice(x.price, x.discount)
+    })),
+    promoCode: state.promoCode,
+    promoDiscountPct: state.promoDiscountPct,
+    total: cartTotal(),
+    ts: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch("/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
+    });
+
+    if (res.ok) {
+      tg && tg.showPopup({
+        title: "Заказ",
+        message: "✅ Заказ отправлен!",
+        buttons: [{ type: "ok" }]
+      });
+      // очистка корзины
+      state.cart = [];
+      localStorage.removeItem("cart");
+      renderCart();
+      updateCartBadge();
+    } else {
+      throw new Error("Server error");
+    }
+  } catch (e) {
+    tg && tg.showPopup({
+      title: "Ошибка",
+      message: "Не удалось отправить заказ",
+      buttons: [{ type: "ok" }]
+    });
   }
 }
+
 
 function debounce(fn, ms) {
   let t = null;
