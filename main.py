@@ -51,10 +51,14 @@ async def order_handler(request):
 # -----------------------------
 # 3) Создание приложения
 # -----------------------------
+async def healthz(request):
+    return web.Response(text="OK")
+
 async def create_app():
     app = web.Application()
     app.router.add_get("/", index)
-    app.router.add_post("/order", order_handler)  # <-- ДОБАВЛЕНО
+    app.router.add_get("/healthz", healthz)   # <-- ВАЖНО
+    app.router.add_post("/order", order_handler)
     app.router.add_static("/", WEB_DIR)
     return app
 
