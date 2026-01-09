@@ -410,15 +410,35 @@ function checkout() {
     ts: new Date().toISOString()
   };
 
-  if (tg) {
-    tg.sendData(JSON.stringify(order));
-    alert("✅ Заказ отправлен в бота!"); // временное подтверждение
-    // tg.close(); // пока закомментируй, чтобы видеть результат
-  } else {
-    alert('Заказ:\n' + JSON.stringify(order, null, 2));
-  }
-}
+try {
+  const res = await fetch("/order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(order)
+  });
 
+  if (res.ok) {
+    tg && tg.showPopup({
+      title: "Заказ",
+      message: "✅ Заказ отправлен!",
+      buttons: [{ type: "ok" }]
+    });
+
+    // очищаем корзину
+    state.cart = [];
+    localStorage.removeItem("cart");
+    renderCart();
+    updateCartBadge();
+  } else {
+    throw new Error("Server error");
+  }
+} catch (e) {
+  tg && tg.showPopup({
+    title: "Ошибка",
+    message: "Не удалось отправить заказ",
+    buttons: [{ type: "ok" }]
+  });
+}
 function debounce(fn, ms) {
   let t = null;
   return (...args) => {
