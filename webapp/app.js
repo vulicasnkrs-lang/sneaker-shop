@@ -69,6 +69,10 @@ async function loadProducts() {
   } catch (e) {
     products = [];
   }
+  products.forEach(p => {
+  p.season = (p.season || '').toLowerCase();
+});
+
   state.products = products;
   state.products.forEach(p => {
     state.brandSet.add(p.brand);
@@ -389,7 +393,7 @@ function updateCartBadge() {
   els.cartBtn.textContent = formatPrice(total);
 }
 
-function checkout() {
+async function checkout() {
   if (!state.cart.length) {
     alert('Корзина пуста');
     return;
