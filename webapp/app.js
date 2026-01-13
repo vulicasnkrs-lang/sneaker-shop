@@ -302,7 +302,7 @@ if (icon) {
   icon.classList.add('animate');
   setTimeout(() => icon.classList.remove('animate'), 400);
 }
-
+}
 
 
 function pickFirstSize(p) {
