@@ -23,36 +23,52 @@
 
     <input id="searchInput" type="text" placeholder="Поиск модели..." />
 
-    <div class="filter-row">
+     <div class="filter-scroll">
+    <div class="chip">
+      <span>👟</span>
       <select id="brandFilter">
         <option value="">Бренд</option>
       </select>
+    </div>
 
+    <div class="chip">
+      <span>☀️</span>
       <select id="seasonFilter">
         <option value="">Сезон</option>
         <option value="summer">Лето</option>
         <option value="winter">Зима</option>
         <option value="all">Круглый год</option>
       </select>
+    </div>
 
+    <div class="chip">
+      <span>💸</span>
       <select id="discountFilter">
         <option value="">Скидка</option>
         <option value="has">Со скидкой</option>
         <option value="no">Без скидки</option>
       </select>
+    </div>
 
+    <div class="chip">
+      <span>🎯</span>
       <select id="sizeFilter">
         <option value="">Размер</option>
       </select>
+    </div>
 
+    <div class="chip">
+      <span>📊</span>
       <select id="sortSelect">
         <option value="popular">Популярные</option>
         <option value="price_asc">Цена ↑</option>
         <option value="price_desc">Цена ↓</option>
-        <option value="newest">Новинки</option>
+        <option value="newest">Новизна</option>
         <option value="discount">Скидка</option>
       </select>
     </div>
+  </div>
+
 
     <div class="filter-row">
       <input id="minPrice" type="number" placeholder="Мин. цена" />
