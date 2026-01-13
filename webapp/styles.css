@@ -1,3 +1,4 @@
+/* ———— 1. Цветовая палитра ———— */
 :root {
   --bg: #f5f5f5;
   --card: #ffffff;
@@ -9,6 +10,7 @@
   --border: #e5e5e5;
 }
 
+/* ———— 2. Базовые стили ———— */
 * { box-sizing: border-box; }
 
 html, body {
@@ -19,7 +21,7 @@ html, body {
   color: var(--text);
 }
 
-/* Хедер */
+/* ———— 3. Хедер ———— */
 .header {
   display: flex;
   align-items: center;
@@ -43,7 +45,7 @@ html, body {
   gap: 10px;
 }
 
-/* Поиск */
+/* ———— 4. Поиск ———— */
 #searchInput {
   width: 100%;
   padding: 12px 14px;
@@ -54,7 +56,7 @@ html, body {
   color: var(--text);
 }
 
-/* Фильтры */
+/* ———— 5. Фильтры ———— */
 .filters {
   padding: 12px 16px;
   display: flex;
@@ -79,7 +81,8 @@ input[type="text"] {
   color: var(--text);
 }
 
-/* Каталог — 2 карточки в ряд на телефоне */
+/* ———— 6. Каталог ———— */
+/* 2 карточки в ряд на телефоне */
 .catalog {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -87,7 +90,7 @@ input[type="text"] {
   padding: 0 16px 80px;
 }
 
-/* Карточка товара */
+/* ———— 7. Карточка товара ———— */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -97,8 +100,16 @@ input[type="text"] {
   display: flex;
   flex-direction: column;
   position: relative;
+  cursor: pointer;
+  transition: 0.15s;
 }
 
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* Фото */
 .card img {
   width: 100%;
   height: 160px;
@@ -106,6 +117,31 @@ input[type="text"] {
   background: #fff;
 }
 
+/* Избранное */
+.card .fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffffffcc;
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--primary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.card .fav-btn.active {
+  color: #ff4444;
+}
+
+/* Информация */
 .card .info {
   padding: 12px;
   display: grid;
@@ -119,18 +155,13 @@ input[type="text"] {
   color: var(--primary);
 }
 
-.card .meta {
-  font-size: 12px;
-  color: var(--muted);
-}
-
 .card .price {
   font-size: 18px;
   font-weight: 700;
   color: var(--primary);
 }
 
-/* Бейдж скидки */
+/* ———— 8. Бейдж скидки ———— */
 .discount-badge {
   position: absolute;
   top: 10px;
@@ -143,34 +174,46 @@ input[type="text"] {
   font-weight: 700;
 }
 
-/* Кнопки */
-button {
-  border: none;
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+/* ———— 9. Модалка ———— */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
 
-button.primary {
-  background: var(--primary);
-  color: #fff;
-}
+.modal.hidden { display: none; }
 
-button.secondary {
+.modal-content {
   background: #fff;
+  border-radius: 16px;
   border: 1px solid var(--border);
-  color: var(--primary);
+  width: min(900px, 95vw);
+  padding: 16px;
 }
 
-button.ghost {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--primary);
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-/* Размеры */
+.modal-images img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  object-fit: cover;
+}
+
+.modal-info {
+  display: grid;
+  gap: 10px;
+}
+
+/* ———— 10. Размеры ———— */
 .sizes {
   display: flex;
   flex-wrap: wrap;
@@ -197,7 +240,7 @@ button.ghost {
   border-color: var(--primary);
 }
 
-/* Корзина */
+/* ———— 11. Корзина ———— */
 .drawer {
   position: fixed;
   right: 0;
@@ -263,7 +306,7 @@ button.ghost {
   padding: 6px 8px;
 }
 
-/* Адаптив */
+/* ———— 12. Адаптив ———— */
 @media (max-width: 780px) {
   .modal-grid {
     grid-template-columns: 1fr;
