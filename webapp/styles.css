@@ -28,8 +28,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
-  background: #ffffffcc;
-  backdrop-filter: blur(8px);
+  background: #ffffff;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -61,31 +60,32 @@ html, body {
 /* ———— 5. Фильтры ———— */
 .filters {
   padding: 12px 16px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 10px;
 }
 
-.filter-row button {
-  background: #fff;
-  border: 1px solid var(--border);
-  color: var(--primary);
-  border-radius: 12px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.15s;
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.filter-row button:hover {
-  border-color: #cfcfcf;
+/* Чипы вместо select */
+select,
+input[type="number"],
+input[type="text"] {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
 }
 
 /* ———— 6. Каталог ———— */
 .catalog {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 16px;
   padding: 0 16px 80px;
 }
@@ -102,18 +102,19 @@ html, body {
   position: relative;
 }
 
+/* Фото — как у Nanogi */
 .card img {
   width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: contain;
+  height: 160px;
+  object-fit: cover;
   background: #fff;
-  padding: 10px;
 }
 
+/* Информация */
 .card .info {
-  padding: 14px;
+  padding: 12px;
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .card .title {
@@ -126,12 +127,6 @@ html, body {
 .card .meta {
   font-size: 12px;
   color: var(--muted);
-}
-
-.card .row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .card .price {
@@ -176,7 +171,7 @@ html, body {
 
 .modal-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
@@ -206,6 +201,11 @@ html, body {
   background: #fff;
   cursor: pointer;
   font-size: 14px;
+}
+
+.sizes .size:hover {
+  background: #f9f9f9;
+  border-color: var(--primary);
 }
 
 .sizes .size.active {
