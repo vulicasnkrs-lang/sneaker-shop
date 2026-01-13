@@ -200,38 +200,35 @@ function renderCatalog(onlyFavorites = false) {
 function cardNode(p) {
   const node = document.createElement('div');
   node.className = 'card';
+  node.dataset.id = p.id;
+
   const cover = (p.images && p.images[0]) || '';
   const price = formatPrice(finalPrice(p.price, p.discount));
-  const meta = `${p.brand} • ${seasonLabel(p.season)}${p.discount ? ` • -${p.discount}%` : ''}`;
   const fav = state.favorites.has(p.id);
 
   node.innerHTML = `
+    <button class="fav-btn ${fav ? 'active' : ''}" data-fav="${fav ? '1' : '0'}">★</button>
     <img src="${cover}" alt="${p.title}" loading="lazy">
     <div class="info">
-      <div class="row">
-        <h3 class="title">${p.title}</h3>
-        <button class="ghost" data-fav="${fav ? '1' : '0'}">★</button>
-      </div>
-      <div class="meta">${meta}</div>
-      <div class="row">
-        <div class="price">${price}</div>
-        <div class="btns">
-          <button class="secondary" data-action="details">Подробнее</button>
-          <button class="primary" data-action="quick">В корзину</button>
-        </div>
-      </div>
+      <h3 class="title">${p.title}</h3>
+      <div class="price">${price}</div>
     </div>
   `;
 
-  node.querySelector('[data-action="details"]').addEventListener('click', () => openProductModal(p));
-  node.querySelector('[data-action="quick"]').addEventListener('click', () => {
-    selectedSize = pickFirstSize(p);
-    addToCart(p, selectedSize, 1);
+  // КЛИК ПО КАРТОЧКЕ — открыть модалку
+  node.addEventListener('click', () => openProductModal(p));
+
+  // КЛИК ПО ИЗБРАННОМУ — не открывает модалку
+  const favBtn = node.querySelector('.fav-btn');
+  favBtn.addEventListener('click', (e) => {
+    e.stopPropagation();          // не даём клику дойти до карточки
+    toggleFavorite(p.id);         // меняем избранное
+    favBtn.classList.toggle('active');
   });
-  node.querySelector('[data-fav]').addEventListener('click', () => toggleFavorite(p.id));
 
   return node;
 }
+
 
 function openProductModal(p) {
   currentProduct = p;
@@ -277,11 +274,19 @@ function closeProductModal() {
 }
 
 function toggleFavorite(id) {
-  if (state.favorites.has(id)) state.favorites.delete(id);
-  else state.favorites.add(id);
+  if (state.favorites.has(id)) {
+    state.favorites.delete(id);
+  } else {
+    state.favorites.add(id);
+  }
+
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
-  renderCatalog();
+
+  // Обновляем только иконку на карточке
+  const btn = document.querySelector(`.card[data-id="${id}"] .fav-btn`);
+  if (btn) btn.classList.toggle('active');
 }
+
 
 function pickFirstSize(p) {
   return (p.sizes || [])[0] || null;
