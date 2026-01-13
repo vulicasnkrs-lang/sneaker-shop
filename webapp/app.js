@@ -207,27 +207,38 @@ function cardNode(p) {
   const fav = state.favorites.has(p.id);
 
   node.innerHTML = `
-    <button class="fav-btn ${fav ? 'active' : ''}" data-fav="${fav ? '1' : '0'}">★</button>
+    <div class="fav-btn">
+      <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
+        <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
+                 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                 C13.09 3.81 14.76 3 16.5 3
+                 19.58 3 22 5.42 22 8.5
+                 c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
+      </svg>
+    </div>
+
     <img src="${cover}" alt="${p.title}" loading="lazy">
+
     <div class="info">
       <h3 class="title">${p.title}</h3>
       <div class="price">${price}</div>
     </div>
   `;
 
-  // КЛИК ПО КАРТОЧКЕ — открыть модалку
+  // Клик по карточке — открыть модалку
   node.addEventListener('click', () => openProductModal(p));
 
-  // КЛИК ПО ИЗБРАННОМУ — не открывает модалку
-  const favBtn = node.querySelector('.fav-btn');
-  favBtn.addEventListener('click', (e) => {
-    e.stopPropagation();          // не даём клику дойти до карточки
-    toggleFavorite(p.id);         // меняем избранное
-    favBtn.classList.toggle('active');
+  // Клик по избранному — не открывает модалку
+  const favIcon = node.querySelector('.fav-icon');
+  favIcon.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleFavorite(p.id);
+    favIcon.classList.toggle('active');
   });
 
   return node;
 }
+
 
 
 function openProductModal(p) {
@@ -282,9 +293,9 @@ function toggleFavorite(id) {
 
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
 
-  // Обновляем только иконку на карточке
-  const btn = document.querySelector(`.card[data-id="${id}"] .fav-btn`);
-  if (btn) btn.classList.toggle('active');
+  // Обновляем только SVG-иконку
+  const icon = document.querySelector(`.card[data-id="${id}"] .fav-icon`);
+  if (icon) icon.classList.toggle('active');
 }
 
 
