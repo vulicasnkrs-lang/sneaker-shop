@@ -294,9 +294,15 @@ function toggleFavorite(id) {
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
 
   // Обновляем только SVG-иконку
-  const icon = document.querySelector(`.card[data-id="${id}"] .fav-icon`);
-  if (icon) icon.classList.toggle('active');
+ const icon = document.querySelector(`.card[data-id="${id}"] .fav-icon`);
+if (icon) {
+  icon.classList.toggle('active');
+
+  // анимация лайка
+  icon.classList.add('animate');
+  setTimeout(() => icon.classList.remove('animate'), 400);
 }
+
 
 
 function pickFirstSize(p) {
