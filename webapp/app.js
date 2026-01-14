@@ -18,6 +18,10 @@ const els = {
   minPrice: document.getElementById('minPrice'),
   maxPrice: document.getElementById('maxPrice'),
 
+  // Поиск + сортировка
+  searchInput: document.getElementById('searchInput'),
+  sortSelect: document.getElementById('sortSelect'),
+
   // Mystery Box
   openMysteryBtn: document.getElementById('openMysteryBtn'),
 
@@ -105,6 +109,10 @@ function attachEvents() {
   els.minPrice.addEventListener('input', debounce(applyFilters, 300));
   els.maxPrice.addEventListener('input', debounce(applyFilters, 300));
 
+  // Поиск + сортировка
+  els.searchInput.addEventListener('input', debounce(applyFilters, 300));
+  els.sortSelect.addEventListener('change', applyFilters);
+
   // Mystery Box
   els.openMysteryBtn.addEventListener('click', openMysteryBox);
 
@@ -139,14 +147,25 @@ function applyFilters() {
   const size = els.sizeFilter.value ? Number(els.sizeFilter.value) : null;
   const minPrice = Number(els.minPrice.value || 0);
   const maxPrice = Number(els.maxPrice.value || Infinity);
+  const search = els.searchInput.value.trim().toLowerCase();
+  const sort = els.sortSelect.value;
 
   let arr = state.products.filter(p => {
     const byBrand = !brand || p.brand === brand;
     const price = Number(p.price);
     const byPrice = price >= minPrice && price <= maxPrice;
     const bySize = !size || (p.sizes || []).includes(size);
-    return byBrand && byPrice && bySize;
+    const bySearch = !search || p.title.toLowerCase().includes(search);
+
+    return byBrand && byPrice && bySize && bySearch;
   });
+
+  // сортировка
+  if (sort === 'price-asc') {
+    arr.sort((a, b) => a.price - b.price);
+  } else if (sort === 'price-desc') {
+    arr.sort((a, b) => b.price - a.price);
+  }
 
   state.filtered = arr;
   renderCatalog();
