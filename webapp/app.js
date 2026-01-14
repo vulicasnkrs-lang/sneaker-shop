@@ -1,5 +1,7 @@
+/* ———— Telegram ———— */
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
+/* ———— State ———— */
 const state = {
   products: [],
   filtered: [],
@@ -9,21 +11,18 @@ const state = {
   allSizes: new Set()
 };
 
+/* ———— Elements ———— */
 const els = {
   catalog: document.getElementById('catalog'),
 
-  // Фильтры
   brandFilter: document.getElementById('brandFilter'),
   sizeFilter: document.getElementById('sizeFilter'),
 
-  // Поиск + сортировка
   searchInput: document.getElementById('searchInput'),
   sortSelect: document.getElementById('sortSelect'),
 
-  // Mystery Box
   openMysteryBtn: document.getElementById('openMysteryBtn'),
 
-  // Корзина
   cartBtn: document.getElementById('cartBtn'),
   cartDrawer: document.getElementById('cartDrawer'),
   closeCart: document.getElementById('closeCart'),
@@ -31,7 +30,6 @@ const els = {
   cartTotal: document.getElementById('cartTotal'),
   checkoutBtn: document.getElementById('checkoutBtn'),
 
-  // Модалка товара
   productModal: document.getElementById('productModal'),
   closeProduct: document.getElementById('closeProduct'),
   modalImages: document.getElementById('modalImages'),
@@ -48,6 +46,7 @@ const els = {
 let currentProduct = null;
 let selectedSize = null;
 
+/* ———— Init ———— */
 async function init() {
   await loadProducts();
   buildFilters();
@@ -62,6 +61,7 @@ async function init() {
   }
 }
 
+/* ———— Load products ———— */
 async function loadProducts() {
   let products = [];
   try {
@@ -73,7 +73,6 @@ async function loadProducts() {
 
   state.products = products;
 
-  // Собираем бренды и размеры
   state.products.forEach(p => {
     state.brandSet.add(p.brand);
     (p.sizes || []).forEach(s => state.allSizes.add(s));
@@ -82,8 +81,8 @@ async function loadProducts() {
   state.filtered = [...state.products];
 }
 
+/* ———— Filters ———— */
 function buildFilters() {
-  // Бренды
   [...state.brandSet].sort().forEach(b => {
     const opt = document.createElement('option');
     opt.value = b;
@@ -91,7 +90,6 @@ function buildFilters() {
     els.brandFilter.appendChild(opt);
   });
 
-  // Размеры
   for (let s = 35; s <= 49; s++) {
     const opt = document.createElement('option');
     opt.value = s;
@@ -101,23 +99,18 @@ function buildFilters() {
 }
 
 function attachEvents() {
-  // Фильтры
   els.brandFilter.addEventListener('change', applyFilters);
   els.sizeFilter.addEventListener('change', applyFilters);
 
-  // Поиск + сортировка
   els.searchInput.addEventListener('input', debounce(applyFilters, 300));
   els.sortSelect.addEventListener('change', applyFilters);
 
-  // Mystery Box
   els.openMysteryBtn.addEventListener('click', openMysteryBox);
 
-  // Корзина
   els.cartBtn.addEventListener('click', openCart);
   els.closeCart.addEventListener('click', closeCart);
   els.checkoutBtn.addEventListener('click', checkout);
 
-  // Модалка товара
   els.closeProduct.addEventListener('click', closeProductModal);
 
   window.addEventListener('keydown', (e) => {
@@ -128,6 +121,7 @@ function attachEvents() {
   });
 }
 
+/* ———— Mystery Box ———— */
 function openMysteryBox() {
   const arr = state.products;
   if (!arr.length) return;
@@ -138,6 +132,7 @@ function openMysteryBox() {
   alert(`Сегодняшняя пара: ${p.title} — ${formatPrice(p.price)}`);
 }
 
+/* ———— Apply filters ———— */
 function applyFilters() {
   const brand = els.brandFilter.value;
   const size = els.sizeFilter.value ? Number(els.sizeFilter.value) : null;
@@ -152,17 +147,14 @@ function applyFilters() {
     return byBrand && bySize && bySearch;
   });
 
-  // сортировка
-  if (sort === 'price-asc') {
-    arr.sort((a, b) => a.price - b.price);
-  } else if (sort === 'price-desc') {
-    arr.sort((a, b) => b.price - a.price);
-  }
+  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
+  else if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
 
   state.filtered = arr;
   renderCatalog();
 }
 
+/* ———— Render catalog ———— */
 function renderCatalog() {
   els.catalog.innerHTML = '';
   const arr = state.filtered;
@@ -178,6 +170,7 @@ function renderCatalog() {
   arr.forEach(p => els.catalog.appendChild(cardNode(p)));
 }
 
+/* ———— CARD NODE (Air Minimal Bold Clean) ———— */
 function cardNode(p) {
   const node = document.createElement('div');
   node.className = 'card';
@@ -188,32 +181,39 @@ function cardNode(p) {
   const fav = state.favorites.has(p.id);
 
   node.innerHTML = `
-    <div class="fav-btn">
+    <button class="fav-btn">
       <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
         <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
       </svg>
+    </button>
+
+    <div class="card-image">
+      <img src="${cover}" alt="${p.title}">
     </div>
 
-    <img src="${cover}" alt="${p.title}" loading="lazy">
-
-    <div class="info">
-      <h3 class="title">${p.title}</h3>
-      <div class="price">${price}</div>
+    <div class="card-info">
+      <div class="card-title">${p.title}</div>
+      <div class="card-price">${price}</div>
     </div>
   `;
 
   node.addEventListener('click', () => openProductModal(p));
 
+  const favBtn = node.querySelector('.fav-btn');
   const favIcon = node.querySelector('.fav-icon');
-  favIcon.addEventListener('click', (e) => {
+
+  favBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleFavorite(p.id);
     favIcon.classList.toggle('active');
+    favIcon.classList.add('animate');
+    setTimeout(() => favIcon.classList.remove('animate'), 300);
   });
 
   return node;
 }
 
+/* ———— Product modal ———— */
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
@@ -257,12 +257,10 @@ function closeProductModal() {
   els.productModal.classList.add('hidden');
 }
 
+/* ———— Favorites ———— */
 function toggleFavorite(id) {
-  if (state.favorites.has(id)) {
-    state.favorites.delete(id);
-  } else {
-    state.favorites.add(id);
-  }
+  if (state.favorites.has(id)) state.favorites.delete(id);
+  else state.favorites.add(id);
 
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
 
@@ -274,6 +272,7 @@ function toggleFavorite(id) {
   }
 }
 
+/* ———— Cart ———— */
 function pickFirstSize(p) {
   return (p.sizes || [])[0] || null;
 }
@@ -301,142 +300,4 @@ function openCart() {
   els.cartDrawer.classList.remove('hidden');
 }
 
-function closeCart() {
-  els.cartDrawer.classList.add('hidden');
-}
-
-function renderCart() {
-  els.cartList.innerHTML = '';
-
-  if (!state.cart.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.textContent = 'Корзина пуста';
-    els.cartList.appendChild(empty);
-    els.cartTotal.textContent = formatPrice(0);
-    return;
-  }
-
-  state.cart.forEach(item => {
-    const node = document.createElement('div');
-    node.className = 'cart-item';
-    node.innerHTML = `
-      <img src="${(item.images && item.images[0]) || ''}" alt="">
-      <div>
-        <div><strong>${item.title}</strong></div>
-        <div class="meta">Размер ${item.size}</div>
-
-        <div class="qty-row">
-          <button class="qty-btn" data-act="minus">−</button>
-          <span>${item.qty}</span>
-          <button class="qty-btn" data-act="plus">+</button>
-          <button class="remove-btn" data-act="remove">Удалить</button>
-        </div>
-      </div>
-
-      <div class="price">${formatPrice(item.price)}</div>
-    `;
-
-    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
-    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
-    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
-
-    els.cartList.appendChild(node);
-  });
-
-  els.cartTotal.textContent = formatPrice(cartTotal());
-}
-
-function changeQty(key, delta) {
-  const idx = state.cart.findIndex(x => x.key === key);
-  if (idx < 0) return;
-
-  state.cart[idx].qty += delta;
-  if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
-
-  persistCart();
-  updateCartBadge();
-  renderCart();
-}
-
-function removeItem(key) {
-  const idx = state.cart.findIndex(x => x.key === key);
-  if (idx < 0) return;
-
-  state.cart.splice(idx, 1);
-  persistCart();
-  updateCartBadge();
-  renderCart();
-}
-
-function cartTotal() {
-  return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
-}
-
-function formatPrice(v) {
-  return `${v} ₽`;
-}
-
-function updateCartBadge() {
-  const total = cartTotal();
-  els.cartBtn.textContent = formatPrice(total);
-}
-
-async function checkout() {
-  if (!state.cart.length) {
-    alert('Корзина пуста');
-    return;
-  }
-
-  const order = {
-    items: state.cart.map(x => ({
-      id: x.id,
-      title: x.title,
-      brand: x.brand,
-      size: x.size,
-      qty: x.qty,
-      price: x.price
-    })),
-    total: cartTotal(),
-    ts: new Date().toISOString()
-  };
-
-  try {
-    const res = await fetch("/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(order)
-    });
-
-    if (res.ok) {
-      tg && tg.showPopup({
-        title: "Заказ",
-        message: "✅ Заказ отправлен!",
-        buttons: [{ type: "ok" }]
-      });
-
-      state.cart = [];
-      localStorage.removeItem("cart");
-      renderCart();
-      updateCartBadge();
-    } else {
-      throw new Error("Server error");
-    }
-  } catch (e) {
-    tg && tg.showPopup({
-      title: "Ошибка",
-      message: "Не удалось отправить заказ",
-      buttons: [{ type: "ok" }]
-    });
-  }
-}
-
-function debounce(fn, ms) {
-  let t = null;
-  return (...args) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...args), ms);
-  };
-}
-
-init();
+function closeCart()
