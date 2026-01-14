@@ -11,14 +11,13 @@
 
   <!-- HEADER -->
   <header class="header">
-  <div class="brand">vulica.SNKRS</div>
+    <div class="brand">vulica.SNKRS</div>
 
-  <div class="header-actions">
-    <div class="profile-icon">👤</div>
-    <button id="cartBtn" class="primary">0 ₽</button>
-  </div>
-</header>
-
+    <div class="header-actions">
+      <div class="profile-icon">👤</div>
+      <button id="cartBtn" class="primary">0 ₽</button>
+    </div>
+  </header>
 
   <!-- MYSTERY BOX -->
   <section class="mystery-box">
@@ -45,10 +44,52 @@
   <main class="catalog" id="catalog"></main>
 
   <!-- PRODUCT MODAL -->
-  <!-- (оставляем без изменений — пригодится позже) -->
+  <div class="modal hidden" id="productModal">
+    <div class="modal-content">
+      <button id="closeProduct" style="float:right; border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+
+      <div class="modal-grid">
+        <div class="modal-images" id="modalImages"></div>
+
+        <div class="modal-info">
+          <h2 id="modalTitle"></h2>
+          <div id="modalBrandSeason" style="color:#777; font-size:14px;"></div>
+          <div id="modalPrice" style="font-size:20px; font-weight:700;"></div>
+          <p id="modalDesc" style="font-size:14px; color:#555;"></p>
+
+          <div class="sizes" id="modalSizes"></div>
+
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input id="modalQty" type="number" value="1" min="1" style="width:70px; padding:8px; border-radius:10px; border:1px solid #ddd;">
+            <button id="addToCartBtn" class="primary" style="flex:1;">Добавить в корзину</button>
+          </div>
+
+          <button id="toggleFavBtn" style="margin-top:10px; background:none; border:none; cursor:pointer; color:#ff4444;">
+            ❤ В избранное
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- CART DRAWER -->
-  <!-- (оставляем без изменений — пригодится позже) -->
+  <div class="drawer hidden" id="cartDrawer">
+    <div class="drawer-header">
+      <strong>Корзина</strong>
+      <button id="closeCart" style="border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+    </div>
+
+    <div class="drawer-list" id="cartList"></div>
+
+    <div style="padding:14px; border-top:1px solid #eee;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+        <span>Итого:</span>
+        <strong id="cartTotal">0 ₽</strong>
+      </div>
+
+      <button id="checkoutBtn" class="primary" style="width:100%;">Оформить заказ</button>
+    </div>
+  </div>
 
   <script src="/app.js"></script>
 </body>
