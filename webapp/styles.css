@@ -327,3 +327,16 @@ input:focus {
     grid-template-columns: 1fr;
   }
 }
+#searchInput {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+#searchInput:focus {
+  border-color: var(--primary);
+}
+
