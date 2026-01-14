@@ -5,32 +5,31 @@ const state = {
   filtered: [],
   favorites: new Set(JSON.parse(localStorage.getItem('favorites') || '[]')),
   cart: JSON.parse(localStorage.getItem('cart') || '[]'),
-  promoCode: null,
-  promoDiscountPct: 0,
   brandSet: new Set(),
   allSizes: new Set()
 };
 
 const els = {
   catalog: document.getElementById('catalog'),
+
+  // Фильтры
   brandFilter: document.getElementById('brandFilter'),
-  seasonFilter: document.getElementById('seasonFilter'),
-  discountFilter: document.getElementById('discountFilter'),
   sizeFilter: document.getElementById('sizeFilter'),
-  sortSelect: document.getElementById('sortSelect'),
-  searchInput: document.getElementById('searchInput'),
   minPrice: document.getElementById('minPrice'),
   maxPrice: document.getElementById('maxPrice'),
-  promoInput: document.getElementById('promoInput'),
-  applyFilters: document.getElementById('applyFilters'),
-  clearFilters: document.getElementById('clearFilters'),
-  favoritesBtn: document.getElementById('favoritesBtn'),
+
+  // Mystery Box
+  openMysteryBtn: document.getElementById('openMysteryBtn'),
+
+  // Корзина
   cartBtn: document.getElementById('cartBtn'),
   cartDrawer: document.getElementById('cartDrawer'),
   closeCart: document.getElementById('closeCart'),
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
   checkoutBtn: document.getElementById('checkoutBtn'),
+
+  // Модалка товара
   productModal: document.getElementById('productModal'),
   closeProduct: document.getElementById('closeProduct'),
   modalImages: document.getElementById('modalImages'),
@@ -64,56 +63,57 @@ async function init() {
 async function loadProducts() {
   let products = [];
   try {
-   const res = await fetch('/products.json', { cache: 'no-store' });
+    const res = await fetch('/products.json', { cache: 'no-store' });
     products = await res.json();
   } catch (e) {
     products = [];
   }
-  products.forEach(p => {
-  p.season = (p.season || '').toLowerCase();
-});
 
   state.products = products;
+
+  // Собираем бренды и размеры
   state.products.forEach(p => {
     state.brandSet.add(p.brand);
     (p.sizes || []).forEach(s => state.allSizes.add(s));
   });
+
   state.filtered = [...state.products];
 }
 
 function buildFilters() {
+  // Бренды
   [...state.brandSet].sort().forEach(b => {
     const opt = document.createElement('option');
-    opt.value = b; opt.textContent = b;
+    opt.value = b;
+    opt.textContent = b;
     els.brandFilter.appendChild(opt);
   });
+
+  // Размеры
   for (let s = 35; s <= 49; s++) {
     const opt = document.createElement('option');
-    opt.value = s; opt.textContent = String(s);
+    opt.value = s;
+    opt.textContent = String(s);
     els.sizeFilter.appendChild(opt);
   }
 }
 
 function attachEvents() {
-  els.applyFilters.addEventListener('click', applyFilters);
-  els.clearFilters.addEventListener('click', clearFilters);
-  els.searchInput.addEventListener('input', debounce(applyFilters, 300));
-  [els.brandFilter, els.seasonFilter, els.discountFilter, els.sizeFilter, els.sortSelect].forEach(el =>
-    el.addEventListener('change', applyFilters)
-  );
+  // Фильтры
+  els.brandFilter.addEventListener('change', applyFilters);
+  els.sizeFilter.addEventListener('change', applyFilters);
   els.minPrice.addEventListener('input', debounce(applyFilters, 300));
   els.maxPrice.addEventListener('input', debounce(applyFilters, 300));
-  els.promoInput.addEventListener('change', applyPromo);
 
-  els.favoritesBtn.addEventListener('click', () => {
-    const favIds = state.favorites;
-    state.filtered = state.products.filter(p => favIds.has(p.id));
-    renderCatalog(true);
-  });
+  // Mystery Box
+  els.openMysteryBtn.addEventListener('click', openMysteryBox);
 
+  // Корзина
   els.cartBtn.addEventListener('click', openCart);
   els.closeCart.addEventListener('click', closeCart);
   els.checkoutBtn.addEventListener('click', checkout);
+
+  // Модалка товара
   els.closeProduct.addEventListener('click', closeProductModal);
 
   window.addEventListener('keydown', (e) => {
@@ -124,69 +124,38 @@ function attachEvents() {
   });
 }
 
+function openMysteryBox() {
+  const arr = state.products;
+  if (!arr.length) return;
+
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  const p = arr[randomIndex];
+
+  alert(`Сегодняшняя пара: ${p.title} — ${formatPrice(p.price)}`);
+}
+
 function applyFilters() {
-  const q = els.searchInput.value.trim().toLowerCase();
   const brand = els.brandFilter.value;
-  const season = els.seasonFilter.value;
-  const discountFilter = els.discountFilter.value;
   const size = els.sizeFilter.value ? Number(els.sizeFilter.value) : null;
   const minPrice = Number(els.minPrice.value || 0);
   const maxPrice = Number(els.maxPrice.value || Infinity);
 
   let arr = state.products.filter(p => {
-    const title = (p.title || '').toLowerCase();
-    const byTitle = !q || title.includes(q);
     const byBrand = !brand || p.brand === brand;
-    const bySeason = !season || p.season === season;
     const price = Number(p.price);
     const byPrice = price >= minPrice && price <= maxPrice;
-    const hasDiscount = Number(p.discount || 0) > 0;
-    const byDiscount = discountFilter === '' || (discountFilter === 'has' && hasDiscount) || (discountFilter === 'no' && !hasDiscount);
     const bySize = !size || (p.sizes || []).includes(size);
-    return byTitle && byBrand && bySeason && byPrice && byDiscount && bySize;
-  });
-
-  const sortKey = els.sortSelect.value;
-  arr.sort((a, b) => {
-    if (sortKey === 'price_asc') return a.price - b.price;
-    if (sortKey === 'price_desc') return b.price - a.price;
-    if (sortKey === 'newest') return new Date(b.addedAt) - new Date(a.addedAt);
-    if (sortKey === 'discount') return (b.discount || 0) - (a.discount || 0);
-    return (b.popularity || 0) - (a.popularity || 0);
+    return byBrand && byPrice && bySize;
   });
 
   state.filtered = arr;
   renderCatalog();
 }
 
-function clearFilters() {
-  els.searchInput.value = '';
-  els.brandFilter.value = '';
-  els.seasonFilter.value = '';
-  els.discountFilter.value = '';
-  els.sizeFilter.value = '';
-  els.sortSelect.value = 'popular';
-  els.minPrice.value = '';
-  els.maxPrice.value = '';
-  els.promoInput.value = '';
-  state.promoCode = null;
-  state.promoDiscountPct = 0;
-  state.filtered = [...state.products];
-  renderCatalog();
-}
-
-function applyPromo() {
-  const code = els.promoInput.value.trim();
-  state.promoCode = code || null;
-  const known = { NANOGI10: 10, VULICA5: 5 }; // демо-значения, можно валидировать на сервере
-  state.promoDiscountPct = known[code] || 0;
-  updateCartBadge();
-  renderCart();
-}
-
-function renderCatalog(onlyFavorites = false) {
-  const arr = onlyFavorites ? state.products.filter(p => state.favorites.has(p.id)) : state.filtered;
+function renderCatalog() {
   els.catalog.innerHTML = '';
+  const arr = state.filtered;
+
   if (!arr.length) {
     const empty = document.createElement('div');
     empty.style.color = '#aeb4c0';
@@ -194,6 +163,7 @@ function renderCatalog(onlyFavorites = false) {
     els.catalog.appendChild(empty);
     return;
   }
+
   arr.forEach(p => els.catalog.appendChild(cardNode(p)));
 }
 
@@ -203,14 +173,13 @@ function cardNode(p) {
   node.dataset.id = p.id;
 
   const cover = (p.images && p.images[0]) || '';
-  const price = formatPrice(finalPrice(p.price, p.discount));
+  const price = formatPrice(p.price);
   const fav = state.favorites.has(p.id);
 
   node.innerHTML = `
     <div class="fav-btn">
       <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
         <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
-
       </svg>
     </div>
 
@@ -236,16 +205,14 @@ function cardNode(p) {
   return node;
 }
 
-
-
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
+
   els.modalImages.innerHTML = (p.images || []).map(src => `<img src="${src}" alt="">`).join('');
   els.modalTitle.textContent = p.title;
-  els.modalBrandSeason.textContent = `${p.brand} • ${seasonLabel(p.season)}`;
-  const priceWithDiscount = finalPrice(p.price, p.discount);
-  els.modalPrice.textContent = `${formatPrice(priceWithDiscount)}${p.discount ? `  (−${p.discount}%)` : ''}`;
+  els.modalBrandSeason.textContent = p.title; // бренд + модель = title
+  els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
 
@@ -290,17 +257,13 @@ function toggleFavorite(id) {
 
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
 
-  // Обновляем только SVG-иконку
- const icon = document.querySelector(`.card[data-id="${id}"] .fav-icon`);
-if (icon) {
-  icon.classList.toggle('active');
-
-  // анимация лайка
-  icon.classList.add('animate');
-  setTimeout(() => icon.classList.remove('animate'), 400);
+  const icon = document.querySelector(`.card[data-id="${id}"] .fav-icon`);
+  if (icon) {
+    icon.classList.toggle('active');
+    icon.classList.add('animate');
+    setTimeout(() => icon.classList.remove('animate'), 400);
+  }
 }
-}
-
 
 function pickFirstSize(p) {
   return (p.sizes || [])[0] || null;
@@ -309,11 +272,13 @@ function pickFirstSize(p) {
 function addToCart(p, size, qty) {
   const key = `${p.id}:${size}`;
   const idx = state.cart.findIndex(x => x.key === key);
+
   if (idx >= 0) state.cart[idx].qty += qty;
   else state.cart.push({
-    key, id: p.id, title: p.title, brand: p.brand, season: p.season,
-    price: p.price, discount: p.discount || 0, size, qty, images: p.images
+    key, id: p.id, title: p.title, brand: p.brand,
+    price: p.price, size, qty, images: p.images
   });
+
   persistCart();
   updateCartBadge();
 }
@@ -333,6 +298,7 @@ function closeCart() {
 
 function renderCart() {
   els.cartList.innerHTML = '';
+
   if (!state.cart.length) {
     const empty = document.createElement('div');
     empty.style.color = '#aeb4c0';
@@ -349,7 +315,8 @@ function renderCart() {
       <img src="${(item.images && item.images[0]) || ''}" alt="">
       <div>
         <div><strong>${item.title}</strong></div>
-        <div class="meta">${item.brand} • ${seasonLabel(item.season)} • Размер ${item.size}</div>
+        <div class="meta">Размер ${item.size}</div>
+
         <div class="qty-row">
           <button class="qty-btn" data-act="minus">−</button>
           <span>${item.qty}</span>
@@ -357,11 +324,14 @@ function renderCart() {
           <button class="remove-btn" data-act="remove">Удалить</button>
         </div>
       </div>
-      <div class="price">${formatPrice(finalPrice(item.price, item.discount))}</div>
+
+      <div class="price">${formatPrice(item.price)}</div>
     `;
+
     node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
     node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
     node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
+
     els.cartList.appendChild(node);
   });
 
@@ -371,8 +341,10 @@ function renderCart() {
 function changeQty(key, delta) {
   const idx = state.cart.findIndex(x => x.key === key);
   if (idx < 0) return;
+
   state.cart[idx].qty += delta;
   if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
+
   persistCart();
   updateCartBadge();
   renderCart();
@@ -381,6 +353,7 @@ function changeQty(key, delta) {
 function removeItem(key) {
   const idx = state.cart.findIndex(x => x.key === key);
   if (idx < 0) return;
+
   state.cart.splice(idx, 1);
   persistCart();
   updateCartBadge();
@@ -388,23 +361,11 @@ function removeItem(key) {
 }
 
 function cartTotal() {
-  const subtotal = state.cart.reduce((sum, x) => sum + finalPrice(x.price, x.discount) * x.qty, 0);
-  const promo = Math.round(subtotal * (state.promoDiscountPct / 100));
-  return Math.max(0, subtotal - promo);
-}
-
-function finalPrice(price, discountPct) {
-  const d = Number(discountPct || 0);
-  const base = Number(price || 0);
-  return Math.round(base * (100 - d) / 100);
+  return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
 }
 
 function formatPrice(v) {
   return `${v} ₽`;
-}
-
-function seasonLabel(s) {
-  return s === 'summer' ? 'Лето' : s === 'winter' ? 'Зима' : 'Круглый год';
 }
 
 function updateCartBadge() {
@@ -417,52 +378,50 @@ async function checkout() {
     alert('Корзина пуста');
     return;
   }
+
   const order = {
     items: state.cart.map(x => ({
       id: x.id,
       title: x.title,
       brand: x.brand,
-      season: x.season,
       size: x.size,
       qty: x.qty,
-      price: finalPrice(x.price, x.discount)
+      price: x.price
     })),
-    promoCode: state.promoCode,
-    promoDiscountPct: state.promoDiscountPct,
     total: cartTotal(),
     ts: new Date().toISOString()
   };
 
-try {
-  const res = await fetch("/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(order)
-  });
-
-  if (res.ok) {
-    tg && tg.showPopup({
-      title: "Заказ",
-      message: "✅ Заказ отправлен!",
-      buttons: [{ type: "ok" }]
+  try {
+    const res = await fetch("/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
     });
 
-    // очищаем корзину
-    state.cart = [];
-    localStorage.removeItem("cart");
-    renderCart();
-    updateCartBadge();
-  } else {
-    throw new Error("Server error");
+    if (res.ok) {
+      tg && tg.showPopup({
+        title: "Заказ",
+        message: "✅ Заказ отправлен!",
+        buttons: [{ type: "ok" }]
+      });
+
+      state.cart = [];
+      localStorage.removeItem("cart");
+      renderCart();
+      updateCartBadge();
+    } else {
+      throw new Error("Server error");
+    }
+  } catch (e) {
+    tg && tg.showPopup({
+      title: "Ошибка",
+      message: "Не удалось отправить заказ",
+      buttons: [{ type: "ok" }]
+    });
   }
-} catch (e) {
-  tg && tg.showPopup({
-    title: "Ошибка",
-    message: "Не удалось отправить заказ",
-    buttons: [{ type: "ok" }]
-  });
 }
-}
+
 function debounce(fn, ms) {
   let t = null;
   return (...args) => {
