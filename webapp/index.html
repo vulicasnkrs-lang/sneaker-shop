@@ -27,18 +27,35 @@
   </section>
 
   <!-- FILTERS -->
-  <section class="filters">
-    <div class="filter-row">
-      <select id="brandFilter">
-        <option value="">Бренд</option>
-      </select>
-      <select id="sizeFilter">
-        <option value="">Размер</option>
-      </select>
-      <input id="minPrice" type="number" placeholder="Мин. цена" />
-      <input id="maxPrice" type="number" placeholder="Макс. цена" />
-    </div>
-  </section>
+<section class="filters">
+
+  <!-- Первая строка фильтров -->
+  <div class="filter-row">
+    <select id="brandFilter">
+      <option value="">Бренд</option>
+    </select>
+
+    <select id="sizeFilter">
+      <option value="">Размер</option>
+    </select>
+
+    <input id="minPrice" type="number" placeholder="Мин. цена" />
+    <input id="maxPrice" type="number" placeholder="Макс. цена" />
+  </div>
+
+  <!-- Вторая строка: поиск + сортировка -->
+  <div class="filter-row" style="margin-top:12px;">
+    <input id="searchInput" type="text" placeholder="Поиск модели..." />
+
+    <select id="sortSelect">
+      <option value="">Сортировка</option>
+      <option value="price-asc">Цена: дешевле</option>
+      <option value="price-desc">Цена: дороже</option>
+    </select>
+  </div>
+
+</section>
+
 
   <!-- CATALOG -->
   <main class="catalog" id="catalog"></main>
