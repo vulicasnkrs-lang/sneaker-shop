@@ -15,8 +15,6 @@ const els = {
   // Фильтры
   brandFilter: document.getElementById('brandFilter'),
   sizeFilter: document.getElementById('sizeFilter'),
-  minPrice: document.getElementById('minPrice'),
-  maxPrice: document.getElementById('maxPrice'),
 
   // Поиск + сортировка
   searchInput: document.getElementById('searchInput'),
@@ -106,8 +104,6 @@ function attachEvents() {
   // Фильтры
   els.brandFilter.addEventListener('change', applyFilters);
   els.sizeFilter.addEventListener('change', applyFilters);
-  els.minPrice.addEventListener('input', debounce(applyFilters, 300));
-  els.maxPrice.addEventListener('input', debounce(applyFilters, 300));
 
   // Поиск + сортировка
   els.searchInput.addEventListener('input', debounce(applyFilters, 300));
@@ -145,19 +141,15 @@ function openMysteryBox() {
 function applyFilters() {
   const brand = els.brandFilter.value;
   const size = els.sizeFilter.value ? Number(els.sizeFilter.value) : null;
-  const minPrice = Number(els.minPrice.value || 0);
-  const maxPrice = Number(els.maxPrice.value || Infinity);
   const search = els.searchInput.value.trim().toLowerCase();
   const sort = els.sortSelect.value;
 
   let arr = state.products.filter(p => {
     const byBrand = !brand || p.brand === brand;
-    const price = Number(p.price);
-    const byPrice = price >= minPrice && price <= maxPrice;
     const bySize = !size || (p.sizes || []).includes(size);
     const bySearch = !search || p.title.toLowerCase().includes(search);
 
-    return byBrand && byPrice && bySize && bySearch;
+    return byBrand && bySize && bySearch;
   });
 
   // сортировка
@@ -210,10 +202,8 @@ function cardNode(p) {
     </div>
   `;
 
-  // Клик по карточке — открыть модалку
   node.addEventListener('click', () => openProductModal(p));
 
-  // Клик по избранному — не открывает модалку
   const favIcon = node.querySelector('.fav-icon');
   favIcon.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -230,7 +220,7 @@ function openProductModal(p) {
 
   els.modalImages.innerHTML = (p.images || []).map(src => `<img src="${src}" alt="">`).join('');
   els.modalTitle.textContent = p.title;
-  els.modalBrandSeason.textContent = p.title; // бренд + модель = title
+  els.modalBrandSeason.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
