@@ -51,6 +51,25 @@ html, body {
 .profile-icon:hover {
   opacity: 1;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.primary:hover {
+  opacity: 0.85;
+}
 
 /* ———— 4. Mystery Box ———— */
 .mystery-box {
