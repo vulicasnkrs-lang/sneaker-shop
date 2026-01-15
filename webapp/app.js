@@ -300,4 +300,142 @@ function openCart() {
   els.cartDrawer.classList.remove('hidden');
 }
 
-function closeCart()
+function closeCart() {
+  els.cartDrawer.classList.add('hidden');
+}
+
+function renderCart() {
+  els.cartList.innerHTML = '';
+
+  if (!state.cart.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.textContent = 'Корзина пуста';
+    els.cartList.appendChild(empty);
+    els.cartTotal.textContent = formatPrice(0);
+    return;
+  }
+
+  state.cart.forEach(item => {
+    const node = document.createElement('div');
+    node.className = 'cart-item';
+    node.innerHTML = `
+      <img src="${(item.images && item.images[0]) || ''}" alt="">
+      <div>
+        <div><strong>${item.title}</strong></div>
+        <div class="meta">Размер ${item.size}</div>
+
+        <div class="qty-row">
+          <button class="qty-btn" data-act="minus">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn" data-act="plus">+</button>
+          <button class="remove-btn" data-act="remove">Удалить</button>
+        </div>
+      </div>
+
+      <div class="price">${formatPrice(item.price)}</div>
+    `;
+
+    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
+    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
+    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
+
+    els.cartList.appendChild(node);
+  });
+
+  els.cartTotal.textContent = formatPrice(cartTotal());
+}
+
+function changeQty(key, delta) {
+  const idx = state.cart.findIndex(x => x.key === key);
+  if (idx < 0) return;
+
+  state.cart[idx].qty += delta;
+  if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
+
+  persistCart();
+  updateCartBadge();
+  renderCart();
+}
+
+function removeItem(key) {
+  const idx = state.cart.findIndex(x => x.key === key);
+  if (idx < 0) return;
+
+  state.cart.splice(idx, 1);
+  persistCart();
+  updateCartBadge();
+  renderCart();
+}
+
+function cartTotal() {
+  return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
+}
+
+function formatPrice(v) {
+  return `${v} ₽`;
+}
+
+function updateCartBadge() {
+  const total = cartTotal();
+  els.cartBtn.textContent = formatPrice(total);
+}
+
+async function checkout() {
+  if (!state.cart.length) {
+    alert('Корзина пуста');
+    return;
+  }
+
+  const order = {
+    items: state.cart.map(x => ({
+      id: x.id,
+      title: x.title,
+      brand: x.brand,
+      size: x.size,
+      qty: x.qty,
+      price: x.price
+    })),
+    total: cartTotal(),
+    ts: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch("/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
+    });
+
+    if (res.ok) {
+      tg && tg.showPopup({
+        title: "Заказ",
+        message: "✅ Заказ отправлен!",
+        buttons: [{ type: "ok" }]
+      });
+
+      state.cart = [];
+      localStorage.removeItem("cart");
+      renderCart();
+      updateCartBadge();
+    } else {
+      throw new Error("Server error");
+    }
+  } catch (e) {
+    tg && tg.showPopup({
+      title: "Ошибка",
+      message: "Не удалось отправить заказ",
+      buttons: [{ type: "ok" }]
+    });
+  }
+}
+
+function debounce(fn, ms) {
+  let t = null;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), ms);
+  };
+}
+
+init();
