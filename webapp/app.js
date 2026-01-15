@@ -324,8 +324,12 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
-  els.productModal.classList.remove('hidden');
-  els.productModal.classList.add('open');
+  // сбрасываем классы
+  els.productModal.classList.remove('hidden', 'closing');
+  // небольшой тик, чтобы transition сработал
+  requestAnimationFrame(() => {
+    els.productModal.classList.add('open');
+  });
 
   els.addToCartBtn.onclick = () => {
     const qty = Math.max(1, Number(els.modalQty.value || 1));
@@ -343,11 +347,16 @@ function openProductModal(p) {
 }
 
 function closeProductModal() {
+  // запускаем анимацию закрытия
   els.productModal.classList.remove('open');
+  els.productModal.classList.add('closing');
+
   setTimeout(() => {
     els.productModal.classList.add('hidden');
-  }, 200);
+    els.productModal.classList.remove('closing');
+  }, 220); // синхронно с CSS transition
 }
+
 
 /* Favorites */
 function toggleFavorite(id) {
