@@ -332,6 +332,23 @@ node.addEventListener('mouseleave', () => {
 }
 
 /* Product modal */
+function addRippleEffect(button, event) {
+  const rect = button.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const x = event.clientX - rect.left - size / 2;
+  const y = event.clientY - rect.top - size / 2;
+
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.width = ripple.style.height = `${size}px`;
+  ripple.style.left = `${x}px`;
+  ripple.style.top = `${y}px`;
+
+  button.appendChild(ripple);
+
+  setTimeout(() => ripple.remove(), 450);
+}
+
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
@@ -363,7 +380,17 @@ function openProductModal(p) {
     els.productModal.classList.add('open');
   });
 
-  els.addToCartBtn.onclick = () => {
+  els.addToCartBtn.onclick = (e) => {
+  addRippleEffect(els.addToCartBtn, e);
+
+  const qty = Math.max(1, Number(els.modalQty.value || 1));
+  if (!selectedSize) selectedSize = pickFirstSize(p);
+  addToCart(p, selectedSize, qty);
+  createFlyAnimation(p);
+  closeProductModal();
+  openCart();
+};
+
     const qty = Math.max(1, Number(els.modalQty.value || 1));
     if (!selectedSize) selectedSize = pickFirstSize(p);
     addToCart(p, selectedSize, qty);
