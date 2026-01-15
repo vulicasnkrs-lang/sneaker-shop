@@ -65,7 +65,7 @@ async function init() {
 async function loadProducts() {
   let products = [];
   try {
-    const res = await fetch('/products.json', { cache: 'no-store' });
+    const res = await fetch('/static/products.json', { cache: 'no-store' });
     products = await res.json();
   } catch (e) {
     products = [];
@@ -170,7 +170,7 @@ function renderCatalog() {
   arr.forEach(p => els.catalog.appendChild(cardNode(p)));
 }
 
-/* ———— CARD NODE (Air Minimal Bold Clean) ———— */
+/* ———— CARD NODE ———— */
 function cardNode(p) {
   const node = document.createElement('div');
   node.className = 'card';
