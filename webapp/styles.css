@@ -216,18 +216,28 @@ input:focus,
   transition: transform .22s ease, box-shadow .22s ease;
   opacity: 0;
   animation: fadeIn .5s ease forwards;
+  will-change: transform;
 }
+
+/* Fade-out (при фильтрации) */
 .card.fade-out {
   opacity: 0 !important;
   transform: translateY(10px);
   transition: opacity .25s ease, transform .25s ease;
 }
 
+/* Tilt mode (активируется JS) */
+.card.tilt {
+  transition: transform .12s ease-out;
+}
+
+/* Hover (базовый эффект + scale) */
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-4px) scale(1.02);
   box-shadow: 0 12px 28px rgba(0,0,0,0.08);
 }
 
+/* Card image */
 .card-image {
   width: 100%;
   height: 170px;
@@ -246,6 +256,7 @@ input:focus,
   transform: scale(1.06);
 }
 
+/* Card info */
 .card-info {
   padding: 14px;
   display: grid;
@@ -263,6 +274,7 @@ input:focus,
   font-weight: 700;
   color: var(--primary);
 }
+
 
 /* Fav button on card */
 .fav-btn {
