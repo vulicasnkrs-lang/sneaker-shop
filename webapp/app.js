@@ -430,6 +430,7 @@ async function checkout() {
   }
 }
 
+/* ———— Utils ———— */
 function debounce(fn, ms) {
   let t = null;
   return (...args) => {
