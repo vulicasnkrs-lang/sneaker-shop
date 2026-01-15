@@ -204,6 +204,29 @@ function closeMysteryModal() {
     els.mysteryModal.classList.remove('closing');
   }, 220);
 }
+
+/* View switching */
+function toggleFavoritesView() {
+  if (state.view === 'catalog') {
+    state.view = 'favorites';
+    els.filtersSection.classList.add('hidden');
+    els.favoritesHeader.classList.remove('hidden');
+    fadeSwitch(renderFavorites);
+  } else {
+    state.view = 'catalog';
+    els.filtersSection.classList.remove('hidden');
+    els.favoritesHeader.classList.add('hidden');
+    fadeSwitch(renderCatalog);
+  }
+}
+
+function fadeSwitch(renderFn) {
+  els.catalog.style.opacity = '0';
+  setTimeout(() => {
+    renderFn();
+    els.catalog.style.opacity = '1';
+  }, 200);
+}
 /* Apply filters */
 function applyFilters() {
   const brand = els.brandFilter.value;
