@@ -1,26 +1,32 @@
-/* ———— Telegram ———— */
+/* Telegram */
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
-/* ———— State ———— */
+/* State */
 const state = {
   products: [],
   filtered: [],
   favorites: new Set(JSON.parse(localStorage.getItem('favorites') || '[]')),
   cart: JSON.parse(localStorage.getItem('cart') || '[]'),
   brandSet: new Set(),
-  allSizes: new Set()
+  allSizes: new Set(),
+  view: 'catalog' // 'catalog' | 'favorites'
 };
 
-/* ———— Elements ———— */
+/* Elements */
 const els = {
   catalog: document.getElementById('catalog'),
 
   brandFilter: document.getElementById('brandFilter'),
   sizeFilter: document.getElementById('sizeFilter'),
-
   searchInput: document.getElementById('searchInput'),
   sortSelect: document.getElementById('sortSelect'),
 
+  filtersSection: document.getElementById('filtersSection'),
+  favoritesHeader: document.getElementById('favoritesHeader'),
+  favoritesCountLabel: document.getElementById('favoritesCountLabel'),
+  clearFavoritesBtn: document.getElementById('clearFavoritesBtn'),
+
+  mysteryBox: document.getElementById('mysteryBox'),
   openMysteryBtn: document.getElementById('openMysteryBtn'),
 
   cartBtn: document.getElementById('cartBtn'),
@@ -40,17 +46,22 @@ const els = {
   modalSizes: document.getElementById('modalSizes'),
   modalQty: document.getElementById('modalQty'),
   addToCartBtn: document.getElementById('addToCartBtn'),
-  toggleFavBtn: document.getElementById('toggleFavBtn')
+  toggleFavBtn: document.getElementById('toggleFavBtn'),
+
+  favBtn: document.getElementById('favBtn'),
+  favCount: document.getElementById('favCount')
 };
 
 let currentProduct = null;
 let selectedSize = null;
 
-/* ———— Init ———— */
+/* Init */
 async function init() {
+  renderSkeletons();
   await loadProducts();
   buildFilters();
   updateCartBadge();
+  updateFavBadge();
   renderCatalog();
   attachEvents();
 
@@ -61,7 +72,24 @@ async function init() {
   }
 }
 
-/* ———— Load products ———— */
+/* Skeletons */
+function renderSkeletons() {
+  els.catalog.innerHTML = '';
+  for (let i = 0; i < 8; i++) {
+    const sk = document.createElement('div');
+    sk.className = 'card skeleton';
+    sk.innerHTML = `
+      <div class="card-image skeleton"></div>
+      <div class="card-info">
+        <div class="skeleton" style="height:16px; width:70%;"></div>
+        <div class="skeleton" style="height:18px; width:40%; margin-top:6px;"></div>
+      </div>
+    `;
+    els.catalog.appendChild(sk);
+  }
+}
+
+/* Load products */
 async function loadProducts() {
   let products = [];
   try {
@@ -81,7 +109,7 @@ async function loadProducts() {
   state.filtered = [...state.products];
 }
 
-/* ———— Filters ———— */
+/* Filters */
 function buildFilters() {
   [...state.brandSet].sort().forEach(b => {
     const opt = document.createElement('option');
@@ -99,11 +127,20 @@ function buildFilters() {
 }
 
 function attachEvents() {
-  els.brandFilter.addEventListener('change', applyFilters);
-  els.sizeFilter.addEventListener('change', applyFilters);
+  els.brandFilter.addEventListener('change', () => {
+    if (state.view === 'catalog') applyFilters();
+  });
+  els.sizeFilter.addEventListener('change', () => {
+    if (state.view === 'catalog') applyFilters();
+  });
 
-  els.searchInput.addEventListener('input', debounce(applyFilters, 300));
-  els.sortSelect.addEventListener('change', applyFilters);
+  els.searchInput.addEventListener('input', debounce(() => {
+    if (state.view === 'catalog') applyFilters();
+  }, 300));
+
+  els.sortSelect.addEventListener('change', () => {
+    if (state.view === 'catalog') applyFilters();
+  });
 
   els.openMysteryBtn.addEventListener('click', openMysteryBox);
 
@@ -113,6 +150,9 @@ function attachEvents() {
 
   els.closeProduct.addEventListener('click', closeProductModal);
 
+  els.favBtn.addEventListener('click', toggleFavoritesView);
+  els.clearFavoritesBtn.addEventListener('click', clearFavorites);
+
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeCart();
@@ -121,10 +161,13 @@ function attachEvents() {
   });
 }
 
-/* ———— Mystery Box ———— */
+/* Mystery Box */
 function openMysteryBox() {
   const arr = state.products;
   if (!arr.length) return;
+
+  els.mysteryBox.classList.add('mystery-animate');
+  setTimeout(() => els.mysteryBox.classList.remove('mystery-animate'), 500);
 
   const randomIndex = Math.floor(Math.random() * arr.length);
   const p = arr[randomIndex];
@@ -132,7 +175,30 @@ function openMysteryBox() {
   alert(`Сегодняшняя пара: ${p.title} — ${formatPrice(p.price)}`);
 }
 
-/* ———— Apply filters ———— */
+/* View switching */
+function toggleFavoritesView() {
+  if (state.view === 'catalog') {
+    state.view = 'favorites';
+    els.filtersSection.classList.add('hidden');
+    els.favoritesHeader.classList.remove('hidden');
+    fadeSwitch(renderFavorites);
+  } else {
+    state.view = 'catalog';
+    els.filtersSection.classList.remove('hidden');
+    els.favoritesHeader.classList.add('hidden');
+    fadeSwitch(renderCatalog);
+  }
+}
+
+function fadeSwitch(renderFn) {
+  els.catalog.style.opacity = '0';
+  setTimeout(() => {
+    renderFn();
+    els.catalog.style.opacity = '1';
+  }, 200);
+}
+
+/* Apply filters */
 function applyFilters() {
   const brand = els.brandFilter.value;
   const size = els.sizeFilter.value ? Number(els.sizeFilter.value) : null;
@@ -143,7 +209,6 @@ function applyFilters() {
     const byBrand = !brand || p.brand === brand;
     const bySize = !size || (p.sizes || []).includes(size);
     const bySearch = !search || p.title.toLowerCase().includes(search);
-
     return byBrand && bySize && bySearch;
   });
 
@@ -154,7 +219,7 @@ function applyFilters() {
   renderCatalog();
 }
 
-/* ———— Render catalog ———— */
+/* Render catalog */
 function renderCatalog() {
   els.catalog.innerHTML = '';
   const arr = state.filtered;
@@ -170,7 +235,28 @@ function renderCatalog() {
   arr.forEach(p => els.catalog.appendChild(cardNode(p)));
 }
 
-/* ———— CARD NODE ———— */
+/* Render favorites */
+function renderFavorites() {
+  els.catalog.innerHTML = '';
+
+  const favIds = [...state.favorites];
+  const arr = state.products.filter(p => favIds.includes(p.id));
+
+  const count = arr.length;
+  els.favoritesCountLabel.textContent = count ? `(${count})` : '(0)';
+
+  if (!arr.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.textContent = 'В избранном пока пусто';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  arr.forEach(p => els.catalog.appendChild(cardNode(p)));
+}
+
+/* Card node */
 function cardNode(p) {
   const node = document.createElement('div');
   node.className = 'card';
@@ -213,7 +299,7 @@ function cardNode(p) {
   return node;
 }
 
-/* ———— Product modal ———— */
+/* Product modal */
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
@@ -239,40 +325,56 @@ function openProductModal(p) {
   });
 
   els.productModal.classList.remove('hidden');
+  els.productModal.classList.add('open');
 
   els.addToCartBtn.onclick = () => {
     const qty = Math.max(1, Number(els.modalQty.value || 1));
     if (!selectedSize) selectedSize = pickFirstSize(p);
     addToCart(p, selectedSize, qty);
+    createFlyAnimation(p);
     closeProductModal();
     openCart();
   };
 
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
+    updateFavBadge();
   };
 }
 
 function closeProductModal() {
-  els.productModal.classList.add('hidden');
+  els.productModal.classList.remove('open');
+  setTimeout(() => {
+    els.productModal.classList.add('hidden');
+  }, 200);
 }
 
-/* ———— Favorites ———— */
+/* Favorites */
 function toggleFavorite(id) {
   if (state.favorites.has(id)) state.favorites.delete(id);
   else state.favorites.add(id);
 
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
+  updateFavBadge();
 
-  const icon = document.querySelector(`.card[data-id="${id}"] .fav-icon`);
-  if (icon) {
-    icon.classList.toggle('active');
-    icon.classList.add('animate');
-    setTimeout(() => icon.classList.remove('animate'), 400);
+  if (state.view === 'favorites') {
+    renderFavorites();
   }
 }
 
-/* ———— Cart ———— */
+function clearFavorites() {
+  state.favorites.clear();
+  localStorage.setItem('favorites', JSON.stringify([]));
+  updateFavBadge();
+  if (state.view === 'favorites') renderFavorites();
+}
+
+function updateFavBadge() {
+  const count = state.favorites.size;
+  els.favCount.textContent = count;
+}
+
+/* Cart */
 function pickFirstSize(p) {
   return (p.sizes || [])[0] || null;
 }
@@ -381,6 +483,28 @@ function updateCartBadge() {
   els.cartBtn.textContent = formatPrice(total);
 }
 
+/* Fly animation */
+function createFlyAnimation(p) {
+  const cover = (p.images && p.images[0]) || '';
+  if (!cover) return;
+
+  const img = document.createElement('img');
+  img.src = cover;
+  img.className = 'fly';
+  img.style.width = '80px';
+  img.style.height = '80px';
+  img.style.borderRadius = '50%';
+  img.style.objectFit = 'cover';
+
+  const rect = els.productModal.getBoundingClientRect();
+  img.style.left = (rect.left + rect.width / 2 - 40) + 'px';
+  img.style.top = (rect.top + rect.height / 2 - 40) + 'px';
+
+  document.body.appendChild(img);
+  setTimeout(() => img.remove(), 700);
+}
+
+/* Checkout */
 async function checkout() {
   if (!state.cart.length) {
     alert('Корзина пуста');
@@ -430,7 +554,7 @@ async function checkout() {
   }
 }
 
-/* ———— Utils ———— */
+/* Utils */
 function debounce(fn, ms) {
   let t = null;
   return (...args) => {
