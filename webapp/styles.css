@@ -302,12 +302,17 @@ input:focus,
   z-index: 100;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .25s ease;
+  transition: opacity .22s ease;
 }
 
 .modal.open {
   opacity: 1;
   pointer-events: auto;
+}
+
+.modal.closing {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .modal-content {
@@ -316,13 +321,18 @@ input:focus,
   border: 1px solid var(--border);
   width: min(900px, 95vw);
   padding: 16px;
-  transform: scale(.92);
-  transition: transform .25s ease;
+  transform: scale(.96);
+  transition: transform .22s ease;
 }
 
 .modal.open .modal-content {
   transform: scale(1);
 }
+
+.modal.closing .modal-content {
+  transform: scale(.96);
+}
+
 
 .modal-grid {
   display: grid;
