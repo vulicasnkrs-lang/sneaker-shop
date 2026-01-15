@@ -9,7 +9,7 @@ const state = {
   cart: JSON.parse(localStorage.getItem('cart') || '[]'),
   brandSet: new Set(),
   allSizes: new Set(),
-  view: 'catalog' // 'catalog' | 'favorites'
+  view: 'catalog'
 };
 
 /* Elements */
@@ -28,6 +28,14 @@ const els = {
 
   mysteryBox: document.getElementById('mysteryBox'),
   openMysteryBtn: document.getElementById('openMysteryBtn'),
+
+  /* Mystery Modal */
+  mysteryModal: document.getElementById('mysteryModal'),
+  closeMystery: document.getElementById('closeMystery'),
+  mysteryImg: document.getElementById('mysteryImg'),
+  mysteryTitle: document.getElementById('mysteryTitle'),
+  mysteryPrice: document.getElementById('mysteryPrice'),
+  mysteryOk: document.getElementById('mysteryOk'),
 
   cartBtn: document.getElementById('cartBtn'),
   cartDrawer: document.getElementById('cartDrawer'),
@@ -144,6 +152,10 @@ function attachEvents() {
 
   els.openMysteryBtn.addEventListener('click', openMysteryBox);
 
+  /* Mystery Modal events */
+  els.closeMystery.addEventListener('click', closeMysteryModal);
+  els.mysteryOk.addEventListener('click', closeMysteryModal);
+
   els.cartBtn.addEventListener('click', openCart);
   els.closeCart.addEventListener('click', closeCart);
   els.checkoutBtn.addEventListener('click', checkout);
@@ -157,11 +169,12 @@ function attachEvents() {
     if (e.key === 'Escape') {
       closeCart();
       closeProductModal();
+      closeMysteryModal();
     }
   });
 }
 
-/* Mystery Box */
+/* Mystery Box — обновлённая версия */
 function openMysteryBox() {
   const arr = state.products;
   if (!arr.length) return;
@@ -169,35 +182,28 @@ function openMysteryBox() {
   els.mysteryBox.classList.add('mystery-animate');
   setTimeout(() => els.mysteryBox.classList.remove('mystery-animate'), 500);
 
-  const randomIndex = Math.floor(Math.random() * arr.length);
-  const p = arr[randomIndex];
+  const p = arr[Math.floor(Math.random() * arr.length)];
 
-  alert(`Сегодняшняя пара: ${p.title} — ${formatPrice(p.price)}`);
+  els.mysteryImg.src = (p.images && p.images[0]) || '';
+  els.mysteryTitle.textContent = p.title;
+  els.mysteryPrice.textContent = formatPrice(p.price);
+
+  els.mysteryModal.classList.remove('hidden', 'closing');
+  requestAnimationFrame(() => {
+    els.mysteryModal.classList.add('open');
+  });
 }
 
-/* View switching */
-function toggleFavoritesView() {
-  if (state.view === 'catalog') {
-    state.view = 'favorites';
-    els.filtersSection.classList.add('hidden');
-    els.favoritesHeader.classList.remove('hidden');
-    fadeSwitch(renderFavorites);
-  } else {
-    state.view = 'catalog';
-    els.filtersSection.classList.remove('hidden');
-    els.favoritesHeader.classList.add('hidden');
-    fadeSwitch(renderCatalog);
-  }
-}
+/* Закрытие Mystery Modal */
+function closeMysteryModal() {
+  els.mysteryModal.classList.remove('open');
+  els.mysteryModal.classList.add('closing');
 
-function fadeSwitch(renderFn) {
-  els.catalog.style.opacity = '0';
   setTimeout(() => {
-    renderFn();
-    els.catalog.style.opacity = '1';
-  }, 200);
+    els.mysteryModal.classList.add('hidden');
+    els.mysteryModal.classList.remove('closing');
+  }, 220);
 }
-
 /* Apply filters */
 function applyFilters() {
   const brand = els.brandFilter.value;
@@ -223,10 +229,8 @@ function applyFilters() {
 function renderCatalog() {
   const oldCards = [...els.catalog.children];
 
-  // 1) Fade-out старых карточек
   oldCards.forEach(card => card.classList.add('fade-out'));
 
-  // 2) Ждём завершения fade-out
   setTimeout(() => {
     els.catalog.innerHTML = '';
 
@@ -240,14 +244,13 @@ function renderCatalog() {
       return;
     }
 
-    // 3) Добавляем новые карточки со stagger-анимацией
     arr.forEach((p, i) => {
       const node = cardNode(p);
-      node.style.animationDelay = `${i * 40}ms`; // stagger 40ms
+      node.style.animationDelay = `${i * 40}ms`;
       els.catalog.appendChild(node);
     });
 
-  }, 180); // время fade-out
+  }, 180);
 }
 
 /* Render favorites */
@@ -257,8 +260,7 @@ function renderFavorites() {
   const favIds = [...state.favorites];
   const arr = state.products.filter(p => favIds.includes(p.id));
 
-  const count = arr.length;
-  els.favoritesCountLabel.textContent = count ? `(${count})` : '(0)';
+  els.favoritesCountLabel.textContent = arr.length ? `(${arr.length})` : '(0)';
 
   if (!arr.length) {
     const empty = document.createElement('div');
@@ -310,28 +312,30 @@ function cardNode(p) {
     favIcon.classList.add('animate');
     setTimeout(() => favIcon.classList.remove('animate'), 300);
   });
-// Tilt effect
-node.addEventListener('mousemove', (e) => {
-  const rect = node.getBoundingClientRect();
-  const x = e.clientX - rect.left - rect.width / 2;
-  const y = e.clientY - rect.top - rect.height / 2;
 
-  const tiltX = (y / rect.height) * 3; // до 3°
-  const tiltY = -(x / rect.width) * 3;
+  /* Tilt effect */
+  node.addEventListener('mousemove', (e) => {
+    const rect = node.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
 
-  node.style.transform = `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-  node.classList.add('tilt');
-});
+    const tiltX = (y / rect.height) * 3;
+    const tiltY = -(x / rect.width) * 3;
 
-node.addEventListener('mouseleave', () => {
-  node.style.transform = '';
-  node.classList.remove('tilt');
-});
+    node.style.transform =
+      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    node.classList.add('tilt');
+  });
+
+  node.addEventListener('mouseleave', () => {
+    node.style.transform = '';
+    node.classList.remove('tilt');
+  });
 
   return node;
 }
 
-/* Product modal */
+/* Ripple */
 function addRippleEffect(button, event) {
   const rect = button.getBoundingClientRect();
   const size = Math.max(rect.width, rect.height);
@@ -349,11 +353,15 @@ function addRippleEffect(button, event) {
   setTimeout(() => ripple.remove(), 450);
 }
 
+/* Product modal */
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
 
-  els.modalImages.innerHTML = (p.images || []).map(src => `<img src="${src}" alt="">`).join('');
+  els.modalImages.innerHTML = (p.images || [])
+    .map(src => `<img src="${src}" alt="">`)
+    .join('');
+
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
@@ -367,24 +375,24 @@ function openProductModal(p) {
     b.textContent = s;
     b.addEventListener('click', () => {
       selectedSize = s;
-      els.modalSizes.querySelectorAll('.size').forEach(x => x.classList.remove('active'));
+      els.modalSizes.querySelectorAll('.size')
+        .forEach(x => x.classList.remove('active'));
       b.classList.add('active');
     });
     els.modalSizes.appendChild(b);
   });
 
-  // сбрасываем классы
   els.productModal.classList.remove('hidden', 'closing');
-  // небольшой тик, чтобы transition сработал
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
   els.addToCartBtn.onclick = (e) => {
-  addRippleEffect(els.addToCartBtn, e);
-    
+    addRippleEffect(els.addToCartBtn, e);
+
     const qty = Math.max(1, Number(els.modalQty.value || 1));
     if (!selectedSize) selectedSize = pickFirstSize(p);
+
     addToCart(p, selectedSize, qty);
     createFlyAnimation(p);
     closeProductModal();
@@ -396,16 +404,14 @@ function openProductModal(p) {
     updateFavBadge();
   };
 }
-
 function closeProductModal() {
-  // запускаем анимацию закрытия
   els.productModal.classList.remove('open');
   els.productModal.classList.add('closing');
 
   setTimeout(() => {
     els.productModal.classList.add('hidden');
     els.productModal.classList.remove('closing');
-  }, 220); // синхронно с CSS transition
+  }, 220);
 }
 
 /* Favorites */
@@ -416,9 +422,7 @@ function toggleFavorite(id) {
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
   updateFavBadge();
 
-  if (state.view === 'favorites') {
-    renderFavorites();
-  }
+  if (state.view === 'favorites') renderFavorites();
 }
 
 function clearFavorites() {
@@ -429,8 +433,7 @@ function clearFavorites() {
 }
 
 function updateFavBadge() {
-  const count = state.favorites.size;
-  els.favCount.textContent = count;
+  els.favCount.textContent = state.favorites.size;
 }
 
 /* Cart */
@@ -442,11 +445,20 @@ function addToCart(p, size, qty) {
   const key = `${p.id}:${size}`;
   const idx = state.cart.findIndex(x => x.key === key);
 
-  if (idx >= 0) state.cart[idx].qty += qty;
-  else state.cart.push({
-    key, id: p.id, title: p.title, brand: p.brand,
-    price: p.price, size, qty, images: p.images
-  });
+  if (idx >= 0) {
+    state.cart[idx].qty += qty;
+  } else {
+    state.cart.push({
+      key,
+      id: p.id,
+      title: p.title,
+      brand: p.brand,
+      price: p.price,
+      size,
+      qty,
+      images: p.images
+    });
+  }
 
   persistCart();
   updateCartBadge();
@@ -480,6 +492,7 @@ function renderCart() {
   state.cart.forEach(item => {
     const node = document.createElement('div');
     node.className = 'cart-item';
+
     node.innerHTML = `
       <img src="${(item.images && item.images[0]) || ''}" alt="">
       <div>
@@ -538,8 +551,7 @@ function formatPrice(v) {
 }
 
 function updateCartBadge() {
-  const total = cartTotal();
-  els.cartBtn.textContent = formatPrice(total);
+  els.cartBtn.textContent = formatPrice(cartTotal());
 }
 
 /* Fly animation */
@@ -556,8 +568,8 @@ function createFlyAnimation(p) {
   img.style.objectFit = 'cover';
 
   const rect = els.productModal.getBoundingClientRect();
-  img.style.left = (rect.left + rect.width / 2 - 40) + 'px';
-  img.style.top = (rect.top + rect.height / 2 - 40) + 'px';
+  img.style.left = rect.left + rect.width / 2 - 40 + 'px';
+  img.style.top = rect.top + rect.height / 2 - 40 + 'px';
 
   document.body.appendChild(img);
   setTimeout(() => img.remove(), 700);
