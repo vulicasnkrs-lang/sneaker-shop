@@ -382,15 +382,7 @@ function openProductModal(p) {
 
   els.addToCartBtn.onclick = (e) => {
   addRippleEffect(els.addToCartBtn, e);
-
-  const qty = Math.max(1, Number(els.modalQty.value || 1));
-  if (!selectedSize) selectedSize = pickFirstSize(p);
-  addToCart(p, selectedSize, qty);
-  createFlyAnimation(p);
-  closeProductModal();
-  openCart();
-};
-
+    
     const qty = Math.max(1, Number(els.modalQty.value || 1));
     if (!selectedSize) selectedSize = pickFirstSize(p);
     addToCart(p, selectedSize, qty);
