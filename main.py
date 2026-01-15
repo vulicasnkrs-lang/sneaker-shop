@@ -67,7 +67,7 @@ async def create_app():
 
     # WebApp
     app.router.add_get("/", index)
-    app.router.add_static("/", WEB_DIR)
+    app.router.add_static("/static/", WEB_DIR)
 
     # API
     app.router.add_get("/healthz", healthz)
