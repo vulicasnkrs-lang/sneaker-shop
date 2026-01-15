@@ -217,6 +217,11 @@ input:focus,
   opacity: 0;
   animation: fadeIn .5s ease forwards;
 }
+.card.fade-out {
+  opacity: 0 !important;
+  transform: translateY(10px);
+  transition: opacity .25s ease, transform .25s ease;
+}
 
 .card:hover {
   transform: translateY(-4px);
