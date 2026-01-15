@@ -221,18 +221,33 @@ function applyFilters() {
 
 /* Render catalog */
 function renderCatalog() {
-  els.catalog.innerHTML = '';
-  const arr = state.filtered;
+  const oldCards = [...els.catalog.children];
 
-  if (!arr.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.textContent = 'Ничего не найдено';
-    els.catalog.appendChild(empty);
-    return;
-  }
+  // 1) Fade-out старых карточек
+  oldCards.forEach(card => card.classList.add('fade-out'));
 
-  arr.forEach(p => els.catalog.appendChild(cardNode(p)));
+  // 2) Ждём завершения fade-out
+  setTimeout(() => {
+    els.catalog.innerHTML = '';
+
+    const arr = state.filtered;
+
+    if (!arr.length) {
+      const empty = document.createElement('div');
+      empty.style.color = '#aeb4c0';
+      empty.textContent = 'Ничего не найдено';
+      els.catalog.appendChild(empty);
+      return;
+    }
+
+    // 3) Добавляем новые карточки со stagger-анимацией
+    arr.forEach((p, i) => {
+      const node = cardNode(p);
+      node.style.animationDelay = `${i * 40}ms`; // stagger 40ms
+      els.catalog.appendChild(node);
+    });
+
+  }, 180); // время fade-out
 }
 
 /* Render favorites */
