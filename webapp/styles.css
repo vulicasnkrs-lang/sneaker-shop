@@ -66,6 +66,33 @@ html, body {
   font-size: 22px;
   cursor: pointer;
 }
+/* Ripple container */
+.primary {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple circle */
+.primary .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  transform: scale(0);
+  animation: rippleAnim .45s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+/* Press feedback */
+.primary:active {
+  transform: scale(0.96);
+}
 
 /* Fade-in */
 .fade-in {
