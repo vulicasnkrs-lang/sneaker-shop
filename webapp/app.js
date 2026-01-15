@@ -407,6 +407,20 @@ function closeProductModal() {
     els.productModal.classList.remove('closing');
   }, 220); // синхронно с CSS transition
 }
+<!-- MYSTERY MODAL -->
+<div class="modal hidden" id="mysteryModal">
+  <div class="modal-content" style="max-width: 420px; text-align:center;">
+    <button id="closeMystery" class="close-btn">×</button>
+
+    <h2>Пара дня 🎁</h2>
+    <img id="mysteryImg" style="width:100%; border-radius:14px; margin:12px 0;" />
+
+    <div id="mysteryTitle" style="font-size:18px; font-weight:600;"></div>
+    <div id="mysteryPrice" style="font-size:20px; font-weight:700; margin:8px 0;"></div>
+
+    <button id="mysteryOk" class="primary" style="margin-top:10px;">Открыть каталог</button>
+  </div>
+</div>
 
 
 /* Favorites */
