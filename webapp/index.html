@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>vulica.SNKRS</title>
-
-  <!-- СТАТИКА ТЕПЕРЬ ПО /static/ -->
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 
 <body>
-
   <!-- HEADER -->
   <header class="header">
     <div class="brand">vulica.SNKRS</div>
@@ -18,23 +15,23 @@
     <div class="header-actions">
       <div class="profile-icon">👤</div>
       <button id="cartBtn" class="primary">0 ₽</button>
+      <button id="favBtn" class="icon-btn">
+        ❤ <span id="favCount">0</span>
+      </button>
     </div>
   </header>
 
   <!-- MYSTERY BOX -->
-  <section class="mystery-box">
+  <section class="mystery-box" id="mysteryBox">
     <h2>🎁 Тайная коробка дня</h2>
     <p>Открой, чтобы узнать пару дня</p>
     <button id="openMysteryBtn" class="primary">Открыть</button>
   </section>
 
   <!-- FILTERS -->
-  <section class="filters">
-
-    <!-- Поиск + сортировка -->
+  <section class="filters" id="filtersSection">
     <div class="filter-row">
       <input id="searchInput" type="text" placeholder="Поиск модели..." />
-
       <select id="sortSelect">
         <option value="">Сортировка</option>
         <option value="price-asc">Цена: дешевле</option>
@@ -42,7 +39,6 @@
       </select>
     </div>
 
-    <!-- Бренд + размер -->
     <div class="filter-row" style="margin-top:12px;">
       <select id="brandFilter">
         <option value="">Бренд</option>
@@ -52,34 +48,41 @@
         <option value="">Размер</option>
       </select>
     </div>
-
   </section>
 
-  <!-- CATALOG -->
+  <!-- FAVORITES HEADER (показывается только в режиме избранного) -->
+  <section class="favorites-header hidden" id="favoritesHeader">
+    <div class="fav-title">
+      ❤ Избранное <span id="favoritesCountLabel"></span>
+    </div>
+    <button id="clearFavoritesBtn" class="secondary">Очистить</button>
+  </section>
+
+  <!-- CATALOG / FAVORITES GRID -->
   <main class="catalog" id="catalog"></main>
 
   <!-- PRODUCT MODAL -->
   <div class="modal hidden" id="productModal">
     <div class="modal-content">
-      <button id="closeProduct" style="float:right; border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+      <button id="closeProduct" class="close-btn">×</button>
 
       <div class="modal-grid">
         <div class="modal-images" id="modalImages"></div>
 
         <div class="modal-info">
           <h2 id="modalTitle"></h2>
-          <div id="modalBrandSeason" style="color:#777; font-size:14px;"></div>
-          <div id="modalPrice" style="font-size:20px; font-weight:700;"></div>
-          <p id="modalDesc" style="font-size:14px; color:#555;"></p>
+          <div id="modalBrandSeason" class="modal-meta"></div>
+          <div id="modalPrice" class="modal-price"></div>
+          <p id="modalDesc" class="modal-desc"></p>
 
           <div class="sizes" id="modalSizes"></div>
 
-          <div style="display:flex; gap:10px; align-items:center;">
-            <input id="modalQty" type="number" value="1" min="1" style="width:70px; padding:8px; border-radius:10px; border:1px solid #ddd;">
-            <button id="addToCartBtn" class="primary" style="flex:1;">Добавить в корзину</button>
+          <div class="modal-actions">
+            <input id="modalQty" type="number" value="1" min="1" />
+            <button id="addToCartBtn" class="primary">Добавить в корзину</button>
           </div>
 
-          <button id="toggleFavBtn" style="margin-top:10px; background:none; border:none; cursor:pointer; color:#ff4444;">
+          <button id="toggleFavBtn" class="fav-toggle-btn">
             ❤ В избранное
           </button>
         </div>
@@ -91,22 +94,20 @@
   <div class="drawer hidden" id="cartDrawer">
     <div class="drawer-header">
       <strong>Корзина</strong>
-      <button id="closeCart" style="border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+      <button id="closeCart" class="close-btn">×</button>
     </div>
 
     <div class="drawer-list" id="cartList"></div>
 
-    <div style="padding:14px; border-top:1px solid #eee;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+    <div class="drawer-footer">
+      <div class="drawer-total-row">
         <span>Итого:</span>
         <strong id="cartTotal">0 ₽</strong>
       </div>
-
-      <button id="checkoutBtn" class="primary" style="width:100%;">Оформить заказ</button>
+      <button id="checkoutBtn" class="primary full-width">Оформить заказ</button>
     </div>
   </div>
 
-  <!-- JS ТЕПЕРЬ ПО /static/ -->
   <script src="/static/app.js"></script>
 </body>
 </html>
