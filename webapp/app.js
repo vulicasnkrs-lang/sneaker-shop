@@ -310,6 +310,23 @@ function cardNode(p) {
     favIcon.classList.add('animate');
     setTimeout(() => favIcon.classList.remove('animate'), 300);
   });
+// Tilt effect
+node.addEventListener('mousemove', (e) => {
+  const rect = node.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+
+  const tiltX = (y / rect.height) * 3; // до 3°
+  const tiltY = -(x / rect.width) * 3;
+
+  node.style.transform = `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  node.classList.add('tilt');
+});
+
+node.addEventListener('mouseleave', () => {
+  node.style.transform = '';
+  node.classList.remove('tilt');
+});
 
   return node;
 }
