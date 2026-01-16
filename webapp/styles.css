@@ -417,6 +417,26 @@ input:focus,
   opacity: 1;
   transform: translateY(0);
 }
+/* Mystery Modal — Glow Effect */
+.mystery-appear img {
+  position: relative;
+}
+
+.mystery-appear.open img {
+  animation: mysteryGlow 0.45s ease-out;
+}
+
+@keyframes mysteryGlow {
+  0% {
+    box-shadow: 0 0 0px rgba(255,255,255,0);
+  }
+  40% {
+    box-shadow: 0 0 22px rgba(255,255,255,0.8);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(255,255,255,0);
+  }
+}
 
 /* Fly-to-cart */
 @keyframes flyToCart {
