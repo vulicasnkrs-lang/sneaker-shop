@@ -188,11 +188,14 @@ function openMysteryBox() {
   els.mysteryTitle.textContent = p.title;
   els.mysteryPrice.textContent = formatPrice(p.price);
 
+  els.mysteryModal.classList.add('mystery-appear');
   els.mysteryModal.classList.remove('hidden', 'closing');
+
   requestAnimationFrame(() => {
     els.mysteryModal.classList.add('open');
   });
 }
+
 
 /* Закрытие Mystery Modal */
 function closeMysteryModal() {
@@ -201,9 +204,10 @@ function closeMysteryModal() {
 
   setTimeout(() => {
     els.mysteryModal.classList.add('hidden');
-    els.mysteryModal.classList.remove('closing');
+    els.mysteryModal.classList.remove('closing', 'mystery-appear');
   }, 220);
 }
+
 
 /* View switching */
 function toggleFavoritesView() {
