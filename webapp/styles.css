@@ -641,3 +641,19 @@ input:focus,
 .size:active {
   transform: scale(0.97);
 }
+/* Size Pills */
+.sizes { ... }
+.size { ... }
+.size:hover { ... }
+.size.active { ... }
+.size:active { ... }
+
+/* Micro‑interaction при выборе размера */
+.size.active {
+  animation: sizeSelect 0.25s ease;
+}
+
+@keyframes sizeSelect {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1.05); }
+}
