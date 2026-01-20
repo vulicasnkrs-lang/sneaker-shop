@@ -544,3 +544,51 @@ input:focus,
 @media (max-width: 780px) {
   .modal-grid { grid-template-columns: 1fr; }
 }
+/* Product Modal — Gallery */
+.modal-main-image {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.modal-main-image img {
+  width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  transition: opacity 0.25s ease;
+}
+
+.fade-in {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.modal-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.modal-thumb.active {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.modal-thumb:hover {
+  opacity: 1;
+}
