@@ -428,6 +428,7 @@ thumbs.forEach(thumb => {
   });
 });
 // Свайп на мобильных
+// Свайп на мобильных
 let startX = 0;
 
 mainImg.addEventListener('touchstart', e => {
@@ -445,11 +446,24 @@ mainImg.addEventListener('touchend', e => {
   if (diff < 0 && currentIndex < imgs.length - 1) currentIndex++;
   else if (diff > 0 && currentIndex > 0) currentIndex--;
 
-  // Переключение
-  mainImg.classList.remove('fade-in');
+  // Переключение с crossfade + zoom
+  mainImg.classList.remove('fade-switch');
   void mainImg.offsetWidth;
   mainImg.src = imgs[currentIndex];
-  mainImg.classList.add('fade-in');
+  mainImg.classList.add('fade-switch');
+
+  // Обновляем активную миниатюру
+  thumbs.forEach(t => t.classList.remove('active'));
+  thumbs[currentIndex].classList.add('active');
+});
+
+
+  // Переключение
+ mainImg.classList.remove('fade-switch');
+void mainImg.offsetWidth; // reset animation
+mainImg.src = imgs[index];
+mainImg.classList.add('fade-switch');
+
 
   // Обновляем активную миниатюру
   thumbs.forEach(t => t.classList.remove('active'));
