@@ -466,12 +466,19 @@ mainImg.addEventListener('touchend', e => {
     const b = document.createElement('button');
     b.className = 'size';
     b.textContent = s;
-    b.addEventListener('click', () => {
-      selectedSize = s;
-      els.modalSizes.querySelectorAll('.size')
-        .forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-    });
+   b.addEventListener('click', () => {
+  selectedSize = s;
+
+  els.modalSizes.querySelectorAll('.size')
+    .forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+
+  // Анимация цены
+  els.modalPrice.classList.remove('bump');
+  void els.modalPrice.offsetWidth;
+  els.modalPrice.classList.add('bump');
+});
+
     els.modalSizes.appendChild(b);
   });
 
