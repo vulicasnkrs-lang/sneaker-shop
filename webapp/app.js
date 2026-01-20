@@ -455,21 +455,6 @@ mainImg.addEventListener('touchend', e => {
   thumbs.forEach(t => t.classList.remove('active'));
   thumbs[currentIndex].classList.add('active');
 });
-
-
-  // Переключение
- mainImg.classList.remove('fade-switch');
-void mainImg.offsetWidth; // reset animation
-mainImg.src = imgs[index];
-mainImg.classList.add('fade-switch');
-
-
-  // Обновляем активную миниатюру
-  thumbs.forEach(t => t.classList.remove('active'));
-  thumbs[currentIndex].classList.add('active');
-});
-
-
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
