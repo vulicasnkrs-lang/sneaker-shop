@@ -385,9 +385,77 @@ function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
 
-  els.modalImages.innerHTML = (p.images || [])
-    .map(src => `<img src="${src}" alt="">`)
-    .join('');
+  // Галерея: основное изображение + миниатюры
+const imgs = p.images || [];
+if (!imgs.length) {
+  els.modalImages.innerHTML = '';
+} else {
+  els.modalImages.innerHTML = `
+    <div class="modal-main-image">
+      <img id="modalMainImage" src="${imgs[0]}" class="fade-in">
+    </div>
+
+    <div class="modal-thumbs">
+      ${imgs
+        .map((src, i) => `
+          <img 
+            src="${src}" 
+            class="modal-thumb ${i === 0 ? 'active' : ''}" 
+            data-index="${i}"
+          >
+        `)
+        .join('')}
+    </div>
+  `;
+}
+// Логика переключения фото
+const mainImg = document.getElementById('modalMainImage');
+const thumbs = els.modalImages.querySelectorAll('.modal-thumb');
+
+thumbs.forEach(thumb => {
+  thumb.addEventListener('click', () => {
+    const index = Number(thumb.dataset.index);
+
+    // Активная миниатюра
+    thumbs.forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+
+    // Fade-анимация
+    mainImg.classList.remove('fade-in');
+    void mainImg.offsetWidth; // reset animation
+    mainImg.src = imgs[index];
+    mainImg.classList.add('fade-in');
+  });
+});
+// Свайп на мобильных
+let startX = 0;
+
+mainImg.addEventListener('touchstart', e => {
+  startX = e.touches[0].clientX;
+});
+
+mainImg.addEventListener('touchend', e => {
+  const endX = e.changedTouches[0].clientX;
+  const diff = endX - startX;
+
+  if (Math.abs(diff) < 40) return; // слишком маленький свайп
+
+  let currentIndex = imgs.indexOf(mainImg.src.replace(location.origin, ''));
+
+  if (diff < 0 && currentIndex < imgs.length - 1) currentIndex++;
+  else if (diff > 0 && currentIndex > 0) currentIndex--;
+
+  // Переключение
+  mainImg.classList.remove('fade-in');
+  void mainImg.offsetWidth;
+  mainImg.src = imgs[currentIndex];
+  mainImg.classList.add('fade-in');
+
+  // Обновляем активную миниатюру
+  thumbs.forEach(t => t.classList.remove('active'));
+  thumbs[currentIndex].classList.add('active');
+});
+
 
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.title;
