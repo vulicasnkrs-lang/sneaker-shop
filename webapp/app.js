@@ -486,6 +486,10 @@ mainImg.addEventListener('touchend', e => {
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
+// Bounce анимация кнопки
+els.addToCartBtn.classList.remove('bounce');
+void els.addToCartBtn.offsetWidth;
+els.addToCartBtn.classList.add('bounce');
 
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
