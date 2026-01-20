@@ -607,3 +607,37 @@ input:focus,
     transform: scale(1);
   }
 }
+/* Size Pills */
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.size {
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+
+.size:hover {
+  background: #e9eaed;
+  transform: translateY(-1px);
+}
+
+.size.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  transform: scale(1.05);
+}
+
+.size:active {
+  transform: scale(0.97);
+}
