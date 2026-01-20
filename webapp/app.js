@@ -428,7 +428,6 @@ thumbs.forEach(thumb => {
   });
 });
 // Свайп на мобильных
-// Свайп на мобильных
 let startX = 0;
 
 mainImg.addEventListener('touchstart', e => {
