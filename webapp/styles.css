@@ -752,3 +752,24 @@ input:focus,
     opacity: 0;
   }
 }
+.modal-sizes {
+  margin-top: 16px;
+  margin-bottom: 12px;
+}
+
+.modal-qty {
+  margin-bottom: 16px;
+}
+
+#addToCartBtn {
+  margin-top: 12px;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.modal-fav {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+}
