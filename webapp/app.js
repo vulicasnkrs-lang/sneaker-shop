@@ -252,7 +252,6 @@ function applyFilters() {
   state.filtered = arr;
   renderCatalog();
 }
-
 /* Render catalog */
 function renderCatalog() {
   const oldCards = [...els.catalog.children];
@@ -416,7 +415,7 @@ function openProductModal(p) {
   });
 
   els.modalTitle.textContent = p.title;
-  els.modalBrandSeason.textContent = p.brand + " • " + p.season;
+  els.modalBrandSeason.textContent = p.brand + " • " + (p.season || "");
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
@@ -549,4 +548,155 @@ function renderCart() {
   if (!state.cart.length) {
     const empty = document.createElement('div');
     empty.style.color = '#aeb4c0';
-    empty.textContent = '
+    empty.textContent = 'Корзина пуста';
+    els.cartList.appendChild(empty);
+    els.cartTotal.textContent = formatPrice(0);
+    return;
+  }
+
+  state.cart.forEach(item => {
+    const node = document.createElement('div');
+    node.className = 'cart-item';
+
+    node.innerHTML = `
+      <img src="${(item.images && item.images[0]) || ''}" alt="">
+      <div>
+        <div><strong>${item.title}</strong></div>
+        <div class="meta">Размер ${item.size}</div>
+
+        <div class="qty-row">
+          <button class="qty-btn" data-act="minus">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn" data-act="plus">+</button>
+          <button class="remove-btn" data-act="remove">Удалить</button>
+        </div>
+      </div>
+
+      <div class="price">${formatPrice(item.price)}</div>
+    `;
+
+    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
+    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
+    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
+
+    els.cartList.appendChild(node);
+  });
+
+  els.cartTotal.textContent = formatPrice(cartTotal());
+}
+
+function changeQty(key, delta) {
+  const idx = state.cart.findIndex(x => x.key === key);
+  if (idx < 0) return;
+
+  state.cart[idx].qty += delta;
+  if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
+
+  persistCart();
+  updateCartBadge();
+  renderCart();
+}
+
+function removeItem(key) {
+  const idx = state.cart.findIndex(x => x.key === key);
+  if (idx < 0) return;
+
+  state.cart.splice(idx, 1);
+  persistCart();
+  updateCartBadge();
+  renderCart();
+}
+
+function cartTotal() {
+  return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
+}
+
+function formatPrice(v) {
+  return `${v} ₽`;
+}
+
+function updateCartBadge() {
+  els.cartBtn.textContent = formatPrice(cartTotal());
+}
+
+/* Fly animation */
+function createFlyAnimation(p) {
+  const cover = (p.images && p.images[0]) || '';
+  if (!cover) return;
+
+  const img = document.createElement('img');
+  img.src = cover;
+  img.className = 'fly';
+  img.style.width = '80px';
+  img.style.height = '80px';
+  img.style.borderRadius = '50%';
+  img.style.objectFit = 'cover';
+
+  const rect = els.productModal.getBoundingClientRect();
+  img.style.left = rect.left + rect.width / 2 - 40 + 'px';
+  img.style.top = rect.top + rect.height / 2 - 40 + 'px';
+
+  document.body.appendChild(img);
+  setTimeout(() => img.remove(), 700);
+}
+
+/* Checkout */
+async function checkout() {
+  if (!state.cart.length) {
+    alert('Корзина пуста');
+    return;
+  }
+
+  const order = {
+    items: state.cart.map(x => ({
+      id: x.id,
+      title: x.title,
+      brand: x.brand,
+      size: x.size,
+      qty: x.qty,
+      price: x.price
+    })),
+    total: cartTotal(),
+    ts: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch("/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
+    });
+
+    if (res.ok) {
+      tg && tg.showPopup({
+        title: "Заказ",
+        message: "✅ Заказ отправлен!",
+        buttons: [{ type: "ok" }]
+      });
+
+      state.cart = [];
+      localStorage.removeItem("cart");
+      renderCart();
+      updateCartBadge();
+    } else {
+      throw new Error("Server error");
+    }
+  } catch (e) {
+    tg && tg.showPopup({
+      title: "Ошибка",
+      message: "Не удалось отправить заказ",
+      buttons: [{ type: "ok" }]
+    });
+  }
+}
+
+/* Utils */
+function debounce(fn, ms) {
+  let t = null;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), ms);
+  };
+}
+
+init();
