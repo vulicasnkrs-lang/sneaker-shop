@@ -61,41 +61,50 @@
   <!-- CATALOG -->
   <main class="catalog" id="catalog"></main>
 
-  <!-- PRODUCT MODAL -->
-  <div class="modal hidden" id="productModal">
-    <div class="modal-content">
-      <button id="closeProduct" class="close-btn">×</button>
+<!-- PRODUCT MODAL -->
+<div class="modal hidden" id="productModal">
+  <div class="modal-content">
 
-      <div class="modal-grid">
-        <div class="modal-images" id="modalImages"></div>
+    <button id="closeProduct" class="close-btn">×</button>
 
-        <div class="modal-info">
-          <h2 id="modalTitle"></h2>
-          <div id="modalBrandSeason" class="modal-meta"></div>
-          <div id="modalPrice" class="modal-price"></div>
-          <p id="modalDesc" class="modal-desc"></p>
+    <!-- ГАЛЕРЕЯ (КАРУСЕЛЬ) -->
+    <div class="modal-images">
+      <div class="carousel" id="carousel">
+        <!-- JS вставит сюда <img> -->
+      </div>
 
-          <!-- Sizes -->
-          <div class="modal-sizes" id="modalSizes"></div>
+      <div class="carousel-dots" id="carouselDots"></div>
+    </div>
 
-          <!-- Quantity -->
-          <div class="modal-qty">
-            <input id="modalQty" type="number" value="1" min="1" />
-          </div>
+    <!-- ИНФОРМАЦИЯ О ТОВАРЕ -->
+    <div class="modal-info">
+      <h2 id="modalTitle"></h2>
+      <div id="modalBrandSeason" class="modal-meta"></div>
+      <div id="modalPrice" class="modal-price"></div>
+      <p id="modalDesc" class="modal-desc"></p>
 
-          <!-- Add to cart -->
-          <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+      <!-- Sizes -->
+      <div class="modal-sizes" id="modalSizes"></div>
 
-          <!-- Favorites -->
-          <div class="modal-fav">
-            <button id="toggleFavBtn" class="fav-toggle-btn">
-              ❤ В избранное
-            </button>
-          </div>
-        </div>
+      <!-- Quantity -->
+      <div class="modal-qty">
+        <input id="modalQty" type="number" value="1" min="1" />
+      </div>
+
+      <!-- Add to cart -->
+      <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+
+      <!-- Favorites -->
+      <div class="modal-fav">
+        <button id="toggleFavBtn" class="fav-toggle-btn">
+          ❤ В избранное
+        </button>
       </div>
     </div>
+
   </div>
+</div>
+
 
   <!-- MYSTERY MODAL -->
   <div class="modal hidden" id="mysteryModal">
