@@ -773,3 +773,58 @@ input:focus,
   font-size: 14px;
   color: #6b7280;
 }
+/* FULLSCREEN PRODUCT MODAL */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  overflow-y: auto;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+}
+
+/* Контейнер внутри модалки */
+.modal-content {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Вертикальная структура */
+.modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Размеры */
+.modal-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Количество */
+.modal-qty {
+  width: 100%;
+}
+
+/* Кнопка корзины */
+#addToCartBtn {
+  width: 100%;
+}
+
+/* Избранное */
+.modal-fav {
+  text-align: center;
+}
