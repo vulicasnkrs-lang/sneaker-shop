@@ -50,7 +50,7 @@
     </div>
   </section>
 
-  <!-- FAVORITES HEADER (показывается только в режиме избранного) -->
+  <!-- FAVORITES HEADER -->
   <section class="favorites-header hidden" id="favoritesHeader">
     <div class="fav-title">
       ❤ Избранное <span id="favoritesCountLabel"></span>
@@ -58,7 +58,7 @@
     <button id="clearFavoritesBtn" class="secondary">Очистить</button>
   </section>
 
-  <!-- CATALOG / FAVORITES GRID -->
+  <!-- CATALOG -->
   <main class="catalog" id="catalog"></main>
 
   <!-- PRODUCT MODAL -->
@@ -75,35 +75,43 @@
           <div id="modalPrice" class="modal-price"></div>
           <p id="modalDesc" class="modal-desc"></p>
 
-          <div class="sizes" id="modalSizes"></div>
+          <!-- Sizes -->
+          <div class="modal-sizes" id="modalSizes"></div>
 
-          <div class="modal-actions">
+          <!-- Quantity -->
+          <div class="modal-qty">
             <input id="modalQty" type="number" value="1" min="1" />
-            <button id="addToCartBtn" class="primary">Добавить в корзину</button>
           </div>
 
-          <button id="toggleFavBtn" class="fav-toggle-btn">
-            ❤ В избранное
-          </button>
+          <!-- Add to cart -->
+          <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+
+          <!-- Favorites -->
+          <div class="modal-fav">
+            <button id="toggleFavBtn" class="fav-toggle-btn">
+              ❤ В избранное
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
   <!-- MYSTERY MODAL -->
-<div class="modal hidden" id="mysteryModal">
-  <div class="modal-content" style="max-width: 420px; text-align:center;">
-    <button id="closeMystery" class="close-btn">×</button>
+  <div class="modal hidden" id="mysteryModal">
+    <div class="modal-content" style="max-width: 420px; text-align:center;">
+      <button id="closeMystery" class="close-btn">×</button>
 
-    <h2>Пара дня 🎁</h2>
-    <img id="mysteryImg" style="width:100%; border-radius:14px; margin:12px 0;" />
+      <h2>Пара дня 🎁</h2>
+      <img id="mysteryImg" style="width:100%; border-radius:14px; margin:12px 0;" />
 
-    <div id="mysteryTitle" class="mystery-title"></div>
-<div id="mysteryPrice" class="mystery-price"></div>
-<button id="mysteryOk" class="primary mystery-btn" style="margin-top:10px;">Открыть каталог</button>
-
+      <div id="mysteryTitle" class="mystery-title"></div>
+      <div id="mysteryPrice" class="mystery-price"></div>
+      <button id="mysteryOk" class="primary mystery-btn" style="margin-top:10px;">
+        Открыть каталог
+      </button>
+    </div>
   </div>
-</div>
-
 
   <!-- CART DRAWER -->
   <div class="drawer hidden" id="cartDrawer">
