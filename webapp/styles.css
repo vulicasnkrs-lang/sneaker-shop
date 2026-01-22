@@ -471,8 +471,13 @@ input:focus,
   height: auto;
   flex-shrink: 0;
   scroll-snap-align: center;
-  object-fit: cover;
+  object-fit: contain;     /* ← сохраняет пропорции, ничего не режет */
+  background: #fff;        /* чтобы не было серых полос */
+  padding: 10px;           /* лёгкий воздух вокруг фото */
+  display: block;
+  margin: 0 auto;
 }
+
 
 /* Точки-индикаторы */
 .carousel-dots {
