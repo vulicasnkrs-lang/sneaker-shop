@@ -654,5 +654,16 @@ function debounce(fn, ms) {
     t = setTimeout(() => fn(...args), ms);
   };
 }
+function toggleFavoritesView() {
+  if (state.view === 'favorites') {
+    state.view = 'catalog';
+    els.favoritesHeader.classList.add('hidden');
+    renderCatalog();
+  } else {
+    state.view = 'favorites';
+    els.favoritesHeader.classList.remove('hidden');
+    renderFavorites();
+  }
+}
 
 init();
