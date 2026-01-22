@@ -10,7 +10,7 @@ const state = {
   brandSet: new Set(),
   allSizes: new Set(),
   view: 'catalog',
-  mysteryProductId: null   // товар, выпавший из Mystery Box
+  mysteryProductId: null
 };
 
 /* Elements */
@@ -30,7 +30,6 @@ const els = {
   mysteryBox: document.getElementById('mysteryBox'),
   openMysteryBtn: document.getElementById('openMysteryBtn'),
 
-  /* Mystery Modal */
   mysteryModal: document.getElementById('mysteryModal'),
   closeMystery: document.getElementById('closeMystery'),
   mysteryImg: document.getElementById('mysteryImg'),
@@ -46,10 +45,10 @@ const els = {
   checkoutBtn: document.getElementById('checkoutBtn'),
 
   productModal: document.getElementById('productModal'),
-  closeProduct: document.getElementById('closeProduct'),
+  backBtn: document.getElementById('closeProduct'),
 
   carousel: document.getElementById('carousel'),
-  carouselDots: document.getElementById('carouselDots'),
+  photoCounter: document.getElementById('photoCounter'),
 
   modalTitle: document.getElementById('modalTitle'),
   modalBrandSeason: document.getElementById('modalBrandSeason'),
@@ -156,7 +155,6 @@ function attachEvents() {
 
   els.openMysteryBtn.addEventListener('click', openMysteryBox);
 
-  /* Mystery Modal events */
   els.closeMystery.addEventListener('click', closeMysteryModal);
   els.mysteryOk.addEventListener('click', closeMysteryModal);
 
@@ -164,7 +162,7 @@ function attachEvents() {
   els.closeCart.addEventListener('click', closeCart);
   els.checkoutBtn.addEventListener('click', checkout);
 
-  els.closeProduct.addEventListener('click', closeProductModal);
+  els.backBtn.addEventListener('click', closeProductModal);
 
   els.favBtn.addEventListener('click', toggleFavoritesView);
   els.clearFavoritesBtn.addEventListener('click', clearFavorites);
@@ -188,7 +186,6 @@ function openMysteryBox() {
 
   const p = arr[Math.floor(Math.random() * arr.length)];
 
-  // запоминаем, что эта пара — из Mystery Box
   state.mysteryProductId = p.id;
 
   els.mysteryImg.src = (p.images && p.images[0]) || '';
@@ -212,76 +209,25 @@ function closeMysteryModal() {
     els.mysteryModal.classList.remove('closing', 'mystery-appear');
   }, 220);
 }
-
-/* View switching */
-function toggleFavoritesView() {
-  if (state.view === 'catalog') {
-    state.view = 'favorites';
-    els.filtersSection.classList.add('hidden');
-    els.favoritesHeader.classList.remove('hidden');
-    fadeSwitch(renderFavorites);
-  } else {
-    state.view = 'catalog';
-    els.filtersSection.classList.remove('hidden');
-    els.favoritesHeader.classList.add('hidden');
-    fadeSwitch(renderCatalog);
-  }
-}
-
-function fadeSwitch(renderFn) {
-  els.catalog.style.opacity = '0';
-  setTimeout(() => {
-    renderFn();
-    els.catalog.style.opacity = '1';
-  }, 200);
-}
-
-/* Apply filters */
-function applyFilters() {
-  const brand = els.brandFilter.value;
-  const size = els.sizeFilter.value ? Number(els.sizeFilter.value) : null;
-  const search = els.searchInput.value.trim().toLowerCase();
-  const sort = els.sortSelect.value;
-
-  let arr = state.products.filter(p => {
-    const byBrand = !brand || p.brand === brand;
-    const bySize = !size || (p.sizes || []).includes(size);
-    const bySearch = !search || p.title.toLowerCase().includes(search);
-    return byBrand && bySize && bySearch;
-  });
-
-  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
-  else if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
-
-  state.filtered = arr;
-  renderCatalog();
-}
 /* Render catalog */
 function renderCatalog() {
-  const oldCards = [...els.catalog.children];
+  els.catalog.innerHTML = '';
 
-  oldCards.forEach(card => card.classList.add('fade-out'));
+  const arr = state.filtered;
 
-  setTimeout(() => {
-    els.catalog.innerHTML = '';
+  if (!arr.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.textContent = 'Ничего не найдено';
+    els.catalog.appendChild(empty);
+    return;
+  }
 
-    const arr = state.filtered;
-
-    if (!arr.length) {
-      const empty = document.createElement('div');
-      empty.style.color = '#aeb4c0';
-      empty.textContent = 'Ничего не найдено';
-      els.catalog.appendChild(empty);
-      return;
-    }
-
-    arr.forEach((p, i) => {
-      const node = cardNode(p);
-      node.style.animationDelay = `${i * 40}ms`;
-      els.catalog.appendChild(node);
-    });
-
-  }, 180);
+  arr.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
 }
 
 /* Render favorites */
@@ -355,12 +301,10 @@ function cardNode(p) {
 
     node.style.transform =
       `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-    node.classList.add('tilt');
   });
 
   node.addEventListener('mouseleave', () => {
     node.style.transform = '';
-    node.classList.remove('tilt');
   });
 
   return node;
@@ -384,56 +328,35 @@ function addRippleEffect(button, event) {
   setTimeout(() => ripple.remove(), 450);
 }
 
-/* PRODUCT MODAL — с каруселью и подсветкой Mystery Box */
+/* PRODUCT MODAL — новая версия */
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
 
   const carousel = els.carousel;
-  const dotsContainer = els.carouselDots;
+  const counter = els.photoCounter;
 
   carousel.innerHTML = "";
-  dotsContainer.innerHTML = "";
 
   const imgs = p.images || [];
 
-  imgs.forEach((src, index) => {
+  imgs.forEach((src) => {
     const img = document.createElement("img");
     img.src = src;
     img.alt = p.title;
     carousel.appendChild(img);
-
-    const dot = document.createElement("div");
-    if (index === 0) dot.classList.add("active");
-
-    // клик по точке — плавный скролл к нужному фото
-    dot.addEventListener("click", () => {
-      const width = carousel.clientWidth;
-      carousel.scrollTo({
-        left: index * width,
-        behavior: "smooth"
-      });
-
-      [...dotsContainer.children].forEach((d, i) => {
-        d.classList.toggle("active", i === index);
-      });
-    });
-
-    dotsContainer.appendChild(dot);
   });
 
-  // сброс позиции скролла
+  // сброс позиции
   carousel.scrollLeft = 0;
 
-  // один обработчик скролла
-  carousel.onscroll = () => {
-    const scrollLeft = carousel.scrollLeft;
-    const width = carousel.clientWidth;
-    const index = Math.round(scrollLeft / width);
+  // обновление счётчика
+  counter.textContent = `1 / ${imgs.length}`;
 
-    [...dotsContainer.children].forEach((d, i) => {
-      d.classList.toggle("active", i === index);
-    });
+  carousel.onscroll = () => {
+    const width = carousel.clientWidth;
+    const index = Math.round(carousel.scrollLeft / width);
+    counter.textContent = `${index + 1} / ${imgs.length}`;
   };
 
   els.modalTitle.textContent = p.title;
@@ -442,13 +365,14 @@ function openProductModal(p) {
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
 
-  // подсветка товара из Mystery Box
+  // подсветка Mystery Box
   if (state.mysteryProductId === p.id) {
     els.productModal.classList.add('highlighted');
   } else {
     els.productModal.classList.remove('highlighted');
   }
 
+  // размеры
   els.modalSizes.innerHTML = "";
   (p.sizes || []).forEach(s => {
     const b = document.createElement("button");
@@ -462,7 +386,6 @@ function openProductModal(p) {
         .forEach(x => x.classList.remove("active"));
       b.classList.add("active");
 
-      // лёгкий bump цены
       els.modalPrice.classList.remove("bump");
       void els.modalPrice.offsetWidth;
       els.modalPrice.classList.add("bump");
@@ -471,16 +394,15 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
+  // открыть модалку
   els.productModal.classList.remove("hidden", "closing");
+  document.body.style.overflow = "hidden";
+
   requestAnimationFrame(() => {
     els.productModal.classList.add("open");
   });
 
-  // лёгкий bounce на кнопке
-  els.addToCartBtn.classList.remove("bounce");
-  void els.addToCartBtn.offsetWidth;
-  els.addToCartBtn.classList.add("bounce");
-
+  // кнопка "Добавить"
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -493,6 +415,7 @@ function openProductModal(p) {
     openCart();
   };
 
+  // избранное
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
@@ -503,76 +426,13 @@ function openProductModal(p) {
 function closeProductModal() {
   els.productModal.classList.remove('open');
   els.productModal.classList.add('closing');
+  document.body.style.overflow = "";
 
   setTimeout(() => {
     els.productModal.classList.add('hidden');
     els.productModal.classList.remove('closing');
   }, 220);
 }
-
-/* Favorites */
-function toggleFavorite(id) {
-  if (state.favorites.has(id)) state.favorites.delete(id);
-  else state.favorites.add(id);
-
-  localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
-  updateFavBadge();
-
-  if (state.view === 'favorites') renderFavorites();
-}
-
-function clearFavorites() {
-  state.favorites.clear();
-  localStorage.setItem('favorites', JSON.stringify([]));
-  updateFavBadge();
-  if (state.view === 'favorites') renderFavorites();
-}
-
-function updateFavBadge() {
-  els.favCount.textContent = state.favorites.size;
-}
-
-/* Cart */
-function pickFirstSize(p) {
-  return (p.sizes || [])[0] || null;
-}
-
-function addToCart(p, size, qty) {
-  const key = `${p.id}:${size}`;
-  const idx = state.cart.findIndex(x => x.key === key);
-
-  if (idx >= 0) {
-    state.cart[idx].qty += qty;
-  } else {
-    state.cart.push({
-      key,
-      id: p.id,
-      title: p.title,
-      brand: p.brand,
-      price: p.price,
-      size,
-      qty,
-      images: p.images
-    });
-  }
-
-  persistCart();
-  updateCartBadge();
-}
-
-function persistCart() {
-  localStorage.setItem('cart', JSON.stringify(state.cart));
-}
-
-function openCart() {
-  renderCart();
-  els.cartDrawer.classList.remove('hidden');
-}
-
-function closeCart() {
-  els.cartDrawer.classList.add('hidden');
-}
-
 function renderCart() {
   els.cartList.innerHTML = '';
 
@@ -637,6 +497,7 @@ function removeItem(key) {
   updateCartBadge();
   renderCart();
 }
+
 function cartTotal() {
   return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
 }
