@@ -516,3 +516,66 @@ input:focus,
 .modal-qty {
   width: 100%;
 }
+/* ================================
+   PREMIUM PRODUCT MODAL UPGRADES
+   ================================ */
+
+/* Фиксированная адаптивная высота галереи */
+.modal-images {
+  width: 100%;
+  height: 340px; /* стабильная высота как у Kith */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  position: relative;
+}
+
+/* Плавное появление фото */
+.carousel img {
+  opacity: 0;
+  animation: fadeInImg .35s ease forwards;
+}
+
+@keyframes fadeInImg {
+  to { opacity: 1; }
+}
+
+/* Улучшенные точки-индикаторы */
+.carousel-dots div {
+  width: 7px;
+  height: 7px;
+  background: #d1d5db;
+  border-radius: 50%;
+  transition: background .25s ease, transform .25s ease;
+}
+
+.carousel-dots .active {
+  background: #111;
+  transform: scale(1.4);
+}
+
+/* Плавный скролл карусели */
+.carousel {
+  scroll-behavior: smooth;
+  scroll-padding: 0 20px;
+}
+
+/* Микро-анимация выбора размера */
+.size.active {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Ripple улучшенный */
+.primary .ripple {
+  background: rgba(255,255,255,0.35);
+  animation: rippleAnim .55s ease-out forwards;
+}
+
+/* Выделение товара из Mystery Box */
+.modal.highlighted .modal-content {
+  box-shadow: 0 0 0 4px #ffe680;
+  border-radius: 18px;
+  transition: box-shadow .3s ease;
+}
