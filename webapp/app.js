@@ -9,7 +9,8 @@ const state = {
   cart: JSON.parse(localStorage.getItem('cart') || '[]'),
   brandSet: new Set(),
   allSizes: new Set(),
-  view: 'catalog'
+  view: 'catalog',
+  mysteryProductId: null   // товар, выпавший из Mystery Box
 };
 
 /* Elements */
@@ -186,6 +187,9 @@ function openMysteryBox() {
   setTimeout(() => els.mysteryBox.classList.remove('mystery-animate'), 500);
 
   const p = arr[Math.floor(Math.random() * arr.length)];
+
+  // запоминаем, что эта пара — из Mystery Box
+  state.mysteryProductId = p.id;
 
   els.mysteryImg.src = (p.images && p.images[0]) || '';
   els.mysteryTitle.textContent = p.title;
@@ -380,7 +384,7 @@ function addRippleEffect(button, event) {
   setTimeout(() => ripple.remove(), 450);
 }
 
-/* PRODUCT MODAL — NEW VERSION WITH CAROUSEL */
+/* PRODUCT MODAL — с каруселью и подсветкой Mystery Box */
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
@@ -401,10 +405,28 @@ function openProductModal(p) {
 
     const dot = document.createElement("div");
     if (index === 0) dot.classList.add("active");
+
+    // клик по точке — плавный скролл к нужному фото
+    dot.addEventListener("click", () => {
+      const width = carousel.clientWidth;
+      carousel.scrollTo({
+        left: index * width,
+        behavior: "smooth"
+      });
+
+      [...dotsContainer.children].forEach((d, i) => {
+        d.classList.toggle("active", i === index);
+      });
+    });
+
     dotsContainer.appendChild(dot);
   });
 
-  carousel.addEventListener("scroll", () => {
+  // сброс позиции скролла
+  carousel.scrollLeft = 0;
+
+  // один обработчик скролла
+  carousel.onscroll = () => {
     const scrollLeft = carousel.scrollLeft;
     const width = carousel.clientWidth;
     const index = Math.round(scrollLeft / width);
@@ -412,13 +434,20 @@ function openProductModal(p) {
     [...dotsContainer.children].forEach((d, i) => {
       d.classList.toggle("active", i === index);
     });
-  });
+  };
 
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.brand + " • " + (p.season || "");
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
+
+  // подсветка товара из Mystery Box
+  if (state.mysteryProductId === p.id) {
+    els.productModal.classList.add('highlighted');
+  } else {
+    els.productModal.classList.remove('highlighted');
+  }
 
   els.modalSizes.innerHTML = "";
   (p.sizes || []).forEach(s => {
@@ -433,6 +462,7 @@ function openProductModal(p) {
         .forEach(x => x.classList.remove("active"));
       b.classList.add("active");
 
+      // лёгкий bump цены
       els.modalPrice.classList.remove("bump");
       void els.modalPrice.offsetWidth;
       els.modalPrice.classList.add("bump");
@@ -446,6 +476,7 @@ function openProductModal(p) {
     els.productModal.classList.add("open");
   });
 
+  // лёгкий bounce на кнопке
   els.addToCartBtn.classList.remove("bounce");
   void els.addToCartBtn.offsetWidth;
   els.addToCartBtn.classList.add("bounce");
@@ -606,7 +637,6 @@ function removeItem(key) {
   updateCartBadge();
   renderCart();
 }
-
 function cartTotal() {
   return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
 }
