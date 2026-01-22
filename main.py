@@ -12,6 +12,7 @@ log = logging.getLogger("vulica.main")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 WEB_DIR = os.path.join(BASE_DIR, "webapp")
+STATIC_DIR = os.path.join(WEB_DIR, "static")
 
 # -----------------------------
 # 1) Главная страница WebApp
@@ -67,7 +68,9 @@ async def create_app():
 
     # WebApp
     app.router.add_get("/", index)
-    app.router.add_static("/static/", WEB_DIR)
+
+    # ВАЖНО: правильная раздача статики
+    app.router.add_static("/static/", STATIC_DIR)
 
     # API
     app.router.add_get("/healthz", healthz)
