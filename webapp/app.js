@@ -45,7 +45,6 @@ const els = {
   checkoutBtn: document.getElementById('checkoutBtn'),
 
   productModal: document.getElementById('productModal'),
-  backBtn: document.getElementById('closeProduct'),
 
   carousel: document.getElementById('carousel'),
   photoCounter: document.getElementById('photoCounter'),
@@ -161,8 +160,6 @@ function attachEvents() {
   els.cartBtn.addEventListener('click', openCart);
   els.closeCart.addEventListener('click', closeCart);
   els.checkoutBtn.addEventListener('click', checkout);
-
-  els.backBtn.addEventListener('click', closeProductModal);
 
   els.favBtn.addEventListener('click', toggleFavoritesView);
   els.clearFavoritesBtn.addEventListener('click', clearFavorites);
@@ -328,7 +325,7 @@ function addRippleEffect(button, event) {
   setTimeout(() => ripple.remove(), 450);
 }
 
-/* PRODUCT MODAL — новая версия */
+/* PRODUCT MODAL */
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
@@ -339,7 +336,6 @@ function openProductModal(p) {
   carousel.innerHTML = "";
 
   const imgs = p.images || [];
-
   imgs.forEach((src) => {
     const img = document.createElement("img");
     img.src = src;
@@ -347,10 +343,7 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  // сброс позиции
   carousel.scrollLeft = 0;
-
-  // обновление счётчика
   counter.textContent = `1 / ${imgs.length}`;
 
   carousel.onscroll = () => {
@@ -365,14 +358,12 @@ function openProductModal(p) {
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
 
-  // подсветка Mystery Box
   if (state.mysteryProductId === p.id) {
     els.productModal.classList.add('highlighted');
   } else {
     els.productModal.classList.remove('highlighted');
   }
 
-  // размеры
   els.modalSizes.innerHTML = "";
   (p.sizes || []).forEach(s => {
     const b = document.createElement("button");
@@ -394,7 +385,6 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
-  // открыть модалку
   els.productModal.classList.remove("hidden", "closing");
   document.body.style.overflow = "hidden";
 
@@ -402,7 +392,6 @@ function openProductModal(p) {
     els.productModal.classList.add("open");
   });
 
-  // кнопка "Добавить"
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -415,11 +404,18 @@ function openProductModal(p) {
     openCart();
   };
 
-  // избранное
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
   };
+
+  /* SYSTEM TELEGRAM BACK BUTTON */
+  if (tg) {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      closeProductModal();
+    });
+  }
 }
 
 /* Close product modal */
@@ -427,6 +423,11 @@ function closeProductModal() {
   els.productModal.classList.remove('open');
   els.productModal.classList.add('closing');
   document.body.style.overflow = "";
+
+  if (tg) {
+    tg.BackButton.hide();
+    tg.BackButton.onClick(() => {});
+  }
 
   setTimeout(() => {
     els.productModal.classList.add('hidden');
