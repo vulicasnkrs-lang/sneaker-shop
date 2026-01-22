@@ -66,11 +66,12 @@ async def healthz(request):
 async def create_app():
     app = web.Application()
 
-    # WebApp
+    # Главная страница
     app.router.add_get("/", index)
 
-    # ВАЖНО: правильная раздача статики
-    app.router.add_static("/static/", STATIC_DIR)
+    # Статика
+    app.router.add_static("/static/", STATIC_DIR)  # картинки
+    app.router.add_static("/", WEB_DIR)            # styles.css, app.js, products.json
 
     # API
     app.router.add_get("/healthz", healthz)
@@ -105,8 +106,8 @@ async def run_web():
 # -----------------------------
 async def main():
     await asyncio.gather(
-        run_bot(),   # Устанавливаем webhook
-        run_web()    # Запускаем веб-сервер
+        run_bot(),
+        run_web()
     )
 
 if __name__ == "__main__":
