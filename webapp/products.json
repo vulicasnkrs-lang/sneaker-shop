@@ -6,7 +6,7 @@
     "season": "all",
     "price": 329,
     "discount": 10,
-    "sizes": [40,41,42,43,44,45],
+    "sizes": [40, 41, 42, 43, 44, 45],
     "images": [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200",
       "https://images.unsplash.com/photo-1519741491163-3f2c6f6e4b45?w=1200"
@@ -22,7 +22,7 @@
     "season": "summer",
     "price": 299,
     "discount": 0,
-    "sizes": [39,40,41,42,43,44],
+    "sizes": [39, 40, 41, 42, 43, 44],
     "images": [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200",
       "https://images.unsplash.com/photo-1519741491163-3f2c6f6e4b45?w=1200"
@@ -38,7 +38,7 @@
     "season": "all",
     "price": 279,
     "discount": 5,
-    "sizes": [40,41,42,43,44],
+    "sizes": [40, 41, 42, 43, 44],
     "images": [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200",
       "https://images.unsplash.com/photo-1519741491163-3f2c6f6e4b45?w=1200"
@@ -54,7 +54,7 @@
     "season": "all",
     "price": 349,
     "discount": 0,
-    "sizes": [40,41,42,43,44,45,46],
+    "sizes": [40, 41, 42, 43, 44, 45, 46],
     "images": [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200",
       "https://images.unsplash.com/photo-1519741491163-3f2c6f6e4b45?w=1200"
@@ -70,7 +70,7 @@
     "season": "summer",
     "price": 219,
     "discount": 15,
-    "sizes": [35,36,37,38,39,40],
+    "sizes": [35, 36, 37, 38, 39, 40],
     "images": [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200",
       "https://images.unsplash.com/photo-1519741491163-3f2c6f6e4b45?w=1200"
@@ -86,7 +86,7 @@
     "season": "all",
     "price": 199,
     "discount": 0,
-    "sizes": [39,40,41,42,43,44],
+    "sizes": [39, 40, 41, 42, 43, 44],
     "images": [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200",
       "https://images.unsplash.com/photo-1519741491163-3f2c6f6e4b45?w=1200"
@@ -94,5 +94,29 @@
     "description": "Скейт-икона, проверенная временем.",
     "addedAt": "2025-12-27T12:00:00Z",
     "popularity": 80
+  },
+  {
+    "id": "asics-gel-pickax",
+    "title": "Asics GEL-PICKAX",
+    "brand": "ASICS",
+    "season": "all",
+    "price": 219,
+    "discount": 0,
+    "sizes": [40, 41, 42, 43, 44, 45],
+    "materials": {
+      "upper": "Сетка + синтетические накладки",
+      "midsole": "Амортизирующая EVA",
+      "outsole": "Резина с трейл‑протектором",
+      "lining": "Текстиль"
+    },
+    "images": [
+      "/static/images/asics-gel-pickax-main.jpg",
+      "/static/images/asics-gel-pickax-box.jpg",
+      "/static/images/asics-gel-pickax-ground.jpg",
+      "/static/images/asics-gel-pickax-hand.jpg",
+      "/static/images/asics-gel-pickax-sole.jpg"
+    ],
+    "addedAt": "2026-01-22T12:00:00Z",
+    "popularity": 100
   }
 ]
