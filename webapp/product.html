@@ -5,16 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Товар — vulica.SNKRS</title>
 
-  <!-- Подключаем те же стили, что и в каталоге -->
   <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
 
-  <!-- Контейнер для карточки товара -->
-  <main id="productRoot" style="padding-bottom: 40px;"></main>
+  <!-- Полноэкранная карточка товара -->
+  <div id="productModal" class="modal open" style="opacity:1; pointer-events:auto;">
+    <div class="modal-content">
 
-  <!-- Логика карточки товара -->
+      <!-- Галерея -->
+      <div class="modal-images">
+        <div id="carousel" class="carousel"></div>
+        <div id="photoCounter" class="photo-counter"></div>
+      </div>
+
+      <!-- Информация -->
+      <div class="modal-info">
+        <h2 id="modalTitle"></h2>
+        <div id="modalBrandSeason" class="modal-meta"></div>
+        <div id="modalPrice" class="modal-price"></div>
+        <p id="modalDesc" class="modal-desc"></p>
+
+        <div id="modalSizes" class="modal-sizes"></div>
+
+        <input id="modalQty" class="modal-qty" type="number" value="1" min="1" />
+
+        <button id="addToCartBtn" class="primary full-width">Добавить в корзину</button>
+      </div>
+
+    </div>
+  </div>
+
   <script src="/product.js"></script>
 </body>
 </html>
