@@ -1,100 +1,91 @@
-/* Telegram */
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
-/* Root element */
-const root = document.getElementById('productRoot');
+let product = null;
+let selectedSize = null;
 
-/* Init */
+const els = {
+  carousel: document.getElementById('carousel'),
+  photoCounter: document.getElementById('photoCounter'),
+  modalTitle: document.getElementById('modalTitle'),
+  modalBrandSeason: document.getElementById('modalBrandSeason'),
+  modalPrice: document.getElementById('modalPrice'),
+  modalDesc: document.getElementById('modalDesc'),
+  modalSizes: document.getElementById('modalSizes'),
+  modalQty: document.getElementById('modalQty'),
+  addToCartBtn: document.getElementById('addToCartBtn')
+};
+
 init();
 
 async function init() {
   if (tg) tg.expand();
 
-  // Получаем ID товара из URL
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
 
-  // Загружаем товары
-  let products = [];
-  try {
-    const res = await fetch('/products.json', { cache: 'no-store' });
-    products = await res.json();
-  } catch (e) {
-    root.textContent = 'Ошибка загрузки товара';
+  const res = await fetch('/products.json', { cache: 'no-store' });
+  const products = await res.json();
+  product = products.find(x => String(x.id) === String(id));
+
+  if (!product) {
+    els.modalTitle.textContent = 'Товар не найден';
     return;
   }
 
-  const p = products.find(x => String(x.id) === String(id));
+  renderProduct(product);
 
-  if (!p) {
-    root.textContent = 'Товар не найден';
-    return;
-  }
-
-  renderProduct(p);
-
-  // Включаем системную кнопку Telegram "Назад"
   if (tg) {
     tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      tg.close(); // Возвращает в каталог
-    });
+    tg.BackButton.onClick(() => tg.close());
   }
 }
 
-/* Render product */
 function renderProduct(p) {
-  const cover = (p.images && p.images[0]) || '';
-  const price = `${p.price} ₽`;
+  // Галерея
+  els.carousel.innerHTML = '';
+  const imgs = p.images || [];
 
-  root.innerHTML = `
-    <div class="modal open" style="opacity:1; pointer-events:auto; position:relative;">
-      <div class="modal-content">
-
-        <div class="modal-images">
-          <img src="${cover}" alt="${p.title}" style="width:100%; height:100%; object-fit:contain;">
-        </div>
-
-        <div class="modal-info">
-          <h2>${p.title}</h2>
-          <div class="modal-meta">${p.brand} • ${p.season || ''}</div>
-          <div class="modal-price">${price}</div>
-
-          <p class="modal-desc">${p.description || ''}</p>
-
-          <div class="modal-sizes">
-            ${(p.sizes || []).map(s => `
-              <button class="size">${s}</button>
-            `).join('')}
-          </div>
-
-          <div class="modal-qty">
-            <input id="qtyInput" type="number" value="1" min="1" />
-          </div>
-
-          <button id="addBtn" class="primary full-width">Добавить в корзину</button>
-        </div>
-
-      </div>
-    </div>
-  `;
-
-  // Логика выбора размера
-  const sizeBtns = root.querySelectorAll('.size');
-  let selectedSize = null;
-
-  sizeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      sizeBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedSize = btn.textContent;
-    });
+  imgs.forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = p.title;
+    els.carousel.appendChild(img);
   });
 
-  // Логика добавления в корзину
-  const addBtn = document.getElementById('addBtn');
-  addBtn.addEventListener('click', () => {
-    const qty = Math.max(1, Number(document.getElementById('qtyInput').value || 1));
+  els.carousel.scrollLeft = 0;
+  els.photoCounter.textContent = `1 / ${imgs.length}`;
+
+  els.carousel.onscroll = () => {
+    const width = els.carousel.clientWidth;
+    const index = Math.round(els.carousel.scrollLeft / width);
+    els.photoCounter.textContent = `${index + 1} / ${imgs.length}`;
+  };
+
+  // Текст
+  els.modalTitle.textContent = p.title;
+  els.modalBrandSeason.textContent = `${p.brand} • ${p.season || ''}`;
+  els.modalPrice.textContent = `${p.price} ₽`;
+  els.modalDesc.textContent = p.description || '';
+
+  // Размеры
+  els.modalSizes.innerHTML = '';
+  (p.sizes || []).forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'size';
+    b.textContent = s;
+
+    b.addEventListener('click', () => {
+      selectedSize = s;
+      els.modalSizes.querySelectorAll('.size').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+
+    els.modalSizes.appendChild(b);
+  });
+
+  // Добавление в корзину
+  els.addToCartBtn.onclick = () => {
+    const qty = Math.max(1, Number(els.modalQty.value || 1));
     if (!selectedSize) selectedSize = (p.sizes || [])[0];
 
     const order = {
@@ -110,7 +101,6 @@ function renderProduct(p) {
       ts: new Date().toISOString()
     };
 
-    // Отправляем заказ в backend
     fetch('/order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -118,9 +108,9 @@ function renderProduct(p) {
     }).then(() => {
       tg && tg.showPopup({
         title: "Заказ",
-        message: "✅ Товар добавлен!",
+        message: "Товар добавлен!",
         buttons: [{ type: "ok" }]
       });
     });
-  });
+  };
 }
