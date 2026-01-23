@@ -275,7 +275,14 @@ function cardNode(p) {
     </div>
   `;
 
-  node.addEventListener('click', () => openProductModal(p));
+  node.addEventListener('click', () => {
+  if (tg) {
+    tg.openLink(`/product.html?id=${p.id}`, { try_instant_view: false });
+  } else {
+    openProductModal(p); // старое поведение для браузера
+  }
+});
+
 
   const favBtn = node.querySelector('.fav-btn');
   const favIcon = node.querySelector('.fav-icon');
