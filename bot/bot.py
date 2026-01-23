@@ -5,6 +5,7 @@ from aiohttp import web
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 
 # -----------------------------------
 # Конфигурация
@@ -12,7 +13,7 @@ from aiogram.filters import CommandStart
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "1426577785"))
 
-# URL WebApp (НЕ отправляем пользователю)
+# URL WebApp
 WEBAPP_URL = os.getenv("WEBAPP_URL", "https://sneaker-shop-r7fa.onrender.com")
 
 logging.basicConfig(
@@ -29,9 +30,22 @@ dp = Dispatcher()
 # -----------------------------------
 @dp.message(CommandStart())
 async def cmd_start(m: types.Message):
+
+    kb = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Открыть магазин 👟",
+                    web_app=WebAppInfo(url=WEBAPP_URL)
+                )
+            ]
+        ]
+    )
+
     await m.answer(
         "👟 Добро пожаловать в vulica.SNKRS!\n"
-        "Открывай магазин через синюю кнопку Telegram внизу."
+        "Нажми кнопку ниже, чтобы открыть магазин.",
+        reply_markup=kb
     )
 
 # -----------------------------------
@@ -59,7 +73,7 @@ async def on_webapp_data(m: types.Message):
     promoPct = data.get("promoDiscountPct", 0)
 
     for i, item in enumerate(data.get("items", []), start=1):
-        lines.append(f"{i}) {item['title']} • {item['brand']} • {item['season']}")
+        lines.append(f"{i}) {item['title']} • {item['brand']} • {item.get('season', '')}")
         lines.append(
             f"   Размер: {item['size']}  Кол-во: {item['qty']}  Цена: {item['price']} ₽"
         )
