@@ -12,7 +12,7 @@ from aiogram.filters import CommandStart
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "1426577785"))
 
-# ВАЖНО: URL должен быть БЕЗ /index.html
+# URL WebApp (НЕ отправляем пользователю)
 WEBAPP_URL = os.getenv("WEBAPP_URL", "https://sneaker-shop-r7fa.onrender.com")
 
 logging.basicConfig(
@@ -30,8 +30,8 @@ dp = Dispatcher()
 @dp.message(CommandStart())
 async def cmd_start(m: types.Message):
     await m.answer(
-        "Привет! Добро пожаловать в vulica.SNKRS 👟\n"
-        "Оформляй заказ через синюю кнопку Telegram внизу."
+        "👟 Добро пожаловать в vulica.SNKRS!\n"
+        "Открывай магазин через синюю кнопку Telegram внизу."
     )
 
 # -----------------------------------
