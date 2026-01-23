@@ -21,6 +21,12 @@ async def index(request):
     return web.FileResponse(os.path.join(WEB_DIR, "index.html"))
 
 # -----------------------------
+# 1.1) Страница товара (ОТДЕЛЬНЫЙ ЭКРАН)
+# -----------------------------
+async def product_page(request):
+    return web.FileResponse(os.path.join(WEB_DIR, "product.html"))
+
+# -----------------------------
 # 2) Обработчик заказа /order
 # -----------------------------
 async def order_handler(request):
@@ -29,7 +35,6 @@ async def order_handler(request):
     except Exception:
         return web.json_response({"status": "error", "msg": "invalid json"}, status=400)
 
-    # Формируем сообщение админу
     lines = []
     lines.append("🛒 Новый заказ в vulica.SNKRS")
     lines.append("")
@@ -39,14 +44,13 @@ async def order_handler(request):
     lines.append("")
 
     for i, item in enumerate(data.get("items", []), start=1):
-        lines.append(f"{i}) {item['title']} • {item['brand']} • {item['season']}")
+        lines.append(f"{i}) {item['title']} • {item['brand']} • {item.get('season', '')}")
         lines.append(
             f"   Размер: {item['size']}  Кол-во: {item['qty']}  Цена: {item['price']} ₽"
         )
 
     admin_msg = "\n".join(lines)
 
-    # Отправляем админу
     try:
         await bot.send_message(chat_id=ADMIN_CHAT_ID, text=admin_msg)
     except Exception:
@@ -55,7 +59,7 @@ async def order_handler(request):
     return web.json_response({"status": "ok"})
 
 # -----------------------------
-# 3) Health check для Render
+# 3) Health check
 # -----------------------------
 async def healthz(request):
     return web.Response(text="OK")
@@ -69,9 +73,12 @@ async def create_app():
     # Главная страница
     app.router.add_get("/", index)
 
+    # ОТДЕЛЬНАЯ страница товара
+    app.router.add_get("/product.html", product_page)
+
     # Статика
-    app.router.add_static("/static/", STATIC_DIR)  # картинки
-    app.router.add_static("/", WEB_DIR)            # styles.css, app.js, products.json
+    app.router.add_static("/static/", STATIC_DIR)
+    app.router.add_static("/", WEB_DIR)
 
     # API
     app.router.add_get("/healthz", healthz)
@@ -97,7 +104,6 @@ async def run_web():
 
     log.info(f"WebApp доступен на порту {port}")
 
-    # aiohttp должен жить вечно
     while True:
         await asyncio.sleep(3600)
 
