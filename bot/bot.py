@@ -13,8 +13,8 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "1426577785"))
 
-# URL WebApp
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://sneaker-shop-r7fa.onrender.com")
+# URL WebApp — обязательно чистим от переносов/пробелов
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://sneaker-shop-r7fa.onrender.com").strip()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -115,6 +115,7 @@ def setup_webhook_routes(app):
 # Установка webhook при старте
 # -----------------------------------
 async def run_bot():
-    webhook_url = f"{WEBAPP_URL}/webhook"
+    clean_url = WEBAPP_URL.strip()
+    webhook_url = f"{clean_url}/webhook"
     log.info(f"Устанавливаем webhook: {webhook_url}")
     await bot.set_webhook(webhook_url)
