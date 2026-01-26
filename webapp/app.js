@@ -65,6 +65,22 @@ const els = {
 let currentProduct = null;
 let selectedSize = null;
 
+/* SPA Navigation */
+function showScreen(view) {
+  const catalogView = document.getElementById('catalogView');
+  const productView = document.getElementById('productView');
+
+  if (view === 'catalog') {
+    catalogView.classList.remove('hidden');
+    productView.classList.add('hidden');
+    state.view = 'catalog';
+  } else if (view === 'product') {
+    catalogView.classList.add('hidden');
+    productView.classList.remove('hidden');
+    state.view = 'product';
+  }
+}
+
 /* Init */
 async function init() {
   renderSkeletons();
@@ -276,13 +292,12 @@ function cardNode(p) {
   `;
 
   node.addEventListener('click', () => {
-  if (tg) {
-    tg.openLink(`/product.html?id=${p.id}`, { try_instant_view: false });
-  } else {
-    openProductModal(p); // старое поведение для браузера
-  }
-});
-
+    if (tg) {
+      openProductScreen(p.id);
+    } else {
+      openProductModal(p);
+    }
+  });
 
   const favBtn = node.querySelector('.fav-btn');
   const favIcon = node.querySelector('.fav-icon');
@@ -314,25 +329,29 @@ function cardNode(p) {
 
   return node;
 }
-/* Ripple */
-function addRippleEffect(button, event) {
-  const rect = button.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  const x = event.clientX - rect.left - size / 2;
-  const y = event.clientY - rect.top - size / 2;
+/* PRODUCT SCREEN (SPA) */
+function openProductScreen(productId) {
+  const p = state.products.find(x => String(x.id) === String(productId));
+  if (!p) return;
 
-  const ripple = document.createElement('span');
-  ripple.className = 'ripple';
-  ripple.style.width = ripple.style.height = `${size}px`;
-  ripple.style.left = `${x}px`;
-  ripple.style.top = `${y}px`;
+  currentProduct = p;
+  selectedSize = null;
 
-  button.appendChild(ripple);
+  openProductModal(p);
+  showScreen('product');
 
-  setTimeout(() => ripple.remove(), 450);
+  if (tg) {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      closeProductModal();
+      showScreen('catalog');
+      tg.BackButton.hide();
+      tg.BackButton.onClick(() => {});
+    });
+  }
 }
 
-/* PRODUCT MODAL */
+/* PRODUCT MODAL (SPA VERSION) */
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
@@ -393,7 +412,6 @@ function openProductModal(p) {
   });
 
   els.productModal.classList.remove("hidden", "closing");
-  document.body.style.overflow = "hidden";
 
   requestAnimationFrame(() => {
     els.productModal.classList.add("open");
@@ -407,6 +425,7 @@ function openProductModal(p) {
 
     addToCart(p, selectedSize, qty);
     createFlyAnimation(p);
+
     closeProductModal();
     openCart();
   };
@@ -415,21 +434,12 @@ function openProductModal(p) {
     toggleFavorite(p.id);
     updateFavBadge();
   };
-
-  /* SYSTEM TELEGRAM BACK BUTTON */
-  if (tg) {
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      closeProductModal();
-    });
-  }
 }
 
-/* Close product modal */
+/* Close product modal (SPA) */
 function closeProductModal() {
   els.productModal.classList.remove('open');
   els.productModal.classList.add('closing');
-  document.body.style.overflow = "";
 
   if (tg) {
     tg.BackButton.hide();
@@ -661,6 +671,7 @@ function debounce(fn, ms) {
     t = setTimeout(() => fn(...args), ms);
   };
 }
+
 function toggleFavoritesView() {
   if (state.view === 'favorites') {
     state.view = 'catalog';
