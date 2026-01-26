@@ -4,132 +4,153 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>vulica.SNKRS</title>
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="brand">vulica.SNKRS</div>
+  <!-- ========================= -->
+  <!-- ЭКРАН 1 — КАТАЛОГ (SPA)   -->
+  <!-- ========================= -->
+  <div id="catalogView">
 
-    <div class="header-actions">
-      <div class="profile-icon">👤</div>
-      <button id="cartBtn" class="primary">0 ₽</button>
-      <button id="favBtn" class="icon-btn">
-        ❤ <span id="favCount">0</span>
-      </button>
-    </div>
-  </header>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand">vulica.SNKRS</div>
 
-  <!-- MYSTERY BOX -->
-  <section class="mystery-box" id="mysteryBox">
-    <h2>🎁 Тайная коробка дня</h2>
-    <p>Открой, чтобы узнать пару дня</p>
-    <button id="openMysteryBtn" class="primary">Открыть</button>
-  </section>
+      <div class="header-actions">
+        <div class="profile-icon">👤</div>
+        <button id="cartBtn" class="primary">0 ₽</button>
+        <button id="favBtn" class="icon-btn">
+          ❤ <span id="favCount">0</span>
+        </button>
+      </div>
+    </header>
 
-  <!-- FILTERS -->
-  <section class="filters" id="filtersSection">
-    <div class="filter-row">
-      <input id="searchInput" type="text" placeholder="Поиск модели..." />
-      <select id="sortSelect">
-        <option value="">Сортировка</option>
-        <option value="price-asc">Цена: дешевле</option>
-        <option value="price-desc">Цена: дороже</option>
-      </select>
-    </div>
+    <!-- MYSTERY BOX -->
+    <section class="mystery-box" id="mysteryBox">
+      <h2>🎁 Тайная коробка дня</h2>
+      <p>Открой, чтобы узнать пару дня</p>
+      <button id="openMysteryBtn" class="primary">Открыть</button>
+    </section>
 
-    <div class="filter-row" style="margin-top:12px;">
-      <select id="brandFilter">
-        <option value="">Бренд</option>
-      </select>
-
-      <select id="sizeFilter">
-        <option value="">Размер</option>
-      </select>
-    </div>
-  </section>
-
-  <!-- FAVORITES HEADER -->
-  <section class="favorites-header hidden" id="favoritesHeader">
-    <div class="fav-title">
-      ❤ Избранное <span id="favoritesCountLabel"></span>
-    </div>
-    <button id="clearFavoritesBtn" class="secondary">Очистить</button>
-  </section>
-
-  <!-- CATALOG -->
-  <main class="catalog" id="catalog"></main>
-
-  <!-- PRODUCT MODAL -->
-  <div class="modal hidden" id="productModal">
-    <div class="modal-content">
-
-      <!-- ГАЛЕРЕЯ -->
-      <div class="modal-images">
-        <div class="carousel" id="carousel"></div>
-        <div class="photo-counter" id="photoCounter">1 / 1</div>
+    <!-- FILTERS -->
+    <section class="filters" id="filtersSection">
+      <div class="filter-row">
+        <input id="searchInput" type="text" placeholder="Поиск модели..." />
+        <select id="sortSelect">
+          <option value="">Сортировка</option>
+          <option value="price-asc">Цена: дешевле</option>
+          <option value="price-desc">Цена: дороже</option>
+        </select>
       </div>
 
-      <!-- ИНФОРМАЦИЯ О ТОВАРЕ -->
-      <div class="modal-info">
-        <h2 id="modalTitle"></h2>
-        <div id="modalBrandSeason" class="modal-meta"></div>
-        <div id="modalPrice" class="modal-price"></div>
-        <p id="modalDesc" class="modal-desc"></p>
+      <div class="filter-row" style="margin-top:12px;">
+        <select id="brandFilter">
+          <option value="">Бренд</option>
+        </select>
 
-        <div class="modal-sizes" id="modalSizes"></div>
+        <select id="sizeFilter">
+          <option value="">Размер</option>
+        </select>
+      </div>
+    </section>
 
-        <div class="modal-qty">
-          <input id="modalQty" type="number" value="1" min="1" />
+    <!-- FAVORITES HEADER -->
+    <section class="favorites-header hidden" id="favoritesHeader">
+      <div class="fav-title">
+        ❤ Избранное <span id="favoritesCountLabel"></span>
+      </div>
+      <button id="clearFavoritesBtn" class="secondary">Очистить</button>
+    </section>
+
+    <!-- CATALOG -->
+    <main class="catalog" id="catalog"></main>
+
+    <!-- MYSTERY MODAL -->
+    <div class="modal hidden" id="mysteryModal">
+      <div class="modal-content" style="max-width: 420px; text-align:center;">
+        <button id="closeMystery" class="close-btn">×</button>
+
+        <h2>Пара дня 🎁</h2>
+        <img id="mysteryImg" style="width:100%; border-radius:14px; margin:12px 0;" />
+
+        <div id="mysteryTitle" class="mystery-title"></div>
+        <div id="mysteryPrice" class="mystery-price"></div>
+        <button id="mysteryOk" class="primary mystery-btn" style="margin-top:10px;">
+          Открыть каталог
+        </button>
+      </div>
+    </div>
+
+    <!-- CART DRAWER -->
+    <div class="drawer hidden" id="cartDrawer">
+      <div class="drawer-header">
+        <strong>Корзина</strong>
+        <button id="closeCart" class="close-btn">×</button>
+      </div>
+
+      <div class="drawer-list" id="cartList"></div>
+
+      <div class="drawer-footer">
+        <div class="drawer-total-row">
+          <span>Итого:</span>
+          <strong id="cartTotal">0 ₽</strong>
+        </div>
+        <button id="checkoutBtn" class="primary full-width">Оформить заказ</button>
+      </div>
+    </div>
+
+  </div> <!-- /catalogView -->
+
+
+
+  <!-- ========================= -->
+  <!-- ЭКРАН 2 — КАРТОЧКА ТОВАРА -->
+  <!-- ========================= -->
+  <div id="productView" class="hidden">
+
+    <div id="productModal" class="modal open" style="opacity:1; pointer-events:auto;">
+      <div class="modal-content">
+
+        <!-- ГАЛЕРЕЯ -->
+        <div class="modal-images">
+          <div class="carousel" id="carousel"></div>
+          <div class="photo-counter" id="photoCounter">1 / 1</div>
         </div>
 
-        <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+        <!-- ИНФОРМАЦИЯ -->
+        <div class="modal-info">
+          <h2 id="modalTitle"></h2>
+          <div id="modalBrandSeason" class="modal-meta"></div>
+          <div id="modalPrice" class="modal-price"></div>
+          <p id="modalDesc" class="modal-desc"></p>
 
-        <div class="modal-fav">
-          <button id="toggleFavBtn" class="fav-toggle-btn">
-            ❤ В избранное
-          </button>
+          <div class="modal-sizes" id="modalSizes"></div>
+
+          <div class="modal-qty">
+            <input id="modalQty" type="number" value="1" min="1" />
+          </div>
+
+          <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+
+          <div class="modal-fav">
+            <button id="toggleFavBtn" class="fav-toggle-btn">
+              ❤ В избранное
+            </button>
+          </div>
         </div>
+
       </div>
-
-    </div>
-  </div>
-
-  <!-- MYSTERY MODAL -->
-  <div class="modal hidden" id="mysteryModal">
-    <div class="modal-content" style="max-width: 420px; text-align:center;">
-      <button id="closeMystery" class="close-btn">×</button>
-
-      <h2>Пара дня 🎁</h2>
-      <img id="mysteryImg" style="width:100%; border-radius:14px; margin:12px 0;" />
-
-      <div id="mysteryTitle" class="mystery-title"></div>
-      <div id="mysteryPrice" class="mystery-price"></div>
-      <button id="mysteryOk" class="primary mystery-btn" style="margin-top:10px;">
-        Открыть каталог
-      </button>
-    </div>
-  </div>
-
-  <!-- CART DRAWER -->
-  <div class="drawer hidden" id="cartDrawer">
-    <div class="drawer-header">
-      <strong>Корзина</strong>
-      <button id="closeCart" class="close-btn">×</button>
     </div>
 
-    <div class="drawer-list" id="cartList"></div>
+  </div> <!-- /productView -->
 
-    <div class="drawer-footer">
-      <div class="drawer-total-row">
-        <span>Итого:</span>
-        <strong id="cartTotal">0 ₽</strong>
-      </div>
-      <button id="checkoutBtn" class="primary full-width">Оформить заказ</button>
-    </div>
-  </div>
+
 
   <script src="/app.js"></script>
 </body>
