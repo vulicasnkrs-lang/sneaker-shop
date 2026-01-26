@@ -295,6 +295,7 @@ function cardNode(p) {
     if (tg) {
       openProductScreen(p.id);
     } else {
+      showScreen('product');      // fallback для браузера
       openProductModal(p);
     }
   });
@@ -344,7 +345,6 @@ function openProductScreen(productId) {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
       closeProductModal();
-      showScreen('catalog');
       tg.BackButton.hide();
       tg.BackButton.onClick(() => {});
     });
@@ -436,10 +436,13 @@ function openProductModal(p) {
   };
 }
 
-/* Close product modal (SPA) */
+/* Close product modal (SPA + fallback) */
 function closeProductModal() {
   els.productModal.classList.remove('open');
   els.productModal.classList.add('closing');
+
+  // всегда возвращаемся на каталог (и в Telegram, и в браузере)
+  showScreen('catalog');
 
   if (tg) {
     tg.BackButton.hide();
