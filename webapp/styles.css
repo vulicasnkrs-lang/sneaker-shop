@@ -338,24 +338,7 @@ input:focus,
   object-fit: cover;
   border: 1px solid #eee;
 }
-
-/* Sizes */
-.size {
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  font-size: 15px;
-  cursor: pointer;
-  transition: all 0.22s ease;
-  user-select: none;
-}
-
-.size:hover {
-  background: #e9eaed;
-  transform: translateY(-1px);
-}
-
+/* Sizes active */
 .size.active {
   background: #111;
   color: #fff;
@@ -431,7 +414,7 @@ input:focus,
   position: relative;
 }
 
-/* КНОПКА ЗАКРЫТЬ — НОВОЕ РАСПОЛОЖЕНИЕ */
+/* КНОПКА ЗАКРЫТЬ */
 .close-btn {
   position: absolute;
   top: 12px;
@@ -490,11 +473,6 @@ input:focus,
   to { opacity: 1; }
 }
 
-/* УБИРАЕМ ТОЧКИ */
-.carousel-dots {
-  display: none !important;
-}
-
 /* СЧЁТЧИК ФОТО */
 .photo-counter {
   position: absolute;
@@ -531,4 +509,30 @@ input:focus,
   box-shadow: 0 0 0 4px #ffe680;
   border-radius: 18px;
   transition: box-shadow .3s ease;
+}
+
+/* КНОПКА НАЗАД ДЛЯ БРАУЗЕРА */
+.browser-back {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 50;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.browser-back.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.browser-back:hover {
+  transform: translateX(-2px);
 }
