@@ -67,8 +67,8 @@ const els = {
   browserBackBtn: document.getElementById('browserBackBtn'),
 
   /* Профиль */
-  profileBackBtn: document.getElementById('profileBackBtn'),
-  profileAvatar: document.getElementById('profileAvatar'),
+  profileAvatarHeader: document.getElementById('profileAvatar'),
+  profileAvatarProfile: document.getElementById('profileAvatarProfile'),
   profileName: document.getElementById('profileName'),
   profileUsername: document.getElementById('profileUsername'),
 
@@ -126,7 +126,7 @@ async function init() {
 
 /* Telegram profile init */
 function initProfileFromTelegram() {
-  if (!tg || !tg.initDataUnsafe || !tg.initDataUnsafe.user) return;
+  if (!tg?.initDataUnsafe?.user) return;
 
   const user = tg.initDataUnsafe.user;
 
@@ -136,10 +136,17 @@ function initProfileFromTelegram() {
   els.profileUsername.textContent = user.username ? '@' + user.username : '';
 
   if (user.photo_url) {
-    els.profileAvatar.textContent = '';
-    els.profileAvatar.style.backgroundImage = `url(${user.photo_url})`;
-    els.profileAvatar.style.backgroundSize = 'cover';
-    els.profileAvatar.style.backgroundPosition = 'center';
+    // аватар в шапке
+    els.profileAvatarHeader.textContent = '';
+    els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarHeader.style.backgroundSize = 'cover';
+    els.profileAvatarHeader.style.backgroundPosition = 'center';
+
+    // аватар в профиле
+    els.profileAvatarProfile.textContent = '';
+    els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarProfile.style.backgroundSize = 'cover';
+    els.profileAvatarProfile.style.backgroundPosition = 'center';
   }
 }
 
@@ -184,141 +191,6 @@ function applyPostponedFilter(arr) {
   const hiddenIds = activePostponed.map(x => x.id);
   return arr.filter(p => !hiddenIds.includes(p.id));
 }
-/* Filters */
-function buildFilters() {
-  [...state.brandSet].sort().forEach(b => {
-    const opt = document.createElement('option');
-    opt.value = b;
-    opt.textContent = b;
-    els.brandFilter.appendChild(opt);
-  });
-
-  for (let s = 35; s <= 49; s++) {
-    const opt = document.createElement('option');
-    opt.value = s;
-    opt.textContent = String(s);
-    els.sizeFilter.appendChild(opt);
-  }
-}
-
-function attachEvents() {
-  els.brandFilter.addEventListener('change', () => state.view === 'catalog' && applyFilters());
-  els.sizeFilter.addEventListener('change', () => state.view === 'catalog' && applyFilters());
-
-  els.searchInput.addEventListener('input', debounce(() => {
-    if (state.view === 'catalog') applyFilters();
-  }, 300));
-
-  els.sortSelect.addEventListener('change', () => state.view === 'catalog' && applyFilters());
-
-  els.openMysteryBtn.addEventListener('click', openMysteryBox);
-  els.closeMystery.addEventListener('click', closeMysteryModal);
-  els.mysteryOk.addEventListener('click', closeMysteryModal);
-
-  els.cartBtn.addEventListener('click', openCart);
-  els.closeCart.addEventListener('click', closeCart);
-  els.checkoutBtn.addEventListener('click', checkout);
-
-  els.favBtn.addEventListener('click', toggleFavoritesView);
-  els.clearFavoritesBtn.addEventListener('click', clearFavorites);
-
-  /* 🔥 Аватар в шапке открывает профиль */
-  els.profileAvatar.addEventListener('click', () => {
-    showScreen('profile');
-    renderProfileSections();
-  });
-
-  els.profileBackBtn.addEventListener('click', () => {
-    showScreen('catalog');
-  });
-
-  els.profileTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      els.profileTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      switchProfileTab(tab.dataset.tab);
-    });
-  });
-
-  if (!tg) {
-    els.browserBackBtn.addEventListener('click', () => {
-      closeProductModal();
-      showScreen('catalog');
-    });
-  }
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeCart();
-      closeProductModal();
-      closeMysteryModal();
-    }
-  });
-}
-
-/* Mystery Box */
-function openMysteryBox() {
-  const arr = state.products;
-  if (!arr.length) return;
-
-  els.mysteryBox.classList.add('mystery-animate');
-  setTimeout(() => els.mysteryBox.classList.remove('mystery-animate'), 500);
-
-  const p = arr[Math.floor(Math.random() * arr.length)];
-  state.mysteryProductId = p.id;
-
-  els.mysteryImg.src = p.images?.[0] || '';
-  els.mysteryTitle.textContent = p.title;
-  els.mysteryPrice.textContent = formatPrice(p.price);
-
-  els.mysteryModal.classList.remove('hidden');
-  requestAnimationFrame(() => els.mysteryModal.classList.add('open'));
-}
-
-function closeMysteryModal() {
-  els.mysteryModal.classList.remove('open');
-  setTimeout(() => els.mysteryModal.classList.add('hidden'), 220);
-}
-
-/* Render catalog */
-function renderCatalog() {
-  els.catalog.innerHTML = '';
-
-  if (!state.filtered.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.textContent = 'Ничего не найдено';
-    els.catalog.appendChild(empty);
-    return;
-  }
-
-  state.filtered.forEach((p, i) => {
-    const node = cardNode(p);
-    node.style.animationDelay = `${i * 40}ms`;
-    els.catalog.appendChild(node);
-  });
-}
-
-/* Render favorites */
-function renderFavorites() {
-  els.catalog.innerHTML = '';
-
-  const favIds = [...state.favorites];
-  const arr = state.products.filter(p => favIds.includes(p.id));
-
-  els.favoritesCountLabel.textContent = arr.length ? `(${arr.length})` : '(0)';
-
-  if (!arr.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.textContent = 'В избранном пока пусто';
-    els.catalog.appendChild(empty);
-    return;
-  }
-
-  arr.forEach(p => els.catalog.appendChild(cardNode(p)));
-}
-
 /* Card node */
 function cardNode(p) {
   const node = document.createElement('div');
@@ -386,6 +258,7 @@ function cardNode(p) {
 
   return node;
 }
+
 /* PRODUCT SCREEN (SPA) */
 function openProductScreen(productId) {
   const p = state.products.find(x => String(x.id) === String(productId));
@@ -552,75 +425,6 @@ function addToCart(p, size, qty) {
     state.cart.push({
       key,
       id: p.id,
-      title: p.title,
-      brand: p.brand,
-      price: p.price,
-      size,
-      qty,
-      images: p.images
-    });
-  }
-
-  persistCart();
-  updateCartBadge();
-}
-
-function persistCart() {
-  localStorage.setItem('cart', JSON.stringify(state.cart));
-}
-
-function openCart() {
-  renderCart();
-  els.cartDrawer.classList.remove('hidden');
-}
-
-function closeCart() {
-  els.cartDrawer.classList.add('hidden');
-}
-
-function renderCart() {
-  els.cartList.innerHTML = '';
-
-  if (!state.cart.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.textContent = 'Корзина пуста';
-    els.cartList.appendChild(empty);
-    els.cartTotal.textContent = formatPrice(0);
-    return;
-  }
-
-  state.cart.forEach(item => {
-    const node = document.createElement('div');
-    node.className = 'cart-item';
-
-    node.innerHTML = `
-      <img src="${item.images?.[0] || ''}" alt="">
-      <div>
-        <div><strong>${item.title}</strong></div>
-        <div class="meta">Размер ${item.size}</div>
-
-        <div class="qty-row">
-          <button class="qty-btn" data-act="minus">−</button>
-          <span>${item.qty}</span>
-          <button class="qty-btn" data-act="plus">+</button>
-          <button class="remove-btn" data-act="remove">Удалить</button>
-        </div>
-      </div>
-
-      <div class="price">${formatPrice(item.price)}</div>
-    `;
-
-    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
-    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
-    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
-
-    els.cartList.appendChild(node);
-  });
-
-  els.cartTotal.textContent = formatPrice(cartTotal());
-}
-
 function changeQty(key, delta) {
   const idx = state.cart.findIndex(x => x.key === key);
   if (idx < 0) return;
