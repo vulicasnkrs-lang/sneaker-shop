@@ -189,6 +189,95 @@ function applyPostponedFilter(arr) {
   const hiddenIds = activePostponed.map(x => x.id);
   return arr.filter(p => !hiddenIds.includes(p.id));
 }
+/* Build filters */
+function buildFilters() {
+  // Бренды
+  [...state.brandSet].sort().forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b;
+    opt.textContent = b;
+    els.brandFilter.appendChild(opt);
+  });
+
+  // Размеры
+  for (let s = 35; s <= 49; s++) {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = String(s);
+    els.sizeFilter.appendChild(opt);
+  }
+}
+
+/* Apply filters */
+function applyFilters() {
+  let arr = [...state.products];
+
+  const brand = els.brandFilter.value;
+  const size = els.sizeFilter.value;
+  const search = els.searchInput.value.trim().toLowerCase();
+  const sort = els.sortSelect.value;
+
+  if (brand) arr = arr.filter(p => p.brand === brand);
+  if (size) arr = arr.filter(p => (p.sizes || []).includes(Number(size)));
+  if (search) arr = arr.filter(p => p.title.toLowerCase().includes(search));
+
+  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
+
+  state.filtered = applyPostponedFilter(arr);
+  renderCatalog();
+}
+
+/* Attach events */
+function attachEvents() {
+  els.brandFilter.addEventListener('change', () => applyFilters());
+  els.sizeFilter.addEventListener('change', () => applyFilters());
+  els.sortSelect.addEventListener('change', () => applyFilters());
+
+  els.searchInput.addEventListener('input', debounce(() => {
+    applyFilters();
+  }, 300));
+
+  els.openMysteryBtn.addEventListener('click', openMysteryBox);
+  els.closeMystery.addEventListener('click', closeMysteryModal);
+  els.mysteryOk.addEventListener('click', closeMysteryModal);
+
+  els.cartBtn.addEventListener('click', openCart);
+  els.closeCart.addEventListener('click', closeCart);
+  els.checkoutBtn.addEventListener('click', checkout);
+
+  els.favBtn.addEventListener('click', toggleFavoritesView);
+  els.clearFavoritesBtn.addEventListener('click', clearFavorites);
+
+  els.profileAvatarHeader.addEventListener('click', () => {
+    showScreen('profile');
+    renderProfileSections();
+  });
+
+  els.profileTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      els.profileTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      switchProfileTab(tab.dataset.tab);
+    });
+  });
+
+  if (!tg) {
+    els.browserBackBtn.addEventListener('click', () => {
+      closeProductModal();
+      showScreen('catalog');
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeCart();
+      closeProductModal();
+      closeMysteryModal();
+    }
+  });
+}
+
 /* Card node */
 function cardNode(p) {
   const node = document.createElement('div');
