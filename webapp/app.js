@@ -13,7 +13,7 @@ const state = {
   mysteryProductId: null,
 
   orders: JSON.parse(localStorage.getItem('orders') || '[]'),
-  postponed: JSON.parse(localStorage.getItem('postponed') || '[]') // [{id, until}]
+  postponed: JSON.parse(localStorage.getItem('postponed') || '[]')
 };
 
 /* Elements */
@@ -67,9 +67,7 @@ const els = {
   browserBackBtn: document.getElementById('browserBackBtn'),
 
   /* Профиль */
-  profileBtn: document.getElementById('profileBtn'),
   profileBackBtn: document.getElementById('profileBackBtn'),
-  profileHeader: document.getElementById('profileHeader'),
   profileAvatar: document.getElementById('profileAvatar'),
   profileName: document.getElementById('profileName'),
   profileUsername: document.getElementById('profileUsername'),
@@ -132,7 +130,9 @@ function initProfileFromTelegram() {
 
   const user = tg.initDataUnsafe.user;
 
-  els.profileName.textContent = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Покупатель';
+  els.profileName.textContent =
+    [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Покупатель';
+
   els.profileUsername.textContent = user.username ? '@' + user.username : '';
 
   if (user.photo_url) {
@@ -177,14 +177,13 @@ async function loadProducts() {
   state.filtered = applyPostponedFilter([...state.products]);
 }
 
-/* Учитываем отложенные товары (до даты) */
+/* Учитываем отложенные товары */
 function applyPostponedFilter(arr) {
   const now = Date.now();
   const activePostponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
   const hiddenIds = activePostponed.map(x => x.id);
   return arr.filter(p => !hiddenIds.includes(p.id));
 }
-
 /* Filters */
 function buildFilters() {
   [...state.brandSet].sort().forEach(b => {
@@ -223,19 +222,15 @@ function attachEvents() {
   els.favBtn.addEventListener('click', toggleFavoritesView);
   els.clearFavoritesBtn.addEventListener('click', clearFavorites);
 
-  /* Профиль */
-  if (els.profileBtn) {
-    els.profileBtn.addEventListener('click', () => {
-      showScreen('profile');
-      renderProfileSections();
-    });
-  }
+  /* 🔥 Аватар в шапке открывает профиль */
+  els.profileAvatar.addEventListener('click', () => {
+    showScreen('profile');
+    renderProfileSections();
+  });
 
-  if (els.profileBackBtn) {
-    els.profileBackBtn.addEventListener('click', () => {
-      showScreen('catalog');
-    });
-  }
+  els.profileBackBtn.addEventListener('click', () => {
+    showScreen('catalog');
+  });
 
   els.profileTabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -245,7 +240,6 @@ function attachEvents() {
     });
   });
 
-  /* Browser Back Button */
   if (!tg) {
     els.browserBackBtn.addEventListener('click', () => {
       closeProductModal();
@@ -369,6 +363,8 @@ function cardNode(p) {
     favIcon.classList.toggle('active');
     favIcon.classList.add('animate');
     setTimeout(() => favIcon.classList.remove('animate'), 300);
+
+    renderProfileFavorites();
   });
 
   /* Tilt effect */
@@ -494,7 +490,7 @@ function openProductModal(p) {
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
-    renderProfileFavorites(); // чтобы профиль сразу обновлялся
+    renderProfileFavorites();
   };
 }
 
@@ -526,6 +522,7 @@ function toggleFavorite(id) {
   updateFavBadge();
 
   if (state.view === 'favorites') renderFavorites();
+  renderProfileFavorites();
 }
 
 function clearFavorites() {
@@ -533,6 +530,7 @@ function clearFavorites() {
   localStorage.setItem('favorites', JSON.stringify([]));
   updateFavBadge();
   if (state.view === 'favorites') renderFavorites();
+  renderProfileFavorites();
 }
 
 function updateFavBadge() {
@@ -678,16 +676,7 @@ function createFlyAnimation(p) {
   setTimeout(() => img.remove(), 700);
 }
 
-/* Orders / Profile helpers */
-function saveOrders() {
-  localStorage.setItem('orders', JSON.stringify(state.orders));
-}
-
-function savePostponed() {
-  localStorage.setItem('postponed', JSON.stringify(state.postponed));
-}
-
-/* Отложить товар (по умолчанию на 3 дня, но максимум 7) */
+/* Отложить товар */
 function postponeProduct(id, days = 3) {
   const safeDays = Math.min(Math.max(days, 1), 7);
   const until = new Date(Date.now() + safeDays * 24 * 60 * 60 * 1000).toISOString();
@@ -705,7 +694,7 @@ function postponeProduct(id, days = 3) {
   renderProfilePostponed();
 }
 
-/* Очистка просроченных отложенных */
+/* Очистка просроченных */
 function cleanupPostponed() {
   const now = Date.now();
   state.postponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
@@ -732,7 +721,6 @@ function switchProfileTab(tab) {
 }
 
 function renderProfileOrders() {
-  if (!els.profileOrders) return;
   els.profileOrders.innerHTML = '';
 
   if (!state.orders.length) {
@@ -776,7 +764,6 @@ function renderProfileOrders() {
 }
 
 function renderProfileFavorites() {
-  if (!els.profileFavorites) return;
   els.profileFavorites.innerHTML = '';
 
   const favIds = [...state.favorites];
@@ -814,7 +801,6 @@ function renderProfileFavorites() {
 }
 
 function renderProfilePostponed() {
-  if (!els.profilePostponed) return;
   els.profilePostponed.innerHTML = '';
 
   cleanupPostponed();
@@ -895,7 +881,6 @@ async function checkout() {
     });
 
     if (res.ok) {
-      // сохраняем в историю
       state.orders.push(order);
       saveOrders();
       renderProfileOrders();
@@ -943,4 +928,13 @@ function toggleFavoritesView() {
   }
 }
 
+function saveOrders() {
+  localStorage.setItem('orders', JSON.stringify(state.orders));
+}
+
+function savePostponed() {
+  localStorage.setItem('postponed', JSON.stringify(state.postponed));
+}
+
+/* Start */
 init();
