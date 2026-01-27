@@ -23,7 +23,7 @@
       <div class="brand">vulica.SNKRS</div>
 
       <div class="header-actions">
-        <div class="profile-icon">👤</div>
+        <button id="profileBtn" class="profile-icon">👤</button>
         <button id="cartBtn" class="primary">0 ₽</button>
         <button id="favBtn" class="icon-btn">
           ❤ <span id="favCount">0</span>
@@ -154,6 +154,39 @@
   </div> <!-- /productView -->
 
 
+
+  <!-- ========================= -->
+  <!-- ЭКРАН 3 — ПРОФИЛЬ / ЛИЧНЫЙ КАБИНЕТ -->
+  <!-- ========================= -->
+  <div id="profileView" class="hidden">
+
+    <header class="header">
+      <button id="profileBackBtn" class="icon-btn">←</button>
+      <div class="brand">Профиль</div>
+      <div style="width:40px;"></div>
+    </header>
+
+    <section class="profile-header" id="profileHeader">
+      <div class="profile-avatar" id="profileAvatar">👤</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">Гость</div>
+        <div class="profile-username" id="profileUsername"></div>
+      </div>
+    </section>
+
+    <section class="profile-tabs">
+      <button class="profile-tab active" data-tab="orders">Покупки</button>
+      <button class="profile-tab" data-tab="favorites">Избранное</button>
+      <button class="profile-tab" data-tab="postponed">Отложенные</button>
+    </section>
+
+    <main class="profile-content">
+      <div id="profileOrders" class="profile-section active"></div>
+      <div id="profileFavorites" class="profile-section"></div>
+      <div id="profilePostponed" class="profile-section"></div>
+    </main>
+
+  </div> <!-- /profileView -->
 
   <script src="/app.js"></script>
 </body>
