@@ -189,9 +189,9 @@ function applyPostponedFilter(arr) {
   const hiddenIds = activePostponed.map(x => x.id);
   return arr.filter(p => !hiddenIds.includes(p.id));
 }
+
 /* Build filters */
 function buildFilters() {
-  // Бренды
   [...state.brandSet].sort().forEach(b => {
     const opt = document.createElement('option');
     opt.value = b;
@@ -199,7 +199,6 @@ function buildFilters() {
     els.brandFilter.appendChild(opt);
   });
 
-  // Размеры
   for (let s = 35; s <= 49; s++) {
     const opt = document.createElement('option');
     opt.value = s;
@@ -230,13 +229,11 @@ function applyFilters() {
 
 /* Attach events */
 function attachEvents() {
-  els.brandFilter.addEventListener('change', () => applyFilters());
-  els.sizeFilter.addEventListener('change', () => applyFilters());
-  els.sortSelect.addEventListener('change', () => applyFilters());
+  els.brandFilter.addEventListener('change', applyFilters);
+  els.sizeFilter.addEventListener('change', applyFilters);
+  els.sortSelect.addEventListener('change', applyFilters);
 
-  els.searchInput.addEventListener('input', debounce(() => {
-    applyFilters();
-  }, 300));
+  els.searchInput.addEventListener('input', debounce(applyFilters, 300));
 
   els.openMysteryBtn.addEventListener('click', openMysteryBox);
   els.closeMystery.addEventListener('click', closeMysteryModal);
@@ -278,6 +275,25 @@ function attachEvents() {
   });
 }
 
+/* Render catalog */
+function renderCatalog() {
+  els.catalog.innerHTML = '';
+
+  if (!state.filtered.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.style.padding = '20px';
+    empty.textContent = 'Ничего не найдено';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  state.filtered.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
+}
 /* Card node */
 function cardNode(p) {
   const node = document.createElement('div');
