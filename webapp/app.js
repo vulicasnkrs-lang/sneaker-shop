@@ -10,7 +10,10 @@ const state = {
   brandSet: new Set(),
   allSizes: new Set(),
   view: 'catalog',
-  mysteryProductId: null
+  mysteryProductId: null,
+
+  orders: JSON.parse(localStorage.getItem('orders') || '[]'),
+  postponed: JSON.parse(localStorage.getItem('postponed') || '[]') // [{id, until}]
 };
 
 /* Elements */
@@ -61,7 +64,20 @@ const els = {
   favBtn: document.getElementById('favBtn'),
   favCount: document.getElementById('favCount'),
 
-  browserBackBtn: document.getElementById('browserBackBtn')
+  browserBackBtn: document.getElementById('browserBackBtn'),
+
+  /* Профиль */
+  profileBtn: document.getElementById('profileBtn'),
+  profileBackBtn: document.getElementById('profileBackBtn'),
+  profileHeader: document.getElementById('profileHeader'),
+  profileAvatar: document.getElementById('profileAvatar'),
+  profileName: document.getElementById('profileName'),
+  profileUsername: document.getElementById('profileUsername'),
+
+  profileTabs: document.querySelectorAll('.profile-tab'),
+  profileOrders: document.getElementById('profileOrders'),
+  profileFavorites: document.getElementById('profileFavorites'),
+  profilePostponed: document.getElementById('profilePostponed')
 };
 
 let currentProduct = null;
@@ -71,18 +87,24 @@ let selectedSize = null;
 function showScreen(view) {
   const catalogView = document.getElementById('catalogView');
   const productView = document.getElementById('productView');
+  const profileView = document.getElementById('profileView');
+
+  catalogView.classList.add('hidden');
+  productView.classList.add('hidden');
+  profileView.classList.add('hidden');
 
   if (view === 'catalog') {
-    productView.classList.add('hidden');
     catalogView.classList.remove('hidden');
     catalogView.classList.add('fade-in');
-    state.view = 'catalog';
-  } else {
-    catalogView.classList.add('hidden');
+  } else if (view === 'product') {
     productView.classList.remove('hidden');
     productView.classList.add('fade-in');
-    state.view = 'product';
+  } else if (view === 'profile') {
+    profileView.classList.remove('hidden');
+    profileView.classList.add('fade-in');
   }
+
+  state.view = view;
 }
 
 /* Init */
@@ -94,11 +116,30 @@ async function init() {
   updateFavBadge();
   renderCatalog();
   attachEvents();
+  initProfileFromTelegram();
+  renderProfileSections();
 
   if (tg) {
     tg.expand();
     tg.MainButton.text = 'Оформить заказ';
     tg.MainButton.onClick(checkout);
+  }
+}
+
+/* Telegram profile init */
+function initProfileFromTelegram() {
+  if (!tg || !tg.initDataUnsafe || !tg.initDataUnsafe.user) return;
+
+  const user = tg.initDataUnsafe.user;
+
+  els.profileName.textContent = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Покупатель';
+  els.profileUsername.textContent = user.username ? '@' + user.username : '';
+
+  if (user.photo_url) {
+    els.profileAvatar.textContent = '';
+    els.profileAvatar.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatar.style.backgroundSize = 'cover';
+    els.profileAvatar.style.backgroundPosition = 'center';
   }
 }
 
@@ -133,7 +174,15 @@ async function loadProducts() {
     (p.sizes || []).forEach(s => state.allSizes.add(s));
   });
 
-  state.filtered = [...state.products];
+  state.filtered = applyPostponedFilter([...state.products]);
+}
+
+/* Учитываем отложенные товары (до даты) */
+function applyPostponedFilter(arr) {
+  const now = Date.now();
+  const activePostponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  const hiddenIds = activePostponed.map(x => x.id);
+  return arr.filter(p => !hiddenIds.includes(p.id));
 }
 
 /* Filters */
@@ -173,6 +222,28 @@ function attachEvents() {
 
   els.favBtn.addEventListener('click', toggleFavoritesView);
   els.clearFavoritesBtn.addEventListener('click', clearFavorites);
+
+  /* Профиль */
+  if (els.profileBtn) {
+    els.profileBtn.addEventListener('click', () => {
+      showScreen('profile');
+      renderProfileSections();
+    });
+  }
+
+  if (els.profileBackBtn) {
+    els.profileBackBtn.addEventListener('click', () => {
+      showScreen('catalog');
+    });
+  }
+
+  els.profileTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      els.profileTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      switchProfileTab(tab.dataset.tab);
+    });
+  });
 
   /* Browser Back Button */
   if (!tg) {
@@ -423,6 +494,7 @@ function openProductModal(p) {
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
+    renderProfileFavorites(); // чтобы профиль сразу обновлялся
   };
 }
 
@@ -606,6 +678,195 @@ function createFlyAnimation(p) {
   setTimeout(() => img.remove(), 700);
 }
 
+/* Orders / Profile helpers */
+function saveOrders() {
+  localStorage.setItem('orders', JSON.stringify(state.orders));
+}
+
+function savePostponed() {
+  localStorage.setItem('postponed', JSON.stringify(state.postponed));
+}
+
+/* Отложить товар (по умолчанию на 3 дня, но максимум 7) */
+function postponeProduct(id, days = 3) {
+  const safeDays = Math.min(Math.max(days, 1), 7);
+  const until = new Date(Date.now() + safeDays * 24 * 60 * 60 * 1000).toISOString();
+
+  const existingIdx = state.postponed.findIndex(x => x.id === id);
+  if (existingIdx >= 0) {
+    state.postponed[existingIdx].until = until;
+  } else {
+    state.postponed.push({ id, until });
+  }
+
+  savePostponed();
+  state.filtered = applyPostponedFilter([...state.products]);
+  if (state.view === 'catalog') renderCatalog();
+  renderProfilePostponed();
+}
+
+/* Очистка просроченных отложенных */
+function cleanupPostponed() {
+  const now = Date.now();
+  state.postponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  savePostponed();
+}
+
+/* Profile rendering */
+function renderProfileSections() {
+  cleanupPostponed();
+  renderProfileOrders();
+  renderProfileFavorites();
+  renderProfilePostponed();
+}
+
+function switchProfileTab(tab) {
+  const sections = {
+    orders: els.profileOrders,
+    favorites: els.profileFavorites,
+    postponed: els.profilePostponed
+  };
+
+  Object.values(sections).forEach(s => s.classList.remove('active'));
+  if (sections[tab]) sections[tab].classList.add('active');
+}
+
+function renderProfileOrders() {
+  if (!els.profileOrders) return;
+  els.profileOrders.innerHTML = '';
+
+  if (!state.orders.length) {
+    const empty = document.createElement('div');
+    empty.className = 'profile-empty';
+    empty.textContent = 'Покупок пока нет';
+    els.profileOrders.appendChild(empty);
+    return;
+  }
+
+  const sorted = [...state.orders].sort((a, b) => new Date(b.ts) - new Date(a.ts));
+
+  sorted.forEach(order => {
+    const node = document.createElement('div');
+    node.className = 'profile-order';
+
+    const date = new Date(order.ts);
+    const dateStr = date.toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+    node.innerHTML = `
+      <div class="profile-order-header">
+        <div class="profile-order-date">${dateStr}</div>
+        <div class="profile-order-total">${formatPrice(order.total)}</div>
+      </div>
+      <div class="profile-order-items">
+        ${order.items.map(it => `
+          <div class="profile-order-item">
+            <div class="title">${it.title}</div>
+            <div class="meta">Размер ${it.size} • ${it.qty} шт.</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    els.profileOrders.appendChild(node);
+  });
+}
+
+function renderProfileFavorites() {
+  if (!els.profileFavorites) return;
+  els.profileFavorites.innerHTML = '';
+
+  const favIds = [...state.favorites];
+  const arr = state.products.filter(p => favIds.includes(p.id));
+
+  if (!arr.length) {
+    const empty = document.createElement('div');
+    empty.className = 'profile-empty';
+    empty.textContent = 'В избранном пока пусто';
+    els.profileFavorites.appendChild(empty);
+    return;
+  }
+
+  arr.forEach(p => {
+    const node = document.createElement('div');
+    node.className = 'profile-fav-item';
+
+    const cover = p.images?.[0] || '';
+
+    node.innerHTML = `
+      <div class="profile-fav-left">
+        <img src="${cover}" alt="${p.title}">
+        <div>
+          <div class="title">${p.title}</div>
+          <div class="meta">${p.brand}</div>
+        </div>
+      </div>
+      <div class="profile-fav-right">
+        <div class="price">${formatPrice(p.price)}</div>
+      </div>
+    `;
+
+    els.profileFavorites.appendChild(node);
+  });
+}
+
+function renderProfilePostponed() {
+  if (!els.profilePostponed) return;
+  els.profilePostponed.innerHTML = '';
+
+  cleanupPostponed();
+
+  if (!state.postponed.length) {
+    const empty = document.createElement('div');
+    empty.className = 'profile-empty';
+    empty.textContent = 'Отложенных пар нет';
+    els.profilePostponed.appendChild(empty);
+    return;
+  }
+
+  state.postponed.forEach(entry => {
+    const p = state.products.find(x => x.id === entry.id);
+    if (!p) return;
+
+    const node = document.createElement('div');
+    node.className = 'profile-postponed-item';
+
+    const cover = p.images?.[0] || '';
+    const untilDate = new Date(entry.until);
+    const diffMs = untilDate.getTime() - Date.now();
+    const daysLeft = Math.max(1, Math.ceil(diffMs / (24 * 60 * 60 * 1000)));
+
+    node.innerHTML = `
+      <div class="profile-postponed-left">
+        <img src="${cover}" alt="${p.title}">
+        <div>
+          <div class="title">${p.title}</div>
+          <div class="meta">${p.brand}</div>
+          <div class="meta">Ещё ~${daysLeft} дн.</div>
+        </div>
+      </div>
+      <div class="profile-postponed-right">
+        <div class="price">${formatPrice(p.price)}</div>
+        <button class="secondary small" data-id="${p.id}">Вернуть в каталог</button>
+      </div>
+    `;
+
+    const btn = node.querySelector('button');
+    btn.addEventListener('click', () => {
+      state.postponed = state.postponed.filter(x => x.id !== p.id);
+      savePostponed();
+      state.filtered = applyPostponedFilter([...state.products]);
+      if (state.view === 'catalog') renderCatalog();
+      renderProfilePostponed();
+    });
+
+    els.profilePostponed.appendChild(node);
+  });
+}
+
 /* Checkout */
 async function checkout() {
   if (!state.cart.length) {
@@ -634,6 +895,11 @@ async function checkout() {
     });
 
     if (res.ok) {
+      // сохраняем в историю
+      state.orders.push(order);
+      saveOrders();
+      renderProfileOrders();
+
       tg?.showPopup({
         title: "Заказ",
         message: "✅ Заказ отправлен!",
