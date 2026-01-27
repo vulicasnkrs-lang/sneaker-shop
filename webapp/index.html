@@ -161,13 +161,16 @@
   <div id="profileView" class="hidden">
 
     <header class="header">
-      <button id="profileBackBtn" class="icon-btn">←</button>
+      <!-- 🔥 Убрали кнопку ←, теперь будет системная Telegram BackButton -->
+      <div style="width:40px;"></div>
       <div class="brand">Профиль</div>
       <div style="width:40px;"></div>
     </header>
 
     <section class="profile-header" id="profileHeader">
-      <div class="profile-avatar" id="profileAvatar">👤</div>
+      <!-- 🔥 Уникальный ID для аватара в профиле -->
+      <div class="profile-avatar" id="profileAvatarProfile">👤</div>
+
       <div class="profile-info">
         <div class="profile-name" id="profileName">Гость</div>
         <div class="profile-username" id="profileUsername"></div>
