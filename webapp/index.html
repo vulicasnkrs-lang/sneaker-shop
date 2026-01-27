@@ -23,8 +23,11 @@
       <div class="brand">vulica.SNKRS</div>
 
       <div class="header-actions">
-        <button id="profileBtn" class="profile-icon">👤</button>
+        <!-- 🔥 АВАТАР КЛИЕНТА В ШАПКЕ -->
+        <div id="profileAvatar" class="profile-avatar">👤</div>
+
         <button id="cartBtn" class="primary">0 ₽</button>
+
         <button id="favBtn" class="icon-btn">
           ❤ <span id="favCount">0</span>
         </button>
@@ -114,19 +117,16 @@
   <!-- ========================= -->
   <div id="productView" class="hidden">
 
-    <!-- КНОПКА НАЗАД ДЛЯ БРАУЗЕРА -->
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
 
     <div id="productModal" class="modal open" style="opacity:1; pointer-events:auto;">
       <div class="modal-content">
 
-        <!-- ГАЛЕРЕЯ -->
         <div class="modal-images">
           <div class="carousel" id="carousel"></div>
           <div class="photo-counter" id="photoCounter">1 / 1</div>
         </div>
 
-        <!-- ИНФОРМАЦИЯ -->
         <div class="modal-info">
           <h2 id="modalTitle"></h2>
           <div id="modalBrandSeason" class="modal-meta"></div>
@@ -156,7 +156,7 @@
 
 
   <!-- ========================= -->
-  <!-- ЭКРАН 3 — ПРОФИЛЬ / ЛИЧНЫЙ КАБИНЕТ -->
+  <!-- ЭКРАН 3 — ПРОФИЛЬ -->
   <!-- ========================= -->
   <div id="profileView" class="hidden">
 
