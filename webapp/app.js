@@ -136,13 +136,11 @@ function initProfileFromTelegram() {
   els.profileUsername.textContent = user.username ? '@' + user.username : '';
 
   if (user.photo_url) {
-    // аватар в шапке
     els.profileAvatarHeader.textContent = '';
     els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
     els.profileAvatarHeader.style.backgroundSize = 'cover';
     els.profileAvatarHeader.style.backgroundPosition = 'center';
 
-    // аватар в профиле
     els.profileAvatarProfile.textContent = '';
     els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
     els.profileAvatarProfile.style.backgroundSize = 'cover';
@@ -425,6 +423,75 @@ function addToCart(p, size, qty) {
     state.cart.push({
       key,
       id: p.id,
+      title: p.title,
+      brand: p.brand,
+      price: p.price,
+      size,
+      qty,
+      images: p.images
+    });
+  }
+
+  persistCart();
+  updateCartBadge();
+}
+
+function persistCart() {
+  localStorage.setItem('cart', JSON.stringify(state.cart));
+}
+
+function openCart() {
+  renderCart();
+  els.cartDrawer.classList.remove('hidden');
+}
+
+function closeCart() {
+  els.cartDrawer.classList.add('hidden');
+}
+
+function renderCart() {
+  els.cartList.innerHTML = '';
+
+  if (!state.cart.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.textContent = 'Корзина пуста';
+    els.cartList.appendChild(empty);
+    els.cartTotal.textContent = formatPrice(0);
+    return;
+  }
+
+  state.cart.forEach(item => {
+    const node = document.createElement('div');
+    node.className = 'cart-item';
+
+    node.innerHTML = `
+      <img src="${item.images?.[0] || ''}" alt="">
+      <div>
+        <div><strong>${item.title}</strong></div>
+        <div class="meta">Размер ${item.size}</div>
+
+        <div class="qty-row">
+          <button class="qty-btn" data-act="minus">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn" data-act="plus">+</button>
+          <button class="remove-btn" data-act="remove">Удалить</button>
+        </div>
+      </div>
+
+      <div class="price">${formatPrice(item.price)}</div>
+    `;
+
+    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
+    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
+    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
+
+    els.cartList.appendChild(node);
+  });
+
+  els.cartTotal.textContent = formatPrice(cartTotal());
+}
+/* Change quantity */
 function changeQty(key, delta) {
   const idx = state.cart.findIndex(x => x.key === key);
   if (idx < 0) return;
@@ -480,7 +547,7 @@ function createFlyAnimation(p) {
   setTimeout(() => img.remove(), 700);
 }
 
-/* Отложить товар */
+/* Postpone product */
 function postponeProduct(id, days = 3) {
   const safeDays = Math.min(Math.max(days, 1), 7);
   const until = new Date(Date.now() + safeDays * 24 * 60 * 60 * 1000).toISOString();
@@ -498,14 +565,14 @@ function postponeProduct(id, days = 3) {
   renderProfilePostponed();
 }
 
-/* Очистка просроченных */
+/* Cleanup expired postponed */
 function cleanupPostponed() {
   const now = Date.now();
   state.postponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
   savePostponed();
 }
 
-/* Profile rendering */
+/* Profile sections */
 function renderProfileSections() {
   cleanupPostponed();
   renderProfileOrders();
@@ -524,6 +591,7 @@ function switchProfileTab(tab) {
   if (sections[tab]) sections[tab].classList.add('active');
 }
 
+/* Orders */
 function renderProfileOrders() {
   els.profileOrders.innerHTML = '';
 
@@ -567,6 +635,7 @@ function renderProfileOrders() {
   });
 }
 
+/* Favorites in profile */
 function renderProfileFavorites() {
   els.profileFavorites.innerHTML = '';
 
@@ -604,6 +673,7 @@ function renderProfileFavorites() {
   });
 }
 
+/* Postponed */
 function renderProfilePostponed() {
   els.profilePostponed.innerHTML = '';
 
