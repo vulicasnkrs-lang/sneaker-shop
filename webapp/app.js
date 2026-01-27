@@ -11,7 +11,6 @@ const state = {
   allSizes: new Set(),
   view: 'catalog',
   mysteryProductId: null,
-
   orders: JSON.parse(localStorage.getItem('orders') || '[]'),
   postponed: JSON.parse(localStorage.getItem('postponed') || '[]')
 };
@@ -48,7 +47,6 @@ const els = {
   checkoutBtn: document.getElementById('checkoutBtn'),
 
   productModal: document.getElementById('productModal'),
-
   carousel: document.getElementById('carousel'),
   photoCounter: document.getElementById('photoCounter'),
 
@@ -66,7 +64,6 @@ const els = {
 
   browserBackBtn: document.getElementById('browserBackBtn'),
 
-  /* Профиль */
   profileAvatarHeader: document.getElementById('profileAvatar'),
   profileAvatarProfile: document.getElementById('profileAvatarProfile'),
   profileName: document.getElementById('profileName'),
@@ -190,6 +187,30 @@ function applyPostponedFilter(arr) {
   return arr.filter(p => !hiddenIds.includes(p.id));
 }
 
+/* Mystery Box */
+function openMysteryBox() {
+  if (!state.products.length) return;
+
+  const p = state.products[Math.floor(Math.random() * state.products.length)];
+  state.mysteryProductId = p.id;
+
+  els.mysteryImg.src = p.images?.[0] || '';
+  els.mysteryTitle.textContent = p.title;
+  els.mysteryPrice.textContent = formatPrice(p.price);
+
+  els.mysteryModal.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    els.mysteryModal.classList.add('open');
+  });
+}
+
+function closeMysteryModal() {
+  els.mysteryModal.classList.remove('open');
+  setTimeout(() => {
+    els.mysteryModal.classList.add('hidden');
+  }, 200);
+}
+
 /* Build filters */
 function buildFilters() {
   [...state.brandSet].sort().forEach(b => {
@@ -232,7 +253,6 @@ function attachEvents() {
   els.brandFilter.addEventListener('change', applyFilters);
   els.sizeFilter.addEventListener('change', applyFilters);
   els.sortSelect.addEventListener('change', applyFilters);
-
   els.searchInput.addEventListener('input', debounce(applyFilters, 300));
 
   els.openMysteryBtn.addEventListener('click', openMysteryBox);
@@ -338,19 +358,15 @@ function cardNode(p) {
     favIcon.classList.toggle('active');
     favIcon.classList.add('animate');
     setTimeout(() => favIcon.classList.remove('animate'), 300);
-
     renderProfileFavorites();
   });
 
-  /* Tilt effect */
   node.addEventListener('mousemove', (e) => {
     const rect = node.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-
     const tiltX = (y / rect.height) * 3;
     const tiltY = -(x / rect.width) * 3;
-
     node.style.transform =
       `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
   });
@@ -393,11 +409,11 @@ function openProductModal(p) {
   const carousel = els.carousel;
   const counter = els.photoCounter;
 
-  carousel.innerHTML = "";
+  carousel.innerHTML = '';
 
   const imgs = p.images || [];
   imgs.forEach((src) => {
-    const img = document.createElement("img");
+    const img = document.createElement('img');
     img.src = src;
     img.alt = p.title;
     carousel.appendChild(img);
@@ -413,7 +429,7 @@ function openProductModal(p) {
   };
 
   els.modalTitle.textContent = p.title;
-  els.modalBrandSeason.textContent = p.brand + " • " + (p.season || "");
+  els.modalBrandSeason.textContent = p.brand + ' • ' + (p.season || '');
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
@@ -424,30 +440,29 @@ function openProductModal(p) {
     els.productModal.classList.remove('highlighted');
   }
 
-  els.modalSizes.innerHTML = "";
+  els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(s => {
-    const b = document.createElement("button");
-    b.className = "size";
+    const b = document.createElement('button');
+    b.className = 'size';
     b.textContent = s;
 
-    b.addEventListener("click", () => {
+    b.addEventListener('click', () => {
       selectedSize = s;
+      els.modalSizes.querySelectorAll('.size')
+        .forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
 
-      els.modalSizes.querySelectorAll(".size")
-        .forEach(x => x.classList.remove("active"));
-      b.classList.add("active");
-
-      els.modalPrice.classList.remove("bump");
+      els.modalPrice.classList.remove('bump');
       void els.modalPrice.offsetWidth;
-      els.modalPrice.classList.add("bump");
+      els.modalPrice.classList.add('bump');
     });
 
     els.modalSizes.appendChild(b);
   });
 
-  els.productModal.classList.remove("hidden");
+  els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
-    els.productModal.classList.add("open");
+    els.productModal.classList.add('open');
   });
 
   els.addToCartBtn.onclick = (e) => {
@@ -832,6 +847,29 @@ function renderProfilePostponed() {
   });
 }
 
+/* Favorites view (catalog mode) */
+function renderFavorites() {
+  els.catalog.innerHTML = '';
+
+  const favIds = [...state.favorites];
+  const arr = state.products.filter(p => favIds.includes(p.id));
+
+  if (!arr.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.style.padding = '20px';
+    empty.textContent = 'В избранном пока пусто';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  arr.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
+}
+
 /* Checkout */
 async function checkout() {
   if (!state.cart.length) {
@@ -853,9 +891,9 @@ async function checkout() {
   };
 
   try {
-    const res = await fetch("/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const res = await fetch('/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(order)
     });
 
@@ -865,23 +903,23 @@ async function checkout() {
       renderProfileOrders();
 
       tg?.showPopup({
-        title: "Заказ",
-        message: "✅ Заказ отправлен!",
-        buttons: [{ type: "ok" }]
+        title: 'Заказ',
+        message: '✅ Заказ отправлен!',
+        buttons: [{ type: 'ok' }]
       });
 
       state.cart = [];
-      localStorage.removeItem("cart");
+      localStorage.removeItem('cart');
       renderCart();
       updateCartBadge();
     } else {
-      throw new Error("Server error");
+      throw new Error('Server error');
     }
   } catch {
     tg?.showPopup({
-      title: "Ошибка",
-      message: "Не удалось отправить заказ",
-      buttons: [{ type: "ok" }]
+      title: 'Ошибка',
+      message: 'Не удалось отправить заказ',
+      buttons: [{ type: 'ok' }]
     });
   }
 }
@@ -913,6 +951,23 @@ function saveOrders() {
 
 function savePostponed() {
   localStorage.setItem('postponed', JSON.stringify(state.postponed));
+}
+
+function addRippleEffect(button, event) {
+  const rect = button.getBoundingClientRect();
+  const circle = document.createElement('span');
+  const diameter = Math.max(rect.width, rect.height);
+  const radius = diameter / 2;
+
+  circle.style.width = circle.style.height = `${diameter}px`;
+  circle.style.left = `${event.clientX - rect.left - radius}px`;
+  circle.style.top = `${event.clientY - rect.top - radius}px`;
+  circle.classList.add('ripple');
+
+  const existing = button.getElementsByClassName('ripple')[0];
+  if (existing) existing.remove();
+
+  button.appendChild(circle);
 }
 
 /* Start */
