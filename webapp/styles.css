@@ -126,7 +126,8 @@ html, body {
   gap: 10px;
 }
 
-.profile-icon {
+/* Avatar in header */
+.profile-avatar {
   width: 32px;
   height: 32px;
   border-radius: 999px;
@@ -134,6 +135,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 /* Mystery Box */
@@ -310,7 +312,6 @@ input:focus,
   align-items: center;
   border-bottom: 1px solid #eee;
 }
-
 .drawer-list {
   flex: 1;
   overflow-y: auto;
@@ -338,7 +339,18 @@ input:focus,
   object-fit: cover;
   border: 1px solid #eee;
 }
-/* Sizes active */
+
+/* Sizes */
+.size {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  transition: all .2s ease;
+  font-size: 15px;
+}
+
 .size.active {
   background: #111;
   color: #fff;
@@ -404,7 +416,6 @@ input:focus,
   pointer-events: auto;
 }
 
-/* Контейнер */
 .modal-content {
   width: 100%;
   max-width: 480px;
@@ -414,7 +425,7 @@ input:focus,
   position: relative;
 }
 
-/* КНОПКА ЗАКРЫТЬ */
+/* Close button */
 .close-btn {
   position: absolute;
   top: 12px;
@@ -435,7 +446,7 @@ input:focus,
   background: #fff;
 }
 
-/* ГАЛЕРЕЯ — КАРУСЕЛЬ */
+/* Gallery */
 .modal-images {
   width: 100%;
   height: 340px;
@@ -473,7 +484,7 @@ input:focus,
   to { opacity: 1; }
 }
 
-/* СЧЁТЧИК ФОТО */
+/* Photo counter */
 .photo-counter {
   position: absolute;
   bottom: 14px;
@@ -486,7 +497,7 @@ input:focus,
   font-weight: 500;
 }
 
-/* Информация */
+/* Product info */
 .modal-info {
   display: flex;
   flex-direction: column;
@@ -504,14 +515,14 @@ input:focus,
   width: 100%;
 }
 
-/* Выделение товара из Mystery Box */
+/* Highlighted (Mystery Box) */
 .modal.highlighted .modal-content {
   box-shadow: 0 0 0 4px #ffe680;
   border-radius: 18px;
   transition: box-shadow .3s ease;
 }
 
-/* КНОПКА НАЗАД ДЛЯ БРАУЗЕРА */
+/* Browser back button */
 .browser-back {
   position: absolute;
   top: 16px;
@@ -536,6 +547,7 @@ input:focus,
 .browser-back:hover {
   transform: translateX(-2px);
 }
+
 /* ========================= */
 /*        PROFILE VIEW       */
 /* ========================= */
@@ -546,7 +558,7 @@ input:focus,
   padding-bottom: 40px;
 }
 
-/* Header */
+/* Profile header */
 .profile-header {
   display: flex;
   align-items: center;
@@ -556,7 +568,7 @@ input:focus,
   border-bottom: 1px solid #eee;
 }
 
-.profile-avatar {
+.profile-header .profile-avatar {
   width: 64px;
   height: 64px;
   border-radius: 999px;
@@ -632,8 +644,10 @@ input:focus,
   color: #aeb4c0;
   font-size: 15px;
 }
+/* ========================= */
+/*        PROFILE — ORDERS   */
+/* ========================= */
 
-/* Orders */
 .profile-order {
   background: #fff;
   border-radius: 16px;
@@ -665,7 +679,10 @@ input:focus,
   color: var(--muted);
 }
 
-/* Favorites inside profile */
+/* ========================= */
+/*   PROFILE — FAVORITES     */
+/* ========================= */
+
 .profile-fav-item {
   background: #fff;
   border-radius: 16px;
@@ -704,7 +721,10 @@ input:focus,
   font-weight: 600;
 }
 
-/* Postponed */
+/* ========================= */
+/*   PROFILE — POSTPONED     */
+/* ========================= */
+
 .profile-postponed-item {
   background: #fff;
   border-radius: 16px;
@@ -754,4 +774,42 @@ input:focus,
   padding: 6px 12px;
   font-size: 13px;
   border-radius: 10px;
+}
+
+/* ========================= */
+/*       FLY ANIMATION       */
+/* ========================= */
+
+.fly {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  transition: transform .7s ease, opacity .7s ease;
+  animation: flyAnim .7s ease forwards;
+}
+
+@keyframes flyAnim {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
+}
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+@media (max-width: 420px) {
+  .card-image {
+    height: 150px;
+  }
+
+  .profile-header .profile-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .profile-fav-left img,
+  .profile-postponed-left img {
+    width: 56px;
+    height: 56px;
+  }
 }
