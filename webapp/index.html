@@ -23,11 +23,14 @@
       <div class="brand">vulica.SNKRS</div>
 
       <div class="header-actions">
-        <!-- 🔥 АВАТАР КЛИЕНТА В ШАПКЕ -->
-        <div id="profileAvatar" class="profile-avatar">👤</div>
 
+        <!-- АВАТАР БЕЗ ЗАГЛУШКИ (заглушка теперь через CSS) -->
+        <div id="profileAvatar" class="profile-avatar"></div>
+
+        <!-- КОРЗИНА -->
         <button id="cartBtn" class="primary">0 ₽</button>
 
+        <!-- ИЗБРАННОЕ -->
         <button id="favBtn" class="icon-btn">
           ❤ <span id="favCount">0</span>
         </button>
@@ -119,7 +122,6 @@
 
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
 
-    <!-- ВАЖНО: productModal теперь скрыт по умолчанию -->
     <div id="productModal" class="modal hidden">
       <div class="modal-content">
 
@@ -169,7 +171,9 @@
       </header>
 
       <section class="profile-header" id="profileHeader">
-        <div class="profile-avatar" id="profileAvatarProfile">👤</div>
+
+        <!-- АВАТАР БЕЗ ЗАГЛУШКИ -->
+        <div class="profile-avatar" id="profileAvatarProfile"></div>
 
         <div class="profile-info">
           <div class="profile-name" id="profileName">Гость</div>
