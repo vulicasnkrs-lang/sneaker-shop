@@ -5,38 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>vulica.SNKRS</title>
 
-  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
   <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
 
-  <!-- ========================= -->
-  <!-- ЭКРАН 1 — КАТАЛОГ (SPA)   -->
-  <!-- ========================= -->
+  <!-- PRODUCT MODAL (В КОРНЕ — ПРАВИЛЬНО) -->
+  <div id="productModal" class="modal hidden">
+    <div class="modal-content">
+
+      <div class="modal-images">
+        <div class="carousel" id="carousel"></div>
+        <div class="photo-counter" id="photoCounter">1 / 1</div>
+      </div>
+
+      <div class="modal-info">
+        <h2 id="modalTitle"></h2>
+        <div id="modalBrandSeason" class="modal-meta"></div>
+        <div id="modalPrice" class="modal-price"></div>
+        <p id="modalDesc" class="modal-desc"></p>
+
+        <div class="modal-sizes" id="modalSizes"></div>
+
+        <div class="modal-qty">
+          <input id="modalQty" type="number" value="1" min="1" />
+        </div>
+
+        <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+
+        <div class="modal-fav">
+          <button id="toggleFavBtn" class="fav-toggle-btn">
+            ❤ В избранное
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- КАТАЛОГ -->
   <div id="catalogView">
 
-    <!-- HEADER -->
     <header class="header">
       <div class="brand">vulica.SNKRS</div>
 
       <div class="header-actions">
-
-        <!-- АВАТАР БЕЗ ЗАГЛУШКИ (заглушка теперь через CSS) -->
         <div id="profileAvatar" class="profile-avatar"></div>
 
-        <!-- КОРЗИНА -->
         <button id="cartBtn" class="primary">0 ₽</button>
 
-        <!-- ИЗБРАННОЕ -->
         <button id="favBtn" class="icon-btn">
           ❤ <span id="favCount">0</span>
         </button>
       </div>
     </header>
-
     <!-- MYSTERY BOX -->
     <section class="mystery-box" id="mysteryBox">
       <h2>🎁 Тайная коробка дня</h2>
@@ -112,55 +135,12 @@
     </div>
 
   </div> <!-- /catalogView -->
-
-
-
-  <!-- ========================= -->
-  <!-- ЭКРАН 2 — КАРТОЧКА ТОВАРА -->
-  <!-- ========================= -->
+  <!-- PRODUCT VIEW (теперь только кнопка назад) -->
   <div id="productView" class="hidden">
-
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
+  </div>
 
-    <div id="productModal" class="modal hidden">
-      <div class="modal-content">
-
-        <div class="modal-images">
-          <div class="carousel" id="carousel"></div>
-          <div class="photo-counter" id="photoCounter">1 / 1</div>
-        </div>
-
-        <div class="modal-info">
-          <h2 id="modalTitle"></h2>
-          <div id="modalBrandSeason" class="modal-meta"></div>
-          <div id="modalPrice" class="modal-price"></div>
-          <p id="modalDesc" class="modal-desc"></p>
-
-          <div class="modal-sizes" id="modalSizes"></div>
-
-          <div class="modal-qty">
-            <input id="modalQty" type="number" value="1" min="1" />
-          </div>
-
-          <button id="addToCartBtn" class="primary">Добавить в корзину</button>
-
-          <div class="modal-fav">
-            <button id="toggleFavBtn" class="fav-toggle-btn">
-              ❤ В избранное
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div> <!-- /productView -->
-
-
-
-  <!-- ========================= -->
-  <!-- ПРОФИЛЬ — МОДАЛЬНОЕ ОКНО -->
-  <!-- ========================= -->
+  <!-- PROFILE MODAL -->
   <div id="profileModal" class="modal hidden">
     <div class="modal-content profile-modal">
 
@@ -171,8 +151,6 @@
       </header>
 
       <section class="profile-header" id="profileHeader">
-
-        <!-- АВАТАР БЕЗ ЗАГЛУШКИ -->
         <div class="profile-avatar" id="profileAvatarProfile"></div>
 
         <div class="profile-info">
@@ -194,8 +172,7 @@
       </main>
 
     </div>
-  </div> <!-- /profileModal -->
-
+  </div>
   <script src="/app.js"></script>
 </body>
 </html>
