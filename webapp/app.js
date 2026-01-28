@@ -9,7 +9,6 @@ const state = {
   cart: JSON.parse(localStorage.getItem('cart') || '[]'),
   brandSet: new Set(),
   allSizes: new Set(),
-  view: 'catalog',
   mysteryProductId: null,
   orders: JSON.parse(localStorage.getItem('orders') || '[]'),
   postponed: JSON.parse(localStorage.getItem('postponed') || '[]')
@@ -64,6 +63,9 @@ const els = {
 
   browserBackBtn: document.getElementById('browserBackBtn'),
 
+  /* NEW — модальный профиль */
+  profileModal: document.getElementById('profileModal'),
+
   profileAvatarHeader: document.getElementById('profileAvatar'),
   profileAvatarProfile: document.getElementById('profileAvatarProfile'),
   profileName: document.getElementById('profileName'),
@@ -77,30 +79,6 @@ const els = {
 
 let currentProduct = null;
 let selectedSize = null;
-
-/* Fade SPA Navigation */
-function showScreen(view) {
-  const catalogView = document.getElementById('catalogView');
-  const productView = document.getElementById('productView');
-  const profileView = document.getElementById('profileView');
-
-  catalogView.classList.add('hidden');
-  productView.classList.add('hidden');
-  profileView.classList.add('hidden');
-
-  if (view === 'catalog') {
-    catalogView.classList.remove('hidden');
-    catalogView.classList.add('fade-in');
-  } else if (view === 'product') {
-    productView.classList.remove('hidden');
-    productView.classList.add('fade-in');
-  } else if (view === 'profile') {
-    profileView.classList.remove('hidden');
-    profileView.classList.add('fade-in');
-  }
-
-  state.view = view;
-}
 
 /* Init */
 async function init() {
@@ -179,36 +157,12 @@ async function loadProducts() {
   state.filtered = applyPostponedFilter([...state.products]);
 }
 
-/* Учитываем отложенные товары */
+/* Apply postponed filter */
 function applyPostponedFilter(arr) {
   const now = Date.now();
-  const activePostponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
-  const hiddenIds = activePostponed.map(x => x.id);
+  const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  const hiddenIds = active.map(x => x.id);
   return arr.filter(p => !hiddenIds.includes(p.id));
-}
-
-/* Mystery Box */
-function openMysteryBox() {
-  if (!state.products.length) return;
-
-  const p = state.products[Math.floor(Math.random() * state.products.length)];
-  state.mysteryProductId = p.id;
-
-  els.mysteryImg.src = p.images?.[0] || '';
-  els.mysteryTitle.textContent = p.title;
-  els.mysteryPrice.textContent = formatPrice(p.price);
-
-  els.mysteryModal.classList.remove('hidden');
-  requestAnimationFrame(() => {
-    els.mysteryModal.classList.add('open');
-  });
-}
-
-function closeMysteryModal() {
-  els.mysteryModal.classList.remove('open');
-  setTimeout(() => {
-    els.mysteryModal.classList.add('hidden');
-  }, 200);
 }
 
 /* Build filters */
@@ -248,63 +202,6 @@ function applyFilters() {
   renderCatalog();
 }
 
-/* Attach events */
-function attachEvents() {
-  els.brandFilter.addEventListener('change', applyFilters);
-  els.sizeFilter.addEventListener('change', applyFilters);
-  els.sortSelect.addEventListener('change', applyFilters);
-  els.searchInput.addEventListener('input', debounce(applyFilters, 300));
-
-  els.openMysteryBtn.addEventListener('click', openMysteryBox);
-  els.closeMystery.addEventListener('click', closeMysteryModal);
-  els.mysteryOk.addEventListener('click', closeMysteryModal);
-
-  els.cartBtn.addEventListener('click', openCart);
-  els.closeCart.addEventListener('click', closeCart);
-  els.checkoutBtn.addEventListener('click', checkout);
-
-  els.favBtn.addEventListener('click', toggleFavoritesView);
-  els.clearFavoritesBtn.addEventListener('click', clearFavorites);
-
-  els.profileAvatarHeader.addEventListener('click', () => {
-  showScreen('profile');
-  renderProfileSections();
-
-  if (tg) {
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      showScreen('catalog');
-      tg.BackButton.hide();
-      tg.BackButton.onClick(() => {});
-    });
-  }
-});
-
-
-  els.profileTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      els.profileTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      switchProfileTab(tab.dataset.tab);
-    });
-  });
-
-  if (!tg) {
-    els.browserBackBtn.addEventListener('click', () => {
-      closeProductModal();
-      showScreen('catalog');
-    });
-  }
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeCart();
-      closeProductModal();
-      closeMysteryModal();
-    }
-  });
-}
-
 /* Render catalog */
 function renderCatalog() {
   els.catalog.innerHTML = '';
@@ -324,6 +221,7 @@ function renderCatalog() {
     els.catalog.appendChild(node);
   });
 }
+
 /* Card node */
 function cardNode(p) {
   const node = document.createElement('div');
@@ -353,10 +251,7 @@ function cardNode(p) {
 
   node.addEventListener('click', () => {
     if (tg) openProductScreen(p.id);
-    else {
-      showScreen('product');
-      openProductModal(p);
-    }
+    else openProductModal(p);
   });
 
   const favBtn = node.querySelector('.fav-btn');
@@ -371,6 +266,7 @@ function cardNode(p) {
     renderProfileFavorites();
   });
 
+  /* Hover tilt */
   node.addEventListener('mousemove', (e) => {
     const rect = node.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
@@ -388,7 +284,7 @@ function cardNode(p) {
   return node;
 }
 
-/* PRODUCT SCREEN (SPA) */
+/* PRODUCT SCREEN (Telegram SPA) */
 function openProductScreen(productId) {
   const p = state.products.find(x => String(x.id) === String(productId));
   if (!p) return;
@@ -396,19 +292,14 @@ function openProductScreen(productId) {
   currentProduct = p;
   selectedSize = null;
 
-  showScreen('product');
   openProductModal(p);
 
-  if (tg) {
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      closeProductModal();
-      tg.BackButton.hide();
-      tg.BackButton.onClick(() => {});
-    });
-  } else {
-    els.browserBackBtn.classList.remove('hidden');
-  }
+  tg.BackButton.show();
+  tg.BackButton.onClick(() => {
+    closeProductModal();
+    tg.BackButton.hide();
+    tg.BackButton.onClick(() => {});
+  });
 }
 
 /* PRODUCT MODAL */
@@ -499,13 +390,8 @@ function openProductModal(p) {
 function closeProductModal() {
   els.productModal.classList.remove('open');
 
-  if (!tg) {
-    els.browserBackBtn.classList.add('hidden');
-  }
-
   setTimeout(() => {
     els.productModal.classList.add('hidden');
-    showScreen('catalog');
   }, 220);
 
   if (tg) {
@@ -513,7 +399,6 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
-
 /* Favorites */
 function toggleFavorite(id) {
   if (state.favorites.has(id)) state.favorites.delete(id);
@@ -521,8 +406,6 @@ function toggleFavorite(id) {
 
   localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
   updateFavBadge();
-
-  if (state.view === 'favorites') renderFavorites();
   renderProfileFavorites();
 }
 
@@ -530,7 +413,6 @@ function clearFavorites() {
   state.favorites.clear();
   localStorage.setItem('favorites', JSON.stringify([]));
   updateFavBadge();
-  if (state.view === 'favorites') renderFavorites();
   renderProfileFavorites();
 }
 
@@ -621,6 +503,7 @@ function renderCart() {
 
   els.cartTotal.textContent = formatPrice(cartTotal());
 }
+
 /* Change quantity */
 function changeQty(key, delta) {
   const idx = state.cart.findIndex(x => x.key === key);
@@ -652,10 +535,6 @@ function formatPrice(v) {
   return `${v} ₽`;
 }
 
-function updateCartBadge() {
-  els.cartBtn.textContent = formatPrice(cartTotal());
-}
-
 /* Fly animation */
 function createFlyAnimation(p) {
   const cover = p.images?.[0] || '';
@@ -680,7 +559,7 @@ function createFlyAnimation(p) {
 /* Postpone product */
 function postponeProduct(id, days = 3) {
   const safeDays = Math.min(Math.max(days, 1), 7);
-  const until = new Date(Date.now() + safeDays * 24 * 60 * 60 * 1000).toISOString();
+  const until = new Date(Date.now() + safeDays * 86400000).toISOString();
 
   const existingIdx = state.postponed.findIndex(x => x.id === id);
   if (existingIdx >= 0) {
@@ -691,7 +570,7 @@ function postponeProduct(id, days = 3) {
 
   savePostponed();
   state.filtered = applyPostponedFilter([...state.products]);
-  if (state.view === 'catalog') renderCatalog();
+  renderCatalog();
   renderProfilePostponed();
 }
 
@@ -827,7 +706,7 @@ function renderProfilePostponed() {
     const cover = p.images?.[0] || '';
     const untilDate = new Date(entry.until);
     const diffMs = untilDate.getTime() - Date.now();
-    const daysLeft = Math.max(1, Math.ceil(diffMs / (24 * 60 * 60 * 1000)));
+    const daysLeft = Math.max(1, Math.ceil(diffMs / 86400000));
 
     node.innerHTML = `
       <div class="profile-postponed-left">
@@ -849,7 +728,7 @@ function renderProfilePostponed() {
       state.postponed = state.postponed.filter(x => x.id !== p.id);
       savePostponed();
       state.filtered = applyPostponedFilter([...state.products]);
-      if (state.view === 'catalog') renderCatalog();
+      renderCatalog();
       renderProfilePostponed();
     });
 
@@ -979,6 +858,103 @@ function addRippleEffect(button, event) {
 
   button.appendChild(circle);
 }
+/* ========================= */
+/*   PROFILE MODAL (NEW)     */
+/* ========================= */
 
-/* Start */
+/* Открыть профиль */
+function openProfileModal() {
+  els.profileModal.classList.remove('hidden');
+
+  requestAnimationFrame(() => {
+    els.profileModal.classList.add('open');
+  });
+
+  /* Показать системную кнопку назад */
+  if (tg) {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      closeProfileModal();
+      tg.BackButton.hide();
+      tg.BackButton.onClick(() => {});
+    });
+  }
+}
+
+/* Закрыть профиль */
+function closeProfileModal() {
+  els.profileModal.classList.remove('open');
+
+  setTimeout(() => {
+    els.profileModal.classList.add('hidden');
+  }, 200);
+
+  if (tg) {
+    tg.BackButton.hide();
+    tg.BackButton.onClick(() => {});
+  }
+}
+
+/* ========================= */
+/*       ATTACH EVENTS       */
+/* ========================= */
+
+function attachEvents() {
+  /* Filters */
+  els.brandFilter.addEventListener('change', applyFilters);
+  els.sizeFilter.addEventListener('change', applyFilters);
+  els.sortSelect.addEventListener('change', applyFilters);
+  els.searchInput.addEventListener('input', debounce(applyFilters, 300));
+
+  /* Mystery Box */
+  els.openMysteryBtn.addEventListener('click', openMysteryBox);
+  els.closeMystery.addEventListener('click', closeMysteryModal);
+  els.mysteryOk.addEventListener('click', closeMysteryModal);
+
+  /* Cart */
+  els.cartBtn.addEventListener('click', openCart);
+  els.closeCart.addEventListener('click', closeCart);
+  els.checkoutBtn.addEventListener('click', checkout);
+
+  /* Favorites header toggle */
+  els.favBtn.addEventListener('click', toggleFavoritesView);
+  els.clearFavoritesBtn.addEventListener('click', clearFavorites);
+
+  /* NEW — открыть профиль по клику на аватар */
+  els.profileAvatarHeader.addEventListener('click', () => {
+    openProfileModal();
+    renderProfileSections();
+  });
+
+  /* NEW — вкладки профиля */
+  els.profileTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      els.profileTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      switchProfileTab(tab.dataset.tab);
+    });
+  });
+
+  /* Desktop back button (если нет Telegram) */
+  if (!tg) {
+    els.browserBackBtn.addEventListener('click', () => {
+      closeProductModal();
+    });
+  }
+
+  /* Escape */
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeCart();
+      closeProductModal();
+      closeMysteryModal();
+      closeProfileModal();
+    }
+  });
+}
+
+/* ========================= */
+/*           START           */
+/* ========================= */
+
 init();
