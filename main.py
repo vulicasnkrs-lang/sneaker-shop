@@ -21,7 +21,7 @@ async def index(request):
     return web.FileResponse(os.path.join(WEB_DIR, "index.html"))
 
 # -----------------------------
-# 1.1) Страница товара (ОТДЕЛЬНЫЙ ЭКРАН)
+# 1.1) Страница товара
 # -----------------------------
 async def product_page(request):
     return web.FileResponse(os.path.join(WEB_DIR, "product.html"))
@@ -73,7 +73,7 @@ async def create_app():
     # Главная страница
     app.router.add_get("/", index)
 
-    # ОТДЕЛЬНАЯ страница товара
+    # Страница товара
     app.router.add_get("/product.html", product_page)
 
     # Статика
@@ -104,6 +104,7 @@ async def run_web():
 
     log.info(f"WebApp доступен на порту {port}")
 
+    # Веб-сервер должен жить бесконечно
     while True:
         await asyncio.sleep(3600)
 
@@ -112,8 +113,8 @@ async def run_web():
 # -----------------------------
 async def main():
     await asyncio.gather(
-        run_bot(),
-        run_web()
+        run_bot(),   # бот ставит webhook и остаётся живым
+        run_web()    # веб-сервер открывает порт
     )
 
 if __name__ == "__main__":
