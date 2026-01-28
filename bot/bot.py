@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher, F, types
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+import asyncio
 
 # -----------------------------------
 # Конфигурация
@@ -119,3 +120,7 @@ async def run_bot():
     webhook_url = f"{clean_url}/webhook"
     log.info(f"Устанавливаем webhook: {webhook_url}")
     await bot.set_webhook(webhook_url)
+
+    # 🔥 ВАЖНО: бот должен оставаться живым, иначе Render завершит процесс
+    while True:
+        await asyncio.sleep(3600)
