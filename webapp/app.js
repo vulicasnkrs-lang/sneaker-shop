@@ -267,9 +267,19 @@ function attachEvents() {
   els.clearFavoritesBtn.addEventListener('click', clearFavorites);
 
   els.profileAvatarHeader.addEventListener('click', () => {
-    showScreen('profile');
-    renderProfileSections();
-  });
+  showScreen('profile');
+  renderProfileSections();
+
+  if (tg) {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      showScreen('catalog');
+      tg.BackButton.hide();
+      tg.BackButton.onClick(() => {});
+    });
+  }
+});
+
 
   els.profileTabs.forEach(tab => {
     tab.addEventListener('click', () => {
