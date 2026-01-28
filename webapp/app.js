@@ -63,7 +63,6 @@ const els = {
 
   browserBackBtn: document.getElementById('browserBackBtn'),
 
-  /* NEW — модальный профиль */
   profileModal: document.getElementById('profileModal'),
 
   profileAvatarHeader: document.getElementById('profileAvatar'),
@@ -111,12 +110,10 @@ function initProfileFromTelegram() {
   els.profileUsername.textContent = user.username ? '@' + user.username : '';
 
   if (user.photo_url) {
-    els.profileAvatarHeader.textContent = '';
     els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
     els.profileAvatarHeader.style.backgroundSize = 'cover';
     els.profileAvatarHeader.style.backgroundPosition = 'center';
 
-    els.profileAvatarProfile.textContent = '';
     els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
     els.profileAvatarProfile.style.backgroundSize = 'cover';
     els.profileAvatarProfile.style.backgroundPosition = 'center';
@@ -266,7 +263,6 @@ function cardNode(p) {
     renderProfileFavorites();
   });
 
-  /* Hover tilt */
   node.addEventListener('mousemove', (e) => {
     const rect = node.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
@@ -301,7 +297,6 @@ function openProductScreen(productId) {
     tg.BackButton.onClick(() => {});
   });
 }
-
 /* PRODUCT MODAL */
 function openProductModal(p) {
   currentProduct = p;
@@ -399,6 +394,7 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
+
 /* Favorites */
 function toggleFavorite(id) {
   if (state.favorites.has(id)) state.favorites.delete(id);
@@ -533,6 +529,10 @@ function cartTotal() {
 
 function formatPrice(v) {
   return `${v} ₽`;
+}
+
+function updateCartBadge() {
+  els.cartBtn.textContent = formatPrice(cartTotal());
 }
 
 /* Fly animation */
