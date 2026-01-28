@@ -395,7 +395,10 @@ function closeProductModal() {
   }
 }
 
-/* Favorites */
+/* ========================= */
+/*        FAVORITES          */
+/* ========================= */
+
 function toggleFavorite(id) {
   if (state.favorites.has(id)) state.favorites.delete(id);
   else state.favorites.add(id);
@@ -416,7 +419,10 @@ function updateFavBadge() {
   els.favCount.textContent = state.favorites.size;
 }
 
-/* Cart */
+/* ========================= */
+/*           CART            */
+/* ========================= */
+
 function pickFirstSize(p) {
   return (p.sizes || [])[0] || null;
 }
@@ -500,7 +506,6 @@ function renderCart() {
   els.cartTotal.textContent = formatPrice(cartTotal());
 }
 
-/* Change quantity */
 function changeQty(key, delta) {
   const idx = state.cart.findIndex(x => x.key === key);
   if (idx < 0) return;
@@ -535,7 +540,10 @@ function updateCartBadge() {
   els.cartBtn.textContent = formatPrice(cartTotal());
 }
 
-/* Fly animation */
+/* ========================= */
+/*        FLY ANIMATION      */
+/* ========================= */
+
 function createFlyAnimation(p) {
   const cover = p.images?.[0] || '';
   if (!cover) return;
@@ -556,7 +564,10 @@ function createFlyAnimation(p) {
   setTimeout(() => img.remove(), 700);
 }
 
-/* Postpone product */
+/* ========================= */
+/*       POSTPONED           */
+/* ========================= */
+
 function postponeProduct(id, days = 3) {
   const safeDays = Math.min(Math.max(days, 1), 7);
   const until = new Date(Date.now() + safeDays * 86400000).toISOString();
@@ -574,14 +585,16 @@ function postponeProduct(id, days = 3) {
   renderProfilePostponed();
 }
 
-/* Cleanup expired postponed */
 function cleanupPostponed() {
   const now = Date.now();
   state.postponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
   savePostponed();
 }
 
-/* Profile sections */
+/* ========================= */
+/*       PROFILE SECTIONS    */
+/* ========================= */
+
 function renderProfileSections() {
   cleanupPostponed();
   renderProfileOrders();
@@ -600,7 +613,10 @@ function switchProfileTab(tab) {
   if (sections[tab]) sections[tab].classList.add('active');
 }
 
-/* Orders */
+/* ========================= */
+/*          ORDERS           */
+/* ========================= */
+
 function renderProfileOrders() {
   els.profileOrders.innerHTML = '';
 
@@ -644,7 +660,10 @@ function renderProfileOrders() {
   });
 }
 
-/* Favorites in profile */
+/* ========================= */
+/*       PROFILE FAVORITES   */
+/* ========================= */
+
 function renderProfileFavorites() {
   els.profileFavorites.innerHTML = '';
 
@@ -682,7 +701,10 @@ function renderProfileFavorites() {
   });
 }
 
-/* Postponed */
+/* ========================= */
+/*       PROFILE POSTPONED   */
+/* ========================= */
+
 function renderProfilePostponed() {
   els.profilePostponed.innerHTML = '';
 
@@ -736,7 +758,10 @@ function renderProfilePostponed() {
   });
 }
 
-/* Favorites view (catalog mode) */
+/* ========================= */
+/*       FAVORITES VIEW      */
+/* ========================= */
+
 function renderFavorites() {
   els.catalog.innerHTML = '';
 
@@ -759,7 +784,10 @@ function renderFavorites() {
   });
 }
 
-/* Checkout */
+/* ========================= */
+/*          CHECKOUT         */
+/* ========================= */
+
 async function checkout() {
   if (!state.cart.length) {
     alert('Корзина пуста');
@@ -813,7 +841,10 @@ async function checkout() {
   }
 }
 
-/* Utils */
+/* ========================= */
+/*           UTILS           */
+/* ========================= */
+
 function debounce(fn, ms) {
   let t = null;
   return (...args) => {
@@ -858,11 +889,38 @@ function addRippleEffect(button, event) {
 
   button.appendChild(circle);
 }
+
+/* ========================= */
+/*       MYSTERY BOX         */
+/* ========================= */
+
+function openMysteryBox() {
+  const arr = state.filtered.length ? state.filtered : state.products;
+  if (!arr.length) return;
+
+  const p = arr[Math.floor(Math.random() * arr.length)];
+  state.mysteryProductId = p.id;
+
+  els.mysteryImg.src = p.images?.[0] || '';
+  els.mysteryTitle.textContent = p.title;
+  els.mysteryPrice.textContent = formatPrice(p.price);
+
+  els.mysteryModal.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    els.mysteryModal.classList.add('open');
+  });
+}
+
+function closeMysteryModal() {
+  els.mysteryModal.classList.remove('open');
+  setTimeout(() => {
+    els.mysteryModal.classList.add('hidden');
+  }, 200);
+}
 /* ========================= */
 /*   PROFILE MODAL (NEW)     */
 /* ========================= */
 
-/* Открыть профиль */
 function openProfileModal() {
   els.profileModal.classList.remove('hidden');
 
@@ -870,7 +928,6 @@ function openProfileModal() {
     els.profileModal.classList.add('open');
   });
 
-  /* Показать системную кнопку назад */
   if (tg) {
     tg.BackButton.show();
     tg.BackButton.onClick(() => {
@@ -881,7 +938,6 @@ function openProfileModal() {
   }
 }
 
-/* Закрыть профиль */
 function closeProfileModal() {
   els.profileModal.classList.remove('open');
 
@@ -920,13 +976,13 @@ function attachEvents() {
   els.favBtn.addEventListener('click', toggleFavoritesView);
   els.clearFavoritesBtn.addEventListener('click', clearFavorites);
 
-  /* NEW — открыть профиль по клику на аватар */
+  /* Profile open */
   els.profileAvatarHeader.addEventListener('click', () => {
     openProfileModal();
     renderProfileSections();
   });
 
-  /* NEW — вкладки профиля */
+  /* Profile tabs */
   els.profileTabs.forEach(tab => {
     tab.addEventListener('click', () => {
       els.profileTabs.forEach(t => t.classList.remove('active'));
@@ -935,14 +991,14 @@ function attachEvents() {
     });
   });
 
-  /* Desktop back button (если нет Telegram) */
+  /* Desktop back button */
   if (!tg) {
     els.browserBackBtn.addEventListener('click', () => {
       closeProductModal();
     });
   }
 
-  /* Escape */
+  /* ESC closes everything */
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeCart();
