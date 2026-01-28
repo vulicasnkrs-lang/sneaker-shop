@@ -290,7 +290,6 @@ input:focus,
 
 .fav-icon.active { fill: #ff3b3b; }
 .fav-icon.animate { transform: scale(1.3); }
-
 /* Drawer */
 .drawer {
   position: fixed;
@@ -312,6 +311,7 @@ input:focus,
   align-items: center;
   border-bottom: 1px solid #eee;
 }
+
 .drawer-list {
   flex: 1;
   overflow-y: auto;
@@ -549,100 +549,11 @@ input:focus,
 }
 
 /* ========================= */
-/*        PROFILE VIEW       */
+/* OLD PROFILE VIEW (REMOVED) */
 /* ========================= */
-
+/* Эти стили останутся, но сам #profileView мы больше не используем */
 #profileView {
-  min-height: 100vh;
-  background: var(--bg);
-  padding-bottom: 40px;
-}
-
-/* Profile header */
-.profile-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 24px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-.profile-header .profile-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 999px;
-  background: #f3f3f3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  overflow: hidden;
-}
-
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.profile-name {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.profile-username {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-/* Tabs */
-.profile-tabs {
-  display: flex;
-  gap: 6px;
-  padding: 14px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-.profile-tab {
-  flex: 1;
-  padding: 10px 0;
-  text-align: center;
-  border-radius: 12px;
-  background: #f3f3f3;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .2s ease;
-}
-
-.profile-tab.active {
-  background: #111;
-  color: #fff;
-}
-
-/* Content */
-.profile-content {
-  padding: 20px;
-  display: grid;
-  gap: 20px;
-}
-
-.profile-section {
   display: none;
-}
-
-.profile-section.active {
-  display: block;
-}
-
-/* Empty state */
-.profile-empty {
-  text-align: center;
-  padding: 40px 0;
-  color: #aeb4c0;
-  font-size: 15px;
 }
 /* ========================= */
 /*        PROFILE — ORDERS   */
@@ -811,5 +722,164 @@ input:focus,
   .profile-postponed-left img {
     width: 56px;
     height: 56px;
+  }
+}
+
+/* ========================= */
+/*     PROFILE MODAL (NEW)   */
+/* ========================= */
+
+#profileModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 40px;
+}
+
+#profileModal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.profile-modal {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg);
+  border-radius: 22px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  overflow: hidden;
+  animation: fadeInProfile .35s ease forwards;
+}
+
+@keyframes fadeInProfile {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Header inside modal */
+.profile-modal .header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.profile-modal .header .brand {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Profile header inside modal */
+.profile-modal .profile-header {
+  padding: 24px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-modal .profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  overflow: hidden;
+}
+
+.profile-modal .profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-modal .profile-name {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.profile-modal .profile-username {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Tabs inside modal */
+.profile-modal .profile-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-modal .profile-tab {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 12px;
+  background: #f3f3f3;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.profile-modal .profile-tab.active {
+  background: #111;
+  color: #fff;
+}
+
+/* Content inside modal */
+.profile-modal .profile-content {
+  padding: 20px;
+  display: grid;
+  gap: 20px;
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+}
+
+/* Sections */
+.profile-modal .profile-section {
+  display: none;
+}
+
+.profile-modal .profile-section.active {
+  display: block;
+}
+
+/* Fix for items inside modal */
+.profile-modal .profile-order,
+.profile-modal .profile-fav-item,
+.profile-modal .profile-postponed-item {
+  box-shadow: var(--air-shadow);
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  #profileModal {
+    padding-top: 20px;
+  }
+
+  .profile-modal .profile-avatar {
+    width: 64px;
+    height: 64px;
   }
 }
