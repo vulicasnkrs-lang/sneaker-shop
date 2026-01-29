@@ -56,6 +56,7 @@ const els = {
   carousel: document.getElementById('carousel'),
   photoCounter: document.getElementById('photoCounter'),
   photoDots: document.getElementById('photoDots'),
+  thumbStrip: document.getElementById('thumbStrip'), // для мини‑превью
 
   modalTitle: document.getElementById('modalTitle'),
   modalBrandSeason: document.getElementById('modalBrandSeason'),
@@ -314,7 +315,6 @@ function cardNode(p) {
 
   return node;
 }
-
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -335,6 +335,7 @@ function openProductScreen(productId) {
     tg.BackButton.onClick(() => {});
   });
 }
+
 /* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
@@ -346,13 +347,17 @@ function openProductModal(p) {
   const carousel = els.carousel;
   const counter = els.photoCounter;
   const dotsContainer = els.photoDots;
+  const thumbStrip = els.thumbStrip;
 
   carousel.innerHTML = '';
   dotsContainer.innerHTML = '';
+  thumbStrip.innerHTML = '';
 
   const imgs = p.images || [];
 
-  // Render images
+  /* ------------------------- */
+  /*     Render big images     */
+  /* ------------------------- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -360,7 +365,9 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  // Render Instagram dots
+  /* ------------------------- */
+  /*     Render dots (top)     */
+  /* ------------------------- */
   imgs.forEach((_, i) => {
     const dot = document.createElement('span');
     dot.className = 'dot' + (i === 0 ? ' active' : '');
@@ -369,40 +376,81 @@ function openProductModal(p) {
 
   const dots = Array.from(dotsContainer.querySelectorAll('.dot'));
 
-  // Initial state
+  /* ------------------------- */
+  /*   Render thumbnails       */
+  /* ------------------------- */
+  imgs.forEach((src, i) => {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (i === 0 ? ' active' : '');
+    t.innerHTML = `<img src="${src}" alt="">`;
+
+    t.addEventListener('click', () => {
+      const width = carousel.clientWidth;
+      carousel.scrollTo({ left: width * i, behavior: 'smooth' });
+      updateThumbs(i);
+      updateDots(i);
+      updateCounter(i, imgs.length);
+    });
+
+    thumbStrip.appendChild(t);
+  });
+
+  const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
+
+  /* ------------------------- */
+  /*     Initial state         */
+  /* ------------------------- */
   carousel.scrollLeft = 0;
   counter.textContent = imgs.length ? `1 / ${imgs.length}` : '0 / 0';
 
-  // Scroll logic
+  /* ------------------------- */
+  /*     Scroll logic          */
+  /* ------------------------- */
   carousel.onscroll = () => {
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
 
-    if (imgs.length) {
-      counter.textContent = `${safeIndex + 1} / ${imgs.length}`;
-    }
-
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === safeIndex);
-    });
+    updateCounter(safeIndex, imgs.length);
+    updateDots(safeIndex);
+    updateThumbs(safeIndex);
   };
 
-  // Fill product info
+  function updateCounter(i, total) {
+    counter.textContent = `${i + 1} / ${total}`;
+  }
+
+  function updateDots(i) {
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === i);
+    });
+  }
+
+  function updateThumbs(i) {
+    thumbs.forEach((th, idx) => {
+      th.classList.toggle('active', idx === i);
+    });
+  }
+
+  /* ------------------------- */
+  /*     Product info          */
+  /* ------------------------- */
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.brand + ' • ' + (p.season || '');
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
 
-  // Highlight if mystery product
+  /* Highlight mystery product */
   if (state.mysteryProductId === p.id) {
     els.productModal.classList.add('highlighted');
   } else {
     els.productModal.classList.remove('highlighted');
   }
 
-  // Sizes
+  /* ------------------------- */
+  /*          Sizes            */
+  /* ------------------------- */
   els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(s => {
     const b = document.createElement('button');
@@ -423,13 +471,17 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
-  // Open modal
+  /* ------------------------- */
+  /*       Open modal          */
+  /* ------------------------- */
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
-  // Add to cart
+  /* ------------------------- */
+  /*       Add to cart         */
+  /* ------------------------- */
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -443,7 +495,9 @@ function openProductModal(p) {
     openCart();
   };
 
-  // Toggle favorite
+  /* ------------------------- */
+  /*     Toggle favorite       */
+  /* ------------------------- */
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
@@ -466,151 +520,6 @@ function closeProductModal() {
     tg.BackButton.hide();
     tg.BackButton.onClick(() => {});
   }
-}
-
-/* ========================= */
-/*         FAVORITES         */
-/* ========================= */
-
-function toggleFavorite(id) {
-  if (state.favorites.has(id)) state.favorites.delete(id);
-  else state.favorites.add(id);
-
-  localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
-  updateFavBadge();
-  renderProfileFavorites();
-}
-
-function clearFavorites() {
-  state.favorites.clear();
-  localStorage.setItem('favorites', JSON.stringify([]));
-  updateFavBadge();
-  renderProfileFavorites();
-}
-
-function updateFavBadge() {
-  els.favCount.textContent = state.favorites.size;
-}
-
-/* ========================= */
-/*            CART           */
-/* ========================= */
-
-function pickFirstSize(p) {
-  return (p.sizes || [])[0] || null;
-}
-
-function addToCart(p, size, qty) {
-  const key = `${p.id}:${size}`;
-  const idx = state.cart.findIndex(x => x.key === key);
-
-  if (idx >= 0) {
-    state.cart[idx].qty += qty;
-  } else {
-    state.cart.push({
-      key,
-      id: p.id,
-      title: p.title,
-      brand: p.brand,
-      price: p.price,
-      size,
-      qty,
-      images: p.images
-    });
-  }
-
-  persistCart();
-  updateCartBadge();
-}
-
-function persistCart() {
-  localStorage.setItem('cart', JSON.stringify(state.cart));
-}
-
-function openCart() {
-  renderCart();
-  els.cartDrawer.classList.remove('hidden');
-}
-
-function closeCart() {
-  els.cartDrawer.classList.add('hidden');
-}
-
-function renderCart() {
-  els.cartList.innerHTML = '';
-
-  if (!state.cart.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.textContent = 'Корзина пуста';
-    els.cartList.appendChild(empty);
-    els.cartTotal.textContent = formatPrice(0);
-    return;
-  }
-
-  state.cart.forEach(item => {
-    const node = document.createElement('div');
-    node.className = 'cart-item';
-
-    node.innerHTML = `
-      <img src="${item.images?.[0] || ''}" alt="">
-      <div>
-        <div><strong>${item.title}</strong></div>
-        <div class="meta">Размер ${item.size}</div>
-
-        <div class="qty-row">
-          <button class="qty-btn" data-act="minus">−</button>
-          <span>${item.qty}</span>
-          <button class="qty-btn" data-act="plus">+</button>
-          <button class="remove-btn" data-act="remove">Удалить</button>
-        </div>
-      </div>
-
-      <div class="price">${formatPrice(item.price)}</div>
-    `;
-
-    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
-    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
-    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
-
-    els.cartList.appendChild(node);
-  });
-
-  els.cartTotal.textContent = formatPrice(cartTotal());
-}
-
-function changeQty(key, delta) {
-  const idx = state.cart.findIndex(x => x.key === key);
-  if (idx < 0) return;
-
-  state.cart[idx].qty += delta;
-  if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
-
-  persistCart();
-  updateCartBadge();
-  renderCart();
-}
-
-function removeItem(key) {
-  const idx = state.cart.findIndex(x => x.key === key);
-  if (idx < 0) return;
-
-  state.cart.splice(idx, 1);
-  persistCart();
-  updateCartBadge();
-  renderCart();
-}
-
-function cartTotal() {
-  return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
-}
-
-function formatPrice(v) {
-  return `${v} ₽`;
-}
-
-function updateCartBadge() {
-  els.cartBtn.textContent = formatPrice(cartTotal());
 }
 /* ========================= */
 /*       PROFILE SECTIONS    */
@@ -759,8 +668,7 @@ function renderProfilePostponed() {
       </div>
     `;
 
-    const btn = node.querySelector('button');
-    btn.addEventListener('click', () => {
+    node.querySelector('button').addEventListener('click', () => {
       state.postponed = state.postponed.filter(x => x.id !== p.id);
       savePostponed();
       state.filtered = applyPostponedFilter([...state.products]);
