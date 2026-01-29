@@ -11,34 +11,48 @@
 
 <body>
 
-  <!-- PRODUCT MODAL (В КОРНЕ — ПРАВИЛЬНО) -->
+  <!-- PRODUCT MODAL (в корне — правильно) -->
   <div id="productModal" class="modal hidden">
-    <div class="modal-content">
+    <div class="modal-content modal-product">
 
+      <!-- FULLSCREEN GALLERY -->
       <div class="modal-images">
         <div class="carousel" id="carousel"></div>
         <div class="photo-counter" id="photoCounter">1 / 1</div>
-      </div> 
-      
+      </div>
+
+      <!-- PRODUCT INFO -->
       <div class="modal-info">
-        <h2 id="modalTitle"></h2>
-        <div id="modalBrandSeason" class="modal-meta"></div>
-        <div id="modalPrice" class="modal-price"></div>
-        <p id="modalDesc" class="modal-desc"></p>
+        <div class="modal-header-row">
+          <div class="modal-title-block">
+            <h2 id="modalTitle" class="modal-title"></h2>
+            <div id="modalBrandSeason" class="modal-meta"></div>
+          </div>
+        </div>
+
+        <div class="modal-price-row">
+          <div id="modalPrice" class="modal-price"></div>
+        </div>
 
         <div class="modal-sizes" id="modalSizes"></div>
 
-        <div class="modal-qty">
-          <input id="modalQty" type="number" value="1" min="1" />
+        <div class="modal-qty-row">
+          <div class="modal-qty">
+            <input id="modalQty" type="number" value="1" min="1" />
+          </div>
         </div>
 
-        <button id="addToCartBtn" class="primary">Добавить в корзину</button>
+        <div class="modal-actions-row">
+          <button id="addToCartBtn" class="primary modal-cta">
+            Добавить в корзину
+          </button>
 
-        <div class="modal-fav">
-          <button id="toggleFavBtn" class="fav-toggle-btn">
-            ❤ В избранное
+          <button id="toggleFavBtn" class="fav-toggle-btn" aria-label="Добавить в избранное">
+            ❤
           </button>
         </div>
+
+        <p id="modalDesc" class="modal-desc"></p>
       </div>
 
     </div>
@@ -53,13 +67,14 @@
       <div class="header-actions">
         <div id="profileAvatar" class="profile-avatar"></div>
 
-        <button id="cartBtn" class="primary">0 ₽</button>
+        <button id="cartBtn" class="primary">0 BYN</button>
 
         <button id="favBtn" class="icon-btn">
           ❤ <span id="favCount">0</span>
         </button>
       </div>
     </header>
+
     <!-- MYSTERY BOX -->
     <section class="mystery-box" id="mysteryBox">
       <h2>🎁 Тайная коробка дня</h2>
@@ -128,14 +143,15 @@
       <div class="drawer-footer">
         <div class="drawer-total-row">
           <span>Итого:</span>
-          <strong id="cartTotal">0 ₽</strong>
+          <strong id="cartTotal">0 BYN</strong>
         </div>
         <button id="checkoutBtn" class="primary full-width">Оформить заказ</button>
       </div>
     </div>
 
   </div> <!-- /catalogView -->
-  <!-- PRODUCT VIEW (теперь только кнопка назад) -->
+
+  <!-- PRODUCT VIEW (только кнопка назад для Telegram SPA) -->
   <div id="productView" class="hidden">
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
@@ -173,6 +189,7 @@
 
     </div>
   </div>
+
   <script src="/app.js"></script>
 </body>
 </html>
