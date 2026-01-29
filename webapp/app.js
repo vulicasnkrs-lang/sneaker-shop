@@ -1,7 +1,10 @@
 /* Telegram */
 const tg = window.Telegram?.WebApp || null;
 
-/* State */
+/* ========================= */
+/*          STATE            */
+/* ========================= */
+
 const state = {
   products: [],
   filtered: [],
@@ -11,10 +14,14 @@ const state = {
   allSizes: new Set(),
   mysteryProductId: null,
   orders: JSON.parse(localStorage.getItem('orders') || '[]'),
-  postponed: JSON.parse(localStorage.getItem('postponed') || '[]')
+  postponed: JSON.parse(localStorage.getItem('postponed') || '[]'),
+  view: 'catalog'
 };
 
-/* Elements */
+/* ========================= */
+/*         ELEMENTS          */
+/* ========================= */
+
 const els = {
   catalog: document.getElementById('catalog'),
 
@@ -48,6 +55,7 @@ const els = {
   productModal: document.getElementById('productModal'),
   carousel: document.getElementById('carousel'),
   photoCounter: document.getElementById('photoCounter'),
+  photoDots: document.getElementById('photoDots'),
 
   modalTitle: document.getElementById('modalTitle'),
   modalBrandSeason: document.getElementById('modalBrandSeason'),
@@ -79,7 +87,10 @@ const els = {
 let currentProduct = null;
 let selectedSize = null;
 
-/* Init */
+/* ========================= */
+/*            INIT           */
+/* ========================= */
+
 async function init() {
   renderSkeletons();
   await loadProducts();
@@ -98,7 +109,10 @@ async function init() {
   }
 }
 
-/* Telegram profile init */
+/* ========================= */
+/*   TELEGRAM PROFILE INIT   */
+/* ========================= */
+
 function initProfileFromTelegram() {
   if (!tg?.initDataUnsafe?.user) return;
 
@@ -120,7 +134,10 @@ function initProfileFromTelegram() {
   }
 }
 
-/* Skeletons */
+/* ========================= */
+/*         SKELETONS         */
+/* ========================= */
+
 function renderSkeletons() {
   els.catalog.innerHTML = '';
   for (let i = 0; i < 8; i++) {
@@ -137,7 +154,10 @@ function renderSkeletons() {
   }
 }
 
-/* Load products */
+/* ========================= */
+/*       LOAD PRODUCTS       */
+/* ========================= */
+
 async function loadProducts() {
   try {
     const res = await fetch('/products.json', { cache: 'no-store' });
@@ -154,7 +174,10 @@ async function loadProducts() {
   state.filtered = applyPostponedFilter([...state.products]);
 }
 
-/* Apply postponed filter */
+/* ========================= */
+/*    POSTPONED FILTERING    */
+/* ========================= */
+
 function applyPostponedFilter(arr) {
   const now = Date.now();
   const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
@@ -162,7 +185,10 @@ function applyPostponedFilter(arr) {
   return arr.filter(p => !hiddenIds.includes(p.id));
 }
 
-/* Build filters */
+/* ========================= */
+/*       BUILD FILTERS       */
+/* ========================= */
+
 function buildFilters() {
   [...state.brandSet].sort().forEach(b => {
     const opt = document.createElement('option');
@@ -179,7 +205,10 @@ function buildFilters() {
   }
 }
 
-/* Apply filters */
+/* ========================= */
+/*       APPLY FILTERS       */
+/* ========================= */
+
 function applyFilters() {
   let arr = [...state.products];
 
@@ -199,7 +228,10 @@ function applyFilters() {
   renderCatalog();
 }
 
-/* Render catalog */
+/* ========================= */
+/*       RENDER CATALOG      */
+/* ========================= */
+
 function renderCatalog() {
   els.catalog.innerHTML = '';
 
@@ -219,7 +251,10 @@ function renderCatalog() {
   });
 }
 
-/* Card node */
+/* ========================= */
+/*          CARD NODE        */
+/* ========================= */
+
 function cardNode(p) {
   const node = document.createElement('div');
   node.className = 'card';
@@ -280,7 +315,10 @@ function cardNode(p) {
   return node;
 }
 
-/* PRODUCT SCREEN (Telegram SPA) */
+/* ========================= */
+/*   PRODUCT SCREEN (TG)     */
+/* ========================= */
+
 function openProductScreen(productId) {
   const p = state.products.find(x => String(x.id) === String(productId));
   if (!p) return;
@@ -297,17 +335,24 @@ function openProductScreen(productId) {
     tg.BackButton.onClick(() => {});
   });
 }
-/* PRODUCT MODAL */
+/* ========================= */
+/*       PRODUCT MODAL       */
+/* ========================= */
+
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
 
   const carousel = els.carousel;
   const counter = els.photoCounter;
+  const dotsContainer = els.photoDots;
 
   carousel.innerHTML = '';
+  dotsContainer.innerHTML = '';
 
   const imgs = p.images || [];
+
+  // Render images
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -315,27 +360,49 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  carousel.scrollLeft = 0;
-  counter.textContent = `1 / ${imgs.length}`;
+  // Render Instagram dots
+  imgs.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsContainer.appendChild(dot);
+  });
 
+  const dots = Array.from(dotsContainer.querySelectorAll('.dot'));
+
+  // Initial state
+  carousel.scrollLeft = 0;
+  counter.textContent = imgs.length ? `1 / ${imgs.length}` : '0 / 0';
+
+  // Scroll logic
   carousel.onscroll = () => {
-    const width = carousel.clientWidth;
+    const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
-    counter.textContent = `${index + 1} / ${imgs.length}`;
+    const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
+
+    if (imgs.length) {
+      counter.textContent = `${safeIndex + 1} / ${imgs.length}`;
+    }
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === safeIndex);
+    });
   };
 
+  // Fill product info
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.brand + ' • ' + (p.season || '');
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
 
+  // Highlight if mystery product
   if (state.mysteryProductId === p.id) {
     els.productModal.classList.add('highlighted');
   } else {
     els.productModal.classList.remove('highlighted');
   }
 
+  // Sizes
   els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(s => {
     const b = document.createElement('button');
@@ -356,11 +423,13 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
+  // Open modal
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
+  // Add to cart
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -374,6 +443,7 @@ function openProductModal(p) {
     openCart();
   };
 
+  // Toggle favorite
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
@@ -381,7 +451,10 @@ function openProductModal(p) {
   };
 }
 
-/* Close product modal */
+/* ========================= */
+/*    CLOSE PRODUCT MODAL    */
+/* ========================= */
+
 function closeProductModal() {
   els.productModal.classList.remove('open');
 
@@ -396,7 +469,7 @@ function closeProductModal() {
 }
 
 /* ========================= */
-/*        FAVORITES          */
+/*         FAVORITES         */
 /* ========================= */
 
 function toggleFavorite(id) {
@@ -420,7 +493,7 @@ function updateFavBadge() {
 }
 
 /* ========================= */
-/*           CART            */
+/*            CART           */
 /* ========================= */
 
 function pickFirstSize(p) {
@@ -539,68 +612,9 @@ function formatPrice(v) {
 function updateCartBadge() {
   els.cartBtn.textContent = formatPrice(cartTotal());
 }
-
-/* ========================= */
-/*        FLY ANIMATION      */
-/* ========================= */
-
-function createFlyAnimation(p) {
-  const cover = p.images?.[0] || '';
-  if (!cover) return;
-
-  const img = document.createElement('img');
-  img.src = cover;
-  img.className = 'fly';
-  img.style.width = '80px';
-  img.style.height = '80px';
-  img.style.borderRadius = '50%';
-  img.style.objectFit = 'cover';
-
-  const rect = els.productModal.getBoundingClientRect();
-  img.style.left = rect.left + rect.width / 2 - 40 + 'px';
-  img.style.top = rect.top + rect.height / 2 - 40 + 'px';
-
-  document.body.appendChild(img);
-  setTimeout(() => img.remove(), 700);
-}
-
-/* ========================= */
-/*       POSTPONED           */
-/* ========================= */
-
-function postponeProduct(id, days = 3) {
-  const safeDays = Math.min(Math.max(days, 1), 7);
-  const until = new Date(Date.now() + safeDays * 86400000).toISOString();
-
-  const existingIdx = state.postponed.findIndex(x => x.id === id);
-  if (existingIdx >= 0) {
-    state.postponed[existingIdx].until = until;
-  } else {
-    state.postponed.push({ id, until });
-  }
-
-  savePostponed();
-  state.filtered = applyPostponedFilter([...state.products]);
-  renderCatalog();
-  renderProfilePostponed();
-}
-
-function cleanupPostponed() {
-  const now = Date.now();
-  state.postponed = state.postponed.filter(x => new Date(x.until).getTime() > now);
-  savePostponed();
-}
-
 /* ========================= */
 /*       PROFILE SECTIONS    */
 /* ========================= */
-
-function renderProfileSections() {
-  cleanupPostponed();
-  renderProfileOrders();
-  renderProfileFavorites();
-  renderProfilePostponed();
-}
 
 function switchProfileTab(tab) {
   const sections = {
@@ -842,7 +856,7 @@ async function checkout() {
 }
 
 /* ========================= */
-/*           UTILS           */
+/*            UTILS          */
 /* ========================= */
 
 function debounce(fn, ms) {
@@ -889,7 +903,6 @@ function addRippleEffect(button, event) {
 
   button.appendChild(circle);
 }
-
 /* ========================= */
 /*       MYSTERY BOX         */
 /* ========================= */
@@ -917,6 +930,7 @@ function closeMysteryModal() {
     els.mysteryModal.classList.add('hidden');
   }, 200);
 }
+
 /* ========================= */
 /*   PROFILE MODAL (NEW)     */
 /* ========================= */
