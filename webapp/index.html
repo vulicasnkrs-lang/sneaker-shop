@@ -11,18 +11,19 @@
 
 <body>
 
-  <!-- PRODUCT MODAL (в корне — правильно) -->
+  <!-- PRODUCT MODAL -->
   <div id="productModal" class="modal hidden">
     <div class="modal-content modal-product">
 
       <!-- FULLSCREEN GALLERY -->
       <div class="modal-images">
-        <div class="photo-dots" id="photoDots"></div>
+        <!-- УДАЛЕНО: photoDots -->
         <div class="carousel" id="carousel"></div>
-        <div class="photo-counter" id="photoCounter">1 / 1</div>
+        <!-- УДАЛЕНО: photoCounter -->
       </div>
-<!-- THUMBNAILS STRIP -->
-<div class="thumb-strip" id="thumbStrip"></div>
+
+      <!-- THUMBNAILS STRIP -->
+      <div class="thumb-strip" id="thumbStrip"></div>
 
       <!-- PRODUCT INFO -->
       <div class="modal-info">
@@ -152,9 +153,9 @@
       </div>
     </div>
 
-  </div> <!-- /catalogView -->
+  </div>
 
-  <!-- PRODUCT VIEW (только кнопка назад для Telegram SPA) -->
+  <!-- PRODUCT VIEW -->
   <div id="productView" class="hidden">
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
