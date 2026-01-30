@@ -945,13 +945,25 @@ input:focus,
     gap: 6px;
   }
 }
-.modal-images {
-  align-items: flex-start !important;
+#productModal {
+  padding-top: 0 !important;
+}
+
+#productModal .modal-content {
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
 
-.modal-images > * {
-  margin-top: 0 !important;
+#productModal .modal-images {
   padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+html, body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+:root {
+  --tg-viewport-height: 100vh !important;
 }
