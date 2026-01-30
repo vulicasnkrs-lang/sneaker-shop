@@ -206,6 +206,116 @@ function buildFilters() {
     els.sizeFilter.appendChild(opt);
   }
 }
+
+/* ========================= */
+/*       APPLY FILTERS       */
+/* ========================= */
+
+function applyFilters() {
+  let arr = [...state.products];
+
+  const brand = els.brandFilter.value;
+  const size = els.sizeFilter.value;
+  const search = els.searchInput.value.trim().toLowerCase();
+  const sort = els.sortSelect.value;
+
+  if (brand) arr = arr.filter(p => p.brand === brand);
+  if (size) arr = arr.filter(p => (p.sizes || []).includes(Number(size)));
+  if (search) arr = arr.filter(p => p.title.toLowerCase().includes(search));
+
+  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
+
+  state.filtered = applyPostponedFilter(arr);
+  renderCatalog();
+}
+
+/* ========================= */
+/*       RENDER CATALOG      */
+/* ========================= */
+
+function renderCatalog() {
+  els.catalog.innerHTML = '';
+
+  if (!state.filtered.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.style.padding = '20px';
+    empty.textContent = 'Ничего не найдено';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  state.filtered.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
+}
+
+/* ========================= */
+/*          CARD NODE        */
+/* ========================= */
+
+function cardNode(p) {
+  const node = document.createElement('div');
+  node.className = 'card';
+  node.dataset.id = p.id;
+
+  const cover = p.images?.[0] || '';
+  const price = formatPrice(p.price);
+  const fav = state.favorites.has(p.id);
+
+  node.innerHTML = `
+    <button class="fav-btn">
+      <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
+        <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
+      </svg>
+    </button>
+
+    <div class="card-image">
+      <img src="${cover}" alt="${p.title}">
+    </div>
+
+    <div class="card-info">
+      <div class="card-title">${p.title}</div>
+      <div class="card-price">${price}</div>
+    </div>
+  `;
+
+  node.addEventListener('click', () => {
+    if (tg) openProductScreen(p.id);
+    else openProductModal(p);
+  });
+
+  const favBtn = node.querySelector('.fav-btn');
+  const favIcon = node.querySelector('.fav-icon');
+
+  favBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleFavorite(p.id);
+    favIcon.classList.toggle('active');
+    favIcon.classList.add('animate');
+    setTimeout(() => favIcon.classList.remove('animate'), 300);
+    renderProfileFavorites();
+  });
+
+  node.addEventListener('mousemove', (e) => {
+    const rect = node.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const tiltX = (y / rect.height) * 3;
+    const tiltY = -(x / rect.width) * 3;
+    node.style.transform =
+      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+
+  node.addEventListener('mouseleave', () => {
+    node.style.transform = '';
+  });
+
+  return node;
+}
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
