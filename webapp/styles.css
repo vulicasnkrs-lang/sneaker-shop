@@ -945,3 +945,13 @@ input:focus,
     gap: 6px;
   }
 }
+.modal-images {
+  align-items: flex-start !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.modal-images > * {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
