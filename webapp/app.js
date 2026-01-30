@@ -155,6 +155,57 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
+
+/* ========================= */
+/*       LOAD PRODUCTS       */
+/* ========================= */
+
+async function loadProducts() {
+  try {
+    const res = await fetch('/products.json', { cache: 'no-store' });
+    state.products = await res.json();
+  } catch {
+    state.products = [];
+  }
+
+  state.products.forEach(p => {
+    state.brandSet.add(p.brand);
+    (p.sizes || []).forEach(s => state.allSizes.add(s));
+  });
+
+  state.filtered = applyPostponedFilter([...state.products]);
+}
+
+/* ========================= */
+/*    POSTPONED FILTERING    */
+/* ========================= */
+
+function applyPostponedFilter(arr) {
+  const now = Date.now();
+  const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  const hiddenIds = active.map(x => x.id);
+  return arr.filter(p => !hiddenIds.includes(p.id));
+}
+
+/* ========================= */
+/*       BUILD FILTERS       */
+/* ========================= */
+
+function buildFilters() {
+  [...state.brandSet].sort().forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b;
+    opt.textContent = b;
+    els.brandFilter.appendChild(opt);
+  });
+
+  for (let s = 35; s <= 49; s++) {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = String(s);
+    els.sizeFilter.appendChild(opt);
+  }
+}
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
