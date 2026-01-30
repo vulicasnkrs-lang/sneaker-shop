@@ -313,7 +313,6 @@ input:focus,
 
 .fav-icon.active { fill: #ff3b3b; }
 .fav-icon.animate { transform: scale(1.3); }
-/* ========================= */
 /*           DRAWER          */
 /* ========================= */
 
@@ -435,7 +434,11 @@ input:focus,
   width: 100vw;
   height: 100vh;
   background: #fff;
-  overflow-y: auto;
+
+  /* ⭐ ФИКС ПУСТОГО МЕСТА В TELEGRAM */
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
+
   z-index: 9999;
   opacity: 0;
   pointer-events: none;
@@ -463,7 +466,7 @@ input:focus,
 .close-btn {
   position: absolute;
   top: 12px;
-  right: 12px;
+ right: 12px;
   z-index: 10;
   background: rgba(255,255,255,0.9);
   border: none;
@@ -499,7 +502,7 @@ input:focus,
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: flex-start; /* было center, теперь фото от верха */
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -566,6 +569,7 @@ input:focus,
   border-color: #111;
   transform: scale(1.05);
 }
+
 /* ========================= */
 /*       PRODUCT INFO        */
 /* ========================= */
@@ -637,7 +641,6 @@ input:focus,
   transition: all .25s ease;
   box-shadow: 0 4px 14px rgba(0,0,0,0.15);
 }
-
 .modal-cta:hover {
   background: #000;
   transform: translateY(-2px);
@@ -945,6 +948,7 @@ input:focus,
     gap: 6px;
   }
 }
+
 #productModal {
   padding-top: 0 !important;
 }
