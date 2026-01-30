@@ -313,7 +313,6 @@ input:focus,
 
 .fav-icon.active { fill: #ff3b3b; }
 .fav-icon.animate { transform: scale(1.3); }
-
 /* ========================= */
 /*           DRAWER          */
 /* ========================= */
@@ -500,7 +499,7 @@ input:focus,
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* было center, теперь фото от верха */
   justify-content: center;
 }
 
@@ -527,49 +526,6 @@ input:focus,
 
 @keyframes fadeInImg {
   to { opacity: 1; }
-}
-
-/* ========================= */
-/*     INSTAGRAM DOTS        */
-/* ========================= */
-
-.photo-dots {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 6px;
-  z-index: 5;
-}
-
-.photo-dots .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.18);
-  transition: background .25s ease;
-}
-
-.photo-dots .dot.active {
-  background: #111;
-}
-
-/* ========================= */
-/*       PHOTO COUNTER       */
-/* ========================= */
-
-.photo-counter {
-  position: absolute;
-  bottom: 18px;
-  right: 20px;
-  background: rgba(0,0,0,0.55);
-  color: #fff;
-  font-size: 13px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
 }
 
 /* ========================= */
