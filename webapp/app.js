@@ -1107,6 +1107,15 @@ function attachEvents() {
     }
   });
 }
+if (tg) {
+  const updateVH = () => {
+    const vh = tg.viewportHeight; 
+    document.documentElement.style.setProperty('--tg-vh', `${vh}px`);
+  };
+
+  updateVH();
+  tg.onEvent('viewportChanged', updateVH);
+}
 
 /* ========================= */
 /*           START           */
