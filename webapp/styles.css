@@ -498,7 +498,7 @@ input:focus,
 
 .modal-images {
   width: 100%;
-  height: calc(100vh - 56px) !important;
+  height: calc(var(--tg-vh) - 56px) !important;
   background: #fff;
   position: relative;
   overflow: hidden;
