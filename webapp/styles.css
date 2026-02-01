@@ -313,6 +313,7 @@ input:focus,
 
 .fav-icon.active { fill: #ff3b3b; }
 .fav-icon.animate { transform: scale(1.3); }
+/* ========================= */
 /*           DRAWER          */
 /* ========================= */
 
@@ -435,7 +436,7 @@ input:focus,
   height: 100vh;
   background: #fff;
 
-  /* ⭐ ФИКС ПУСТОГО МЕСТА В TELEGRAM */
+  /* ⭐ ФИКС ПУСТОГО МЕСТА В TELEGRAM (для других модалок) */
   overflow-y: scroll !important;
   -webkit-overflow-scrolling: touch;
 
@@ -466,7 +467,7 @@ input:focus,
 .close-btn {
   position: absolute;
   top: 12px;
- right: 12px;
+  right: 12px;
   z-index: 10;
   background: rgba(255,255,255,0.9);
   border: none;
@@ -627,7 +628,6 @@ input:focus,
   align-items: center;
   gap: 12px;
 }
-
 .modal-cta {
   flex: 1;
   padding: 16px;
@@ -949,6 +949,7 @@ input:focus,
   }
 }
 
+/* Твои прежние фиксы — сохраняю */
 #productModal {
   padding-top: 0 !important;
 }
@@ -971,9 +972,38 @@ html, body {
 :root {
   --tg-viewport-height: 100vh !important;
 }
+
 * {
   outline: 1px solid rgba(255,0,0,0.3);
 }
+
 .carousel img[src=""] {
   display: none !important;
+}
+
+/* 🔥 КЛЮЧЕВОЙ ФИКС ДЛЯ БЕЛОЙ ПОЛОСЫ В PRODUCT MODAL */
+
+#productModal {
+  overflow: hidden !important;
+}
+
+#productModal .modal-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#productModal .modal-images {
+  height: calc(100vh - 56px) !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  align-items: stretch !important;
+}
+
+#productModal .carousel img {
+  object-fit: cover !important;
 }
