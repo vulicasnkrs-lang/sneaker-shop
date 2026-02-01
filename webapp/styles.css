@@ -973,10 +973,6 @@ html, body {
   --tg-viewport-height: 100vh !important;
 }
 
-* {
-  outline: 1px solid rgba(255,0,0,0.3);
-}
-
 .carousel img[src=""] {
   display: none !important;
 }
