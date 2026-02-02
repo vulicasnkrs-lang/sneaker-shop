@@ -498,7 +498,7 @@ input:focus,
 
 .modal-images {
   width: 100%;
-  height: calc(100vh - 56px - 72px);
+  height: calc(100vh - 56px - 72px); /* Telegram header + thumbnail strip */
   background: #fff;
   position: relative;
   overflow: hidden;
@@ -507,6 +507,7 @@ input:focus,
   justify-content: center;
   padding-bottom: env(safe-area-inset-bottom);
 }
+
 
 .carousel {
   display: flex;
