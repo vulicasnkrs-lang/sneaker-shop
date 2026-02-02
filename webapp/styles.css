@@ -436,8 +436,8 @@ input:focus,
   height: 100vh;
   background: #fff;
 
-  /* ⭐ ФИКС ПУСТОГО МЕСТА В TELEGRAM (для других модалок) */
-  overflow-y: scroll !important;
+  /* раньше тут был scroll, он и давал внутренний отступ */
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 
   z-index: 9999;
@@ -507,7 +507,6 @@ input:focus,
   justify-content: center;
   padding-bottom: env(safe-area-inset-bottom);
 }
-
 
 .carousel {
   display: flex;
