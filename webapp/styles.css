@@ -498,7 +498,7 @@ input:focus,
 
 .modal-images {
   width: 100%;
-  height: clamp(320px, calc(var(--tg-vh) - 56px), 100vh);
+  height: calc(100vh - 56px - 72px);
   background: #fff;
   position: relative;
   overflow: hidden;
@@ -507,7 +507,6 @@ input:focus,
   justify-content: center;
   padding-bottom: env(safe-area-inset-bottom);
 }
-
 
 .carousel {
   display: flex;
