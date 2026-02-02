@@ -498,7 +498,7 @@ input:focus,
 
 .modal-images {
   width: 100%;
-  height: calc(100vh - 56px - 72px); /* Telegram header + thumbnail strip */
+  height: calc(100vh - 56px - 72px);
   background: #fff;
   position: relative;
   overflow: hidden;
