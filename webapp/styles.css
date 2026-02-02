@@ -8,6 +8,7 @@
   --air-soft: #f7f9fa;
   --air-shadow: 0 8px 22px rgba(0,0,0,0.06);
   --fade-duration: .45s;
+  --tg-vh: 100vh; /* fallback */
 }
 
 * { box-sizing: border-box; }
@@ -435,11 +436,6 @@ input:focus,
   width: 100vw;
   height: 100vh;
   background: #fff;
-
-  /* ⭐ ФИКС ПУСТОГО МЕСТА В TELEGRAM (для других модалок) */
-  overflow-y: scroll !important;
-  -webkit-overflow-scrolling: touch;
-
   z-index: 9999;
   opacity: 0;
   pointer-events: none;
@@ -461,30 +457,6 @@ input:focus,
 }
 
 /* ========================= */
-/*        CLOSE BUTTON       */
-/* ========================= */
-
-.close-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 10;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 22px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: background .2s ease;
-}
-
-.close-btn:hover {
-  background: #fff;
-}
-
-/* ========================= */
 /*     SSENSE GALLERY NEW    */
 /* ========================= */
 
@@ -503,8 +475,11 @@ input:focus,
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: flex-start;
+
+  /* КРИТИЧЕСКИЕ ФИКСЫ */
+  align-items: center;
   justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .carousel {
@@ -540,6 +515,7 @@ input:focus,
   display: flex;
   gap: 8px;
   padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   justify-content: center;
@@ -717,289 +693,3 @@ input:focus,
 .profile-postponed-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-}
-
-.profile-postponed-right .price {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.profile-postponed-right button.small {
-  padding: 6px 12px;
-  font-size: 13px;
-  border-radius: 10px;
-}
-
-/* ========================= */
-/*       FLY ANIMATION       */
-/* ========================= */
-
-.fly {
-  position: fixed;
-  z-index: 99999;
-  pointer-events: none;
-  transition: transform .7s ease, opacity .7s ease;
-  animation: flyAnim .7s ease forwards;
-}
-
-@keyframes flyAnim {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
-}
-
-/* ========================= */
-/*        RESPONSIVE         */
-/* ========================= */
-
-@media (max-width: 420px) {
-  .card-image {
-    height: 150px;
-  }
-
-  .profile-header .profile-avatar {
-    width: 56px;
-    height: 56px;
-  }
-
-  .profile-fav-left img,
-  .profile-postponed-left img {
-    width: 56px;
-    height: 56px;
-  }
-}
-
-/* ========================= */
-/*     PROFILE MODAL (NEW)   */
-/* ========================= */
-
-#profileModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-  z-index: 99999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 40px;
-}
-
-#profileModal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.profile-modal {
-  width: 100%;
-  max-width: 480px;
-  background: var(--bg);
-  border-radius: 22px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
-  overflow: hidden;
-  animation: fadeInProfile .35s ease forwards;
-}
-
-@keyframes fadeInProfile {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
-/* Header inside modal */
-.profile-modal .header {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  padding: 18px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.profile-modal .header .brand {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-/* Profile header inside modal */
-.profile-modal .profile-header {
-  padding: 24px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.profile-modal .profile-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 999px;
-  background: #f3f3f3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  overflow: hidden;
-}
-
-.profile-modal .profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.profile-modal .profile-name {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.profile-modal .profile-username {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-/* Tabs inside modal */
-.profile-modal .profile-tabs {
-  display: flex;
-  gap: 6px;
-  padding: 14px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-.profile-modal .profile-tab {
-  flex: 1;
-  padding: 10px 0;
-  text-align: center;
-  border-radius: 12px;
-  background: #f3f3f3;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .2s ease;
-}
-
-.profile-modal .profile-tab.active {
-  background: #111;
-  color: #fff;
-}
-
-/* Content inside modal */
-.profile-modal .profile-content {
-  padding: 20px;
-  display: grid;
-  gap: 20px;
-  max-height: calc(100vh - 220px);
-  overflow-y: auto;
-}
-
-/* Sections */
-.profile-modal .profile-section {
-  display: none;
-}
-
-.profile-modal .profile-section.active {
-  display: block;
-}
-
-/* Fix for items inside modal */
-.profile-modal .profile-order,
-.profile-modal .profile-fav-item,
-.profile-modal .profile-postponed-item {
-  box-shadow: var(--air-shadow);
-}
-
-/* Responsive profile modal */
-@media (max-width: 420px) {
-  #profileModal {
-    padding-top: 20px;
-  }
-
-  .profile-modal .profile-avatar {
-    width: 64px;
-    height: 64px;
-  }
-}
-
-/* ========================= */
-/*   FINAL HEADER FIX AGAIN  */
-/* ========================= */
-
-@media (max-width: 360px) {
-  #cartBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  #favBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  .header-actions {
-    gap: 6px;
-  }
-}
-
-/* Твои прежние фиксы — сохраняю */
-#productModal {
-  padding-top: 0 !important;
-}
-
-#productModal .modal-content {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-#productModal .modal-images {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-html, body {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-:root {
-  --tg-viewport-height: 100vh !important;
-}
-
-.carousel img[src=""] {
-  display: none !important;
-}
-
-/* 🔥 КЛЮЧЕВОЙ ФИКС ДЛЯ БЕЛОЙ ПОЛОСЫ В PRODUCT MODAL */
-
-#productModal {
-  overflow: hidden !important;
-}
-
-#productModal .modal-content {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-#productModal .modal-images {
-  height: calc(100vh - 56px) !important;
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-  align-items: stretch !important;
-}
-
-#productModal .carousel img {
-  object-fit: cover !important;
-}
