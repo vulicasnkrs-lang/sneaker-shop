@@ -1,7 +1,4 @@
-/* ========================= */
-/*         TELEGRAM          */
-/* ========================= */
-
+/* Telegram */
 const tg = window.Telegram?.WebApp || null;
 
 /* ========================= */
@@ -20,9 +17,6 @@ const state = {
   postponed: JSON.parse(localStorage.getItem('postponed') || '[]'),
   view: 'catalog'
 };
-
-let currentProduct = null;
-let selectedSize = null;
 
 /* ========================= */
 /*         ELEMENTS          */
@@ -86,13 +80,11 @@ const els = {
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
   profileFavorites: document.getElementById('profileFavorites'),
-  profilePostponed: document.getElementById('profilePostponed'),
-
-  // Модальный header (M2)
-  modalAvatar: document.querySelector('.modal-avatar'),
-  modalCartBtn: document.querySelector('.modal-cart'),
-  modalFavBtn: document.querySelector('.modal-fav')
+  profilePostponed: document.getElementById('profilePostponed')
 };
+
+let currentProduct = null;
+let selectedSize = null;
 
 /* ========================= */
 /*            INIT           */
@@ -274,20 +266,21 @@ function cardNode(p) {
   const price = formatPrice(p.price);
   const fav = state.favorites.has(p.id);
 
-  node.innerHTML = `
-    <button class="fav-btn">
-      <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
-        <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
-      </svg>
-    </button>
-    <div class="card-image">
-      <img src="${cover}" alt="${p.title}">
-    </div>
-    <div class="card-info">
-      <div class="card-title">${p.title}</div>
-      <div class="card-price">${price}</div>
-    </div>
-  `;
+node.innerHTML = `
+<button class="fav-btn">
+  <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
+    <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
+  </svg>
+</button>
+<div class="card-image">
+  <img src="${cover}" alt="${p.title}">
+</div>
+<div class="card-info">
+  <div class="card-title">${p.title}</div>
+  <div class="card-price">${price}</div>
+</div>
+`;
+
 
   node.addEventListener('click', () => {
     if (tg) openProductScreen(p.id);
@@ -321,9 +314,7 @@ function cardNode(p) {
   });
 
   return node;
-}
-
-/* ========================= */
+  /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
 
@@ -360,7 +351,9 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  // Большие изображения
+  /* ------------------------- */
+  /*     Render big images     */
+  /* ------------------------- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -368,7 +361,9 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  // Миниатюры
+  /* ------------------------- */
+  /*   Render thumbnails       */
+  /* ------------------------- */
   imgs.forEach((src, i) => {
     const t = document.createElement('div');
     t.className = 'thumb' + (i === 0 ? ' active' : '');
@@ -385,12 +380,19 @@ function openProductModal(p) {
 
   const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
 
+  /* ------------------------- */
+  /*     Initial state         */
+  /* ------------------------- */
   carousel.scrollLeft = 0;
 
+  /* ------------------------- */
+  /*     Scroll logic          */
+  /* ------------------------- */
   carousel.onscroll = () => {
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
+
     updateThumbs(safeIndex);
   };
 
@@ -400,7 +402,9 @@ function openProductModal(p) {
     });
   }
 
-  // Информация о товаре
+  /* ------------------------- */
+  /*     Product info          */
+  /* ------------------------- */
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.brand + ' • ' + (p.season || '');
   els.modalPrice.textContent = formatPrice(p.price);
@@ -413,7 +417,9 @@ function openProductModal(p) {
     els.productModal.classList.remove('highlighted');
   }
 
-  // Размеры
+  /* ------------------------- */
+  /*          Sizes            */
+  /* ------------------------- */
   els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(s => {
     const b = document.createElement('button');
@@ -434,13 +440,17 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
-  // Открытие модалки
+  /* ------------------------- */
+  /*       Open modal          */
+  /* ------------------------- */
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
-  // Добавить в корзину
+  /* ------------------------- */
+  /*       Add to cart         */
+  /* ------------------------- */
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -454,13 +464,19 @@ function openProductModal(p) {
     openCart();
   };
 
-  // Тоггл избранного (кнопка в модалке)
+  /* ------------------------- */
+  /*     Toggle favorite       */
+  /* ------------------------- */
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
     renderProfileFavorites();
   };
 }
+
+/* ========================= */
+/*    CLOSE PRODUCT MODAL    */
+/* ========================= */
 
 function closeProductModal() {
   els.productModal.classList.remove('open');
@@ -619,9 +635,7 @@ function formatPrice(v) {
 function updateCartBadge() {
   els.cartBtn.textContent = formatPrice(cartTotal());
 }
-
-/* ========================= */
-/*       PROFILE SECTIONS    */
+/* ========================= *//*       PROFILE SECTIONS    */
 /* ========================= */
 
 function switchProfileTab(tab) {
@@ -925,9 +939,7 @@ function cleanupPostponed() {
     savePostponed();
   }
 }
-
-/* ========================= */
-/*     FLY TO CART EFFECT    */
+/* ========================= *//*     FLY TO CART EFFECT    */
 /* ========================= */
 
 function createFlyAnimation(p) {
@@ -1091,42 +1103,10 @@ function attachEvents() {
       closeProfileModal();
     }
   });
-
-  /* Модальный header (M2, H1) */
-  if (els.modalCartBtn) {
-    els.modalCartBtn.addEventListener('click', () => {
-      openCart();
-    });
-  }
-
-  if (els.modalFavBtn) {
-    els.modalFavBtn.addEventListener('click', () => {
-      state.view = 'favorites';
-      els.favoritesHeader.classList.remove('hidden');
-      renderFavorites();
-      // Скроллим к избранному в каталоге
-      document.getElementById('favoritesHeader')?.scrollIntoView({ behavior: 'smooth' });
-    });
-  }
-
-  if (els.modalAvatar) {
-    els.modalAvatar.addEventListener('click', () => {
-      openProfileModal();
-      renderProfileSections();
-      renderProfileOrders();
-      renderProfileFavorites();
-      renderProfilePostponed();
-    });
-  }
 }
-
-/* ========================= */
-/*   TELEGRAM VIEWPORT FIX   */
-/* ========================= */
-
 if (tg) {
   const updateVH = () => {
-    const vh = tg.viewportHeight;
+    const vh = tg.viewportHeight; 
     document.documentElement.style.setProperty('--tg-vh', `${vh}px`);
   };
 
@@ -1139,3 +1119,4 @@ if (tg) {
 /* ========================= */
 
 init();
+}
