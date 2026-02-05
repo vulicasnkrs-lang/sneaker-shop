@@ -15,30 +15,18 @@
   <div id="productModal" class="modal hidden">
     <div class="modal-content modal-product">
 
-      <!-- ⭐ МОДАЛЬНЫЙ HEADER (новый) -->
-      <header class="header modal-header">
-        <div class="brand">vulica.SNKRS</div>
-
-        <div class="header-actions">
-          <div class="profile-avatar"></div>
-          <button class="primary" disabled>0 BYN</button>
-          <button class="icon-btn" disabled>
-            ❤ <span>0</span>
-          </button>
-        </div>
-      </header>
-
-      <!-- ⭐ УМЕНЬШЕННАЯ ГАЛЕРЕЯ (50vh) -->
+      <!-- FULLSCREEN GALLERY -->
       <div class="modal-images">
+        <!-- УДАЛЕНО: photoDots -->
         <div class="carousel" id="carousel"></div>
+        <!-- УДАЛЕНО: photoCounter -->
       </div>
 
-      <!-- ⭐ МИНИАТЮРЫ -->
+      <!-- THUMBNAILS STRIP -->
       <div class="thumb-strip" id="thumbStrip"></div>
 
-      <!-- ⭐ ИНФОРМАЦИЯ О ТОВАРЕ -->
+      <!-- PRODUCT INFO -->
       <div class="modal-info">
-
         <div class="modal-header-row">
           <div class="modal-title-block">
             <h2 id="modalTitle" class="modal-title"></h2>
@@ -74,7 +62,7 @@
     </div>
   </div>
 
-  <!-- КАТАЛОГ (без изменений) -->
+  <!-- КАТАЛОГ -->
   <div id="catalogView">
 
     <header class="header">
@@ -91,12 +79,14 @@
       </div>
     </header>
 
+    <!-- MYSTERY BOX -->
     <section class="mystery-box" id="mysteryBox">
       <h2>🎁 Тайная коробка дня</h2>
       <p>Открой, чтобы узнать пару дня</p>
       <button id="openMysteryBtn" class="primary">Открыть</button>
     </section>
 
+    <!-- FILTERS -->
     <section class="filters" id="filtersSection">
       <div class="filter-row">
         <input id="searchInput" type="text" placeholder="Поиск модели..." />
@@ -118,6 +108,7 @@
       </div>
     </section>
 
+    <!-- FAVORITES HEADER -->
     <section class="favorites-header hidden" id="favoritesHeader">
       <div class="fav-title">
         ❤ Избранное <span id="favoritesCountLabel"></span>
@@ -125,8 +116,10 @@
       <button id="clearFavoritesBtn" class="secondary">Очистить</button>
     </section>
 
+    <!-- CATALOG -->
     <main class="catalog" id="catalog"></main>
 
+    <!-- MYSTERY MODAL -->
     <div class="modal hidden" id="mysteryModal">
       <div class="modal-content" style="max-width: 420px; text-align:center;">
         <button id="closeMystery" class="close-btn">×</button>
@@ -142,6 +135,7 @@
       </div>
     </div>
 
+    <!-- CART DRAWER -->
     <div class="drawer hidden" id="cartDrawer">
       <div class="drawer-header">
         <strong>Корзина</strong>
