@@ -11,24 +11,24 @@
 
 <body>
 
-  <!-- PRODUCT MODAL -->
+  <!-- ========================= -->
+  <!--       PRODUCT MODAL       -->
+  <!-- ========================= -->
   <div id="productModal" class="modal hidden">
     <div class="modal-content modal-product">
 
-      <!-- ⭐ МОДАЛЬНЫЙ HEADER (новый) -->
+      <!-- ⭐ МОДАЛЬНЫЙ HEADER (M2, кликабельный) -->
       <header class="header modal-header">
         <div class="brand">vulica.SNKRS</div>
 
         <div class="header-actions">
-          <div class="profile-avatar"></div>
-          <button class="primary" disabled>0 BYN</button>
-          <button class="icon-btn" disabled>
-            ❤ <span>0</span>
-          </button>
+          <div class="modal-avatar"></div>
+          <button class="modal-cart">0 BYN</button>
+          <button class="modal-fav">❤ <span>0</span></button>
         </div>
       </header>
 
-      <!-- ⭐ УМЕНЬШЕННАЯ ГАЛЕРЕЯ (50vh) -->
+      <!-- ⭐ ГАЛЕРЕЯ 50vh (A1, contain) -->
       <div class="modal-images">
         <div class="carousel" id="carousel"></div>
       </div>
@@ -74,7 +74,10 @@
     </div>
   </div>
 
-  <!-- КАТАЛОГ (без изменений) -->
+  <!-- ========================= -->
+  <!--          CATALOG          -->
+  <!-- ========================= -->
+
   <div id="catalogView">
 
     <header class="header">
@@ -127,6 +130,9 @@
 
     <main class="catalog" id="catalog"></main>
 
+    <!-- ========================= -->
+    <!--       MYSTERY MODAL       -->
+    <!-- ========================= -->
     <div class="modal hidden" id="mysteryModal">
       <div class="modal-content" style="max-width: 420px; text-align:center;">
         <button id="closeMystery" class="close-btn">×</button>
@@ -142,6 +148,9 @@
       </div>
     </div>
 
+    <!-- ========================= -->
+    <!--          CART DRAWER      -->
+    <!-- ========================= -->
     <div class="drawer hidden" id="cartDrawer">
       <div class="drawer-header">
         <strong>Корзина</strong>
@@ -166,7 +175,9 @@
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
 
-  <!-- PROFILE MODAL -->
+  <!-- ========================= -->
+  <!--       PROFILE MODAL       -->
+  <!-- ========================= -->
   <div id="profileModal" class="modal hidden">
     <div class="modal-content profile-modal">
 
