@@ -21,12 +21,7 @@
 
         <div class="header-actions">
           <div id="profileAvatar" class="profile-avatar"></div>
-
           <button id="cartBtn" class="primary">0 BYN</button>
-
-          <button id="favBtn" class="icon-btn">
-            ❤ <span id="favCount">0</span>
-          </button>
         </div>
       </header>
 
@@ -38,55 +33,25 @@
       <!-- THUMBNAILS -->
       <div class="thumb-strip" id="thumbStrip"></div>
 
-      <!-- PRODUCT INFO SECTIONS -->
+      <!-- PRODUCT INFO COMPACT -->
       <div class="modal-info">
-
-        <!-- PRODUCT INFO -->
-        <section class="modal-section">
-          <h3 class="section-title">PRODUCT INFO</h3>
-
+        <section class="modal-section modal-main">
           <h2 id="modalTitle" class="modal-title"></h2>
-          <div id="modalBrandSeason" class="modal-meta"></div>
 
-          <div id="modalPrice" class="modal-price"></div>
+          <div class="modal-price-row">
+            <div id="modalPrice" class="modal-price"></div>
+            <div id="availabilityBlock" class="availability-inline">
+              В наличии: <span id="stockCount">—</span> шт.
+            </div>
+          </div>
+
+          <div class="modal-sizes" id="modalSizes"></div>
 
           <p id="modalDesc" class="modal-desc"></p>
-        </section>
 
-        <!-- DELIVERY & RETURNS -->
-        <section class="modal-section">
-          <h3 class="section-title">DELIVERY & RETURNS</h3>
-
-          <div class="delivery-block">
-            <p>🚚 Доставка по Беларуси: 1–2 дня</p>
-            <p>↩️ Возврат: 14 дней</p>
+          <div class="delivery-inline">
+            Доставка 1–2 дня • Возврат 14 дней
           </div>
-        </section>
-
-        <!-- AVAILABILITY -->
-        <section class="modal-section">
-          <h3 class="section-title">AVAILABILITY</h3>
-
-          <div id="availabilityBlock" class="availability-block">
-            📦 В наличии: <span id="stockCount">—</span>
-          </div>
-
-          <button id="reserveBtn" class="secondary reserve-btn">
-            Забронировать пару
-          </button>
-
-          <div class="reserve-note">(бронь держится 24 часа)</div>
-        </section>
-
-        <!-- SIZES -->
-        <section class="modal-section">
-          <h3 class="section-title">SIZES</h3>
-          <div class="modal-sizes" id="modalSizes"></div>
-        </section>
-
-        <!-- PURCHASE -->
-        <section class="modal-section">
-          <h3 class="section-title">PURCHASE</h3>
 
           <div class="modal-qty-row">
             <div class="modal-qty">
@@ -95,16 +60,17 @@
           </div>
 
           <div class="modal-actions-row">
-            <button id="addToCartBtn" class="primary modal-cta">
-              Добавить в корзину
+            <button id="reserveBtn" class="secondary reserve-btn">
+              Забронировать пару
             </button>
 
-            <button id="toggleFavBtn" class="fav-toggle-btn" aria-label="Добавить в избранное">
-              ❤
+            <button id="addToCartBtn" class="primary modal-cta">
+              В корзину
             </button>
           </div>
-        </section>
 
+          <div class="reserve-note">(бронь держится 24 часа)</div>
+        </section>
       </div>
 
     </div>
@@ -118,12 +84,7 @@
 
       <div class="header-actions">
         <div id="profileAvatar" class="profile-avatar"></div>
-
         <button id="cartBtn" class="primary">0 BYN</button>
-
-        <button id="favBtn" class="icon-btn">
-          ❤ <span id="favCount">0</span>
-        </button>
       </div>
     </header>
 
@@ -154,14 +115,6 @@
           <option value="">Размер</option>
         </select>
       </div>
-    </section>
-
-    <!-- FAVORITES HEADER -->
-    <section class="favorites-header hidden" id="favoritesHeader">
-      <div class="fav-title">
-        ❤ Избранное <span id="favoritesCountLabel"></span>
-      </div>
-      <button id="clearFavoritesBtn" class="secondary">Очистить</button>
     </section>
 
     <!-- CATALOG -->
@@ -229,13 +182,11 @@
 
       <section class="profile-tabs">
         <button class="profile-tab active" data-tab="orders">Покупки</button>
-        <button class="profile-tab" data-tab="favorites">Избранное</button>
         <button class="profile-tab" data-tab="postponed">Отложенные</button>
       </section>
 
       <main class="profile-content">
         <div id="profileOrders" class="profile-section active"></div>
-        <div id="profileFavorites" class="profile-section"></div>
         <div id="profilePostponed" class="profile-section"></div>
       </main>
 
