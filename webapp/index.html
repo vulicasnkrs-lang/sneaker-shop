@@ -15,52 +15,102 @@
   <div id="productModal" class="modal hidden">
     <div class="modal-content modal-product">
 
-      <!-- FULLSCREEN GALLERY (ОЧИЩЕНО) -->
+      <!-- HEADER INSIDE PRODUCT MODAL -->
+      <header class="header modal-inner-header">
+        <div class="brand">vulica.SNKRS</div>
+
+        <div class="header-actions">
+          <div id="profileAvatar" class="profile-avatar"></div>
+
+          <button id="cartBtn" class="primary">0 BYN</button>
+
+          <button id="favBtn" class="icon-btn">
+            ❤ <span id="favCount">0</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- FULLSCREEN GALLERY -->
       <div class="modal-images">
         <div class="carousel" id="carousel"></div>
       </div>
 
-      <!-- THUMBNAILS STRIP -->
+      <!-- THUMBNAILS -->
       <div class="thumb-strip" id="thumbStrip"></div>
 
-      <!-- PRODUCT INFO -->
+      <!-- PRODUCT INFO SECTIONS -->
       <div class="modal-info">
-        <div class="modal-header-row">
-          <div class="modal-title-block">
-            <h2 id="modalTitle" class="modal-title"></h2>
-            <div id="modalBrandSeason" class="modal-meta"></div>
-          </div>
-        </div>
 
-        <div class="modal-price-row">
+        <!-- PRODUCT INFO -->
+        <section class="modal-section">
+          <h3 class="section-title">PRODUCT INFO</h3>
+
+          <h2 id="modalTitle" class="modal-title"></h2>
+          <div id="modalBrandSeason" class="modal-meta"></div>
+
           <div id="modalPrice" class="modal-price"></div>
-        </div>
 
-        <div class="modal-sizes" id="modalSizes"></div>
+          <p id="modalDesc" class="modal-desc"></p>
+        </section>
 
-        <div class="modal-qty-row">
-          <div class="modal-qty">
-            <input id="modalQty" type="number" value="1" min="1" />
+        <!-- DELIVERY & RETURNS -->
+        <section class="modal-section">
+          <h3 class="section-title">DELIVERY & RETURNS</h3>
+
+          <div class="delivery-block">
+            <p>🚚 Доставка по Беларуси: 1–2 дня</p>
+            <p>↩️ Возврат: 14 дней</p>
           </div>
-        </div>
+        </section>
 
-        <div class="modal-actions-row">
-          <button id="addToCartBtn" class="primary modal-cta">
-            Добавить в корзину
+        <!-- AVAILABILITY -->
+        <section class="modal-section">
+          <h3 class="section-title">AVAILABILITY</h3>
+
+          <div id="availabilityBlock" class="availability-block">
+            📦 В наличии: <span id="stockCount">—</span>
+          </div>
+
+          <button id="reserveBtn" class="secondary reserve-btn">
+            Забронировать пару
           </button>
 
-          <button id="toggleFavBtn" class="fav-toggle-btn" aria-label="Добавить в избранное">
-            ❤
-          </button>
-        </div>
+          <div class="reserve-note">(бронь держится 24 часа)</div>
+        </section>
 
-        <p id="modalDesc" class="modal-desc"></p>
+        <!-- SIZES -->
+        <section class="modal-section">
+          <h3 class="section-title">SIZES</h3>
+          <div class="modal-sizes" id="modalSizes"></div>
+        </section>
+
+        <!-- PURCHASE -->
+        <section class="modal-section">
+          <h3 class="section-title">PURCHASE</h3>
+
+          <div class="modal-qty-row">
+            <div class="modal-qty">
+              <input id="modalQty" type="number" value="1" min="1" />
+            </div>
+          </div>
+
+          <div class="modal-actions-row">
+            <button id="addToCartBtn" class="primary modal-cta">
+              Добавить в корзину
+            </button>
+
+            <button id="toggleFavBtn" class="fav-toggle-btn" aria-label="Добавить в избранное">
+              ❤
+            </button>
+          </div>
+        </section>
+
       </div>
 
     </div>
   </div>
 
-  <!-- КАТАЛОГ -->
+  <!-- CATALOG VIEW -->
   <div id="catalogView">
 
     <header class="header">
@@ -153,7 +203,7 @@
 
   </div>
 
-  <!-- PRODUCT VIEW (для Telegram SPA) -->
+  <!-- PRODUCT VIEW (Telegram SPA) -->
   <div id="productView" class="hidden">
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
