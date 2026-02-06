@@ -320,11 +320,11 @@ input:focus,
   flex-direction: column;
 }
 
-/* FIX: высота 280px + object-fit: cover */
+/* HYBRID FIX: фото целое + мягкий фон + компактная высота */
 .modal-images {
   width: 100%;
-  height: 280px; /* ← твоя новая высота */
-  background: #fff;
+  height: 260px;              /* компактнее и аккуратнее */
+  background: #f3f3f3;        /* мягкий фон вместо белых полос */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -341,17 +341,23 @@ input:focus,
   -webkit-overflow-scrolling: touch;
 }
 
-/* FIX: object-fit: cover вместо contain */
+/* HYBRID FIX: фото не режется + премиальный zoom */
 .carousel img {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  object-fit: cover;      /* ← ключевой фикс */
+  object-fit: contain;        /* фото всегда целое */
+  background-color: #f3f3f3;  /* мягкий фон */
   object-position: center;
   scroll-snap-align: center;
-  background: #fff;
   opacity: 0;
   animation: fadeInImg .4s ease forwards;
+  transition: transform .25s ease;
+}
+
+/* Premium zoom при свайпе/тапе — как SNKRS */
+.carousel img:active {
+  transform: scale(1.03);
 }
 
 @keyframes fadeInImg {
@@ -807,3 +813,4 @@ input:focus,
 .profile-modal .profile-section.active {
   display: block;
 }
+
