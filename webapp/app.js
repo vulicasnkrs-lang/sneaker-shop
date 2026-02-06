@@ -348,16 +348,14 @@ function openProductModal(p) {
   selectedSize = null;
 
   const carousel = els.carousel;
-  const counter = els.photoCounter;
-  const dotsContainer = els.photoDots;
   const thumbStrip = els.thumbStrip;
 
   carousel.innerHTML = '';
-  dotsContainer.innerHTML = '';
   thumbStrip.innerHTML = '';
 
   const imgs = p.images || [];
 
+  // --- GALLERY IMAGES ---
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -365,14 +363,7 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  imgs.forEach((_, i) => {
-    const dot = document.createElement('span');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dotsContainer.appendChild(dot);
-  });
-
-  const dots = Array.from(dotsContainer.querySelectorAll('.dot'));
-
+  // --- THUMBNAILS ---
   imgs.forEach((src, i) => {
     const t = document.createElement('div');
     t.className = 'thumb' + (i === 0 ? ' active' : '');
@@ -381,8 +372,6 @@ function openProductModal(p) {
     t.addEventListener('click', () => {
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
-      updateCounter(i, imgs.length);
-      updateDots(i);
       updateThumbs(i);
     });
 
@@ -391,28 +380,15 @@ function openProductModal(p) {
 
   const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
 
+  // --- SCROLL SYNC ---
   carousel.scrollLeft = 0;
-  counter.textContent = imgs.length ? `1 / ${imgs.length}` : '0 / 0';
 
   carousel.onscroll = () => {
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
-
-    updateCounter(safeIndex, imgs.length);
-    updateDots(safeIndex);
     updateThumbs(safeIndex);
   };
-
-  function updateCounter(i, total) {
-    counter.textContent = `${i + 1} / ${total}`;
-  }
-
-  function updateDots(i) {
-    dots.forEach((dot, idx) => {
-      dot.classList.toggle('active', idx === i);
-    });
-  }
 
   function updateThumbs(i) {
     thumbs.forEach((th, idx) => {
@@ -420,6 +396,7 @@ function openProductModal(p) {
     });
   }
 
+  // --- PRODUCT INFO ---
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.brand + ' • ' + (p.season || '');
   els.modalPrice.textContent = formatPrice(p.price);
@@ -432,6 +409,7 @@ function openProductModal(p) {
     els.productModal.classList.remove('highlighted');
   }
 
+  // --- SIZES ---
   els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(s => {
     const b = document.createElement('button');
@@ -452,11 +430,13 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
+  // --- OPEN MODAL ---
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
+  // --- ADD TO CART ---
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -470,6 +450,7 @@ function openProductModal(p) {
     openCart();
   };
 
+  // --- FAVORITE ---
   els.toggleFavBtn.onclick = () => {
     toggleFavorite(p.id);
     updateFavBadge();
@@ -883,6 +864,7 @@ async function checkout() {
     });
   }
 }
+
 /* ========================= */
 /*            UTILS          */
 /* ========================= */
@@ -982,7 +964,6 @@ function createFlyAnimation(p) {
     fly.remove();
   }, 700);
 }
-
 /* ========================= */
 /*       MYSTERY BOX         */
 /* ========================= */
