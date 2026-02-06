@@ -320,28 +320,19 @@ input:focus,
   flex-direction: column;
 }
 
-/* PREMIUM GALLERY — 300px, contain, auto‑zoom, vignette, soft shadow */
+/* PREMIUM GALLERY — как у конкурента */
 .modal-images {
   width: 100%;
-  height: 300px;               /* премиальная высота */
-  background: #f3f3f3;
+  height: 340px;              /* ключевой момент — фото становится крупным */
+  background: #fff;           /* никаких серых фонов */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   position: relative;
-  box-shadow: inset 0 -20px 40px rgba(0,0,0,0.06); /* мягкая тень */
 }
 
-/* Виньетка */
-.modal-images::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.08));
-}
-
+/* Карусель */
 .carousel {
   display: flex;
   width: 100%;
@@ -352,24 +343,22 @@ input:focus,
   -webkit-overflow-scrolling: touch;
 }
 
-/* HYBRID FIX — фото целое + авто‑zoom 1.12 */
+/* ГЛАВНОЕ: фото как у конкурента */
 .carousel img {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;         /* фото всегда целое */
-  background-color: #f3f3f3;   /* мягкий фон */
+  height: 100%;      /* фото заполняет блок по высоте */
+  width: auto;       /* ширина подстраивается */
+  object-fit: contain;
   object-position: center;
   scroll-snap-align: center;
   opacity: 0;
   animation: fadeInImg .4s ease forwards;
   transition: transform .25s ease;
-  transform: scale(1.12);      /* аккуратный авто‑zoom */
+  transform: none;   /* никаких zoom, чтобы не появлялись полосы */
 }
 
-/* Premium zoom при свайпе/тапе */
+/* Лёгкий zoom при свайпе — премиально, но безопасно */
 .carousel img:active {
-  transform: scale(1.15);
+  transform: scale(1.04);
 }
 
 @keyframes fadeInImg {
