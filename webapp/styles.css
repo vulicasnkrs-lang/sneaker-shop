@@ -323,8 +323,8 @@ input:focus,
 /* PREMIUM GALLERY — как у конкурента */
 .modal-images {
   width: 100%;
-  height: 340px;              /* ключевой момент — фото становится крупным */
-  background: #fff;           /* никаких серых фонов */
+  height: 340px;              /* фото крупное, как у конкурента */
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -341,22 +341,24 @@ input:focus,
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  padding: 0 6px;             /* воздух слева/справа */
 }
 
-/* ГЛАВНОЕ: фото как у конкурента */
+/* ГЛАВНОЕ: фото как у конкурента + микрозазор */
 .carousel img {
-  height: 100%;      /* фото заполняет блок по высоте */
-  width: auto;       /* ширина подстраивается */
+  height: 100%;               /* фото заполняет блок по высоте */
+  width: auto;                /* ширина подстраивается */
   object-fit: contain;
   object-position: center;
   scroll-snap-align: center;
   opacity: 0;
   animation: fadeInImg .4s ease forwards;
   transition: transform .25s ease;
-  transform: none;   /* никаких zoom, чтобы не появлялись полосы */
+  margin: 0 6px;              /* микрозазор между фото — чтобы не склеивались */
+  transform: none;
 }
 
-/* Лёгкий zoom при свайпе — премиально, но безопасно */
+/* Лёгкий zoom при свайпе — премиально */
 .carousel img:active {
   transform: scale(1.04);
 }
