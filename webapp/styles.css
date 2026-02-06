@@ -255,81 +255,6 @@ input:focus,
   color: var(--primary);
 }
 /* ========================= */
-/*           DRAWER          */
-/* ========================= */
-
-.drawer {
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100vh;
-  width: min(420px, 95vw);
-  background: #fff;
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  z-index: 90;
-}
-
-.drawer-header {
-  padding: 14px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-}
-
-.drawer-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px 16px;
-  display: grid;
-  gap: 12px;
-}
-
-.drawer-footer {
-  padding: 14px 16px;
-  border-top: 1px solid #eee;
-}
-
-.cart-item {
-  display: grid;
-  grid-template-columns: 64px 1fr auto;
-  gap: 10px;
-  align-items: center;
-}
-
-.cart-item img {
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
-  object-fit: cover;
-  border: 1px solid #eee;
-}
-
-/* ========================= */
-/*           SIZES           */
-/* ========================= */
-
-.size {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  background: #fff;
-  cursor: pointer;
-  transition: all .2s ease;
-  font-size: 15px;
-}
-
-.size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  transform: scale(1.08);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* ========================= */
 /*           MODAL           */
 /* ========================= */
 
@@ -395,9 +320,10 @@ input:focus,
   flex-direction: column;
 }
 
+/* FIX: высота 280px + object-fit: cover */
 .modal-images {
   width: 100%;
-  height: 250px; /* фиксированная высота */
+  height: 280px; /* ← твоя новая высота */
   background: #fff;
   display: flex;
   align-items: center;
@@ -415,11 +341,13 @@ input:focus,
   -webkit-overflow-scrolling: touch;
 }
 
+/* FIX: object-fit: cover вместо contain */
 .carousel img {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;      /* ← ключевой фикс */
+  object-position: center;
   scroll-snap-align: center;
   background: #fff;
   opacity: 0;
@@ -467,6 +395,7 @@ input:focus,
   border-color: #111;
   transform: scale(1.05);
 }
+
 /* ========================= */
 /*     PRODUCT INFO BLOCK    */
 /* ========================= */
