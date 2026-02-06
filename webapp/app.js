@@ -16,7 +16,7 @@ const state = {
   orders: JSON.parse(localStorage.getItem('orders') || '[]'),
   postponed: JSON.parse(localStorage.getItem('postponed') || '[]'),
 
-  /* ⭐ NEW: бронь размера */
+  // бронь размеров
   reserved: JSON.parse(localStorage.getItem('reserved') || '[]'),
 
   view: 'catalog'
@@ -58,6 +58,8 @@ const els = {
 
   productModal: document.getElementById('productModal'),
   carousel: document.getElementById('carousel'),
+  photoCounter: document.getElementById('photoCounter'),
+  photoDots: document.getElementById('photoDots'),
   thumbStrip: document.getElementById('thumbStrip'),
 
   modalTitle: document.getElementById('modalTitle'),
@@ -68,6 +70,11 @@ const els = {
   modalQty: document.getElementById('modalQty'),
   addToCartBtn: document.getElementById('addToCartBtn'),
   toggleFavBtn: document.getElementById('toggleFavBtn'),
+
+  // AVAILABILITY
+  availabilityBlock: document.getElementById('availabilityBlock'),
+  stockCount: document.getElementById('stockCount'),
+  reserveBtn: document.getElementById('reserveBtn'),
 
   favBtn: document.getElementById('favBtn'),
   favCount: document.getElementById('favCount'),
@@ -84,11 +91,7 @@ const els = {
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
   profileFavorites: document.getElementById('profileFavorites'),
-  profilePostponed: document.getElementById('profilePostponed'),
-
-  /* ⭐ NEW: Availability */
-  stockCount: document.getElementById('stockCount'),
-  reserveBtn: document.getElementById('reserveBtn')
+  profilePostponed: document.getElementById('profilePostponed')
 };
 
 let currentProduct = null;
@@ -99,10 +102,14 @@ let selectedSize = null;
 /* ========================= */
 
 async function init() {
-  cleanupReserved(); // ⭐ очищаем истёкшие брони
-
   renderSkeletons();
   await loadProducts();
+
+  // восстановить stock из localStorage
+  restoreStock();
+  // очистить истёкшие брони
+  cleanupReserved();
+
   buildFilters();
   updateCartBadge();
   updateFavBadge();
@@ -145,6 +152,197 @@ function initProfileFromTelegram() {
     els.profileAvatarProfile.style.backgroundPosition = 'center';
   }
 }
+
+/* ========================= */
+/*         SKELETONS         */
+/* ========================= */
+
+function renderSkeletons() {
+  els.catalog.innerHTML = '';
+  for (let i = 0; i < 8; i++) {
+    const sk = document.createElement('div');
+    sk.className = 'card skeleton';
+    sk.innerHTML = `
+      <div class="card-image skeleton"></div>
+      <div class="card-info">
+        <div class="skeleton" style="height:16px; width:70%;"></div>
+        <div class="skeleton" style="height:18px; width:40%; margin-top:6px;"></div>
+      </div>
+    `;
+    els.catalog.appendChild(sk);
+  }
+}
+
+/* ========================= */
+/*       LOAD PRODUCTS       */
+/* ========================= */
+
+async function loadProducts() {
+  try {
+    const res = await fetch('/products.json', { cache: 'no-store' });
+    state.products = await res.json();
+  } catch {
+    state.products = [];
+  }
+
+  // sizes = [{ size, stock }]
+  state.products.forEach(p => {
+    state.brandSet.add(p.brand);
+    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
+  });
+
+  state.filtered = applyPostponedFilter([...state.products]);
+}
+
+/* ========================= */
+/*    POSTPONED FILTERING    */
+/* ========================= */
+
+function applyPostponedFilter(arr) {
+  const now = Date.now();
+  const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  const hiddenIds = active.map(x => x.id);
+  return arr.filter(p => !hiddenIds.includes(p.id));
+}
+
+/* ========================= */
+/*       BUILD FILTERS       */
+/* ========================= */
+
+function buildFilters() {
+  [...state.brandSet].sort().forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b;
+    opt.textContent = b;
+    els.brandFilter.appendChild(opt);
+  });
+
+  for (let s = 35; s <= 49; s++) {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = String(s);
+    els.sizeFilter.appendChild(opt);
+  }
+}
+
+/* ========================= */
+/*       APPLY FILTERS       */
+/* ========================= */
+
+function applyFilters() {
+  let arr = [...state.products];
+
+  const brand = els.brandFilter.value;
+  const size = els.sizeFilter.value;
+  const search = els.searchInput.value.trim().toLowerCase();
+  const sort = els.sortSelect.value;
+
+  if (brand) arr = arr.filter(p => p.brand === brand);
+
+  // фильтр по размеру: только пары с stock > 0
+  if (size) {
+    const s = Number(size);
+    arr = arr.filter(p =>
+      (p.sizes || []).some(obj => obj.size === s && obj.stock > 0)
+    );
+  }
+
+  if (search) arr = arr.filter(p => p.title.toLowerCase().includes(search));
+
+  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
+
+  state.filtered = applyPostponedFilter(arr);
+  renderCatalog();
+}
+
+/* ========================= */
+/*       RENDER CATALOG      */
+/* ========================= */
+
+function renderCatalog() {
+  els.catalog.innerHTML = '';
+
+  if (!state.filtered.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.style.padding = '20px';
+    empty.textContent = 'Ничего не найдено';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  state.filtered.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
+}
+
+/* ========================= */
+/*          CARD NODE        */
+/* ========================= */
+
+function cardNode(p) {
+  const node = document.createElement('div');
+  node.className = 'card';
+  node.dataset.id = p.id;
+
+  const cover = p.images?.[0] || '';
+  const price = formatPrice(p.price);
+  const fav = state.favorites.has(p.id);
+
+  node.innerHTML = `
+    <button class="fav-btn">
+      <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
+        <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
+      </svg>
+    </button>
+
+    <div class="card-image">
+      <img src="${cover}" alt="${p.title}">
+    </div>
+
+    <div class="card-info">
+      <div class="card-title">${p.title}</div>
+      <div class="card-price">${price}</div>
+    </div>
+  `;
+
+  node.addEventListener('click', () => {
+    if (tg) openProductScreen(p.id);
+    else openProductModal(p);
+  });
+
+  const favBtn = node.querySelector('.fav-btn');
+  const favIcon = node.querySelector('.fav-icon');
+
+  favBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleFavorite(p.id);
+    favIcon.classList.toggle('active');
+    favIcon.classList.add('animate');
+    setTimeout(() => favIcon.classList.remove('animate'), 300);
+    renderProfileFavorites();
+  });
+
+  node.addEventListener('mousemove', (e) => {
+    const rect = node.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const tiltX = (y / rect.height) * 3;
+    const tiltY = -(x / rect.width) * 3;
+    node.style.transform =
+      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+
+  node.addEventListener('mouseleave', () => {
+    node.style.transform = '';
+  });
+
+  return node;
+}
+
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -164,6 +362,27 @@ function openProductScreen(productId) {
     tg.BackButton.hide();
     tg.BackButton.onClick(() => {});
   });
+}
+
+/* ========================= */
+/*       AVAILABILITY        */
+/* ========================= */
+
+function updateAvailabilityBlock(p, size) {
+  if (!els.stockCount) return;
+
+  if (!size) {
+    els.stockCount.textContent = '—';
+    return;
+  }
+
+  const sizeObj = (p.sizes || []).find(x => x.size === size);
+  if (!sizeObj) {
+    els.stockCount.textContent = '—';
+    return;
+  }
+
+  els.stockCount.textContent = sizeObj.stock;
 }
 
 /* ========================= */
@@ -230,30 +449,37 @@ function openProductModal(p) {
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
 
+  // сброс availability
+  updateAvailabilityBlock(p, null);
+
+  if (state.mysteryProductId === p.id) {
+    els.productModal.classList.add('highlighted');
+  } else {
+    els.productModal.classList.remove('highlighted');
+  }
+
   // --- SIZES ---
   els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(obj => {
-    const s = obj.size;
-    const stock = obj.stock;
-
     const b = document.createElement('button');
     b.className = 'size';
-    b.textContent = s;
+    b.textContent = obj.size;
 
-    if (stock <= 0) {
+    if (obj.stock <= 0) {
       b.disabled = true;
-      b.style.opacity = 0.4;
+      b.classList.add('disabled');
     }
 
     b.addEventListener('click', () => {
-      selectedSize = s;
+      if (obj.stock <= 0) return;
+
+      selectedSize = obj.size;
 
       els.modalSizes.querySelectorAll('.size')
         .forEach(x => x.classList.remove('active'));
       b.classList.add('active');
 
-      updateStockDisplay(p, s);
-      updateReserveButton(p, s);
+      updateAvailabilityBlock(p, selectedSize);
 
       els.modalPrice.classList.remove('bump');
       void els.modalPrice.offsetWidth;
@@ -263,38 +489,23 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
-  // --- INITIAL STOCK DISPLAY ---
-  els.stockCount.textContent = '—';
-  els.reserveBtn.disabled = true;
-
-  // --- RESERVE BUTTON ---
-  els.reserveBtn.onclick = () => {
-    if (!selectedSize) return;
-
-    reserveSize(p.id, selectedSize);
-    updateStockDisplay(p, selectedSize);
-    updateReserveButton(p, selectedSize);
-  };
-
   // --- OPEN MODAL ---
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
-  // --- ADD TO CART ---
+  // --- ADD TO CART (обычная покупка) ---
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
+    const qty = Math.max(1, Number(els.modalQty.value || 1));
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
-    const sizeObj = p.sizes.find(x => x.size === selectedSize);
-    if (!sizeObj || sizeObj.stock <= 0) {
-      alert('Нет в наличии');
+    if (!selectedSize) {
+      alert('Выберите размер');
       return;
     }
-
-    const qty = Math.max(1, Number(els.modalQty.value || 1));
 
     addToCart(p, selectedSize, qty);
     createFlyAnimation(p);
@@ -302,6 +513,45 @@ function openProductModal(p) {
     closeProductModal();
     openCart();
   };
+
+  // --- RESERVE (бронь + корзина + уменьшение stock) ---
+  if (els.reserveBtn) {
+    els.reserveBtn.onclick = () => {
+      if (!selectedSize) {
+        alert('Выберите размер');
+        return;
+      }
+
+      const sizeObj = (p.sizes || []).find(x => x.size === selectedSize);
+      if (!sizeObj || sizeObj.stock <= 0) {
+        alert('Нет в наличии');
+        return;
+      }
+
+      // уменьшаем stock
+      sizeObj.stock -= 1;
+      saveStock();
+
+      // сохраняем бронь на 24 часа
+      const until = Date.now() + 24 * 60 * 60 * 1000;
+      state.reserved.push({
+        id: p.id,
+        size: selectedSize,
+        until
+      });
+      localStorage.setItem('reserved', JSON.stringify(state.reserved));
+
+      // обновляем availability
+      updateAvailabilityBlock(p, selectedSize);
+
+      // кладём в корзину 1 пару
+      addToCart(p, selectedSize, 1);
+
+      // закрываем модалку и открываем корзину
+      closeProductModal();
+      openCart();
+    };
+  }
 
   // --- FAVORITE ---
   els.toggleFavBtn.onclick = () => {
@@ -312,120 +562,187 @@ function openProductModal(p) {
 }
 
 /* ========================= */
-/*   STOCK + RESERVE LOGIC   */
+/*    CLOSE PRODUCT MODAL    */
 /* ========================= */
 
-function updateStockDisplay(p, size) {
-  const sizeObj = p.sizes.find(x => x.size === size);
-  if (!sizeObj) return;
+function closeProductModal() {
+  els.productModal.classList.remove('open');
 
-  const stock = sizeObj.stock;
+  setTimeout(() => {
+    els.productModal.classList.add('hidden');
+  }, 220);
 
-  if (stock > 1) els.stockCount.textContent = `${stock} пар`;
-  else if (stock === 1) els.stockCount.textContent = `1 пара`;
-  else els.stockCount.textContent = `Нет в наличии`;
+  if (tg) {
+    tg.BackButton.hide();
+    tg.BackButton.onClick(() => {});
+  }
 }
 
-function updateReserveButton(p, size) {
+/* ========================= */
+/*         FAVORITES         */
+/* ========================= */
+
+function toggleFavorite(id) {
+  if (state.favorites.has(id)) state.favorites.delete(id);
+  else state.favorites.add(id);
+
+  localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
+  updateFavBadge();
+  renderProfileFavorites();
+}
+
+function clearFavorites() {
+  state.favorites.clear();
+  localStorage.setItem('favorites', JSON.stringify([]));
+  updateFavBadge();
+  renderProfileFavorites();
+}
+
+function updateFavBadge() {
+  els.favCount.textContent = state.favorites.size;
+}
+
+/* ========================= */
+/*            CART           */
+/* ========================= */
+
+function pickFirstSize(p) {
+  const obj = (p.sizes || []).find(x => x.stock > 0);
+  return obj ? obj.size : null;
+}
+
+function addToCart(p, size, qty) {
   const key = `${p.id}:${size}`;
-  const reserved = state.reserved.find(x => x.key === key);
+  const idx = state.cart.findIndex(x => x.key === key);
 
-  const sizeObj = p.sizes.find(x => x.size === size);
+  if (idx >= 0) {
+    state.cart[idx].qty += qty;
+  } else {
+    state.cart.push({
+      key,
+      id: p.id,
+      title: p.title,
+      brand: p.brand,
+      price: p.price,
+      size,
+      qty,
+      images: p.images
+    });
+  }
 
-  if (!sizeObj || sizeObj.stock <= 0) {
-    els.reserveBtn.disabled = true;
-    els.reserveBtn.textContent = 'Нет в наличии';
+  persistCart();
+  updateCartBadge();
+}
+
+function persistCart() {
+  localStorage.setItem('cart', JSON.stringify(state.cart));
+}
+
+function openCart() {
+  renderCart();
+  els.cartDrawer.classList.remove('hidden');
+}
+
+function closeCart() {
+  els.cartDrawer.classList.add('hidden');
+}
+
+function renderCart() {
+  els.cartList.innerHTML = '';
+
+  if (!state.cart.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.textContent = 'Корзина пуста';
+    els.cartList.appendChild(empty);
+    els.cartTotal.textContent = formatPrice(0);
     return;
   }
 
-  if (reserved) {
-    els.reserveBtn.disabled = true;
-    els.reserveBtn.textContent = 'Забронировано';
-  } else {
-    els.reserveBtn.disabled = false;
-    els.reserveBtn.textContent = 'Забронировать пару';
-  }
-}
+  state.cart.forEach(item => {
+    const node = document.createElement('div');
+    node.className = 'cart-item';
 
-function reserveSize(productId, size) {
-  const key = `${productId}:${size}`;
-  const p = state.products.find(x => x.id === productId);
-  if (!p) return;
+    node.innerHTML = `
+      <img src="${item.images?.[0] || ''}" alt="">
+      <div>
+        <div><strong>${item.title}</strong></div>
+        <div class="meta">Размер ${item.size}</div>
 
-  const sizeObj = p.sizes.find(x => x.size === size);
-  if (!sizeObj || sizeObj.stock <= 0) return;
+        <div class="qty-row">
+          <button class="qty-btn" data-act="minus">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn" data-act="plus">+</button>
+          <button class="remove-btn" data-act="remove">Удалить</button>
+        </div>
+      </div>
 
-  // уменьшаем stock
-  sizeObj.stock -= 1;
+      <div class="price">${formatPrice(item.price)}</div>
+    `;
 
-  // создаём бронь
-  state.reserved.push({
-    key,
-    id: productId,
-    size,
-    until: Date.now() + 24 * 60 * 60 * 1000 // 24 часа
+    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
+    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
+    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
+
+    els.cartList.appendChild(node);
   });
 
-  saveReserved();
-  saveProductsStock();
+  els.cartTotal.textContent = formatPrice(cartTotal());
 }
 
-function cleanupReserved() {
-  const now = Date.now();
-  const before = state.reserved.length;
+function changeQty(key, delta) {
+  const idx = state.cart.findIndex(x => x.key === key);
+  if (idx < 0) return;
 
-  state.reserved = state.reserved.filter(r => {
-    if (r.until > now) return true;
+  state.cart[idx].qty += delta;
+  if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
 
-    // бронь истекла → вернуть stock
-    const p = state.products.find(x => x.id === r.id);
-    if (p) {
-      const sizeObj = p.sizes.find(x => x.size === r.size);
-      if (sizeObj) sizeObj.stock += 1;
-    }
-
-    return false;
-  });
-
-  if (state.reserved.length !== before) {
-    saveReserved();
-    saveProductsStock();
-  }
+  persistCart();
+  updateCartBadge();
+  renderCart();
 }
 
-function saveReserved() {
-  localStorage.setItem('reserved', JSON.stringify(state.reserved));
+function removeItem(key) {
+  const idx = state.cart.findIndex(x => x.key === key);
+  if (idx < 0) return;
+
+  state.cart.splice(idx, 1);
+  persistCart();
+  updateCartBadge();
+  renderCart();
 }
 
-function saveProductsStock() {
-  // сохраняем только stock, не весь products.json
-  const stockMap = {};
-
-  state.products.forEach(p => {
-    stockMap[p.id] = p.sizes.map(s => ({
-      size: s.size,
-      stock: s.stock
-    }));
-  });
-
-  localStorage.setItem('stockMap', JSON.stringify(stockMap));
+function cartTotal() {
+  return state.cart.reduce((sum, x) => sum + x.price * x.qty, 0);
 }
 
-function restoreProductsStock() {
-  const raw = localStorage.getItem('stockMap');
-  if (!raw) return;
-
-  const stockMap = JSON.parse(raw);
-
-  state.products.forEach(p => {
-    if (!stockMap[p.id]) return;
-
-    p.sizes.forEach(s => {
-      const saved = stockMap[p.id].find(x => x.size === s.size);
-      if (saved) s.stock = saved.stock;
-    });
-  });
+function formatPrice(v) {
+  return `${v} ₽`;
 }
+
+function updateCartBadge() {
+  els.cartBtn.textContent = formatPrice(cartTotal());
+}
+
+/* ========================= */
+/*       PROFILE SECTIONS    */
+/* ========================= */
+
+function switchProfileTab(tab) {
+  const sections = {
+    orders: els.profileOrders,
+    favorites: els.profileFavorites,
+    postponed: els.profilePostponed
+  };
+
+  Object.values(sections).forEach(s => s.classList.remove('active'));
+  if (sections[tab]) sections[tab].classList.add('active');
+}
+
+function renderProfileSections() {
+  switchProfileTab('orders');
+}
+
 /* ========================= */
 /*          ORDERS           */
 /* ========================= */
@@ -654,6 +971,63 @@ async function checkout() {
 }
 
 /* ========================= */
+/*   STOCK SAVE / RESTORE    */
+/* ========================= */
+
+function saveStock() {
+  const stockMap = {};
+  state.products.forEach(p => {
+    stockMap[p.id] = (p.sizes || []).map(obj => ({
+      size: obj.size,
+      stock: obj.stock
+    }));
+  });
+  localStorage.setItem('stockMap', JSON.stringify(stockMap));
+}
+
+function restoreStock() {
+  const raw = localStorage.getItem('stockMap');
+  if (!raw) return;
+
+  const stockMap = JSON.parse(raw);
+
+  state.products.forEach(p => {
+    if (!stockMap[p.id]) return;
+
+    (p.sizes || []).forEach(obj => {
+      const saved = stockMap[p.id].find(x => x.size === obj.size);
+      if (saved) obj.stock = saved.stock;
+    });
+  });
+}
+
+/* ========================= */
+/*     CLEANUP RESERVED      */
+/* ========================= */
+
+function cleanupReserved() {
+  const now = Date.now();
+  const before = state.reserved.length;
+
+  state.reserved = state.reserved.filter(r => {
+    if (r.until > now) return true;
+
+    const p = state.products.find(x => x.id === r.id);
+    if (p) {
+      const sizeObj = (p.sizes || []).find(x => x.size === r.size);
+      if (sizeObj) sizeObj.stock += 1;
+    }
+
+    return false;
+  });
+
+  if (state.reserved.length !== before) {
+    localStorage.setItem('reserved', JSON.stringify(state.reserved));
+    saveStock();
+  }
+}
+
+/* ========================= */
 /*            UTILS          */
 /* ========================= */
 
@@ -712,9 +1086,6 @@ function cleanupPostponed() {
     savePostponed();
   }
 }
-/* ========================= */
-/*       FLY ANIMATION       */
-/* ========================= */
 
 function createFlyAnimation(p) {
   const src = p.images?.[0] || '';
