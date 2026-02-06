@@ -8,7 +8,6 @@ const tg = window.Telegram?.WebApp || null;
 const state = {
   products: [],
   filtered: [],
-  favorites: new Set(JSON.parse(localStorage.getItem('favorites') || '[]')),
   cart: JSON.parse(localStorage.getItem('cart') || '[]'),
   brandSet: new Set(),
   allSizes: new Set(),
@@ -35,9 +34,6 @@ const els = {
   sortSelect: document.getElementById('sortSelect'),
 
   filtersSection: document.getElementById('filtersSection'),
-  favoritesHeader: document.getElementById('favoritesHeader'),
-  favoritesCountLabel: document.getElementById('favoritesCountLabel'),
-  clearFavoritesBtn: document.getElementById('clearFavoritesBtn'),
 
   mysteryBox: document.getElementById('mysteryBox'),
   openMysteryBtn: document.getElementById('openMysteryBtn'),
@@ -58,8 +54,6 @@ const els = {
 
   productModal: document.getElementById('productModal'),
   carousel: document.getElementById('carousel'),
-  photoCounter: document.getElementById('photoCounter'),
-  photoDots: document.getElementById('photoDots'),
   thumbStrip: document.getElementById('thumbStrip'),
 
   modalTitle: document.getElementById('modalTitle'),
@@ -69,15 +63,11 @@ const els = {
   modalSizes: document.getElementById('modalSizes'),
   modalQty: document.getElementById('modalQty'),
   addToCartBtn: document.getElementById('addToCartBtn'),
-  toggleFavBtn: document.getElementById('toggleFavBtn'),
 
   // AVAILABILITY
   availabilityBlock: document.getElementById('availabilityBlock'),
   stockCount: document.getElementById('stockCount'),
   reserveBtn: document.getElementById('reserveBtn'),
-
-  favBtn: document.getElementById('favBtn'),
-  favCount: document.getElementById('favCount'),
 
   browserBackBtn: document.getElementById('browserBackBtn'),
 
@@ -90,7 +80,6 @@ const els = {
 
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
-  profileFavorites: document.getElementById('profileFavorites'),
   profilePostponed: document.getElementById('profilePostponed')
 };
 
@@ -105,20 +94,16 @@ async function init() {
   renderSkeletons();
   await loadProducts();
 
-  // восстановить stock из localStorage
   restoreStock();
-  // очистить истёкшие брони
   cleanupReserved();
 
   buildFilters();
   updateCartBadge();
-  updateFavBadge();
   renderCatalog();
   attachEvents();
   initProfileFromTelegram();
   renderProfileSections();
   renderProfileOrders();
-  renderProfileFavorites();
   renderProfilePostponed();
 
   if (tg) {
@@ -185,7 +170,6 @@ async function loadProducts() {
     state.products = [];
   }
 
-  // sizes = [{ size, stock }]
   state.products.forEach(p => {
     state.brandSet.add(p.brand);
     (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
@@ -239,7 +223,6 @@ function applyFilters() {
 
   if (brand) arr = arr.filter(p => p.brand === brand);
 
-  // фильтр по размеру: только пары с stock > 0
   if (size) {
     const s = Number(size);
     arr = arr.filter(p =>
@@ -290,15 +273,8 @@ function cardNode(p) {
 
   const cover = p.images?.[0] || '';
   const price = formatPrice(p.price);
-  const fav = state.favorites.has(p.id);
 
   node.innerHTML = `
-    <button class="fav-btn">
-      <svg class="fav-icon ${fav ? 'active' : ''}" viewBox="0 0 24 24">
-        <path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/>
-      </svg>
-    </button>
-
     <div class="card-image">
       <img src="${cover}" alt="${p.title}">
     </div>
@@ -312,18 +288,6 @@ function cardNode(p) {
   node.addEventListener('click', () => {
     if (tg) openProductScreen(p.id);
     else openProductModal(p);
-  });
-
-  const favBtn = node.querySelector('.fav-btn');
-  const favIcon = node.querySelector('.fav-icon');
-
-  favBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleFavorite(p.id);
-    favIcon.classList.toggle('active');
-    favIcon.classList.add('animate');
-    setTimeout(() => favIcon.classList.remove('animate'), 300);
-    renderProfileFavorites();
   });
 
   node.addEventListener('mousemove', (e) => {
@@ -342,7 +306,6 @@ function cardNode(p) {
 
   return node;
 }
-
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -401,7 +364,7 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  // --- GALLERY IMAGES ---
+  /* --- GALLERY IMAGES --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -409,7 +372,7 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  // --- THUMBNAILS ---
+  /* --- THUMBNAILS --- */
   imgs.forEach((src, i) => {
     const t = document.createElement('div');
     t.className = 'thumb' + (i === 0 ? ' active' : '');
@@ -426,7 +389,7 @@ function openProductModal(p) {
 
   const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
 
-  // --- SCROLL SYNC ---
+  /* --- SCROLL SYNC --- */
   carousel.scrollLeft = 0;
 
   carousel.onscroll = () => {
@@ -442,23 +405,16 @@ function openProductModal(p) {
     });
   }
 
-  // --- PRODUCT INFO ---
+  /* --- PRODUCT INFO --- */
   els.modalTitle.textContent = p.title;
   els.modalBrandSeason.textContent = p.brand + ' • ' + (p.season || '');
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
 
-  // сброс availability
   updateAvailabilityBlock(p, null);
 
-  if (state.mysteryProductId === p.id) {
-    els.productModal.classList.add('highlighted');
-  } else {
-    els.productModal.classList.remove('highlighted');
-  }
-
-  // --- SIZES ---
+  /* --- SIZES --- */
   els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(obj => {
     const b = document.createElement('button');
@@ -481,6 +437,7 @@ function openProductModal(p) {
 
       updateAvailabilityBlock(p, selectedSize);
 
+      // маленькая анимация цены
       els.modalPrice.classList.remove('bump');
       void els.modalPrice.offsetWidth;
       els.modalPrice.classList.add('bump');
@@ -489,13 +446,13 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
-  // --- OPEN MODAL ---
+  /* --- OPEN MODAL --- */
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
-  // --- ADD TO CART (обычная покупка) ---
+  /* --- ADD TO CART --- */
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -514,7 +471,7 @@ function openProductModal(p) {
     openCart();
   };
 
-  // --- RESERVE (бронь + корзина + уменьшение stock) ---
+  /* --- RESERVE --- */
   if (els.reserveBtn) {
     els.reserveBtn.onclick = () => {
       if (!selectedSize) {
@@ -541,24 +498,14 @@ function openProductModal(p) {
       });
       localStorage.setItem('reserved', JSON.stringify(state.reserved));
 
-      // обновляем availability
       updateAvailabilityBlock(p, selectedSize);
 
-      // кладём в корзину 1 пару
       addToCart(p, selectedSize, 1);
 
-      // закрываем модалку и открываем корзину
       closeProductModal();
       openCart();
     };
   }
-
-  // --- FAVORITE ---
-  els.toggleFavBtn.onclick = () => {
-    toggleFavorite(p.id);
-    updateFavBadge();
-    renderProfileFavorites();
-  };
 }
 
 /* ========================= */
@@ -577,31 +524,6 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
-
-/* ========================= */
-/*         FAVORITES         */
-/* ========================= */
-
-function toggleFavorite(id) {
-  if (state.favorites.has(id)) state.favorites.delete(id);
-  else state.favorites.add(id);
-
-  localStorage.setItem('favorites', JSON.stringify([...state.favorites]));
-  updateFavBadge();
-  renderProfileFavorites();
-}
-
-function clearFavorites() {
-  state.favorites.clear();
-  localStorage.setItem('favorites', JSON.stringify([]));
-  updateFavBadge();
-  renderProfileFavorites();
-}
-
-function updateFavBadge() {
-  els.favCount.textContent = state.favorites.size;
-}
-
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -731,7 +653,6 @@ function updateCartBadge() {
 function switchProfileTab(tab) {
   const sections = {
     orders: els.profileOrders,
-    favorites: els.profileFavorites,
     postponed: els.profilePostponed
   };
 
@@ -791,47 +712,6 @@ function renderProfileOrders() {
 }
 
 /* ========================= */
-/*       PROFILE FAVORITES   */
-/* ========================= */
-
-function renderProfileFavorites() {
-  els.profileFavorites.innerHTML = '';
-
-  const favIds = [...state.favorites];
-  const arr = state.products.filter(p => favIds.includes(p.id));
-
-  if (!arr.length) {
-    const empty = document.createElement('div');
-    empty.className = 'profile-empty';
-    empty.textContent = 'В избранном пока пусто';
-    els.profileFavorites.appendChild(empty);
-    return;
-  }
-
-  arr.forEach(p => {
-    const node = document.createElement('div');
-    node.className = 'profile-fav-item';
-
-    const cover = p.images?.[0] || '';
-
-    node.innerHTML = `
-      <div class="profile-fav-left">
-        <img src="${cover}" alt="${p.title}">
-        <div>
-          <div class="title">${p.title}</div>
-          <div class="meta">${p.brand}</div>
-        </div>
-      </div>
-      <div class="profile-fav-right">
-        <div class="price">${formatPrice(p.price)}</div>
-      </div>
-    `;
-
-    els.profileFavorites.appendChild(node);
-  });
-}
-
-/* ========================= */
 /*       PROFILE POSTPONED   */
 /* ========================= */
 
@@ -884,32 +764,6 @@ function renderProfilePostponed() {
     });
 
     els.profilePostponed.appendChild(node);
-  });
-}
-
-/* ========================= */
-/*       FAVORITES VIEW      */
-/* ========================= */
-
-function renderFavorites() {
-  els.catalog.innerHTML = '';
-
-  const favIds = [...state.favorites];
-  const arr = state.products.filter(p => favIds.includes(p.id));
-
-  if (!arr.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.style.padding = '20px';
-    empty.textContent = 'В избранном пока пусто';
-    els.catalog.appendChild(empty);
-    return;
-  }
-
-  arr.forEach((p, i) => {
-    const node = cardNode(p);
-    node.style.animationDelay = `${i * 40}ms`;
-    els.catalog.appendChild(node);
   });
 }
 
@@ -1039,41 +893,12 @@ function debounce(fn, ms) {
   };
 }
 
-function toggleFavoritesView() {
-  if (state.view === 'favorites') {
-    state.view = 'catalog';
-    els.favoritesHeader.classList.add('hidden');
-    renderCatalog();
-  } else {
-    state.view = 'favorites';
-    els.favoritesHeader.classList.remove('hidden');
-    renderFavorites();
-  }
-}
-
 function saveOrders() {
   localStorage.setItem('orders', JSON.stringify(state.orders));
 }
 
 function savePostponed() {
   localStorage.setItem('postponed', JSON.stringify(state.postponed));
-}
-
-function addRippleEffect(button, event) {
-  const rect = button.getBoundingClientRect();
-  const circle = document.createElement('span');
-  const diameter = Math.max(rect.width, rect.height);
-  const radius = diameter / 2;
-
-  circle.style.width = circle.style.height = `${diameter}px`;
-  circle.style.left = `${event.clientX - rect.left - radius}px`;
-  circle.style.top = `${event.clientY - rect.top - radius}px`;
-  circle.classList.add('ripple');
-
-  const existing = button.getElementsByClassName('ripple')[0];
-  if (existing) existing.remove();
-
-  button.appendChild(circle);
 }
 
 function cleanupPostponed() {
@@ -1086,6 +911,9 @@ function cleanupPostponed() {
     savePostponed();
   }
 }
+/* ========================= */
+/*       FLY ANIMATION       */
+/* ========================= */
 
 function createFlyAnimation(p) {
   const src = p.images?.[0] || '';
@@ -1207,14 +1035,10 @@ function attachEvents() {
   els.closeCart.addEventListener('click', closeCart);
   els.checkoutBtn.addEventListener('click', checkout);
 
-  els.favBtn.addEventListener('click', toggleFavoritesView);
-  els.clearFavoritesBtn.addEventListener('click', clearFavorites);
-
   els.profileAvatarHeader.addEventListener('click', () => {
     openProfileModal();
     renderProfileSections();
     renderProfileOrders();
-    renderProfileFavorites();
     renderProfilePostponed();
   });
 
