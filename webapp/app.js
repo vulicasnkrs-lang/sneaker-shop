@@ -57,7 +57,6 @@ const els = {
   thumbStrip: document.getElementById('thumbStrip'),
 
   modalTitle: document.getElementById('modalTitle'),
-  modalBrandSeason: document.getElementById('modalBrandSeason'),
   modalPrice: document.getElementById('modalPrice'),
   modalDesc: document.getElementById('modalDesc'),
   modalSizes: document.getElementById('modalSizes'),
@@ -238,7 +237,6 @@ function applyFilters() {
   state.filtered = applyPostponedFilter(arr);
   renderCatalog();
 }
-
 /* ========================= */
 /*       RENDER CATALOG      */
 /* ========================= */
@@ -306,6 +304,7 @@ function cardNode(p) {
 
   return node;
 }
+
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -407,7 +406,6 @@ function openProductModal(p) {
 
   /* --- PRODUCT INFO --- */
   els.modalTitle.textContent = p.title;
-  els.modalBrandSeason.textContent = p.brand + ' • ' + (p.season || '');
   els.modalPrice.textContent = formatPrice(p.price);
   els.modalDesc.textContent = p.description || '';
   els.modalQty.value = 1;
@@ -437,7 +435,6 @@ function openProductModal(p) {
 
       updateAvailabilityBlock(p, selectedSize);
 
-      // маленькая анимация цены
       els.modalPrice.classList.remove('bump');
       void els.modalPrice.offsetWidth;
       els.modalPrice.classList.add('bump');
@@ -485,11 +482,9 @@ function openProductModal(p) {
         return;
       }
 
-      // уменьшаем stock
       sizeObj.stock -= 1;
       saveStock();
 
-      // сохраняем бронь на 24 часа
       const until = Date.now() + 24 * 60 * 60 * 1000;
       state.reserved.push({
         id: p.id,
