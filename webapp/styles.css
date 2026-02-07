@@ -320,10 +320,10 @@ input:focus,
   flex-direction: column;
 }
 
-/* PREMIUM GALLERY — как у конкурента */
+/* ГАЛЕРЕЯ КАК У КОНКУРЕНТА */
 .modal-images {
   width: 100%;
-  height: 340px;              /* фото крупное, как у конкурента */
+  height: 360px;              /* ключевой момент — фото крупное */
   background: #fff;
   display: flex;
   align-items: center;
@@ -341,20 +341,21 @@ input:focus,
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  padding: 0 6px;             /* воздух слева/справа */
+  padding: 0;                 /* убираем воздух — фото получает максимум места */
 }
 
-/* ГЛАВНОЕ: фото как у конкурента + микрозазор */
+/* ГЛАВНОЕ: каждый слайд = ширина экрана */
 .carousel img {
-  height: 100%;               /* фото заполняет блок по высоте */
+  flex: 0 0 100%;             /* фиксированная ширина слайда */
+  height: 100%;               /* фото растягивается по высоте */
   width: auto;                /* ширина подстраивается */
-  object-fit: contain;
+  object-fit: contain;        /* пропорции сохраняются */
   object-position: center;
   scroll-snap-align: center;
   opacity: 0;
   animation: fadeInImg .4s ease forwards;
   transition: transform .25s ease;
-  margin: 0 6px;              /* микрозазор между фото — чтобы не склеивались */
+  margin: 0;                  /* никаких зазоров — фото максимально крупное */
   transform: none;
 }
 
@@ -662,10 +663,6 @@ input:focus,
   }
 }
 
-/* ========================= */
-/*   FINAL HEADER FIX AGAIN  */
-/* ========================= */
-
 @media (max-width: 360px) {
   #cartBtn {
     padding: 6px 10px;
@@ -719,7 +716,6 @@ input:focus,
   to   { transform: translateY(0); opacity: 1; }
 }
 
-/* Header inside modal */
 .profile-modal .header {
   background: #fff;
   border-bottom: 1px solid #eee;
@@ -735,7 +731,6 @@ input:focus,
   font-weight: 600;
 }
 
-/* Profile header inside modal */
 .profile-modal .profile-header {
   padding: 24px 20px;
   background: #fff;
@@ -773,7 +768,6 @@ input:focus,
   color: var(--muted);
 }
 
-/* Tabs inside modal */
 .profile-modal .profile-tabs {
   display: flex;
   gap: 6px;
@@ -799,7 +793,6 @@ input:focus,
   color: #fff;
 }
 
-/* Content inside modal */
 .profile-modal .profile-content {
   padding: 20px;
   display: grid;
@@ -808,7 +801,6 @@ input:focus,
   overflow-y: auto;
 }
 
-/* Sections */
 .profile-modal .profile-section {
   display: none;
 }
@@ -816,4 +808,3 @@ input:focus,
 .profile-modal .profile-section.active {
   display: block;
 }
-
