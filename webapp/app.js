@@ -363,22 +363,17 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* --- GALLERY IMAGES --- */
+  /* --- GALLERY IMAGES (универсальные, одинаковые, object-fit: cover) --- */
   imgs.forEach((src) => {
-  const img = document.createElement('img');
-  img.src = src;
-  img.alt = p.title;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = p.title;
 
-  // определяем вертикальные фото
-  img.onload = () => {
-    if (img.naturalHeight > img.naturalWidth) {
-      img.classList.add('vertical');
-    }
-  };
+    // больше НЕ определяем вертикальные фото — это не нужно
+    // object-fit: cover в CSS делает все фото одинаковыми
 
-  carousel.appendChild(img);
-});
-
+    carousel.appendChild(img);
+  });
 
   /* --- THUMBNAILS --- */
   imgs.forEach((src, i) => {
@@ -511,6 +506,7 @@ function openProductModal(p) {
     };
   }
 }
+
 
 /* ========================= */
 /*    CLOSE PRODUCT MODAL    */
