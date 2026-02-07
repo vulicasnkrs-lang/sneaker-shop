@@ -365,11 +365,20 @@ function openProductModal(p) {
 
   /* --- GALLERY IMAGES --- */
   imgs.forEach((src) => {
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = p.title;
-    carousel.appendChild(img);
-  });
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = p.title;
+
+  // определяем вертикальные фото
+  img.onload = () => {
+    if (img.naturalHeight > img.naturalWidth) {
+      img.classList.add('vertical');
+    }
+  };
+
+  carousel.appendChild(img);
+});
+
 
   /* --- THUMBNAILS --- */
   imgs.forEach((src, i) => {
