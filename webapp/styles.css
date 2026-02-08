@@ -202,7 +202,6 @@ html, body {
   font-weight: 700;
   color: var(--primary);
 }
-
 /* ========================= */
 /*        PRODUCT MODAL      */
 /* ========================= */
@@ -268,6 +267,7 @@ html, body {
   padding: 10px;
   background: #f7f7f7;
 }
+
 /* ========================= */
 /*        THUMB STRIP        */
 /* ========================= */
@@ -486,7 +486,6 @@ html, body {
   font-size: 20px;
   font-weight: 700;
 }
-
 /* ========================= */
 /*       FLY ANIMATION       */
 /* ========================= */
@@ -542,6 +541,7 @@ html, body {
     height: 240px;
   }
 }
+
 @keyframes fadeInProfile {
   from { transform: translateY(20px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
@@ -721,6 +721,11 @@ html, body {
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 6px;
+}
+
+.profile-postponed-right .secondary.small {
+  padding: 6px 12px;
+  font-size: 13px;
 }
 
 .profile-empty {
