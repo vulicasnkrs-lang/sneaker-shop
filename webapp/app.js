@@ -63,7 +63,7 @@ const els = {
   modalQty: document.getElementById('modalQty'),
   addToCartBtn: document.getElementById('addToCartBtn'),
 
-  // AVAILABILITY
+  // AVAILABILITY (old block)
   availabilityBlock: document.getElementById('availabilityBlock'),
   stockCount: document.getElementById('stockCount'),
   reserveBtn: document.getElementById('reserveBtn'),
@@ -79,9 +79,19 @@ const els = {
 
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
-  profilePostponed: document.getElementById('profilePostponed')
+  profilePostponed: document.getElementById('profilePostponed'),
+
+  /* ========================= */
+  /*   NEW PREMIUM CARD FIELDS */
+  /* ========================= */
+
+  modalBrand: document.getElementById('modalBrand'),
+  modalStockInline: document.getElementById('modalStockInline'),
+  modalMaterials: document.getElementById('modalMaterials')
 };
 
+let currentProduct = null;
+let selectedSize = null;
 let currentProduct = null;
 let selectedSize = null;
 
@@ -237,6 +247,7 @@ function applyFilters() {
   state.filtered = applyPostponedFilter(arr);
   renderCatalog();
 }
+
 /* ========================= */
 /*       RENDER CATALOG      */
 /* ========================= */
@@ -346,7 +357,6 @@ function updateAvailabilityBlock(p, size) {
 
   els.stockCount.textContent = sizeObj.stock;
 }
-
 /* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
@@ -363,15 +373,11 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* --- GALLERY IMAGES (универсальные, одинаковые, object-fit: cover) --- */
+  /* --- GALLERY IMAGES --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
     img.alt = p.title;
-
-    // больше НЕ определяем вертикальные фото — это не нужно
-    // object-fit: cover в CSS делает все фото одинаковыми
-
     carousel.appendChild(img);
   });
 
@@ -408,15 +414,45 @@ function openProductModal(p) {
     });
   }
 
-  /* --- PRODUCT INFO --- */
+  /* ========================= */
+  /*   NEW PREMIUM CARD FIELDS */
+  /* ========================= */
+
+  /* BRAND */
+  els.modalBrand.textContent = p.brand || '';
+
+  /* STOCK INLINE (total pairs) */
+  const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
+  els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
+
+  /* MODEL */
   els.modalTitle.textContent = p.title;
+
+  /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
+
+  /* MATERIALS (expandable object A2) */
+  if (p.materials && typeof p.materials === 'object') {
+    els.modalMaterials.innerHTML = Object.entries(p.materials)
+      .map(([key, value]) => `${beautifyMaterialKey(key)}: ${value}`)
+      .join('<br>');
+  } else {
+    els.modalMaterials.innerHTML = '';
+  }
+
+  /* DESCRIPTION (legacy, optional) */
   els.modalDesc.textContent = p.description || '';
+
+  /* QTY RESET */
   els.modalQty.value = 1;
 
+  /* OLD AVAILABILITY BLOCK RESET */
   updateAvailabilityBlock(p, null);
 
-  /* --- SIZES --- */
+  /* ========================= */
+  /*          SIZES            */
+  /* ========================= */
+
   els.modalSizes.innerHTML = '';
   (p.sizes || []).forEach(obj => {
     const b = document.createElement('button');
@@ -447,13 +483,19 @@ function openProductModal(p) {
     els.modalSizes.appendChild(b);
   });
 
-  /* --- OPEN MODAL --- */
+  /* ========================= */
+  /*        OPEN MODAL         */
+  /* ========================= */
+
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
 
-  /* --- ADD TO CART --- */
+  /* ========================= */
+  /*       ADD TO CART         */
+  /* ========================= */
+
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
@@ -472,7 +514,10 @@ function openProductModal(p) {
     openCart();
   };
 
-  /* --- RESERVE --- */
+  /* ========================= */
+  /*         RESERVE           */
+  /* ========================= */
+
   if (els.reserveBtn) {
     els.reserveBtn.onclick = () => {
       if (!selectedSize) {
@@ -507,7 +552,26 @@ function openProductModal(p) {
   }
 }
 
+/* ========================= */
+/*   HELPERS FOR MATERIALS   */
+/* ========================= */
 
+function beautifyMaterialKey(key) {
+  const map = {
+    upper: 'Верх',
+    sole: 'Подошва',
+    midsole: 'Промежуточная подошва',
+    lining: 'Подкладка',
+    weight: 'Вес'
+  };
+  return map[key] || key.charAt(0).toUpperCase() + key.slice(1);
+}
+
+function pluralPairs(n) {
+  if (n % 10 === 1 && n % 100 !== 11) return 'пара';
+  if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
+  return 'пар';
+}
 /* ========================= */
 /*    CLOSE PRODUCT MODAL    */
 /* ========================= */
@@ -524,6 +588,7 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
+
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -911,6 +976,7 @@ function cleanupPostponed() {
     savePostponed();
   }
 }
+
 /* ========================= */
 /*       FLY ANIMATION       */
 /* ========================= */
