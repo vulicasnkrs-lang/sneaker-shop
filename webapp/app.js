@@ -14,9 +14,7 @@ const state = {
   mysteryProductId: null,
   orders: JSON.parse(localStorage.getItem('orders') || '[]'),
   postponed: JSON.parse(localStorage.getItem('postponed') || '[]'),
-
   reserved: JSON.parse(localStorage.getItem('reserved') || '[]'),
-
   view: 'catalog'
 };
 
@@ -59,7 +57,6 @@ const els = {
   modalPrice: document.getElementById('modalPrice'),
   modalMaterials: document.getElementById('modalMaterials'),
   modalSizes: document.getElementById('modalSizes'),
-  modalQty: document.getElementById('modalQty'),
   addToCartBtn: document.getElementById('addToCartBtn'),
   reserveBtn: document.getElementById('reserveBtn'),
 
@@ -67,7 +64,7 @@ const els = {
   profileAvatarModal: document.getElementById('profileAvatarModal'),
   cartBtnModal: document.getElementById('cartBtnModal'),
 
-  /* OLD AVAILABILITY */
+  /* OPTIONAL OLD AVAILABILITY (SAFE IF NULL) */
   availabilityBlock: document.getElementById('availabilityBlock'),
   stockCount: document.getElementById('stockCount'),
 
@@ -96,6 +93,7 @@ const els = {
 
 let currentProduct = null;
 let selectedSize = null;
+
 /* ========================= */
 /*            INIT           */
 /* ========================= */
@@ -171,7 +169,6 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
-
 /* ========================= */
 /*       LOAD PRODUCTS       */
 /* ========================= */
@@ -445,12 +442,6 @@ function openProductModal(p) {
     els.modalMaterials.innerHTML = '';
   }
 
-  /* DESCRIPTION (optional legacy) */
-  // els.modalDesc.textContent = p.description || '';
-
-  /* RESET QTY */
-  els.modalQty.value = 1;
-
   /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
 
@@ -504,7 +495,8 @@ function openProductModal(p) {
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
-    const qty = Math.max(1, Number(els.modalQty.value || 1));
+    const qty = 1; // премиальная карточка — всегда 1 пара
+
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
     if (!selectedSize) {
@@ -981,6 +973,24 @@ function cleanupPostponed() {
   if (state.postponed.length !== before) {
     savePostponed();
   }
+}
+
+function addRippleEffect(button, event) {
+  if (!button) return;
+  const rect = button.getBoundingClientRect();
+  const circle = document.createElement('span');
+  const diameter = Math.max(rect.width, rect.height);
+  const radius = diameter / 2;
+
+  circle.style.width = circle.style.height = `${diameter}px`;
+  circle.style.left = `${event.clientX - rect.left - radius}px`;
+  circle.style.top = `${event.clientY - rect.top - radius}px`;
+  circle.classList.add('ripple');
+
+  const existing = button.getElementsByClassName('ripple')[0];
+  if (existing) existing.remove();
+
+  button.appendChild(circle);
 }
 
 /* ========================= */
