@@ -63,7 +63,7 @@ const els = {
   modalQty: document.getElementById('modalQty'),
   addToCartBtn: document.getElementById('addToCartBtn'),
 
-  // AVAILABILITY (old block)
+  // OLD AVAILABILITY BLOCK
   availabilityBlock: document.getElementById('availabilityBlock'),
   stockCount: document.getElementById('stockCount'),
   reserveBtn: document.getElementById('reserveBtn'),
@@ -90,11 +90,12 @@ const els = {
   modalMaterials: document.getElementById('modalMaterials')
 };
 
-let currentProduct = null;
-let selectedSize = null;
-let currentProduct = null;
-let selectedSize = null;
+/* ========================= */
+/*     GLOBAL VARIABLES      */
+/* ========================= */
 
+let currentProduct = null;
+let selectedSize = null;
 /* ========================= */
 /*            INIT           */
 /* ========================= */
@@ -440,7 +441,7 @@ function openProductModal(p) {
     els.modalMaterials.innerHTML = '';
   }
 
-  /* DESCRIPTION (legacy, optional) */
+  /* DESCRIPTION */
   els.modalDesc.textContent = p.description || '';
 
   /* QTY RESET */
