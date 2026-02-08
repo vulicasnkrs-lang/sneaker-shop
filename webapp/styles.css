@@ -136,58 +136,6 @@ html, body {
 }
 
 /* ========================= */
-/*        MYSTERY BOX        */
-/* ========================= */
-
-.mystery-box {
-  background: var(--air-soft);
-  margin: 20px;
-  padding: 28px;
-  border-radius: 18px;
-  box-shadow: var(--air-shadow);
-  text-align: center;
-  display: grid;
-  gap: 10px;
-  animation: fadeIn .6s ease forwards;
-}
-
-/* ========================= */
-/*          FILTERS          */
-/* ========================= */
-
-.filters {
-  padding: 0 20px 20px;
-  position: sticky;
-  top: 90px;
-  background: #fff;
-  z-index: 18;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.04);
-}
-
-.filter-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
-}
-
-select,
-input[type="number"],
-#searchInput {
-  background: #fff;
-  border: 1px solid #eaeaea;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 15px;
-  transition: 0.2s;
-}
-
-select:focus,
-input:focus,
-#searchInput:focus {
-  border-color: var(--primary);
-}
-
-/* ========================= */
 /*          CATALOG          */
 /* ========================= */
 
@@ -254,6 +202,7 @@ input:focus,
   font-weight: 700;
   color: var(--primary);
 }
+
 /* ========================= */
 /*        PRODUCT MODAL      */
 /* ========================= */
@@ -292,34 +241,33 @@ input:focus,
 }
 
 /* ========================= */
-/*         GALLERY           */
+/*         GALLERY (NEW)     */
 /* ========================= */
 
 .carousel {
   width: 100%;
-  height: 360px;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-  scroll-snap-type: x mandatory;
+  height: 300px;
+  background: #f7f7f7;
   display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
 }
 
-.carousel::-webkit-scrollbar { display: none; }
+.carousel::-webkit-scrollbar {
+  display: none;
+}
 
-/* ⭐ ВСЕ фото одинаковые — как у конкурента */
 .carousel img {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  object-fit: cover;        /* 🔥 ключ */
-  object-position: center;  /* 🔥 ключ */
+  object-fit: contain;
+  object-position: center;
   scroll-snap-align: center;
-  user-select: none;
-  pointer-events: none;
+  padding: 10px;
+  background: #f7f7f7;
 }
-
 /* ========================= */
 /*        THUMB STRIP        */
 /* ========================= */
@@ -538,6 +486,7 @@ input:focus,
   font-size: 20px;
   font-weight: 700;
 }
+
 /* ========================= */
 /*       FLY ANIMATION       */
 /* ========================= */
@@ -575,7 +524,7 @@ input:focus,
   }
 
   .carousel {
-    height: 300px;
+    height: 260px;
   }
 }
 
@@ -590,47 +539,9 @@ input:focus,
   }
 
   .carousel {
-    height: 260px;
+    height: 240px;
   }
 }
-
-/* ========================= */
-/*     PROFILE MODAL (NEW)   */
-/* ========================= */
-
-#profileModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-  z-index: 99999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 40px;
-}
-
-#profileModal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.profile-modal {
-  width: 100%;
-  max-width: 480px;
-  background: var(--bg);
-  border-radius: 22px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
-  overflow: hidden;
-  animation: fadeInProfile .35s ease forwards;
-}
-
 @keyframes fadeInProfile {
   from { transform: translateY(20px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
