@@ -15,7 +15,6 @@ const state = {
   orders: JSON.parse(localStorage.getItem('orders') || '[]'),
   postponed: JSON.parse(localStorage.getItem('postponed') || '[]'),
 
-  // бронь размеров
   reserved: JSON.parse(localStorage.getItem('reserved') || '[]'),
 
   view: 'catalog'
@@ -45,49 +44,50 @@ const els = {
   mysteryPrice: document.getElementById('mysteryPrice'),
   mysteryOk: document.getElementById('mysteryOk'),
 
+  /* CATALOG HEADER */
+  profileAvatarHeader: document.getElementById('profileAvatar'),
   cartBtn: document.getElementById('cartBtn'),
+
+  /* PRODUCT MODAL */
+  productModal: document.getElementById('productModal'),
+  carousel: document.getElementById('carousel'),
+  thumbStrip: document.getElementById('thumbStrip'),
+
+  modalBrand: document.getElementById('modalBrand'),
+  modalStockInline: document.getElementById('modalStockInline'),
+  modalTitle: document.getElementById('modalTitle'),
+  modalPrice: document.getElementById('modalPrice'),
+  modalMaterials: document.getElementById('modalMaterials'),
+  modalSizes: document.getElementById('modalSizes'),
+  modalQty: document.getElementById('modalQty'),
+  addToCartBtn: document.getElementById('addToCartBtn'),
+  reserveBtn: document.getElementById('reserveBtn'),
+
+  /* PRODUCT MODAL HEADER */
+  profileAvatarModal: document.getElementById('profileAvatarModal'),
+  cartBtnModal: document.getElementById('cartBtnModal'),
+
+  /* OLD AVAILABILITY */
+  availabilityBlock: document.getElementById('availabilityBlock'),
+  stockCount: document.getElementById('stockCount'),
+
+  browserBackBtn: document.getElementById('browserBackBtn'),
+
+  /* CART */
   cartDrawer: document.getElementById('cartDrawer'),
   closeCart: document.getElementById('closeCart'),
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
   checkoutBtn: document.getElementById('checkoutBtn'),
 
-  productModal: document.getElementById('productModal'),
-  carousel: document.getElementById('carousel'),
-  thumbStrip: document.getElementById('thumbStrip'),
-
-  modalTitle: document.getElementById('modalTitle'),
-  modalPrice: document.getElementById('modalPrice'),
-  modalDesc: document.getElementById('modalDesc'),
-  modalSizes: document.getElementById('modalSizes'),
-  modalQty: document.getElementById('modalQty'),
-  addToCartBtn: document.getElementById('addToCartBtn'),
-
-  // OLD AVAILABILITY BLOCK
-  availabilityBlock: document.getElementById('availabilityBlock'),
-  stockCount: document.getElementById('stockCount'),
-  reserveBtn: document.getElementById('reserveBtn'),
-
-  browserBackBtn: document.getElementById('browserBackBtn'),
-
+  /* PROFILE */
   profileModal: document.getElementById('profileModal'),
-
-  profileAvatarHeader: document.getElementById('profileAvatar'),
   profileAvatarProfile: document.getElementById('profileAvatarProfile'),
   profileName: document.getElementById('profileName'),
   profileUsername: document.getElementById('profileUsername'),
-
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
-  profilePostponed: document.getElementById('profilePostponed'),
-
-  /* ========================= */
-  /*   NEW PREMIUM CARD FIELDS */
-  /* ========================= */
-
-  modalBrand: document.getElementById('modalBrand'),
-  modalStockInline: document.getElementById('modalStockInline'),
-  modalMaterials: document.getElementById('modalMaterials')
+  profilePostponed: document.getElementById('profilePostponed')
 };
 
 /* ========================= */
@@ -141,6 +141,10 @@ function initProfileFromTelegram() {
     els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
     els.profileAvatarHeader.style.backgroundSize = 'cover';
     els.profileAvatarHeader.style.backgroundPosition = 'center';
+
+    els.profileAvatarModal.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarModal.style.backgroundSize = 'cover';
+    els.profileAvatarModal.style.backgroundPosition = 'center';
 
     els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
     els.profileAvatarProfile.style.backgroundSize = 'cover';
@@ -416,13 +420,13 @@ function openProductModal(p) {
   }
 
   /* ========================= */
-  /*   NEW PREMIUM CARD FIELDS */
+  /*   PREMIUM CARD FIELDS     */
   /* ========================= */
 
   /* BRAND */
   els.modalBrand.textContent = p.brand || '';
 
-  /* STOCK INLINE (total pairs) */
+  /* STOCK INLINE */
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
 
@@ -432,7 +436,7 @@ function openProductModal(p) {
   /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
 
-  /* MATERIALS (expandable object A2) */
+  /* MATERIALS (A2 expandable object) */
   if (p.materials && typeof p.materials === 'object') {
     els.modalMaterials.innerHTML = Object.entries(p.materials)
       .map(([key, value]) => `${beautifyMaterialKey(key)}: ${value}`)
@@ -441,13 +445,13 @@ function openProductModal(p) {
     els.modalMaterials.innerHTML = '';
   }
 
-  /* DESCRIPTION */
-  els.modalDesc.textContent = p.description || '';
+  /* DESCRIPTION (optional legacy) */
+  // els.modalDesc.textContent = p.description || '';
 
-  /* QTY RESET */
+  /* RESET QTY */
   els.modalQty.value = 1;
 
-  /* OLD AVAILABILITY BLOCK RESET */
+  /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
 
   /* ========================= */
@@ -705,11 +709,12 @@ function cartTotal() {
 }
 
 function formatPrice(v) {
-  return `${v} ₽`;
+  return `${v} BYN`;
 }
 
 function updateCartBadge() {
   els.cartBtn.textContent = formatPrice(cartTotal());
+  els.cartBtnModal.textContent = formatPrice(cartTotal());
 }
 
 /* ========================= */
@@ -1099,10 +1104,18 @@ function attachEvents() {
   els.mysteryOk.addEventListener('click', closeMysteryModal);
 
   els.cartBtn.addEventListener('click', openCart);
+  els.cartBtnModal.addEventListener('click', openCart);
   els.closeCart.addEventListener('click', closeCart);
   els.checkoutBtn.addEventListener('click', checkout);
 
   els.profileAvatarHeader.addEventListener('click', () => {
+    openProfileModal();
+    renderProfileSections();
+    renderProfileOrders();
+    renderProfilePostponed();
+  });
+
+  els.profileAvatarModal.addEventListener('click', () => {
     openProfileModal();
     renderProfileSections();
     renderProfileOrders();
