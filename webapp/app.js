@@ -64,10 +64,6 @@ const els = {
   profileAvatarModal: document.getElementById('profileAvatarModal'),
   cartBtnModal: document.getElementById('cartBtnModal'),
 
-  /* OPTIONAL OLD AVAILABILITY (SAFE IF NULL) */
-  availabilityBlock: document.getElementById('availabilityBlock'),
-  stockCount: document.getElementById('stockCount'),
-
   browserBackBtn: document.getElementById('browserBackBtn'),
 
   /* CART */
@@ -136,17 +132,16 @@ function initProfileFromTelegram() {
   els.profileUsername.textContent = user.username ? '@' + user.username : '';
 
   if (user.photo_url) {
-    els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
-    els.profileAvatarHeader.style.backgroundSize = 'cover';
-    els.profileAvatarHeader.style.backgroundPosition = 'center';
+    const url = `url(${user.photo_url})`;
 
-    els.profileAvatarModal.style.backgroundImage = `url(${user.photo_url})`;
-    els.profileAvatarModal.style.backgroundSize = 'cover';
-    els.profileAvatarModal.style.backgroundPosition = 'center';
+    els.profileAvatarHeader.style.backgroundImage = url;
+    els.profileAvatarModal.style.backgroundImage = url;
+    els.profileAvatarProfile.style.backgroundImage = url;
 
-    els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
-    els.profileAvatarProfile.style.backgroundSize = 'cover';
-    els.profileAvatarProfile.style.backgroundPosition = 'center';
+    [els.profileAvatarHeader, els.profileAvatarModal, els.profileAvatarProfile].forEach(el => {
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+    });
   }
 }
 
@@ -169,6 +164,7 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
+
 /* ========================= */
 /*       LOAD PRODUCTS       */
 /* ========================= */
@@ -301,6 +297,7 @@ function cardNode(p) {
     else openProductModal(p);
   });
 
+  /* Premium hover tilt */
   node.addEventListener('mousemove', (e) => {
     const rect = node.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
@@ -317,7 +314,6 @@ function cardNode(p) {
 
   return node;
 }
-
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -352,13 +348,9 @@ function updateAvailabilityBlock(p, size) {
   }
 
   const sizeObj = (p.sizes || []).find(x => x.size === size);
-  if (!sizeObj) {
-    els.stockCount.textContent = '—';
-    return;
-  }
-
-  els.stockCount.textContent = sizeObj.stock;
+  els.stockCount.textContent = sizeObj ? sizeObj.stock : '—';
 }
+
 /* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
@@ -381,7 +373,6 @@ function openProductModal(p) {
     img.src = src;
     img.alt = p.title;
     carousel.appendChild(img);
-    observeSections();
   });
 
   /* --- THUMBNAILS --- */
@@ -394,26 +385,61 @@ function openProductModal(p) {
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
+      highlightActivePhoto(i);
     });
 
     thumbStrip.appendChild(t);
   });
 
   const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
+  const photos = Array.from(carousel.querySelectorAll('img'));
 
-  /* --- SCROLL SYNC --- */
+  /* ========================= */
+  /*       SCROLL SYNC         */
+  /* ========================= */
+
   carousel.scrollLeft = 0;
 
   carousel.onscroll = () => {
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
+
     updateThumbs(safeIndex);
+    highlightActivePhoto(safeIndex);
   };
 
   function updateThumbs(i) {
-    thumbs.forEach((th, idx) => {
-      th.classList.toggle('active', idx === i);
+    thumbs.forEach((th, idx) => th.classList.toggle('active', idx === i));
+  }
+
+  function highlightActivePhoto(i) {
+    photos.forEach((ph, idx) =>
+      ph.classList.toggle('active-photo', idx === i)
+    );
+  }
+
+  /* ========================= */
+  /*         PARALLAX          */
+  /* ========================= */
+
+  function initParallax() {
+    const container = document.querySelector('.modal-images');
+    if (!container) return;
+
+    const img = container.querySelector('img');
+    if (!img) return;
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const y = e.clientY - rect.top;
+      const percent = (y / rect.height) - 0.5;
+      const offset = percent * 12;
+      img.style.transform = `translateY(${offset}px)`;
+    });
+
+    container.addEventListener('mouseleave', () => {
+      img.style.transform = `translateY(0px)`;
     });
   }
 
@@ -421,32 +447,28 @@ function openProductModal(p) {
   /*   PREMIUM CARD FIELDS     */
   /* ========================= */
 
-  /* BRAND */
   els.modalBrand.textContent = p.brand || '';
 
-  /* STOCK INLINE */
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
 
-  /* MODEL */
   els.modalTitle.textContent = p.title;
-
-  /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
 
-  /* MATERIALS (A2 expandable object) */
- if (p.materials && typeof p.materials === 'object') {
-  els.modalMaterials.innerHTML = Object.entries(p.materials)
-    .map(([key, value]) =>
-      `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
-    )
-    .join('<br>');
-} else {
-  els.modalMaterials.innerHTML = '';
-}
+  /* MATERIALS — пакет №2 (построчно + задержки) */
+  if (p.materials && typeof p.materials === 'object') {
+    els.modalMaterials.innerHTML = Object.entries(p.materials)
+      .map(([key, value], i) => `
+        <div class="material-row line" style="animation-delay:${i * 70}ms">
+          <span class="key">${beautifyMaterialKey(key)}</span>
+          <span class="value">${value}</span>
+        </div>
+      `)
+      .join('');
+  } else {
+    els.modalMaterials.innerHTML = '';
+  }
 
-
-  /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
 
   /* ========================= */
@@ -454,7 +476,7 @@ function openProductModal(p) {
   /* ========================= */
 
   els.modalSizes.innerHTML = '';
-  (p.sizes || []).forEach(obj => {
+  (p.sizes || []).forEach((obj, i) => {
     const b = document.createElement('button');
     b.className = 'size';
     b.textContent = obj.size;
@@ -463,6 +485,11 @@ function openProductModal(p) {
       b.disabled = true;
       b.classList.add('disabled');
     }
+
+    /* пакет №2 — появление по одному */
+    b.style.opacity = 0;
+    b.style.animation = `sizePop .45s ease forwards`;
+    b.style.animationDelay = `${i * 60}ms`;
 
     b.addEventListener('click', () => {
       if (obj.stock <= 0) return;
@@ -484,6 +511,17 @@ function openProductModal(p) {
   });
 
   /* ========================= */
+  /*       FADE ON SCROLL      */
+  /* ========================= */
+
+  const body = document.querySelector('.modal-body');
+  body.addEventListener('scroll', () => {
+    const fade = Math.min(body.scrollTop / 60, 1);
+    els.modalTitle.style.opacity = 1 - fade;
+    els.modalPrice.style.opacity = 1 - fade;
+  });
+
+  /* ========================= */
   /*        OPEN MODAL         */
   /* ========================= */
 
@@ -499,7 +537,7 @@ function openProductModal(p) {
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
-    const qty = 1; // премиальная карточка — всегда 1 пара
+    const qty = 1;
 
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
@@ -551,45 +589,14 @@ function openProductModal(p) {
       openCart();
     };
   }
+
+  /* ========================= */
+  /*   INIT PARALLAX + OBS     */
+  /* ========================= */
+
+  initParallax();
+  observeSections(); // теперь вызывается ОДИН раз
 }
-
-/* ========================= */
-/*   HELPERS FOR MATERIALS   */
-/* ========================= */
-
-function beautifyMaterialKey(key) {
-  const map = {
-    upper: 'Верх',
-    sole: 'Подошва',
-    midsole: 'Промежуточная подошва',
-    lining: 'Подкладка',
-    weight: 'Вес'
-  };
-  return map[key] || key.charAt(0).toUpperCase() + key.slice(1);
-}
-
-function pluralPairs(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'пара';
-  if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
-  return 'пар';
-}
-/* ========================= */
-/*    CLOSE PRODUCT MODAL    */
-/* ========================= */
-
-function closeProductModal() {
-  els.productModal.classList.remove('open');
-
-  setTimeout(() => {
-    els.productModal.classList.add('hidden');
-  }, 220);
-
-  if (tg) {
-    tg.BackButton.hide();
-    tg.BackButton.onClick(() => {});
-  }
-}
-
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -890,7 +897,6 @@ async function checkout() {
     });
   }
 }
-
 /* ========================= */
 /*   STOCK SAVE / RESTORE    */
 /* ========================= */
@@ -978,6 +984,10 @@ function cleanupPostponed() {
     savePostponed();
   }
 }
+
+/* ========================= */
+/*       RIPPLE EFFECT       */
+/* ========================= */
 
 function addRippleEffect(button, event) {
   if (!button) return;
@@ -1104,6 +1114,30 @@ function closeProfileModal() {
 }
 
 /* ========================= */
+/*     OBSERVE SECTIONS      */
+/* ========================= */
+
+let sectionsObserver = null;
+
+function observeSections() {
+  if (sectionsObserver) {
+    sectionsObserver.disconnect();
+  }
+
+  const sections = document.querySelectorAll('.modal-info section');
+
+  sectionsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(s => sectionsObserver.observe(s));
+}
+
+/* ========================= */
 /*       ATTACH EVENTS       */
 /* ========================= */
 
@@ -1158,19 +1192,6 @@ function attachEvents() {
       closeProfileModal();
     }
   });
-}
-function observeSections() {
-  const sections = document.querySelectorAll('.modal-info section');
-
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.2 });
-
-  sections.forEach(s => obs.observe(s));
 }
 
 /* ========================= */
