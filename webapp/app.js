@@ -435,13 +435,16 @@ function openProductModal(p) {
   els.modalPrice.textContent = formatPrice(p.price);
 
   /* MATERIALS (A2 expandable object) */
-  if (p.materials && typeof p.materials === 'object') {
-    els.modalMaterials.innerHTML = Object.entries(p.materials)
-      .map(([key, value]) => `${beautifyMaterialKey(key)}: ${value}`)
-      .join('<br>');
-  } else {
-    els.modalMaterials.innerHTML = '';
-  }
+ if (p.materials && typeof p.materials === 'object') {
+  els.modalMaterials.innerHTML = Object.entries(p.materials)
+    .map(([key, value]) =>
+      `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
+    )
+    .join('<br>');
+} else {
+  els.modalMaterials.innerHTML = '';
+}
+
 
   /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
