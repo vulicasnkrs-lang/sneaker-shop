@@ -25,50 +25,54 @@
         </div>
       </header>
 
-      <!-- FULLSCREEN GALLERY -->
-      <div class="modal-images">
-        <div class="carousel" id="carousel"></div>
+      <!-- SCROLLABLE BODY -->
+      <div class="modal-body">
+
+        <!-- FULLSCREEN GALLERY -->
+        <div class="modal-images">
+          <div class="carousel" id="carousel"></div>
+        </div>
+
+        <!-- THUMBNAILS -->
+        <div class="thumb-strip" id="thumbStrip"></div>
+
+        <!-- PRODUCT INFO (NEW PREMIUM STRUCTURE) -->
+        <div class="modal-info">
+          <section class="modal-section modal-main">
+
+            <!-- BRAND + STOCK INLINE -->
+            <div class="brand-row">
+              <span id="modalBrand" class="brand-small"></span>
+              <span class="dot">·</span>
+              <span id="modalStockInline" class="stock-inline"></span>
+            </div>
+
+            <!-- MODEL -->
+            <h2 id="modalTitle" class="modal-title"></h2>
+
+            <!-- PRICE -->
+            <div id="modalPrice" class="modal-price"></div>
+
+            <!-- MATERIALS -->
+            <div id="modalMaterials" class="materials-block"></div>
+
+            <!-- SIZES -->
+            <div class="sizes-label">Размеры:</div>
+            <div id="modalSizes" class="modal-sizes"></div>
+
+            <!-- DELIVERY -->
+            <div class="delivery-inline">
+              Доставка по РБ 2–3 дня • Возврат 14 дней
+            </div>
+
+          </section>
+        </div>
       </div>
 
-      <!-- THUMBNAILS -->
-      <div class="thumb-strip" id="thumbStrip"></div>
-
-      <!-- PRODUCT INFO (NEW PREMIUM STRUCTURE) -->
-      <div class="modal-info">
-        <section class="modal-section modal-main">
-
-          <!-- BRAND + STOCK INLINE -->
-          <div class="brand-row">
-            <span id="modalBrand" class="brand-small"></span>
-            <span class="dot">·</span>
-            <span id="modalStockInline" class="stock-inline"></span>
-          </div>
-
-          <!-- MODEL -->
-          <h2 id="modalTitle" class="modal-title"></h2>
-
-          <!-- PRICE -->
-          <div id="modalPrice" class="modal-price"></div>
-
-          <!-- MATERIALS -->
-          <div id="modalMaterials" class="materials-block"></div>
-
-          <!-- SIZES -->
-          <div class="sizes-label">Размеры:</div>
-          <div id="modalSizes" class="modal-sizes"></div>
-
-          <!-- DELIVERY -->
-          <div class="delivery-inline">
-            Доставка по РБ 2–3 дня • Возврат 14 дней
-          </div>
-
-          <!-- ACTION BUTTONS -->
-          <div class="modal-actions-row">
-            <button id="addToCartBtn" class="primary modal-cta">В корзину</button>
-            <button id="reserveBtn" class="secondary reserve-btn">Забронировать</button>
-          </div>
-
-        </section>
+      <!-- FIXED ACTION BUTTONS -->
+      <div class="modal-actions-fixed">
+        <button id="addToCartBtn" class="primary modal-cta">В корзину</button>
+        <button id="reserveBtn" class="secondary reserve-btn">Забронировать</button>
       </div>
 
     </div>
