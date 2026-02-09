@@ -973,6 +973,22 @@ function pluralPairs(n) {
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'пары';
   return 'пар';
 }
+function beautifyMaterialKey(key) {
+  if (!key) return '';
+
+  const map = {
+    upper: 'Верх',
+    lining: 'Подкладка',
+    sole: 'Подошва',
+    midsole: 'Промежуточная подошва',
+    insole: 'Стелька',
+    laces: 'Шнурки',
+    material: 'Материал',
+    composition: 'Состав'
+  };
+
+  return map[key.toLowerCase()] || key;
+}
 
 function saveOrders() {
   localStorage.setItem('orders', JSON.stringify(state.orders));
