@@ -381,6 +381,7 @@ function openProductModal(p) {
     img.src = src;
     img.alt = p.title;
     carousel.appendChild(img);
+    observeSections();
   });
 
   /* --- THUMBNAILS --- */
@@ -1154,6 +1155,19 @@ function attachEvents() {
       closeProfileModal();
     }
   });
+}
+function observeSections() {
+  const sections = document.querySelectorAll('.modal-info section');
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(s => obs.observe(s));
 }
 
 /* ========================= */
