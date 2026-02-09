@@ -1004,3 +1004,235 @@ button.secondary {
   background: #fff;
   padding: 12px; /* ещё воздух */
 }
+/* ========================================================= */
+/*                    GALLERY (REAL PHOTO)                   */
+/* ========================================================= */
+
+.modal-images {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+#carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+#carousel::-webkit-scrollbar { display: none; }
+
+#carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  scroll-snap-align: center;
+  background: #fff;
+  padding: 12px;
+}
+
+/* THUMBNAILS */
+.thumb-strip {
+  padding: 16px 16px 20px;
+  gap: 10px;
+}
+
+.thumb-strip .thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eee;
+  opacity: 0.7;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.thumb-strip .thumb.active {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ========================================================= */
+/*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
+/* ========================================================= */
+
+.modal-info {
+  padding: 34px 22px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.modal-info section:not(:first-child) {
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  padding-top: 28px;
+}
+
+/* BRAND */
+.brand-row {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #8d8d8d;
+  opacity: 0.85;
+  margin-bottom: 2px;
+}
+
+/* TITLE */
+.modal-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.45px;
+  margin: 0 0 14px;
+  color: #111;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: titleFade .55s ease forwards;
+  animation-delay: .05s;
+}
+
+@keyframes titleFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* PRICE */
+.modal-price {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: #111;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: priceFade .55s ease forwards;
+  animation-delay: .12s;
+}
+
+@keyframes priceFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* MATERIALS */
+.materials-block {
+  font-size: 15px;
+  line-height: 1.68;
+  color: #555;
+  letter-spacing: 0.012em;
+  display: grid;
+  gap: 8px;
+  padding-left: 2px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: materialsFade .55s ease forwards;
+  animation-delay: .18s;
+}
+
+@keyframes materialsFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.materials-block::before {
+  content: "Details";
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b6b6b6;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* SIZES */
+.sizes-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.025em;
+  margin-bottom: 12px;
+}
+
+.modal-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: sizesFade .55s ease forwards;
+  animation-delay: .26s;
+}
+
+@keyframes sizesFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-sizes .size {
+  height: 50px;
+  border-radius: 14px;
+  background: #f5f5f5;
+  color: #111;
+  border: 1px solid #e3e3e3;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all .18s ease;
+}
+
+.modal-sizes .size:hover:not(.disabled) {
+  background: #ebebeb;
+}
+
+.modal-sizes .size.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+/* DELIVERY */
+.delivery-inline {
+  font-size: 13px;
+  color: #7a7a7a;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  padding: 12px 16px;
+  background: #f8f8f8;
+  border-radius: 14px;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: deliveryFade .55s ease forwards;
+  animation-delay: .34s;
+}
+
+@keyframes deliveryFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================================= */
+/*                FIXED BUTTONS — BOUTIQUE                   */
+/* ========================================================= */
+
+.modal-actions-fixed {
+  padding: 22px 22px 32px;
+  background: #fff;
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-actions-fixed button {
+  height: 54px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
