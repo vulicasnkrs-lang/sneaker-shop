@@ -870,3 +870,105 @@ html, body {
   font-size: 15px;
   padding: 12px 18px;
 }
+/* ========================================================= */
+/*        PREMIUM PRODUCT MODAL — LIGHT THEME (WHITE)        */
+/* ========================================================= */
+
+/* BACKDROP */
+#productModal {
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+}
+
+/* MODAL CONTAINER */
+.modal-content.modal-product {
+  background: #fff;
+  color: #111;
+}
+
+/* HEADER */
+.modal-inner-header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+/* SCROLLABLE BODY */
+.modal-body {
+  background: #fff;
+}
+
+/* GALLERY */
+.modal-images {
+  background: #fff;
+}
+
+#carousel img {
+  background: #fff;
+}
+
+/* THUMBNAILS */
+.thumb-strip {
+  background: #fff;
+}
+
+.thumb-strip .thumb {
+  opacity: 0.7;
+}
+
+.thumb-strip .thumb.active {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* PRODUCT INFO */
+.modal-info {
+  background: #fff;
+}
+
+.brand-row {
+  color: #7a7a7a;
+}
+
+.modal-title {
+  color: #111;
+}
+
+.modal-price {
+  color: #111;
+}
+
+.materials-block {
+  color: #555;
+}
+
+/* SIZES */
+.modal-sizes .size {
+  background: #f3f3f3;
+  color: #111;
+}
+
+.modal-sizes .size.active {
+  background: #111;
+  color: #fff;
+}
+
+/* DELIVERY */
+.delivery-inline {
+  color: #7a7a7a;
+}
+
+/* FIXED ACTION BUTTONS */
+.modal-actions-fixed {
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+button.primary {
+  background: #111;
+  color: #fff;
+}
+
+button.secondary {
+  background: #f3f3f3;
+  color: #111;
+}
