@@ -1236,3 +1236,17 @@ button.secondary {
   font-weight: 600;
   letter-spacing: -0.2px;
 }
+/* ===== FIX: make product modal scrollable ===== */
+
+.modal-content.modal-product {
+  height: 100vh;              /* модалка занимает весь экран */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;           /* запрещаем скролл контейнера */
+}
+
+.modal-body {
+  flex: 1;                    /* занимает всё оставшееся пространство */
+  overflow-y: auto;           /* ВАЖНО: скроллим только контент */
+  -webkit-overflow-scrolling: touch;
+}
