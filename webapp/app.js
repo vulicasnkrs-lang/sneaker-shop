@@ -64,6 +64,10 @@ const els = {
   profileAvatarModal: document.getElementById('profileAvatarModal'),
   cartBtnModal: document.getElementById('cartBtnModal'),
 
+  /* OPTIONAL OLD AVAILABILITY (SAFE IF NULL) */
+  availabilityBlock: document.getElementById('availabilityBlock'),
+  stockCount: document.getElementById('stockCount'),
+
   browserBackBtn: document.getElementById('browserBackBtn'),
 
   /* CART */
@@ -116,6 +120,204 @@ async function init() {
     tg.MainButton.onClick(checkout);
   }
 }
+
+/* ========================= */
+/*   TELEGRAM PROFILE INIT   */
+/* ========================= */
+
+function initProfileFromTelegram() {
+  if (!tg?.initDataUnsafe?.user) return;
+
+  const user = tg.initDataUnsafe.user;
+
+  els.profileName.textContent =
+    [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Покупатель';
+
+  els.profileUsername.textContent = user.username ? '@' + user.username : '';
+
+  if (user.photo_url) {
+    els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarHeader.style.backgroundSize = 'cover';
+    els.profileAvatarHeader.style.backgroundPosition = 'center';
+
+    els.profileAvatarModal.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarModal.style.backgroundSize = 'cover';
+    els.profileAvatarModal.style.backgroundPosition = 'center';
+
+    els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarProfile.style.backgroundSize = 'cover';
+    els.profileAvatarProfile.style.backgroundPosition = 'center';
+  }
+}
+
+/* ========================= */
+/*         SKELETONS         */
+/* ========================= */
+
+function renderSkeletons() {
+  els.catalog.innerHTML = '';
+  for (let i = 0; i < 8; i++) {
+    const sk = document.createElement('div');
+    sk.className = 'card skeleton';
+    sk.innerHTML = `
+      <div class="card-image skeleton"></div>
+      <div class="card-info">
+        <div class="skeleton" style="height:16px; width:70%;"></div>
+        <div class="skeleton" style="height:18px; width:40%; margin-top:6px;"></div>
+      </div>
+    `;
+    els.catalog.appendChild(sk);
+  }
+}
+/* ========================= */
+/*       LOAD PRODUCTS       */
+/* ========================= */
+
+async function loadProducts() {
+  try {
+    const res = await fetch('/products.json', { cache: 'no-store' });
+    state.products = await res.json();
+  } catch {
+    state.products = [];
+  }
+
+  state.products.forEach(p => {
+    state.brandSet.add(p.brand);
+    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
+  });
+
+  state.filtered = applyPostponedFilter([...state.products]);
+}
+
+/* ========================= */
+/*    POSTPONED FILTERING    */
+/* ========================= */
+
+function applyPostponedFilter(arr) {
+  const now = Date.now();
+  const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  const hiddenIds = active.map(x => x.id);
+  return arr.filter(p => !hiddenIds.includes(p.id));
+}
+
+/* ========================= */
+/*       BUILD FILTERS       */
+/* ========================= */
+
+function buildFilters() {
+  [...state.brandSet].sort().forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b;
+    opt.textContent = b;
+    els.brandFilter.appendChild(opt);
+  });
+
+  for (let s = 35; s <= 49; s++) {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = String(s);
+    els.sizeFilter.appendChild(opt);
+  }
+}
+
+/* ========================= */
+/*       APPLY FILTERS       */
+/* ========================= */
+
+function applyFilters() {
+  let arr = [...state.products];
+
+  const brand = els.brandFilter.value;
+  const size = els.sizeFilter.value;
+  const search = els.searchInput.value.trim().toLowerCase();
+  const sort = els.sortSelect.value;
+
+  if (brand) arr = arr.filter(p => p.brand === brand);
+
+  if (size) {
+    const s = Number(size);
+    arr = arr.filter(p =>
+      (p.sizes || []).some(obj => obj.size === s && obj.stock > 0)
+    );
+  }
+
+  if (search) arr = arr.filter(p => p.title.toLowerCase().includes(search));
+
+  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
+
+  state.filtered = applyPostponedFilter(arr);
+  renderCatalog();
+}
+
+/* ========================= */
+/*       RENDER CATALOG      */
+/* ========================= */
+
+function renderCatalog() {
+  els.catalog.innerHTML = '';
+
+  if (!state.filtered.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.style.padding = '20px';
+    empty.textContent = 'Ничего не найдено';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  state.filtered.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
+}
+
+/* ========================= */
+/*          CARD NODE        */
+/* ========================= */
+
+function cardNode(p) {
+  const node = document.createElement('div');
+  node.className = 'card';
+  node.dataset.id = p.id;
+
+  const cover = p.images?.[0] || '';
+  const price = formatPrice(p.price);
+
+  node.innerHTML = `
+    <div class="card-image">
+      <img src="${cover}" alt="${p.title}">
+    </div>
+
+    <div class="card-info">
+      <div class="card-title">${p.title}</div>
+      <div class="card-price">${price}</div>
+    </div>
+  `;
+
+  node.addEventListener('click', () => {
+    if (tg) openProductScreen(p.id);
+    else openProductModal(p);
+  });
+
+  node.addEventListener('mousemove', (e) => {
+    const rect = node.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const tiltX = (y / rect.height) * 3;
+    const tiltY = -(x / rect.width) * 3;
+    node.style.transform =
+      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+
+  node.addEventListener('mouseleave', () => {
+    node.style.transform = '';
+  });
+
+  return node;
+}
+
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -138,6 +340,26 @@ function openProductScreen(productId) {
 }
 
 /* ========================= */
+/*       AVAILABILITY        */
+/* ========================= */
+
+function updateAvailabilityBlock(p, size) {
+  if (!els.stockCount) return;
+
+  if (!size) {
+    els.stockCount.textContent = '—';
+    return;
+  }
+
+  const sizeObj = (p.sizes || []).find(x => x.size === size);
+  if (!sizeObj) {
+    els.stockCount.textContent = '—';
+    return;
+  }
+
+  els.stockCount.textContent = sizeObj.stock;
+}
+/* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
 
@@ -159,6 +381,7 @@ function openProductModal(p) {
     img.src = src;
     img.alt = p.title;
     carousel.appendChild(img);
+    observeSections();
   });
 
   /* --- THUMBNAILS --- */
@@ -171,96 +394,67 @@ function openProductModal(p) {
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-      highlightActivePhoto(i);
     });
 
     thumbStrip.appendChild(t);
   });
 
   const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
-  const photos = Array.from(carousel.querySelectorAll('img'));
 
-  /* ========================= */
-  /*       SCROLL SYNC         */
-  /* ========================= */
-
+  /* --- SCROLL SYNC --- */
   carousel.scrollLeft = 0;
 
   carousel.onscroll = () => {
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
-
     updateThumbs(safeIndex);
-    highlightActivePhoto(safeIndex);
   };
 
   function updateThumbs(i) {
-    thumbs.forEach((th, idx) => th.classList.toggle('active', idx === i));
-  }
-
-  function highlightActivePhoto(i) {
-    photos.forEach((ph, idx) =>
-      ph.classList.toggle('active-photo', idx === i)
-    );
-  }
-
-  /* ========================= */
-  /*         PARALLAX          */
-  /* ========================= */
-
-  function initParallax() {
-    const container = document.querySelector('.modal-images');
-    if (!container) return;
-
-    const img = container.querySelector('img');
-    if (!img) return;
-
-    container.addEventListener('mousemove', (e) => {
-      const rect = container.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const percent = (y / rect.height) - 0.5;
-      const offset = percent * 12;
-      img.style.transform = `translateY(${offset}px)`;
-    });
-
-    container.addEventListener('mouseleave', () => {
-      img.style.transform = `translateY(0px)`;
+    thumbs.forEach((th, idx) => {
+      th.classList.toggle('active', idx === i);
     });
   }
 
   /* ========================= */
   /*   PREMIUM CARD FIELDS     */
-/* ========================= */
+  /* ========================= */
 
+  /* BRAND */
   els.modalBrand.textContent = p.brand || '';
 
+  /* STOCK INLINE */
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
 
+  /* MODEL */
   els.modalTitle.textContent = p.title;
+
+  /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
 
-  /* MATERIALS — пакет №2 (построчно + задержки) */
-  if (p.materials && typeof p.materials === 'object') {
-    els.modalMaterials.innerHTML = Object.entries(p.materials)
-      .map(([key, value], i) => `
-        <div class="material-row line" style="animation-delay:${i * 70}ms">
-          <span class="key">${beautifyMaterialKey(key)}</span>
-          <span class="value">${value}</span>
-        </div>
-      `)
-      .join('');
-  } else {
-    els.modalMaterials.innerHTML = '';
-  }
+  /* MATERIALS (A2 expandable object) */
+ if (p.materials && typeof p.materials === 'object') {
+  els.modalMaterials.innerHTML = Object.entries(p.materials)
+    .map(([key, value]) =>
+      `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
+    )
+    .join('<br>');
+} else {
+  els.modalMaterials.innerHTML = '';
+}
+
+
+  /* RESET AVAILABILITY */
+  updateAvailabilityBlock(p, null);
 
   /* ========================= */
   /*          SIZES            */
-/* ========================= */
+  /* ========================= */
 
   els.modalSizes.innerHTML = '';
-  (p.sizes || []).forEach((obj, i) => {
+  (p.sizes || []).forEach(obj => {
     const b = document.createElement('button');
     b.className = 'size';
     b.textContent = obj.size;
@@ -269,10 +463,6 @@ function openProductModal(p) {
       b.disabled = true;
       b.classList.add('disabled');
     }
-
-    b.style.opacity = 0;
-    b.style.animation = `sizePop .45s ease forwards`;
-    b.style.animationDelay = `${i * 60}ms`;
 
     b.addEventListener('click', () => {
       if (obj.stock <= 0) return;
@@ -283,6 +473,8 @@ function openProductModal(p) {
         .forEach(x => x.classList.remove('active'));
       b.classList.add('active');
 
+      updateAvailabilityBlock(p, selectedSize);
+
       els.modalPrice.classList.remove('bump');
       void els.modalPrice.offsetWidth;
       els.modalPrice.classList.add('bump');
@@ -292,19 +484,8 @@ function openProductModal(p) {
   });
 
   /* ========================= */
-  /*       FADE ON SCROLL      */
-/* ========================= */
-
-  const body = document.querySelector('.modal-body');
-  body.addEventListener('scroll', () => {
-    const fade = Math.min(body.scrollTop / 60, 1);
-    els.modalTitle.style.opacity = 1 - fade;
-    els.modalPrice.style.opacity = 1 - fade;
-  });
-
-  /* ========================= */
   /*        OPEN MODAL         */
-/* ========================= */
+  /* ========================= */
 
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
@@ -313,12 +494,12 @@ function openProductModal(p) {
 
   /* ========================= */
   /*       ADD TO CART         */
-/* ========================= */
+  /* ========================= */
 
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
-    const qty = 1;
+    const qty = 1; // премиальная карточка — всегда 1 пара
 
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
@@ -336,7 +517,7 @@ function openProductModal(p) {
 
   /* ========================= */
   /*         RESERVE           */
-/* ========================= */
+  /* ========================= */
 
   if (els.reserveBtn) {
     els.reserveBtn.onclick = () => {
@@ -362,20 +543,53 @@ function openProductModal(p) {
       });
       localStorage.setItem('reserved', JSON.stringify(state.reserved));
 
+      updateAvailabilityBlock(p, selectedSize);
+
       addToCart(p, selectedSize, 1);
 
       closeProductModal();
       openCart();
     };
   }
+}
 
-  /* ========================= */
-  /*   INIT PARALLAX + OBS     */
+/* ========================= */
+/*   HELPERS FOR MATERIALS   */
 /* ========================= */
 
-  initParallax();
-  observeSections();
+function beautifyMaterialKey(key) {
+  const map = {
+    upper: 'Верх',
+    sole: 'Подошва',
+    midsole: 'Промежуточная подошва',
+    lining: 'Подкладка',
+    weight: 'Вес'
+  };
+  return map[key] || key.charAt(0).toUpperCase() + key.slice(1);
 }
+
+function pluralPairs(n) {
+  if (n % 10 === 1 && n % 100 !== 11) return 'пара';
+  if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
+  return 'пар';
+}
+/* ========================= */
+/*    CLOSE PRODUCT MODAL    */
+/* ========================= */
+
+function closeProductModal() {
+  els.productModal.classList.remove('open');
+
+  setTimeout(() => {
+    els.productModal.classList.add('hidden');
+  }, 220);
+
+  if (tg) {
+    tg.BackButton.hide();
+    tg.BackButton.onClick(() => {});
+  }
+}
+
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -686,8 +900,29 @@ function saveStock() {
   state.products.forEach(p => {
     stockMap[p.id] = (p.sizes || []).map(obj => ({
       size: obj.size,
-      stock:
-        /* ========================= */
+      stock: obj.stock
+    }));
+  });
+  localStorage.setItem('stockMap', JSON.stringify(stockMap));
+}
+
+function restoreStock() {
+  const raw = localStorage.getItem('stockMap');
+  if (!raw) return;
+
+  const stockMap = JSON.parse(raw);
+
+  state.products.forEach(p => {
+    if (!stockMap[p.id]) return;
+
+    (p.sizes || []).forEach(obj => {
+      const saved = stockMap[p.id].find(x => x.size === obj.size);
+      if (saved) obj.stock = saved.stock;
+    });
+  });
+}
+
+/* ========================= */
 /*     CLEANUP RESERVED      */
 /* ========================= */
 
@@ -725,32 +960,6 @@ function debounce(fn, ms) {
   };
 }
 
-function pluralPairs(n) {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-
-  if (mod10 === 1 && mod100 !== 11) return 'пара';
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'пары';
-  return 'пар';
-}
-
-function beautifyMaterialKey(key) {
-  if (!key) return '';
-
-  const map = {
-    upper: 'Верх',
-    lining: 'Подкладка',
-    sole: 'Подошва',
-    midsole: 'Промежуточная подошва',
-    insole: 'Стелька',
-    laces: 'Шнурки',
-    material: 'Материал',
-    composition: 'Состав'
-  };
-
-  return map[key.toLowerCase()] || key;
-}
-
 function saveOrders() {
   localStorage.setItem('orders', JSON.stringify(state.orders));
 }
@@ -769,10 +978,6 @@ function cleanupPostponed() {
     savePostponed();
   }
 }
-
-/* ========================= */
-/*       RIPPLE EFFECT       */
-/* ========================= */
 
 function addRippleEffect(button, event) {
   if (!button) return;
@@ -899,30 +1104,6 @@ function closeProfileModal() {
 }
 
 /* ========================= */
-/*     OBSERVE SECTIONS      */
-/* ========================= */
-
-let sectionsObserver = null;
-
-function observeSections() {
-  if (sectionsObserver) {
-    sectionsObserver.disconnect();
-  }
-
-  const sections = document.querySelectorAll('.modal-info section');
-
-  sectionsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.2 });
-
-  sections.forEach(s => sectionsObserver.observe(s));
-}
-
-/* ========================= */
 /*       ATTACH EVENTS       */
 /* ========================= */
 
@@ -977,6 +1158,19 @@ function attachEvents() {
       closeProfileModal();
     }
   });
+}
+function observeSections() {
+  const sections = document.querySelectorAll('.modal-info section');
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(s => obs.observe(s));
 }
 
 /* ========================= */
