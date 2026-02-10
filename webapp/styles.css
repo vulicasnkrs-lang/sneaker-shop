@@ -1725,3 +1725,79 @@ button.secondary:active {
 .modal-product.open {
   animation: modalReveal .45s cubic-bezier(.25,.1,.25,1);
 }
+/* ========================================================= */
+/*                PURE EDGE‑TO‑EDGE GALLERY (SSENSE)         */
+/* ========================================================= */
+
+/* Контейнер галереи — минимальный воздух */
+.modal-images {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  padding: 4px; /* минимальный воздух */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Лента */
+#carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0; /* убираем внутренние отступы */
+}
+
+#carousel::-webkit-scrollbar { display: none; }
+
+/* Фото — чистое, без теней, без рамок */
+#carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+  padding: 0; /* edge-to-edge */
+  border-radius: 0;
+  box-shadow: none !important;
+  opacity: 0.6;
+  transform: scale(0.99);
+  transition: transform .35s ease, opacity .35s ease;
+}
+
+/* Активное фото — лёгкий акцент */
+#carousel img.active {
+  opacity: 1;
+  transform: scale(1.01);
+}
+
+/* Неактивное фото — мягкое затухание */
+#carousel img.inactive {
+  opacity: 0.6;
+  transform: scale(0.99);
+}
+
+/* Тумбы — чистые, минималистичные */
+.thumb-strip {
+  padding: 12px 16px 18px;
+  gap: 10px;
+}
+
+.thumb-strip .thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eee;
+  opacity: 0.55;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.thumb-strip .thumb.active {
+  opacity: 1;
+  transform: scale(1.04);
+}
