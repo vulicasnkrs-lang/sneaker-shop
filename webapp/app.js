@@ -169,6 +169,155 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
+
+/* ========================= */
+/*       LOAD PRODUCTS       */
+/* ========================= */
+
+async function loadProducts() {
+  try {
+    const res = await fetch('/products.json', { cache: 'no-store' });
+    state.products = await res.json();
+  } catch {
+    state.products = [];
+  }
+
+  state.products.forEach(p => {
+    state.brandSet.add(p.brand);
+    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
+  });
+
+  state.filtered = applyPostponedFilter([...state.products]);
+}
+
+/* ========================= */
+/*    POSTPONED FILTERING    */
+/* ========================= */
+
+function applyPostponedFilter(arr) {
+  const now = Date.now();
+  const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  const hiddenIds = active.map(x => x.id);
+  return arr.filter(p => !hiddenIds.includes(p.id));
+}
+
+/* ========================= */
+/*       BUILD FILTERS       */
+/* ========================= */
+
+function buildFilters() {
+  [...state.brandSet].sort().forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b;
+    opt.textContent = b;
+    els.brandFilter.appendChild(opt);
+  });
+
+  for (let s = 35; s <= 49; s++) {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = String(s);
+    els.sizeFilter.appendChild(opt);
+  }
+}
+
+/* ========================= */
+/*       APPLY FILTERS       */
+/* ========================= */
+
+function applyFilters() {
+  let arr = [...state.products];
+
+  const brand = els.brandFilter.value;
+  const size = els.sizeFilter.value;
+  const search = els.searchInput.value.trim().toLowerCase();
+  const sort = els.sortSelect.value;
+
+  if (brand) arr = arr.filter(p => p.brand === brand);
+
+  if (size) {
+    const s = Number(size);
+    arr = arr.filter(p =>
+      (p.sizes || []).some(obj => obj.size === s && obj.stock > 0)
+    );
+  }
+
+  if (search) arr = arr.filter(p => p.title.toLowerCase().includes(search));
+
+  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
+
+  state.filtered = applyPostponedFilter(arr);
+  renderCatalog();
+}
+
+/* ========================= */
+/*       RENDER CATALOG      */
+/* ========================= */
+
+function renderCatalog() {
+  els.catalog.innerHTML = '';
+
+  if (!state.filtered.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.style.padding = '20px';
+    empty.textContent = 'Ничего не найдено';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  state.filtered.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
+}
+
+/* ========================= */
+/*          CARD NODE        */
+/* ========================= */
+
+function cardNode(p) {
+  const node = document.createElement('div');
+  node.className = 'card';
+  node.dataset.id = p.id;
+
+  const cover = p.images?.[0] || '';
+  const price = formatPrice(p.price);
+
+  node.innerHTML = `
+    <div class="card-image">
+      <img src="${cover}" alt="${p.title}">
+    </div>
+
+    <div class="card-info">
+      <div class="card-title">${p.title}</div>
+      <div class="card-price">${price}</div>
+    </div>
+  `;
+
+  node.addEventListener('click', () => {
+    if (tg) openProductScreen(p.id);
+    else openProductModal(p);
+  });
+
+  node.addEventListener('mousemove', (e) => {
+    const rect = node.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const tiltX = (y / rect.height) * 3;
+    const tiltY = -(x / rect.width) * 3;
+    node.style.transform =
+      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+
+  node.addEventListener('mouseleave', () => {
+    node.style.transform = '';
+  });
+
+  return node;
+}
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -227,9 +376,7 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* ========================================================= */
-  /*      🔥 Добавлено: функция активного фото в галерее       */
-  /* ========================================================= */
+  /* 🔥 функция активного фото в галерее */
   function setActiveImage(index) {
     const all = carousel.querySelectorAll('img');
     all.forEach((img, i) => {
@@ -247,7 +394,6 @@ function openProductModal(p) {
     observeSections();
   });
 
-  /* сразу активируем первое фото */
   requestAnimationFrame(() => setActiveImage(0));
 
   /* --- THUMBNAILS --- */
@@ -260,8 +406,6 @@ function openProductModal(p) {
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-
-      /* 🔥 добавлено */
       setActiveImage(i);
     });
 
@@ -277,10 +421,7 @@ function openProductModal(p) {
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
-
     updateThumbs(safeIndex);
-
-    /* 🔥 добавлено */
     setActiveImage(safeIndex);
   };
 
@@ -294,20 +435,14 @@ function openProductModal(p) {
   /*   PREMIUM CARD FIELDS     */
   /* ========================= */
 
-  /* BRAND */
   els.modalBrand.textContent = p.brand || '';
 
-  /* STOCK INLINE */
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
 
-  /* MODEL */
   els.modalTitle.textContent = p.title;
-
-  /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
 
-  /* MATERIALS (A2 expandable object) */
   if (p.materials && typeof p.materials === 'object') {
     els.modalMaterials.innerHTML = Object.entries(p.materials)
       .map(([key, value]) =>
@@ -318,7 +453,6 @@ function openProductModal(p) {
     els.modalMaterials.innerHTML = '';
   }
 
-  /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
 
   /* ========================= */
@@ -327,7 +461,6 @@ function openProductModal(p) {
 
   els.modalSizes.innerHTML = '';
 
-  /* 🔥 Добавлено: stagger-анимация */
   let delay = 0;
 
   (p.sizes || []).forEach(obj => {
@@ -340,7 +473,6 @@ function openProductModal(p) {
       b.classList.add('disabled');
     }
 
-    /* 🔥 stagger-анимация */
     b.style.opacity = 0;
     b.style.transform = 'translateY(6px)';
     b.style.animation = `fadeUp .35s ease forwards`;
