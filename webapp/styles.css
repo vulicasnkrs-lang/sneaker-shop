@@ -1347,3 +1347,49 @@ button.secondary:active {
   transform: scale(0.97);
   filter: brightness(0.92);
 }
+/* ========================================================= */
+/*                PART 5 — GALLERY & SIZES FX                */
+/* ========================================================= */
+
+/* ===== 1) Fade‑эффект активного фото ===== */
+
+#carousel img {
+  transition: opacity .35s ease, transform .35s ease;
+  opacity: 0.35;
+}
+
+#carousel img.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#carousel img.inactive {
+  opacity: 0.35;
+  transform: scale(0.96);
+}
+
+/* ===== 2) Плавное появление размеров (stagger) ===== */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 3) Плавное появление секций в модалке ===== */
+
+.modal-info section {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+
+.modal-info section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
