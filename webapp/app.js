@@ -385,6 +385,10 @@ function openProductModal(p) {
       img.classList.toggle('active', i === index);
       img.classList.toggle('inactive', i !== index);
     });
+    // PREMIUM STICKY PRICE
+const priceBlock = els.modalPrice.closest('section');
+priceBlock.classList.add('sticky-price');
+
   }
 
   /* --- GALLERY IMAGES --- */
