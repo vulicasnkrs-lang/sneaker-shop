@@ -1022,6 +1022,16 @@ button.secondary:active {
   .header-actions {
     gap: 6px;
   }
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
   .carousel,
   #carousel {
