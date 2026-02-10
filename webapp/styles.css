@@ -1801,3 +1801,174 @@ button.secondary:active {
   opacity: 1;
   transform: scale(1.04);
 }
+/* ========================================================= */
+/*                LUXURY EDITORIAL TYPOGRAPHY                */
+/* ========================================================= */
+
+.brand-row {
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8d8d8d !important;
+  opacity: 0.85;
+}
+
+.modal-title {
+  font-size: 30px !important;
+  font-weight: 600;
+  letter-spacing: -0.45px;
+  line-height: 1.12;
+  margin: 0 0 14px !important;
+  color: #111 !important;
+}
+
+.modal-price {
+  font-size: 28px !important;
+  font-weight: 700;
+  letter-spacing: -0.25px;
+  margin-bottom: 6px !important;
+  color: #111 !important;
+}
+
+.materials-block {
+  font-size: 15px !important;
+  line-height: 1.68;
+  color: #555 !important;
+  letter-spacing: 0.012em;
+}
+/* ========================================================= */
+/*                EDITORIAL SPACING RHYTHM                   */
+/* ========================================================= */
+
+.modal-info {
+  padding: 32px 22px 40px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 32px !important;
+}
+
+.modal-info section {
+  padding-top: 32px !important;
+  border-top: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.modal-info section:first-child {
+  padding-top: 0 !important;
+  border-top: none !important;
+}
+/* ========================================================= */
+/*                EDITORIAL REVEAL ANIMATION                 */
+/* ========================================================= */
+
+.modal-info section {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .45s cubic-bezier(.25,.1,.25,1),
+              transform .45s cubic-bezier(.25,.1,.25,1);
+}
+
+.modal-info section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* ========================================================= */
+/*                ULTRA PREMIUM SIZES                        */
+/* ========================================================= */
+
+.modal-sizes .size {
+  height: 50px !important;
+  border-radius: 14px !important;
+  background: #f7f7f7 !important;
+  border: 1px solid #e3e3e3 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  transition: all .22s cubic-bezier(.25,.1,.25,1) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.modal-sizes .size:hover:not(.disabled) {
+  background: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.modal-sizes .size.active {
+  background: #111 !important;
+  color: #fff !important;
+  border-color: #111 !important;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.22),
+    inset 0 0 0 2px #000 !important;
+  transform: translateY(-2px);
+}
+/* ========================================================= */
+/*                PREMIUM DELIVERY BLOCK                     */
+/* ========================================================= */
+
+.delivery-inline {
+  font-size: 14px !important;
+  color: #444 !important;
+  line-height: 1.55 !important;
+  padding: 16px 18px !important;
+  background: #fafafa !important;
+  border-radius: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+}
+
+.delivery-inline::before {
+  content: "🚚" !important;
+  font-size: 18px !important;
+  opacity: 0.7 !important;
+}
+/* ========================================================= */
+/*                PURE EDGE‑TO‑EDGE GALLERY                  */
+/* ========================================================= */
+
+.modal-images {
+  padding: 4px !important;
+  background: #fff !important;
+}
+
+#carousel img {
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
+  transform: scale(0.99) !important;
+}
+
+#carousel img.active {
+  opacity: 1 !important;
+  transform: scale(1.01) !important;
+}
+
+#carousel img.inactive {
+  opacity: 0.6 !important;
+  transform: scale(0.99) !important;
+}
+/* ========================================================= */
+/*                UNIFIED SHADOW SYSTEM                      */
+/* ========================================================= */
+
+.card {
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06) !important;
+}
+
+button.primary {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18) !important;
+}
+
+.modal-sizes .size:hover:not(.disabled) {
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08) !important;
+}
+button.primary:hover {
+  transform: translateY(-2px) !important;
+}
+
+button.primary:active {
+  transform: scale(0.97) !important;
+}
