@@ -203,108 +203,7 @@ html, body {
   color: var(--primary);
 }
 /* ========================= */
-/*        PRODUCT MODAL      */
-/* ========================= */
-
-#productModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-
-#productModal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.product-modal {
-  width: 100%;
-  max-width: 520px;
-  background: #fff;
-  border-radius: 22px 22px 0 0;
-  overflow: hidden;
-  animation: slideUp .35s ease forwards;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
-/* ========================= */
-/*         GALLERY (NEW)     */
-/* ========================= */
-
-.carousel {
-  width: 100%;
-  height: 300px;
-  background: #f7f7f7;
-  display: flex;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-}
-
-.carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel img {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  scroll-snap-align: center;
-  padding: 10px;
-  background: #f7f7f7;
-}
-
-/* ========================= */
-/*        THUMB STRIP        */
-/* ========================= */
-
-#thumbStrip {
-  display: flex;
-  gap: 8px;
-  padding: 12px 16px;
-  overflow-x: auto;
-}
-
-#thumbStrip::-webkit-scrollbar { display: none; }
-
-.thumb {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid transparent;
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: border .2s ease, transform .2s ease;
-}
-
-.thumb.active {
-  border-color: #111;
-  transform: scale(1.05);
-}
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ========================= */
-/*      PRODUCT CONTENT      */
+/*        PRODUCT CONTENT      */
 /* ========================= */
 
 .product-content {
@@ -486,6 +385,7 @@ html, body {
   font-size: 20px;
   font-weight: 700;
 }
+
 /* ========================= */
 /*       FLY ANIMATION       */
 /* ========================= */
@@ -639,7 +539,6 @@ html, body {
 .profile-modal .profile-section.active {
   display: block;
 }
-
 /* ========================= */
 /*      PROFILE ORDERS       */
 /* ========================= */
@@ -782,6 +681,7 @@ html, body {
 .safe-bottom {
   height: env(safe-area-inset-bottom);
 }
+
 /* ========================= */
 /*   PREMIUM PRODUCT CARD    */
 /* ========================= */
@@ -870,6 +770,7 @@ html, body {
   font-size: 15px;
   padding: 12px 18px;
 }
+
 /* ========================================================= */
 /*        PREMIUM PRODUCT MODAL — LIGHT THEME (WHITE)        */
 /* ========================================================= */
@@ -940,7 +841,6 @@ html, body {
 .materials-block {
   color: #555;
 }
-
 /* SIZES */
 .modal-sizes .size {
   background: #f3f3f3;
@@ -972,6 +872,7 @@ button.secondary {
   background: #f3f3f3;
   color: #111;
 }
+
 /* ===== PERFECT REAL-PHOTO GALLERY ===== */
 
 .modal-images {
@@ -1004,6 +905,7 @@ button.secondary {
   background: #fff;
   padding: 12px; /* ещё воздух */
 }
+
 /* ========================================================= */
 /*                    GALLERY (REAL PHOTO)                   */
 /* ========================================================= */
@@ -1236,6 +1138,7 @@ button.secondary {
   font-weight: 600;
   letter-spacing: -0.2px;
 }
+
 /* ===== FIX: make product modal scrollable ===== */
 
 .modal-content.modal-product {
@@ -1250,6 +1153,7 @@ button.secondary {
   overflow-y: auto;           /* ВАЖНО: скроллим только контент */
   -webkit-overflow-scrolling: touch;
 }
+
 /* ===== FIX: make gallery photo wider ===== */
 
 .modal-images {
@@ -1273,6 +1177,7 @@ button.secondary {
   /* ещё меньше воздуха */
   padding: 4px;
 }
+
 /* ===== 1) Мягкая тень под фото (бумажная карточка) ===== */
 
 .modal-images {
