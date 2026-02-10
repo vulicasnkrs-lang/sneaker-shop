@@ -518,6 +518,7 @@ priceBlock.classList.add('sticky-price');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
+requestAnimationFrame(() => observeSections());
 
   /* ========================= */
   /*       ADD TO CART         */
