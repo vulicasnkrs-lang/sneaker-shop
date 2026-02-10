@@ -169,7 +169,6 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
-
 /* ========================= */
 /*       LOAD PRODUCTS       */
 /* ========================= */
@@ -318,6 +317,7 @@ function cardNode(p) {
 
   return node;
 }
+
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -359,7 +359,6 @@ function updateAvailabilityBlock(p, size) {
 
   els.stockCount.textContent = sizeObj.stock;
 }
-
 /* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
@@ -376,15 +375,6 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* 🔥 функция активного фото в галерее */
-  function setActiveImage(index) {
-    const all = carousel.querySelectorAll('img');
-    all.forEach((img, i) => {
-      img.classList.toggle('active', i === index);
-      img.classList.toggle('inactive', i !== index);
-    });
-  }
-
   /* --- GALLERY IMAGES --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
@@ -393,8 +383,6 @@ function openProductModal(p) {
     carousel.appendChild(img);
     observeSections();
   });
-
-  requestAnimationFrame(() => setActiveImage(0));
 
   /* --- THUMBNAILS --- */
   imgs.forEach((src, i) => {
@@ -406,7 +394,6 @@ function openProductModal(p) {
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-      setActiveImage(i);
     });
 
     thumbStrip.appendChild(t);
@@ -422,7 +409,6 @@ function openProductModal(p) {
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
     updateThumbs(safeIndex);
-    setActiveImage(safeIndex);
   };
 
   function updateThumbs(i) {
@@ -435,24 +421,32 @@ function openProductModal(p) {
   /*   PREMIUM CARD FIELDS     */
   /* ========================= */
 
+  /* BRAND */
   els.modalBrand.textContent = p.brand || '';
 
+  /* STOCK INLINE */
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
 
+  /* MODEL */
   els.modalTitle.textContent = p.title;
+
+  /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
 
-  if (p.materials && typeof p.materials === 'object') {
-    els.modalMaterials.innerHTML = Object.entries(p.materials)
-      .map(([key, value]) =>
-        `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
-      )
-      .join('<br>');
-  } else {
-    els.modalMaterials.innerHTML = '';
-  }
+  /* MATERIALS (A2 expandable object) */
+ if (p.materials && typeof p.materials === 'object') {
+  els.modalMaterials.innerHTML = Object.entries(p.materials)
+    .map(([key, value]) =>
+      `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
+    )
+    .join('<br>');
+} else {
+  els.modalMaterials.innerHTML = '';
+}
 
+
+  /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
 
   /* ========================= */
@@ -460,9 +454,6 @@ function openProductModal(p) {
   /* ========================= */
 
   els.modalSizes.innerHTML = '';
-
-  let delay = 0;
-
   (p.sizes || []).forEach(obj => {
     const b = document.createElement('button');
     b.className = 'size';
@@ -472,12 +463,6 @@ function openProductModal(p) {
       b.disabled = true;
       b.classList.add('disabled');
     }
-
-    b.style.opacity = 0;
-    b.style.transform = 'translateY(6px)';
-    b.style.animation = `fadeUp .35s ease forwards`;
-    b.style.animationDelay = `${delay}ms`;
-    delay += 40;
 
     b.addEventListener('click', () => {
       if (obj.stock <= 0) return;
@@ -514,7 +499,7 @@ function openProductModal(p) {
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
-    const qty = 1;
+    const qty = 1; // премиальная карточка — всегда 1 пара
 
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
@@ -588,7 +573,6 @@ function pluralPairs(n) {
   if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
   return 'пар';
 }
-
 /* ========================= */
 /*    CLOSE PRODUCT MODAL    */
 /* ========================= */
@@ -605,6 +589,7 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
+
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -905,6 +890,7 @@ async function checkout() {
     });
   }
 }
+
 /* ========================= */
 /*   STOCK SAVE / RESTORE    */
 /* ========================= */
@@ -1173,7 +1159,6 @@ function attachEvents() {
     }
   });
 }
-
 function observeSections() {
   const sections = document.querySelectorAll('.modal-info section');
 
