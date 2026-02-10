@@ -1252,3 +1252,94 @@ button.secondary:active {
   transform: scale(0.97);
   filter: brightness(0.92);
 }
+/* ========================================================= */
+/*                PREMIUM GALLERY UPGRADE                    */
+/* ========================================================= */
+
+/* Плавное появление галереи */
+.modal-images,
+#carousel img {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity .35s ease, transform .45s ease;
+}
+
+#productModal.open .modal-images,
+#productModal.open #carousel img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Fade при смене фото */
+#carousel img.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#carousel img.inactive {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+/* Zoom‑in при свайпе */
+#carousel:active img {
+  transform: scale(1.04);
+}
+
+/* Hover‑tilt для thumbnails */
+.thumb:hover {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+/* ========================================================= */
+/*                EDITORIAL TYPOGRAPHY UPGRADE               */
+/* ========================================================= */
+
+.modal-info {
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+}
+
+.modal-title {
+  font-weight: 650;
+  letter-spacing: -0.4px;
+}
+
+.modal-price {
+  letter-spacing: -0.3px;
+}
+
+.brand-row {
+  opacity: 0.85;
+  letter-spacing: 0.08em;
+}
+
+/* ========================================================= */
+/*                PREMIUM SIZE BUTTONS UPGRADE               */
+/* ========================================================= */
+
+.modal-sizes .size {
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.modal-sizes .size:hover:not(.disabled) {
+  transform: translateY(-1px);
+  background: #eaeaea;
+}
+
+.modal-sizes .size:active:not(.disabled) {
+  transform: scale(0.96);
+}
+
+.modal-sizes .size.active {
+  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
+}
+
+/* stagger animation */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
