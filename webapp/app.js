@@ -131,16 +131,8 @@ function initProfileFromTelegram() {
 
   if (user.photo_url) {
     els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
-    els.profileAvatarHeader.style.backgroundSize = 'cover';
-    els.profileAvatarHeader.style.backgroundPosition = 'center';
-
     els.profileAvatarModal.style.backgroundImage = `url(${user.photo_url})`;
-    els.profileAvatarModal.style.backgroundSize = 'cover';
-    els.profileAvatarModal.style.backgroundPosition = 'center';
-
     els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
-    els.profileAvatarProfile.style.backgroundSize = 'cover';
-    els.profileAvatarProfile.style.backgroundPosition = 'center';
   }
 }
 
@@ -296,20 +288,6 @@ function cardNode(p) {
     else openProductModal(p);
   });
 
-  node.addEventListener('mousemove', (e) => {
-    const rect = node.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const tiltX = (y / rect.height) * 3;
-    const tiltY = -(x / rect.width) * 3;
-    node.style.transform =
-      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-  });
-
-  node.addEventListener('mouseleave', () => {
-    node.style.transform = '';
-  });
-
   return node;
 }
 /* ========================= */
@@ -379,11 +357,6 @@ function openProductModal(p) {
       img.classList.toggle('active', i === index);
       img.classList.toggle('inactive', i !== index);
     });
-
-    const priceBlock = els.modalPrice.closest('section');
-    if (priceBlock) {
-      priceBlock.classList.add('sticky-price');
-    }
   }
 
   /* --- GALLERY IMAGES --- */
@@ -394,7 +367,6 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  /* активируем первое фото */
   requestAnimationFrame(() => setActiveImage(0));
 
   /* --- THUMBNAILS --- */
@@ -1192,21 +1164,22 @@ function observeSections() {
 }
 
 /* ========================================================= */
-/*   SNAP RAIL SR‑B — MAGNETIC + ELASTIC SWIPE               */
+/*      SOFT MOMENTUM SWIPE — SSENSE STYLE                   */
 /* ========================================================= */
 
 (function() {
   const carousel = document.getElementById('carousel');
   if (!carousel) return;
 
-  let isDown = false;
+  let isDragging = false;
   let startX = 0;
-  let startScrollLeft = 0;
+  let scrollStart = 0;
+  let velocity = 0;
   let lastX = 0;
   let lastTime = 0;
-  let velocity = 0;
+  let momentumFrame = null;
 
-  function computeVelocity(x) {
+  function trackVelocity(x) {
     const now = performance.now();
     const dx = x - lastX;
     const dt = now - lastTime || 1;
@@ -1215,74 +1188,72 @@ function observeSections() {
     lastTime = now;
   }
 
+  /* DRAG START */
   carousel.addEventListener('touchstart', (e) => {
-    if (!e.touches || !e.touches.length) return;
+    if (!e.touches.length) return;
 
-    isDown = true;
+    isDragging = true;
     startX = e.touches[0].clientX;
-    startScrollLeft = carousel.scrollLeft;
+    scrollStart = carousel.scrollLeft;
 
     lastX = startX;
     lastTime = performance.now();
     velocity = 0;
 
-    carousel.classList.remove('snap-overshoot');
-    carousel.classList.remove('snap-reset');
+    if (momentumFrame) cancelAnimationFrame(momentumFrame);
   });
 
+  /* DRAG MOVE */
   carousel.addEventListener('touchmove', (e) => {
-    if (!isDown) return;
-    if (!e.touches || !e.touches.length) return;
+    if (!isDragging) return;
 
     const x = e.touches[0].clientX;
     const dx = x - startX;
 
-    computeVelocity(x);
+    trackVelocity(x);
 
-    carousel.scrollLeft = startScrollLeft - dx;
+    carousel.scrollLeft = scrollStart - dx;
   });
 
+  /* DRAG END + MOMENTUM */
   carousel.addEventListener('touchend', () => {
-    if (!isDown) return;
-    isDown = false;
+    if (!isDragging) return;
+    isDragging = false;
 
-    const width = carousel.offsetWidth || 1;
-    const rawIndex = carousel.scrollLeft / width;
+    const decay = 0.95;
+    const threshold = 0.2;
 
-    const direction = velocity > 0.15 ? -1 :
-                      velocity < -0.15 ? +1 : 0;
+    function momentum() {
+      carousel.scrollLeft -= velocity * 20;
+      velocity *= decay;
 
-    let index = Math.round(rawIndex);
-
-    if (direction !== 0) {
-      index = direction > 0
-        ? Math.floor(rawIndex + 0.2)
-        : Math.ceil(rawIndex - 0.2);
+      if (Math.abs(velocity) > threshold) {
+        momentumFrame = requestAnimationFrame(momentum);
+      } else {
+        snapToNearest();
+      }
     }
 
-    const maxIndex = carousel.children.length - 1;
-    index = Math.max(0, Math.min(maxIndex, index));
+    momentum();
+  });
 
+  function snapToNearest() {
+    const width = carousel.clientWidth;
+    const index = Math.round(carousel.scrollLeft / width);
     const target = index * width;
 
-    carousel.classList.add('snap-overshoot');
-    carousel.style.transform = `translateX(${direction * 6}px)`;
+    carousel.classList.add('momentum');
+    carousel.style.transform = `translateX(0)`; // reset transform
+
+    carousel.scrollTo({
+      left: target,
+      behavior: 'smooth'
+    });
 
     setTimeout(() => {
-      carousel.classList.remove('snap-overshoot');
-      carousel.classList.add('snap-reset');
-      carousel.style.transform = `translateX(0)`;
-
-      carousel.scrollTo({
-        left: target,
-        behavior: 'smooth'
-      });
-    }, 90);
-  });
-
-  carousel.addEventListener('touchcancel', () => {
-    isDown = false;
-  });
+      carousel.classList.remove('momentum');
+    }, 450);
+  }
 })();
 
 /* ========================= */
