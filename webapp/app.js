@@ -42,11 +42,9 @@ const els = {
   mysteryPrice: document.getElementById('mysteryPrice'),
   mysteryOk: document.getElementById('mysteryOk'),
 
-  /* CATALOG HEADER */
   profileAvatarHeader: document.getElementById('profileAvatar'),
   cartBtn: document.getElementById('cartBtn'),
 
-  /* PRODUCT MODAL */
   productModal: document.getElementById('productModal'),
   carousel: document.getElementById('carousel'),
   thumbStrip: document.getElementById('thumbStrip'),
@@ -60,24 +58,20 @@ const els = {
   addToCartBtn: document.getElementById('addToCartBtn'),
   reserveBtn: document.getElementById('reserveBtn'),
 
-  /* PRODUCT MODAL HEADER */
   profileAvatarModal: document.getElementById('profileAvatarModal'),
   cartBtnModal: document.getElementById('cartBtnModal'),
 
-  /* OPTIONAL OLD AVAILABILITY (SAFE IF NULL) */
   availabilityBlock: document.getElementById('availabilityBlock'),
   stockCount: document.getElementById('stockCount'),
 
   browserBackBtn: document.getElementById('browserBackBtn'),
 
-  /* CART */
   cartDrawer: document.getElementById('cartDrawer'),
   closeCart: document.getElementById('closeCart'),
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
   checkoutBtn: document.getElementById('checkoutBtn'),
 
-  /* PROFILE */
   profileModal: document.getElementById('profileModal'),
   profileAvatarProfile: document.getElementById('profileAvatarProfile'),
   profileName: document.getElementById('profileName'),
@@ -441,7 +435,7 @@ function openProductModal(p) {
 
   /* ========================= */
   /*   PREMIUM CARD FIELDS     */
-  /* ========================= */
+/* ========================= */
 
   els.modalBrand.textContent = p.brand || '';
 
@@ -1198,7 +1192,7 @@ function observeSections() {
 }
 
 /* ========================================================= */
-/*   DIRECT DRAG (D2) + MAGNETIC SNAP (S1) — FINAL VERSION   */
+/*   SNAP RAIL SR‑B — MAGNETIC + ELASTIC SWIPE               */
 /* ========================================================= */
 
 (function() {
@@ -1208,12 +1202,32 @@ function observeSections() {
   let isDown = false;
   let startX = 0;
   let startScrollLeft = 0;
+  let lastX = 0;
+  let lastTime = 0;
+  let velocity = 0;
+
+  function computeVelocity(x) {
+    const now = performance.now();
+    const dx = x - lastX;
+    const dt = now - lastTime || 1;
+    velocity = dx / dt;
+    lastX = x;
+    lastTime = now;
+  }
 
   carousel.addEventListener('touchstart', (e) => {
     if (!e.touches || !e.touches.length) return;
+
     isDown = true;
     startX = e.touches[0].clientX;
     startScrollLeft = carousel.scrollLeft;
+
+    lastX = startX;
+    lastTime = performance.now();
+    velocity = 0;
+
+    carousel.classList.remove('snap-overshoot');
+    carousel.classList.remove('snap-reset');
   });
 
   carousel.addEventListener('touchmove', (e) => {
@@ -1223,6 +1237,8 @@ function observeSections() {
     const x = e.touches[0].clientX;
     const dx = x - startX;
 
+    computeVelocity(x);
+
     carousel.scrollLeft = startScrollLeft - dx;
   });
 
@@ -1231,13 +1247,37 @@ function observeSections() {
     isDown = false;
 
     const width = carousel.offsetWidth || 1;
-    const index = Math.round(carousel.scrollLeft / width);
+    const rawIndex = carousel.scrollLeft / width;
+
+    const direction = velocity > 0.15 ? -1 :
+                      velocity < -0.15 ? +1 : 0;
+
+    let index = Math.round(rawIndex);
+
+    if (direction !== 0) {
+      index = direction > 0
+        ? Math.floor(rawIndex + 0.2)
+        : Math.ceil(rawIndex - 0.2);
+    }
+
+    const maxIndex = carousel.children.length - 1;
+    index = Math.max(0, Math.min(maxIndex, index));
+
     const target = index * width;
 
-    carousel.scrollTo({
-      left: target,
-      behavior: 'smooth'
-    });
+    carousel.classList.add('snap-overshoot');
+    carousel.style.transform = `translateX(${direction * 6}px)`;
+
+    setTimeout(() => {
+      carousel.classList.remove('snap-overshoot');
+      carousel.classList.add('snap-reset');
+      carousel.style.transform = `translateX(0)`;
+
+      carousel.scrollTo({
+        left: target,
+        behavior: 'smooth'
+      });
+    }, 90);
   });
 
   carousel.addEventListener('touchcancel', () => {
