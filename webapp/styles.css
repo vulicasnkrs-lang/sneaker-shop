@@ -1276,3 +1276,69 @@ button.secondary:active {
   color: #111;
   margin-top: 2px;
 }
+.modal-sizes .size {
+  height: 50px;
+  min-width: 64px;
+  padding: 0 14px;
+  border-radius: 12px;
+
+  background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+  border: 1px solid #dcdcdc;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    transform .16s cubic-bezier(.25,.1,.25,1),
+    box-shadow .16s cubic-bezier(.25,.1,.25,1),
+    background .16s ease,
+    border .16s ease;
+
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.06),
+    inset 0 0 0 0 rgba(0,0,0,0);
+
+  cursor: pointer;
+
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeUp .35s ease forwards;
+}
+
+.modal-sizes .size:hover:not(.disabled) {
+  background: #fff;
+  border-color: #cfcfcf;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 18px rgba(0,0,0,0.10),
+    inset 0 0 0 0 rgba(0,0,0,0);
+}
+
+.modal-sizes .size:active:not(.disabled) {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.08),
+    inset 0 0 0 0 rgba(0,0,0,0);
+}
+
+.modal-sizes .size.active {
+  background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+  color: #fff;
+  border-color: #000;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 26px rgba(0,0,0,0.28),
+    inset 0 0 0 1px #000;
+}
+
+.modal-sizes .size.disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
