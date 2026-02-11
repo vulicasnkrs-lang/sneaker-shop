@@ -169,6 +169,7 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
+
 /* ========================= */
 /*       LOAD PRODUCTS       */
 /* ========================= */
@@ -272,7 +273,6 @@ function renderCatalog() {
     els.catalog.appendChild(node);
   });
 }
-
 /* ========================= */
 /*          CARD NODE        */
 /* ========================= */
@@ -375,59 +375,67 @@ function openProductModal(p) {
   thumbStrip.innerHTML = '';
 
   const imgs = p.images || [];
-function enableStoryMode() {
-  const gallery = document.querySelector('.modal-images');
-  const storyHeader = document.createElement('div');
-  storyHeader.className = 'story-header hidden';
-
-  storyHeader.innerHTML = `
-    <img src="${p.images?.[0] || ''}" alt="">
-    <div>
-      <div class="story-title">${p.title}</div>
-      <div class="story-price">${formatPrice(p.price)}</div>
-    </div>
-  `;
-
-  els.productModal.querySelector('.modal-content').prepend(storyHeader);
-
-  const infoTop = els.modalInfoTop || document.querySelector('.modal-info');
-
-  let activated = false;
-
-  els.productModal.querySelector('.modal-body').addEventListener('scroll', (e) => {
-    const scrollY = e.target.scrollTop;
-
-    if (scrollY > 120 && !activated) {
-      gallery.classList.add('shrink');
-      storyHeader.classList.add('visible');
-      activated = true;
-    }
-
-    if (scrollY < 80 && activated) {
-      gallery.classList.remove('shrink');
-      storyHeader.classList.remove('visible');
-      activated = false;
-    }
-  });
-}
-enableStoryMode();
 
   /* ========================================================= */
-  /* 1) Fade‑галерея: функция активного фото                   */
+  /* ⭐ STORY MODE — FIXED HEADER + SHRINKING GALLERY          */
   /* ========================================================= */
+
+  function enableStoryMode() {
+    const gallery = document.querySelector('.modal-images');
+    const storyHeader = document.createElement('div');
+    storyHeader.className = 'story-header';
+
+    storyHeader.innerHTML = `
+      <img src="${p.images?.[0] || ''}" alt="">
+      <div>
+        <div class="story-title">${p.title}</div>
+        <div class="story-price">${formatPrice(p.price)}</div>
+      </div>
+    `;
+
+    els.productModal.querySelector('.modal-content').prepend(storyHeader);
+
+    let activated = false;
+
+    els.productModal.querySelector('.modal-body').addEventListener('scroll', (e) => {
+      const scrollY = e.target.scrollTop;
+
+      if (scrollY > 120 && !activated) {
+        gallery.classList.add('shrink');
+        storyHeader.classList.add('visible');
+        activated = true;
+      }
+
+      if (scrollY < 80 && activated) {
+        gallery.classList.remove('shrink');
+        storyHeader.classList.remove('visible');
+        activated = false;
+      }
+    });
+  }
+  enableStoryMode();
+
+  /* ========================================================= */
+  /* ⭐ 1) Улучшенный setActiveImage + вибрация                 */
+  /* ========================================================= */
+
   function setActiveImage(index) {
     const all = carousel.querySelectorAll('img');
     all.forEach((img, i) => {
       img.classList.toggle('active', i === index);
       img.classList.toggle('inactive', i !== index);
     });
-    // PREMIUM STICKY PRICE
-const priceBlock = els.modalPrice.closest('section');
-priceBlock.classList.add('sticky-price');
 
+    /* ⭐ VULICA UPGRADE — вибрация при переключении фото */
+    if (tg?.HapticFeedback) {
+      tg.HapticFeedback.selectionChanged();
+    }
   }
 
-  /* --- GALLERY IMAGES --- */
+  /* ========================================================= */
+  /* ⭐ 2) Добавляем изображения в галерею                      */
+  /* ========================================================= */
+
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -436,10 +444,12 @@ priceBlock.classList.add('sticky-price');
     observeSections();
   });
 
-  /* активируем первое фото */
   requestAnimationFrame(() => setActiveImage(0));
 
-  /* --- THUMBNAILS --- */
+  /* ========================================================= */
+  /* ⭐ 3) THUMBNAILS                                           */
+  /* ========================================================= */
+
   imgs.forEach((src, i) => {
     const t = document.createElement('div');
     t.className = 'thumb' + (i === 0 ? ' active' : '');
@@ -449,7 +459,7 @@ priceBlock.classList.add('sticky-price');
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-      setActiveImage(i);   // 🔥 улучшение
+      setActiveImage(i);
     });
 
     thumbStrip.appendChild(t);
@@ -457,7 +467,16 @@ priceBlock.classList.add('sticky-price');
 
   const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
 
-  /* --- SCROLL SYNC --- */
+  function updateThumbs(i) {
+    thumbs.forEach((th, idx) => {
+      th.classList.toggle('active', idx === i);
+    });
+  }
+
+  /* ========================================================= */
+  /* ⭐ 4) Улучшенный snap‑lock галереи                         */
+  /* ========================================================= */
+
   carousel.scrollLeft = 0;
 
   carousel.onscroll = () => {
@@ -466,18 +485,12 @@ priceBlock.classList.add('sticky-price');
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
 
     updateThumbs(safeIndex);
-    setActiveImage(safeIndex);  // 🔥 улучшение
+    setActiveImage(safeIndex);
   };
 
-  function updateThumbs(i) {
-    thumbs.forEach((th, idx) => {
-      th.classList.toggle('active', idx === i);
-    });
-  }
-
-  /* ========================= */
-  /*   PREMIUM CARD FIELDS     */
-  /* ========================= */
+  /* ========================================================= */
+  /*        PREMIUM CARD FIELDS                                */
+  /* ========================================================= */
 
   els.modalBrand.textContent = p.brand || '';
 
@@ -499,15 +512,12 @@ priceBlock.classList.add('sticky-price');
 
   updateAvailabilityBlock(p, null);
 
-  /* ========================= */
-  /*          SIZES            */
-  /* ========================= */
+  /* ========================================================= */
+  /* ⭐ 5) РАЗМЕРЫ — улучшенный UX + вибрация                   */
+  /* ========================================================= */
 
   els.modalSizes.innerHTML = '';
 
-  /* ========================================================= */
-  /* 3) Stagger‑анимация размеров                              */
-  /* ========================================================= */
   let delay = 0;
 
   (p.sizes || []).forEach(obj => {
@@ -520,7 +530,6 @@ priceBlock.classList.add('sticky-price');
       b.classList.add('disabled');
     }
 
-    /* stagger */
     b.style.opacity = 0;
     b.style.transform = 'translateY(6px)';
     b.style.animation = `fadeUp .35s ease forwards`;
@@ -538,6 +547,11 @@ priceBlock.classList.add('sticky-price');
 
       updateAvailabilityBlock(p, selectedSize);
 
+      /* ⭐ VULICA UPGRADE — вибрация при выборе размера */
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+      }
+
       els.modalPrice.classList.remove('bump');
       void els.modalPrice.offsetWidth;
       els.modalPrice.classList.add('bump');
@@ -546,19 +560,20 @@ priceBlock.classList.add('sticky-price');
     els.modalSizes.appendChild(b);
   });
 
-  /* ========================= */
-  /*        OPEN MODAL         */
-  /* ========================= */
+  /* ========================================================= */
+  /*        OPEN MODAL                                          */
+  /* ========================================================= */
 
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
-requestAnimationFrame(() => observeSections());
 
-  /* ========================= */
-  /*       ADD TO CART         */
-  /* ========================= */
+  requestAnimationFrame(() => observeSections());
+
+  /* ========================================================= */
+  /* ⭐ 6) ADD TO CART — улучшенный UX + вибрация               */
+  /* ========================================================= */
 
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
@@ -568,6 +583,10 @@ requestAnimationFrame(() => observeSections());
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
     if (!selectedSize) {
+      /* вибрация ошибки */
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.notificationOccurred('warning');
+      }
       alert('Выберите размер');
       return;
     }
@@ -575,10 +594,14 @@ requestAnimationFrame(() => observeSections());
     addToCart(p, selectedSize, qty);
     createFlyAnimation(p);
 
+    /* вибрация успешного добавления */
+    if (tg?.HapticFeedback) {
+      tg.HapticFeedback.impactOccurred('medium');
+    }
+
     closeProductModal();
     openCart();
   };
-
   /* ========================= */
   /*         RESERVE           */
   /* ========================= */
@@ -586,12 +609,20 @@ requestAnimationFrame(() => observeSections());
   if (els.reserveBtn) {
     els.reserveBtn.onclick = () => {
       if (!selectedSize) {
+        /* ⭐ вибрация ошибки */
+        if (tg?.HapticFeedback) {
+          tg.HapticFeedback.notificationOccurred('warning');
+        }
         alert('Выберите размер');
         return;
       }
 
       const sizeObj = (p.sizes || []).find(x => x.size === selectedSize);
       if (!sizeObj || sizeObj.stock <= 0) {
+        /* ⭐ вибрация ошибки */
+        if (tg?.HapticFeedback) {
+          tg.HapticFeedback.notificationOccurred('warning');
+        }
         alert('Нет в наличии');
         return;
       }
@@ -610,6 +641,11 @@ requestAnimationFrame(() => observeSections());
       updateAvailabilityBlock(p, selectedSize);
 
       addToCart(p, selectedSize, 1);
+
+      /* ⭐ вибрация успешного резервирования */
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('medium');
+      }
 
       closeProductModal();
       openCart();
@@ -733,9 +769,34 @@ function renderCart() {
       <div class="price">${formatPrice(item.price)}</div>
     `;
 
-    node.querySelector('[data-act="minus"]').addEventListener('click', () => changeQty(item.key, -1));
-    node.querySelector('[data-act="plus"]').addEventListener('click', () => changeQty(item.key, +1));
-    node.querySelector('[data-act="remove"]').addEventListener('click', () => removeItem(item.key));
+    /* ========================= */
+    /* ⭐ CHANGE QTY — улучшенный UX + вибрации */
+    /* ========================= */
+
+    node.querySelector('[data-act="minus"]').addEventListener('click', () => {
+      changeQty(item.key, -1);
+
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.selectionChanged();
+      }
+    });
+
+    node.querySelector('[data-act="plus"]').addEventListener('click', () => {
+      changeQty(item.key, +1);
+
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.selectionChanged();
+      }
+    });
+
+    node.querySelector('[data-act="remove"]').addEventListener('click', () => {
+      removeItem(item.key);
+
+      /* вибрация удаления */
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+      }
+    });
 
     els.cartList.appendChild(node);
   });
@@ -893,18 +954,26 @@ function renderProfilePostponed() {
       state.filtered = applyPostponedFilter([...state.products]);
       renderCatalog();
       renderProfilePostponed();
+
+      /* ⭐ вибрация при возвращении товара */
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.selectionChanged();
+      }
     });
 
     els.profilePostponed.appendChild(node);
   });
 }
-
 /* ========================= */
 /*          CHECKOUT         */
 /* ========================= */
 
 async function checkout() {
   if (!state.cart.length) {
+    /* ⭐ вибрация ошибки */
+    if (tg?.HapticFeedback) {
+      tg.HapticFeedback.notificationOccurred('warning');
+    }
     alert('Корзина пуста');
     return;
   }
@@ -934,6 +1003,11 @@ async function checkout() {
       saveOrders();
       renderProfileOrders();
 
+      /* ⭐ вибрация успеха */
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.notificationOccurred('success');
+      }
+
       tg?.showPopup({
         title: 'Заказ',
         message: '✅ Заказ отправлен!',
@@ -948,6 +1022,11 @@ async function checkout() {
       throw new Error('Server error');
     }
   } catch {
+    /* ⭐ вибрация ошибки */
+    if (tg?.HapticFeedback) {
+      tg.HapticFeedback.notificationOccurred('warning');
+    }
+
     tg?.showPopup({
       title: 'Ошибка',
       message: 'Не удалось отправить заказ',
@@ -1224,6 +1303,7 @@ function attachEvents() {
     }
   });
 }
+
 function observeSections() {
   const sections = document.querySelectorAll('.modal-info section');
 
