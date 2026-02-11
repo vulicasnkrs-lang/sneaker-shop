@@ -1201,6 +1201,40 @@ function observeSections() {
 
   sections.forEach(s => obs.observe(s));
 }
+/* STRICT ONE-SWIPE GALLERY */
+(function() {
+  const carousel = document.getElementById('carousel');
+  if (!carousel) return;
+
+  let startX = 0;
+  let currentIndex = 0;
+
+  function updateIndex() {
+    const width = carousel.offsetWidth;
+    currentIndex = Math.round(carousel.scrollLeft / width);
+  }
+
+  carousel.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    updateIndex();
+  });
+
+  carousel.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const width = carousel.offsetWidth;
+
+    if (dx < -40) currentIndex += 1;      // свайп влево
+    if (dx > 40) currentIndex -= 1;       // свайп вправо
+
+    const maxIndex = carousel.children.length - 1;
+    currentIndex = Math.max(0, Math.min(maxIndex, currentIndex));
+
+    carousel.scrollTo({
+      left: currentIndex * width,
+      behavior: 'smooth'
+    });
+  });
+})();
 
 /* ========================= */
 /*           START           */
