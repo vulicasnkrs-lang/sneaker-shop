@@ -88,6 +88,18 @@ const els = {
 let currentProduct = null;
 let selectedSize = null;
 
+/* Apple Photos slider state */
+let galleryIndex = 0;
+let galleryImages = [];
+let isDraggingGallery = false;
+let galleryStartX = 0;
+let galleryStartTranslate = 0;
+let galleryCurrentTranslate = 0;
+let galleryVelocity = 0;
+let galleryLastX = 0;
+let galleryLastTime = 0;
+let galleryFrame = null;
+
 /* ========================= */
 /*            INIT           */
 /* ========================= */
@@ -347,6 +359,8 @@ function openProductModal(p) {
   thumbStrip.innerHTML = '';
 
   const imgs = p.images || [];
+  galleryImages = imgs;
+  galleryIndex = 0;
 
   /* ========================================================= */
   /* 1) Fade‑галерея: активное фото                            */
@@ -359,7 +373,7 @@ function openProductModal(p) {
     });
   }
 
-  /* --- GALLERY IMAGES --- */
+  /* --- GALLERY IMAGES (transform slider) --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -376,8 +390,8 @@ function openProductModal(p) {
     t.innerHTML = `<img src="${src}" alt="">`;
 
     t.addEventListener('click', () => {
-      const width = carousel.clientWidth || 1;
-      carousel.scrollTo({ left: width * i, behavior: 'smooth' });
+      galleryIndex = i;
+      updateGalleryTransform();
       updateThumbs(i);
       setActiveImage(i);
     });
@@ -387,18 +401,6 @@ function openProductModal(p) {
 
   const thumbs = Array.from(thumbStrip.querySelectorAll('.thumb'));
 
-  /* --- SCROLL SYNC --- */
-  carousel.scrollLeft = 0;
-
-  carousel.onscroll = () => {
-    const width = carousel.clientWidth || 1;
-    const index = Math.round(carousel.scrollLeft / width);
-    const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
-
-    updateThumbs(safeIndex);
-    setActiveImage(safeIndex);
-  };
-
   function updateThumbs(i) {
     thumbs.forEach((th, idx) => {
       th.classList.toggle('active', idx === i);
@@ -407,7 +409,7 @@ function openProductModal(p) {
 
   /* ========================= */
   /*   PREMIUM CARD FIELDS     */
-/* ========================= */
+  /* ========================= */
 
   els.modalBrand.textContent = p.brand || '';
 
@@ -937,17 +939,6 @@ function cleanupReserved() {
     saveStock();
   }
 }
-/* ========================= */
-/*            UTILS          */
-/* ========================= */
-
-function debounce(fn, ms) {
-  let t = null;
-  return (...args) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...args), ms);
-  };
-}
 
 function saveOrders() {
   localStorage.setItem('orders', JSON.stringify(state.orders));
@@ -967,131 +958,6 @@ function cleanupPostponed() {
     savePostponed();
   }
 }
-
-function addRippleEffect(button, event) {
-  if (!button) return;
-  const rect = button.getBoundingClientRect();
-  const circle = document.createElement('span');
-  const diameter = Math.max(rect.width, rect.height);
-  const radius = diameter / 2;
-
-  circle.style.width = circle.style.height = `${diameter}px`;
-  circle.style.left = `${event.clientX - rect.left - radius}px`;
-  circle.style.top = `${event.clientY - rect.top - radius}px`;
-  circle.classList.add('ripple');
-
-  const existing = button.getElementsByClassName('ripple')[0];
-  if (existing) existing.remove();
-
-  button.appendChild(circle);
-}
-
-/* ========================= */
-/*       FLY ANIMATION       */
-/* ========================= */
-
-function createFlyAnimation(p) {
-  const src = p.images?.[0] || '';
-  if (!src) return;
-
-  const img = document.createElement('img');
-  img.src = src;
-  img.alt = '';
-  img.style.width = '64px';
-  img.style.height = '64px';
-  img.style.borderRadius = '16px';
-  img.style.objectFit = 'cover';
-
-  const fly = document.createElement('div');
-  fly.className = 'fly';
-  fly.appendChild(img);
-  document.body.appendChild(fly);
-
-  const startRect = els.productModal.getBoundingClientRect();
-  const cartRect = els.cartBtn.getBoundingClientRect();
-
-  const startX = startRect.left + startRect.width / 2;
-  const startY = startRect.top + startRect.height / 2;
-  const endX = cartRect.left + cartRect.width / 2;
-  const endY = cartRect.top + cartRect.height / 2;
-
-  fly.style.left = `${startX - 32}px`;
-  fly.style.top = `${startY - 32}px`;
-
-  requestAnimationFrame(() => {
-    const dx = endX - startX;
-    const dy = endY - startY;
-    fly.style.transform = `translate(${dx}px, ${dy}px) scale(0.4)`;
-    fly.style.opacity = '0';
-  });
-
-  setTimeout(() => {
-    fly.remove();
-  }, 700);
-}
-
-/* ========================= */
-/*       MYSTERY BOX         */
-/* ========================= */
-
-function openMysteryBox() {
-  const arr = state.filtered.length ? state.filtered : state.products;
-  if (!arr.length) return;
-
-  const p = arr[Math.floor(Math.random() * arr.length)];
-  state.mysteryProductId = p.id;
-
-  els.mysteryImg.src = p.images?.[0] || '';
-  els.mysteryTitle.textContent = p.title;
-  els.mysteryPrice.textContent = formatPrice(p.price);
-
-  els.mysteryModal.classList.remove('hidden');
-  requestAnimationFrame(() => {
-    els.mysteryModal.classList.add('open');
-  });
-}
-
-function closeMysteryModal() {
-  els.mysteryModal.classList.remove('open');
-  setTimeout(() => {
-    els.mysteryModal.classList.add('hidden');
-  }, 200);
-}
-
-/* ========================= */
-/*   PROFILE MODAL (NEW)     */
-/* ========================= */
-
-function openProfileModal() {
-  els.profileModal.classList.remove('hidden');
-
-  requestAnimationFrame(() => {
-    els.profileModal.classList.add('open');
-  });
-
-  if (tg) {
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => {
-      closeProfileModal();
-      tg.BackButton.hide();
-      tg.BackButton.onClick(() => {});
-    });
-  }
-}
-
-function closeProfileModal() {
-  els.profileModal.classList.remove('open');
-
-  setTimeout(() => {
-    els.profileModal.classList.add('hidden');
-  }, 200);
-
-  if (tg) {
-    tg.BackButton.hide();
-    tg.BackButton.onClick(() => {});
-  }
-}
-
 /* ========================= */
 /*       ATTACH EVENTS       */
 /* ========================= */
@@ -1147,6 +1013,8 @@ function attachEvents() {
       closeProfileModal();
     }
   });
+
+  initApplePhotosSlider();
 }
 
 function observeSections() {
@@ -1164,100 +1032,225 @@ function observeSections() {
 }
 
 /* ========================================================= */
-/*      SOFT MOMENTUM SWIPE — SSENSE STYLE                   */
+/*   APPLE PHOTOS — REALISTIC PHYSICS SLIDER ENGINE          */
 /* ========================================================= */
 
-(function() {
-  const carousel = document.getElementById('carousel');
+function initApplePhotosSlider() {
+  const carousel = els.carousel;
   if (!carousel) return;
 
-  let isDragging = false;
-  let startX = 0;
-  let scrollStart = 0;
-  let velocity = 0;
-  let lastX = 0;
-  let lastTime = 0;
-  let momentumFrame = null;
+  /* Reset state */
+  galleryIndex = 0;
+  galleryCurrentTranslate = 0;
+  galleryStartTranslate = 0;
+  galleryVelocity = 0;
+  galleryLastX = 0;
+  galleryLastTime = 0;
+  isDraggingGallery = false;
 
-  function trackVelocity(x) {
-    const now = performance.now();
-    const dx = x - lastX;
-    const dt = now - lastTime || 1;
-    velocity = dx / dt;
-    lastX = x;
-    lastTime = now;
-  }
-
-  /* DRAG START */
+  /* TOUCH START */
   carousel.addEventListener('touchstart', (e) => {
     if (!e.touches.length) return;
 
-    isDragging = true;
-    startX = e.touches[0].clientX;
-    scrollStart = carousel.scrollLeft;
+    isDraggingGallery = true;
+    galleryStartX = e.touches[0].clientX;
+    galleryStartTranslate = galleryCurrentTranslate;
 
-    lastX = startX;
-    lastTime = performance.now();
-    velocity = 0;
+    galleryLastX = galleryStartX;
+    galleryLastTime = performance.now();
+    galleryVelocity = 0;
 
-    if (momentumFrame) cancelAnimationFrame(momentumFrame);
+    if (galleryFrame) cancelAnimationFrame(galleryFrame);
   });
 
-  /* DRAG MOVE */
+  /* TOUCH MOVE */
   carousel.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
+    if (!isDraggingGallery) return;
 
     const x = e.touches[0].clientX;
-    const dx = x - startX;
+    const dx = x - galleryStartX;
 
-    trackVelocity(x);
+    /* Track velocity */
+    const now = performance.now();
+    const dt = now - galleryLastTime || 1;
+    galleryVelocity = (x - galleryLastX) / dt;
+    galleryLastX = x;
+    galleryLastTime = now;
 
-    carousel.scrollLeft = scrollStart - dx;
-  });
+    /* Direct drag */
+    galleryCurrentTranslate = galleryStartTranslate + dx;
 
-  /* DRAG END + MOMENTUM */
-  carousel.addEventListener('touchend', () => {
-    if (!isDragging) return;
-    isDragging = false;
+    /* Overshoot clamp (Apple‑style soft edge) */
+    const maxTranslate = 0;
+    const minTranslate = -(galleryImages.length - 1) * carousel.clientWidth;
 
-    const decay = 0.95;
-    const threshold = 0.2;
-
-    function momentum() {
-      carousel.scrollLeft -= velocity * 20;
-      velocity *= decay;
-
-      if (Math.abs(velocity) > threshold) {
-        momentumFrame = requestAnimationFrame(momentum);
-      } else {
-        snapToNearest();
-      }
+    if (galleryCurrentTranslate > maxTranslate) {
+      galleryCurrentTranslate = maxTranslate + (galleryCurrentTranslate - maxTranslate) * 0.25;
+    }
+    if (galleryCurrentTranslate < minTranslate) {
+      galleryCurrentTranslate = minTranslate + (galleryCurrentTranslate - minTranslate) * 0.25;
     }
 
-    momentum();
+    updateGalleryTransform();
   });
 
-  function snapToNearest() {
-    const width = carousel.clientWidth;
-    const index = Math.round(carousel.scrollLeft / width);
-    const target = index * width;
+  /* TOUCH END */
+  carousel.addEventListener('touchend', () => {
+    if (!isDraggingGallery) return;
+    isDraggingGallery = false;
 
-    carousel.classList.add('momentum');
-    carousel.style.transform = `translateX(0)`; // reset transform
+    startMomentum();
+  });
+}
 
-    carousel.scrollTo({
-      left: target,
-      behavior: 'smooth'
-    });
+/* ========================================================= */
+/*              MOMENTUM + SNAP (iOS REALISTIC)              */
+/* ========================================================= */
 
-    setTimeout(() => {
-      carousel.classList.remove('momentum');
-    }, 450);
+function startMomentum() {
+  const friction = 0.95;
+  const stopVelocity = 0.02;
+
+  function frame() {
+    galleryCurrentTranslate += galleryVelocity * 20;
+    galleryVelocity *= friction;
+
+    const width = els.carousel.clientWidth;
+    const maxTranslate = 0;
+    const minTranslate = -(galleryImages.length - 1) * width;
+
+    /* Clamp edges with soft return */
+    if (galleryCurrentTranslate > maxTranslate) {
+      galleryCurrentTranslate = maxTranslate;
+      galleryVelocity = 0;
+    }
+    if (galleryCurrentTranslate < minTranslate) {
+      galleryCurrentTranslate = minTranslate;
+      galleryVelocity = 0;
+    }
+
+    updateGalleryTransform();
+
+    if (Math.abs(galleryVelocity) > stopVelocity) {
+      galleryFrame = requestAnimationFrame(frame);
+    } else {
+      snapToNearest();
+    }
   }
-})();
 
-/* ========================= */
-/*           START           */
-/* ========================= */
+  frame();
+}
+
+/* ========================================================= */
+/*                     SNAP TO NEAREST INDEX                 */
+/* ========================================================= */
+
+function snapToNearest() {
+  const width = els.carousel.clientWidth;
+  const index = Math.round(Math.abs(galleryCurrentTranslate) / width);
+
+  galleryIndex = Math.min(Math.max(index, 0), galleryImages.length - 1);
+
+  const target = -galleryIndex * width;
+
+  els.carousel.classList.add('snap');
+  galleryCurrentTranslate = target;
+  updateGalleryTransform();
+
+  setTimeout(() => {
+    els.carousel.classList.remove('snap');
+  }, 380);
+
+  updateActiveImage();
+  updateActiveThumb();
+}
+
+/* ========================================================= */
+/*                     UPDATE TRANSFORM                      */
+/* ========================================================= */
+
+function updateGalleryTransform() {
+  els.carousel.style.transform = `translateX(${galleryCurrentTranslate}px)`;
+}
+
+/* ========================================================= */
+/*                     ACTIVE IMAGE + THUMBS                 */
+/* ========================================================= */
+
+function updateActiveImage() {
+  const imgs = els.carousel.querySelectorAll('img');
+  imgs.forEach((img, i) => {
+    img.classList.toggle('active', i === galleryIndex);
+  });
+}
+
+function updateActiveThumb() {
+  const thumbs = els.thumbStrip.querySelectorAll('.thumb');
+  thumbs.forEach((t, i) => {
+    t.classList.toggle('active', i === galleryIndex);
+  });
+}
+
+/* ========================================================= */
+/*           MYSTERY BOX + PROFILE MODAL HANDLERS            */
+/* ========================================================= */
+
+function openMysteryBox() {
+  const arr = state.filtered.length ? state.filtered : state.products;
+  if (!arr.length) return;
+
+  const p = arr[Math.floor(Math.random() * arr.length)];
+  state.mysteryProductId = p.id;
+
+  els.mysteryImg.src = p.images?.[0] || '';
+  els.mysteryTitle.textContent = p.title;
+  els.mysteryPrice.textContent = formatPrice(p.price);
+
+  els.mysteryModal.classList.remove('hidden');
+  requestAnimationFrame(() => {
+    els.mysteryModal.classList.add('open');
+  });
+}
+
+function closeMysteryModal() {
+  els.mysteryModal.classList.remove('open');
+  setTimeout(() => {
+    els.mysteryModal.classList.add('hidden');
+  }, 200);
+}
+
+function openProfileModal() {
+  els.profileModal.classList.remove('hidden');
+
+  requestAnimationFrame(() => {
+    els.profileModal.classList.add('open');
+  });
+
+  if (tg) {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      closeProfileModal();
+      tg.BackButton.hide();
+      tg.BackButton.onClick(() => {});
+    });
+  }
+}
+
+function closeProfileModal() {
+  els.profileModal.classList.remove('open');
+
+  setTimeout(() => {
+    els.profileModal.classList.add('hidden');
+  }, 200);
+
+  if (tg) {
+    tg.BackButton.hide();
+    tg.BackButton.onClick(() => {});
+  }
+}
+
+/* ========================================================= */
+/*           START APPLICATION                                */
+/* ========================================================= */
 
 init();
