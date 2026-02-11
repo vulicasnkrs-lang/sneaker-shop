@@ -375,6 +375,42 @@ function openProductModal(p) {
   thumbStrip.innerHTML = '';
 
   const imgs = p.images || [];
+function enableStoryMode() {
+  const gallery = document.querySelector('.modal-images');
+  const storyHeader = document.createElement('div');
+  storyHeader.className = 'story-header hidden';
+
+  storyHeader.innerHTML = `
+    <img src="${p.images?.[0] || ''}" alt="">
+    <div>
+      <div class="story-title">${p.title}</div>
+      <div class="story-price">${formatPrice(p.price)}</div>
+    </div>
+  `;
+
+  els.productModal.querySelector('.modal-content').prepend(storyHeader);
+
+  const infoTop = els.modalInfoTop || document.querySelector('.modal-info');
+
+  let activated = false;
+
+  els.productModal.querySelector('.modal-body').addEventListener('scroll', (e) => {
+    const scrollY = e.target.scrollTop;
+
+    if (scrollY > 120 && !activated) {
+      gallery.classList.add('shrink');
+      storyHeader.classList.add('visible');
+      activated = true;
+    }
+
+    if (scrollY < 80 && activated) {
+      gallery.classList.remove('shrink');
+      storyHeader.classList.remove('visible');
+      activated = false;
+    }
+  });
+}
+enableStoryMode();
 
   /* ========================================================= */
   /* 1) Fade‑галерея: функция активного фото                   */
