@@ -4,14 +4,16 @@
 
 :root {
   --bg: #ffffff;
-  --text: #111;
+  --card: #ffffff;
+  --text: #1a1a1a;
   --muted: #7a7a7a;
+  --primary: #111111;
   --border: #e5e5e5;
 
-  /* Apple Photos physics */
-  --gallery-ease: cubic-bezier(.22, .61, .36, 1);
-  --gallery-duration: .38s;
-  --fade-duration: .35s;
+  /* Soft Momentum */
+  --momentum-ease: cubic-bezier(.22, .61, .36, 1);
+  --momentum-duration: .45s;
+  --fade-duration: .45s;
 }
 
 * {
@@ -22,9 +24,8 @@ html, body {
   margin: 0;
   padding: 0;
   background: var(--bg);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
-  -webkit-font-smoothing: antialiased;
 }
 
 .hidden {
@@ -32,7 +33,59 @@ html, body {
 }
 
 /* ========================================================= */
-/*                          HEADER                           */
+/*                          BUTTONS                          */
+/* ========================================================= */
+
+.primary {
+  background: linear-gradient(180deg, #111 0%, #000 100%);
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .22s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+
+.primary:hover {
+  transform: translateY(-2px);
+}
+
+.primary:active {
+  transform: scale(0.97);
+}
+
+/* ========================================================= */
+/*                         ANIMATIONS                        */
+/* ========================================================= */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn var(--fade-duration) ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================================= */
+/*                           HEADER                          */
 /* ========================================================= */
 
 .header {
@@ -150,24 +203,25 @@ html, body {
 }
 
 /* ========================================================= */
-/*                APPLE PHOTOS — TRANSFORM SLIDER            */
+/*                     GALLERY — SOFT MOMENTUM               */
 /* ========================================================= */
 
 .modal-images {
   width: 100%;
   aspect-ratio: 1 / 1;
   background: #fff;
-  overflow: hidden;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #carousel {
   width: 100%;
   height: 100%;
   display: flex;
+  overflow: hidden;
   touch-action: pan-y;
-  will-change: transform;
-  transform: translateX(0);
+  scroll-behavior: auto; /* JS controls movement */
 }
 
 #carousel img {
@@ -177,7 +231,7 @@ html, body {
   object-fit: cover;
 
   /* Fade A2 */
-  opacity: 0.55;
+  opacity: 0.65;
   transition: opacity var(--fade-duration) ease;
 }
 
@@ -185,28 +239,9 @@ html, body {
   opacity: 1;
 }
 
-/* Smooth Apple-like snap */
-#carousel.snap {
-  transition: transform var(--gallery-duration) var(--gallery-ease);
-}
-
-/* Momentum movement */
+/* Momentum transition */
 #carousel.momentum {
-  transition: transform var(--gallery-duration) var(--gallery-ease);
-}
-
-/* ========================================================= */
-/*                         ANIMATIONS                        */
-/* ========================================================= */
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  transition: transform var(--momentum-duration) var(--momentum-ease);
 }
 /* ========================================================= */
 /*                         THUMBNAILS                        */
@@ -227,7 +262,7 @@ html, body {
 .thumb {
   width: 60px;
   height: 60px;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   background: #fff;
   border: 1px solid #eee;
@@ -239,7 +274,7 @@ html, body {
 
 .thumb.active {
   opacity: 1;
-  transform: scale(1.06);
+  transform: scale(1.05);
   border-color: #111;
 }
 
@@ -366,7 +401,7 @@ html, body {
   margin-bottom: 10px;
 }
 
-/* Apple‑style premium size buttons */
+/* PREMIUM SIZE BUTTONS — SOFT MOMENTUM */
 .modal-sizes {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -376,7 +411,7 @@ html, body {
 .modal-sizes .size {
   height: 38px;
   font-size: 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 0;
 
   background: #f5f5f5 !important;
@@ -557,40 +592,15 @@ html, body {
 /*                         PROFILE MODAL                     */
 /* ========================================================= */
 
-.profile-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.18);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-
-.profile-modal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.profile-modal .inner {
-  width: 100%;
-  max-width: 520px;
-  height: 100vh;
-  background: #fff;
-  border-radius: 22px 22px 0 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  animation: fadeInProfile .35s ease forwards;
-}
-
 @keyframes fadeInProfile {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .profile-modal .header {
@@ -676,6 +686,14 @@ html, body {
   gap: 20px;
   max-height: calc(100vh - 220px);
   overflow-y: auto;
+}
+
+.profile-modal .profile-section {
+  display: none;
+}
+
+.profile-modal .profile-section.active {
+  display: block;
 }
 
 /* ========================================================= */
