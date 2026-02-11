@@ -11,7 +11,12 @@
   --border: #e5e5e5;
   --air-soft: #f7f9fa;
   --air-shadow: 0 8px 22px rgba(0,0,0,0.06);
+
+  /* Fade + Snap Rail */
   --fade-duration: .45s;
+  --snap-duration: .28s;
+  --snap-ease: cubic-bezier(.22, .61, .36, 1);
+  --overshoot: 6px;
 }
 
 * {
@@ -275,7 +280,7 @@ button.primary {
 }
 
 /* ========================================================= */
-/*                     GALLERY — SSENSE A2                   */
+/*                     GALLERY — SNAP RAIL                   */
 /* ========================================================= */
 
 .modal-images {
@@ -291,8 +296,9 @@ button.primary {
   width: 100%;
   height: 100%;
   display: flex;
-  overflow: hidden; /* no scroll */
+  overflow: hidden;
   touch-action: pan-y;
+  scroll-behavior: auto; /* JS controls snap */
 }
 
 #carousel img {
@@ -301,13 +307,25 @@ button.primary {
   flex-shrink: 0;
   object-fit: cover;
 
-  /* SSENSE A2 — мягкий fade */
+  /* Fade A2 */
   opacity: 0.65;
-  transition: opacity .35s ease;
+  transition: opacity var(--fade-duration) ease;
 }
 
+/* Active image */
 #carousel img.active {
   opacity: 1;
+}
+
+/* Micro-overshoot effect (SR-B) */
+#carousel.snap-overshoot {
+  transition: transform var(--snap-duration) var(--snap-ease);
+  transform: translateX(var(--overshoot));
+}
+
+#carousel.snap-reset {
+  transition: transform var(--snap-duration) var(--snap-ease);
+  transform: translateX(0);
 }
 /* ========================================================= */
 /*                         THUMBNAILS                        */
@@ -318,6 +336,7 @@ button.primary {
   gap: 10px;
   padding: 12px 16px 18px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #thumbStrip::-webkit-scrollbar {
@@ -339,7 +358,7 @@ button.primary {
 
 .thumb.active {
   opacity: 1;
-  transform: scale(1.04);
+  transform: scale(1.05);
   border-color: #111;
 }
 
