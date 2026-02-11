@@ -9,14 +9,11 @@
   --muted: #7a7a7a;
   --primary: #111111;
   --border: #e5e5e5;
-  --air-soft: #f7f9fa;
-  --air-shadow: 0 8px 22px rgba(0,0,0,0.06);
 
-  /* Fade + Snap Rail */
+  /* Soft Momentum */
+  --momentum-ease: cubic-bezier(.22, .61, .36, 1);
+  --momentum-duration: .45s;
   --fade-duration: .45s;
-  --snap-duration: .28s;
-  --snap-ease: cubic-bezier(.22, .61, .36, 1);
-  --overshoot: 6px;
 }
 
 * {
@@ -39,8 +36,7 @@ html, body {
 /*                          BUTTONS                          */
 /* ========================================================= */
 
-.primary,
-button.primary {
+.primary {
   background: linear-gradient(180deg, #111 0%, #000 100%);
   color: #fff;
   border-radius: 999px;
@@ -48,60 +44,16 @@ button.primary {
   padding: 10px 18px;
   font-size: 14px;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
   transition: all .22s ease;
   box-shadow: 0 4px 14px rgba(0,0,0,0.18);
 }
 
 .primary:hover {
-  background: #000;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
 }
 
 .primary:active {
   transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15) inset;
-  filter: brightness(0.92);
-}
-
-.secondary {
-  background: #f5f5f5;
-  color: #111;
-  border-radius: 999px;
-  border: none;
-  padding: 10px 18px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all .22s ease;
-}
-
-.secondary:hover {
-  background: #e9e9e9;
-  transform: translateY(-1px);
-}
-
-.secondary:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08) inset;
-}
-
-/* Ripple */
-.primary .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.35);
-  transform: scale(0);
-  animation: rippleAnim .55s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes rippleAnim {
-  to {
-    transform: scale(3.5);
-    opacity: 0;
-  }
 }
 
 /* ========================================================= */
@@ -148,27 +100,6 @@ button.primary {
   z-index: 20;
 }
 
-.brand {
-  font-size: 22px;
-  font-weight: 500;
-  letter-spacing: -0.5px;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.profile-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: #f3f3f3;
-  overflow: hidden;
-}
-
 /* ========================================================= */
 /*                          CATALOG                          */
 /* ========================================================= */
@@ -185,10 +116,9 @@ button.primary {
 /* ========================================================= */
 
 .card {
-  position: relative;
   background: #fff;
   border-radius: 18px;
-  box-shadow: var(--air-shadow);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
   overflow: hidden;
   cursor: pointer;
   transition: transform .22s ease, box-shadow .22s ease;
@@ -198,7 +128,6 @@ button.primary {
 
 .card:hover {
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
 }
 
 .card-image {
@@ -228,13 +157,11 @@ button.primary {
 .card-title {
   font-size: 15px;
   font-weight: 600;
-  color: var(--primary);
 }
 
 .card-price {
   font-size: 17px;
   font-weight: 700;
-  color: var(--primary);
 }
 
 /* ========================================================= */
@@ -264,9 +191,6 @@ button.primary {
   width: 100%;
   max-width: 520px;
   background: #fff;
-  color: #111;
-  border-radius: 0;
-  box-shadow: none;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -276,11 +200,10 @@ button.primary {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background: #fff;
 }
 
 /* ========================================================= */
-/*                     GALLERY — SNAP RAIL                   */
+/*                     GALLERY — SOFT MOMENTUM               */
 /* ========================================================= */
 
 .modal-images {
@@ -298,7 +221,7 @@ button.primary {
   display: flex;
   overflow: hidden;
   touch-action: pan-y;
-  scroll-behavior: auto; /* JS controls snap */
+  scroll-behavior: auto; /* JS controls movement */
 }
 
 #carousel img {
@@ -312,20 +235,13 @@ button.primary {
   transition: opacity var(--fade-duration) ease;
 }
 
-/* Active image */
 #carousel img.active {
   opacity: 1;
 }
 
-/* Micro-overshoot effect (SR-B) */
-#carousel.snap-overshoot {
-  transition: transform var(--snap-duration) var(--snap-ease);
-  transform: translateX(var(--overshoot));
-}
-
-#carousel.snap-reset {
-  transition: transform var(--snap-duration) var(--snap-ease);
-  transform: translateX(0);
+/* Momentum transition */
+#carousel.momentum {
+  transition: transform var(--momentum-duration) var(--momentum-ease);
 }
 /* ========================================================= */
 /*                         THUMBNAILS                        */
@@ -485,7 +401,7 @@ button.primary {
   margin-bottom: 10px;
 }
 
-/* PREMIUM SIZE BUTTONS — FINAL */
+/* PREMIUM SIZE BUTTONS — SOFT MOMENTUM */
 .modal-sizes {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -788,7 +704,7 @@ button.primary {
   background: #fff;
   padding: 16px;
   border-radius: 16px;
-  box-shadow: var(--air-shadow);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
   display: grid;
   gap: 12px;
 }
@@ -823,7 +739,7 @@ button.primary {
   background: #fff;
   padding: 16px;
   border-radius: 16px;
-  box-shadow: var(--air-shadow);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
   display: flex;
   justify-content: space-between;
   align-items: center;
