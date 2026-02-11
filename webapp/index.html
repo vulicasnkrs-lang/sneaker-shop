@@ -12,7 +12,7 @@
 <body>
 
   <!-- PRODUCT MODAL -->
-  <div id="productModal" class="hidden">
+  <div id="productModal" class="modal hidden">
     <div class="modal-content modal-product">
 
       <!-- HEADER INSIDE PRODUCT MODAL -->
@@ -28,10 +28,15 @@
       <!-- SCROLLABLE BODY -->
       <div class="modal-body">
 
-        <!-- FULLSCREEN GALLERY (FIXED STRUCTURE) -->
-        <div class="modal-images" id="carousel"></div>
+        <!-- FULLSCREEN GALLERY -->
+       <div class="modal-images">
+    <div id="carousel"></div>
+</div>
 
-        <!-- PRODUCT INFO -->
+        <!-- THUMBNAILS -->
+        <div class="thumb-strip" id="thumbStrip"></div>
+
+        <!-- PRODUCT INFO (NEW PREMIUM STRUCTURE) -->
         <div class="modal-info">
           <section class="modal-section modal-main">
 
@@ -62,10 +67,6 @@
 
           </section>
         </div>
-
-        <!-- THUMBNAILS (ДОЛЖНЫ БЫТЬ ПОСЛЕ INFO) -->
-        <div class="thumb-strip" id="thumbStrip"></div>
-
       </div>
 
       <!-- FIXED ACTION BUTTONS -->
