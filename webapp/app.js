@@ -169,6 +169,7 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
+
 /* ========================= */
 /*       LOAD PRODUCTS       */
 /* ========================= */
@@ -317,7 +318,6 @@ function cardNode(p) {
 
   return node;
 }
-
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -377,7 +377,7 @@ function openProductModal(p) {
   const imgs = p.images || [];
 
   /* ========================================================= */
-  /* 1) Fade‑галерея: функция активного фото                   */
+  /* 1) Fade‑галерея: активное фото                            */
   /* ========================================================= */
   function setActiveImage(index) {
     const all = carousel.querySelectorAll('img');
@@ -385,10 +385,11 @@ function openProductModal(p) {
       img.classList.toggle('active', i === index);
       img.classList.toggle('inactive', i !== index);
     });
-    // PREMIUM STICKY PRICE
-const priceBlock = els.modalPrice.closest('section');
-priceBlock.classList.add('sticky-price');
 
+    const priceBlock = els.modalPrice.closest('section');
+    if (priceBlock) {
+      priceBlock.classList.add('sticky-price');
+    }
   }
 
   /* --- GALLERY IMAGES --- */
@@ -397,7 +398,6 @@ priceBlock.classList.add('sticky-price');
     img.src = src;
     img.alt = p.title;
     carousel.appendChild(img);
-    observeSections();
   });
 
   /* активируем первое фото */
@@ -410,10 +410,10 @@ priceBlock.classList.add('sticky-price');
     t.innerHTML = `<img src="${src}" alt="">`;
 
     t.addEventListener('click', () => {
-      const width = carousel.clientWidth;
+      const width = carousel.clientWidth || 1;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-      setActiveImage(i);   // 🔥 улучшение
+      setActiveImage(i);
     });
 
     thumbStrip.appendChild(t);
@@ -430,7 +430,7 @@ priceBlock.classList.add('sticky-price');
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
 
     updateThumbs(safeIndex);
-    setActiveImage(safeIndex);  // 🔥 улучшение
+    setActiveImage(safeIndex);
   };
 
   function updateThumbs(i) {
@@ -469,9 +469,6 @@ priceBlock.classList.add('sticky-price');
 
   els.modalSizes.innerHTML = '';
 
-  /* ========================================================= */
-  /* 3) Stagger‑анимация размеров                              */
-  /* ========================================================= */
   let delay = 0;
 
   (p.sizes || []).forEach(obj => {
@@ -484,7 +481,6 @@ priceBlock.classList.add('sticky-price');
       b.classList.add('disabled');
     }
 
-    /* stagger */
     b.style.opacity = 0;
     b.style.transform = 'translateY(6px)';
     b.style.animation = `fadeUp .35s ease forwards`;
@@ -518,7 +514,7 @@ priceBlock.classList.add('sticky-price');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
-requestAnimationFrame(() => observeSections());
+  requestAnimationFrame(() => observeSections());
 
   /* ========================= */
   /*       ADD TO CART         */
@@ -618,7 +614,6 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
-
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -976,7 +971,6 @@ function cleanupReserved() {
     saveStock();
   }
 }
-
 /* ========================= */
 /*            UTILS          */
 /* ========================= */
@@ -1188,6 +1182,7 @@ function attachEvents() {
     }
   });
 }
+
 function observeSections() {
   const sections = document.querySelectorAll('.modal-info section');
 
@@ -1201,90 +1196,53 @@ function observeSections() {
 
   sections.forEach(s => obs.observe(s));
 }
-/* STRICT ONE-SWIPE GALLERY */
+
+/* ========================================================= */
+/*   DIRECT DRAG (D2) + MAGNETIC SNAP (S1) — FINAL VERSION   */
+/* ========================================================= */
+
 (function() {
   const carousel = document.getElementById('carousel');
   if (!carousel) return;
 
+  let isDown = false;
   let startX = 0;
-  let currentIndex = 0;
-
-  function updateIndex() {
-    const width = carousel.offsetWidth;
-    currentIndex = Math.round(carousel.scrollLeft / width);
-  }
+  let startScrollLeft = 0;
 
   carousel.addEventListener('touchstart', (e) => {
+    if (!e.touches || !e.touches.length) return;
+    isDown = true;
     startX = e.touches[0].clientX;
-    updateIndex();
+    startScrollLeft = carousel.scrollLeft;
   });
 
-  carousel.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].clientX - startX;
-    const width = carousel.offsetWidth;
+  carousel.addEventListener('touchmove', (e) => {
+    if (!isDown) return;
+    if (!e.touches || !e.touches.length) return;
 
-    if (dx < -40) currentIndex += 1;      // свайп влево
-    if (dx > 40) currentIndex -= 1;       // свайп вправо
+    const x = e.touches[0].clientX;
+    const dx = x - startX;
 
-    const maxIndex = carousel.children.length - 1;
-    currentIndex = Math.max(0, Math.min(maxIndex, currentIndex));
+    carousel.scrollLeft = startScrollLeft - dx;
+  });
+
+  carousel.addEventListener('touchend', () => {
+    if (!isDown) return;
+    isDown = false;
+
+    const width = carousel.offsetWidth || 1;
+    const index = Math.round(carousel.scrollLeft / width);
+    const target = index * width;
 
     carousel.scrollTo({
-      left: currentIndex * width,
+      left: target,
       behavior: 'smooth'
     });
   });
-})();
-/* PREMIUM SLIDER — SSENSE / KITH STYLE */
-(function() {
-  const carousel = document.getElementById('carousel');
-  if (!carousel) return;
 
-  const slides = Array.from(carousel.children);
-  let index = 0;
-  let startX = 0;
-  let currentX = 0;
-  let dragging = false;
-
-  function updatePosition(animate = true) {
-    const width = carousel.offsetWidth;
-    carousel.style.transition = animate ? "transform 0.28s ease" : "none";
-    carousel.style.transform = `translateX(${-index * width}px)`;
-  }
-
-  // disable native scroll
-  carousel.style.overflow = "hidden";
-  carousel.style.display = "flex";
-
-  carousel.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-    currentX = startX;
-    dragging = true;
-    carousel.style.transition = "none";
+  carousel.addEventListener('touchcancel', () => {
+    isDown = false;
   });
-
-  carousel.addEventListener("touchmove", (e) => {
-    if (!dragging) return;
-    currentX = e.touches[0].clientX;
-    const dx = currentX - startX;
-    const width = carousel.offsetWidth;
-
-    carousel.style.transform = `translateX(${dx - index * width}px)`;
-  });
-
-  carousel.addEventListener("touchend", () => {
-    dragging = false;
-    const dx = currentX - startX;
-    const width = carousel.offsetWidth;
-
-    if (dx < -40) index += 1;   // swipe left
-    if (dx > 40) index -= 1;    // swipe right
-
-    index = Math.max(0, Math.min(slides.length - 1, index));
-    updatePosition(true);
-  });
-
-  window.addEventListener("resize", () => updatePosition(false));
 })();
 
 /* ========================= */
