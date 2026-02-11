@@ -330,20 +330,23 @@ button.secondary:active {
   width: 100%;
   aspect-ratio: 1 / 1;
   background: #fff;
-  padding: 0; /* SSENSE: убрали отступы */
+  padding: 0;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* FIX: убираем болтанку */
 #carousel {
   width: 100%;
   height: 100%;
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: auto !important;
 }
 
 #carousel::-webkit-scrollbar {
@@ -355,20 +358,18 @@ button.secondary:active {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* было contain */
+  object-fit: cover;
   opacity: 0.45;
-  transform: scale(0.98);
-  transition: opacity .35s ease, transform .35s ease;
+  transform: none !important;
+  transition: opacity .25s ease, transform .25s ease;
 }
 
 #carousel img.active {
   opacity: 1;
-  transform: scale(1.02);
 }
 
 #carousel img.inactive {
   opacity: 0.45;
-  transform: scale(0.98);
 }
 
 /* ========================================================= */
@@ -535,11 +536,14 @@ button.secondary:active {
   gap: 10px;
 }
 
-/* KITH SOFT DEPTH — обновлено полностью */
+/* ========================================================= */
+/*               KITH SOFT DEPTH — FIXED VERSION             */
+/* ========================================================= */
+
 .modal-sizes .size {
   height: 52px;
   border-radius: 16px;
-  background: #f7f7f7;
+  background: #f7f7f7 !important;
   border: 1px solid #e3e3e3;
   font-size: 16px;
   font-weight: 500;
@@ -547,9 +551,27 @@ button.secondary:active {
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
   cursor: pointer;
 
+  -webkit-tap-highlight-color: transparent;
+
   opacity: 0;
   transform: translateY(6px);
   animation: fadeUp .35s ease forwards;
+}
+
+/* Telegram WebView FIX */
+.modal-sizes .size:active {
+  background: #eaeaea !important;
+}
+
+/* ACTIVE — жёсткое переопределение */
+.modal-sizes .size.active {
+  background: #111 !important;
+  color: #fff !important;
+  border-color: #111 !important;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.22),
+    inset 0 0 0 2px #000 !important;
+  transform: translateY(-2px) scale(1.02) !important;
 }
 
 .modal-sizes .size:hover:not(.disabled) {
@@ -558,16 +580,6 @@ button.secondary:active {
   box-shadow:
     0 6px 14px rgba(0,0,0,0.08),
     inset 0 1px 2px rgba(0,0,0,0.04);
-}
-
-.modal-sizes .size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  box-shadow:
-    0 8px 20px rgba(0,0,0,0.22),
-    inset 0 0 0 2px #000;
-  transform: translateY(-2px) scale(1.02);
 }
 
 .modal-sizes .size.disabled {
@@ -626,29 +638,6 @@ button.secondary:active {
   font-weight: 600;
   letter-spacing: -0.2px;
 }
-/* ========================================================= */
-/*                        DELIVERY BLOCK                     */
-/* ========================================================= */
-
-.delivery-inline {
-  background: #fafafa;
-  border-radius: 16px;
-  padding: 16px 18px;
-  font-size: 14px;
-  line-height: 1.55;
-  color: #444;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-
-.delivery-inline::before {
-  content: "🚚";
-  font-size: 18px;
-  opacity: 0.7;
-}
-
 /* ========================================================= */
 /*                         CART DRAWER                       */
 /* ========================================================= */
