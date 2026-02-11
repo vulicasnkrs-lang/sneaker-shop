@@ -1235,6 +1235,57 @@ function observeSections() {
     });
   });
 })();
+/* PREMIUM SLIDER — SSENSE / KITH STYLE */
+(function() {
+  const carousel = document.getElementById('carousel');
+  if (!carousel) return;
+
+  const slides = Array.from(carousel.children);
+  let index = 0;
+  let startX = 0;
+  let currentX = 0;
+  let dragging = false;
+
+  function updatePosition(animate = true) {
+    const width = carousel.offsetWidth;
+    carousel.style.transition = animate ? "transform 0.28s ease" : "none";
+    carousel.style.transform = `translateX(${-index * width}px)`;
+  }
+
+  // disable native scroll
+  carousel.style.overflow = "hidden";
+  carousel.style.display = "flex";
+
+  carousel.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    currentX = startX;
+    dragging = true;
+    carousel.style.transition = "none";
+  });
+
+  carousel.addEventListener("touchmove", (e) => {
+    if (!dragging) return;
+    currentX = e.touches[0].clientX;
+    const dx = currentX - startX;
+    const width = carousel.offsetWidth;
+
+    carousel.style.transform = `translateX(${dx - index * width}px)`;
+  });
+
+  carousel.addEventListener("touchend", () => {
+    dragging = false;
+    const dx = currentX - startX;
+    const width = carousel.offsetWidth;
+
+    if (dx < -40) index += 1;   // swipe left
+    if (dx > 40) index -= 1;    // swipe right
+
+    index = Math.max(0, Math.min(slides.length - 1, index));
+    updatePosition(true);
+  });
+
+  window.addEventListener("resize", () => updatePosition(false));
+})();
 
 /* ========================= */
 /*           START           */
