@@ -1,6 +1,6 @@
-/* ========================================================= */
-/*                       ROOT + RESET                        */
-/* ========================================================= */
+/* ========================= */
+/*        ROOT + RESET       */
+/* ========================= */
 
 :root {
   --bg: #ffffff;
@@ -14,12 +14,9 @@
   --fade-duration: .45s;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   background: var(--bg);
@@ -27,68 +24,39 @@ body {
   color: var(--text);
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
-/* ========================================================= */
-/*                          BUTTONS                          */
-/* ========================================================= */
+/* ========================= */
+/*          BUTTONS          */
+/* ========================= */
 
-.primary,
-button.primary {
-  background: linear-gradient(180deg, #111 0%, #000 100%);
+.primary {
+  background: #111;
   color: #fff;
   border-radius: 999px;
   border: none;
   padding: 10px 18px;
   font-size: 14px;
   cursor: pointer;
+  transition: background .2s ease, transform .15s ease;
   position: relative;
   overflow: hidden;
-  transition: all .22s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
 }
 
-.primary:hover,
-button.primary:hover {
-  background: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
-}
+.primary:hover { background: #000; transform: translateY(-1px); }
+.primary:active { transform: scale(0.96); }
 
-.primary:active,
-button.primary:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15) inset;
-  filter: brightness(0.92);
-}
-
-.secondary,
-button.secondary {
-  background: #f5f5f5;
+.secondary {
+  background: #f3f3f3;
   color: #111;
   border-radius: 999px;
   border: none;
   padding: 10px 18px;
   font-size: 14px;
   cursor: pointer;
-  transition: all .22s ease;
 }
 
-button.secondary:hover {
-  background: #e9e9e9;
-  transform: translateY(-1px);
-}
-
-button.secondary:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08) inset;
-}
-
-.full-width {
-  width: 100%;
-}
+.full-width { width: 100%; }
 
 /* Ripple */
 .primary .ripple {
@@ -101,15 +69,12 @@ button.secondary:active {
 }
 
 @keyframes rippleAnim {
-  to {
-    transform: scale(3.5);
-    opacity: 0;
-  }
+  to { transform: scale(3.5); opacity: 0; }
 }
 
-/* ========================================================= */
-/*                         ANIMATIONS                        */
-/* ========================================================= */
+/* ========================= */
+/*         ANIMATIONS        */
+/* ========================= */
 
 .fade-in {
   opacity: 0;
@@ -118,75 +83,24 @@ button.secondary:active {
 }
 
 @keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ⭐ ВАЖНО: вынесенная анимация fadeUp */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.skeleton {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+  border-radius: 14px;
 }
 
-/* editorial reveal for sections */
-.modal-info section {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity .45s cubic-bezier(.25,.1,.25,1),
-              transform .45s cubic-bezier(.25,.1,.25,1);
+@keyframes skeleton {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
-.modal-info section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* fly to cart */
-.fly {
-  position: fixed;
-  z-index: 99999;
-  pointer-events: none;
-  transition: transform .7s ease, opacity .7s ease;
-  animation: flyAnim .7s ease forwards;
-}
-
-@keyframes flyAnim {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-120px) scale(0.4);
-  }
-}
-
-/* premium modal reveal */
-@keyframes modalReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.96);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(0) scale(1.02);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* ========================================================= */
-/*                           HEADER                          */
-/* ========================================================= */
+/* ========================= */
+/*           HEADER          */
+/* ========================= */
 
 .header {
   display: flex;
@@ -221,9 +135,9 @@ button.secondary:active {
   overflow: hidden;
 }
 
-/* ========================================================= */
-/*                          CATALOG                          */
-/* ========================================================= */
+/* ========================= */
+/*          CATALOG          */
+/* ========================= */
 
 .catalog {
   display: grid;
@@ -232,9 +146,9 @@ button.secondary:active {
   padding: 0 20px 100px;
 }
 
-/* ========================================================= */
-/*                            CARD                           */
-/* ========================================================= */
+/* ========================= */
+/*            CARD           */
+/* ========================= */
 
 .card {
   position: relative;
@@ -288,10 +202,9 @@ button.secondary:active {
   font-weight: 700;
   color: var(--primary);
 }
-
-/* ========================================================= */
-/*                        PRODUCT MODAL                      */
-/* ========================================================= */
+/* ========================= */
+/*        PRODUCT MODAL      */
+/* ========================= */
 
 #productModal {
   position: fixed;
@@ -312,124 +225,76 @@ button.secondary:active {
   pointer-events: auto;
 }
 
-.modal-content.modal-product {
+.product-modal {
   width: 100%;
   max-width: 520px;
   background: #fff;
-  color: #111;
   border-radius: 22px 22px 0 0;
   overflow: hidden;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  transform: translateY(20px);
-  opacity: 0;
-  transition: transform .35s ease, opacity .35s ease;
+  animation: slideUp .35s ease forwards;
 }
 
-#productModal.open .modal-content.modal-product {
-  transform: translateY(0);
-  opacity: 1;
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background: #fff;
-}
+/* ========================= */
+/*         GALLERY (NEW)     */
+/* ========================= */
 
-/* header inside modal */
-.modal-inner-header {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-/* ========================================================= */
-/*                     GALLERY — EDGE-TO-EDGE                */
-/* ========================================================= */
-
-.modal-images {
+.carousel {
   width: 100%;
-  aspect-ratio: 1 / 1;
-  background: #fff;
-  padding: 4px;
+  height: 300px;
+  background: #f7f7f7;
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#carousel {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  overflow-x: auto;
+  overflow-x: scroll;
   scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding: 0;
+  scroll-behavior: smooth;
 }
 
-#carousel::-webkit-scrollbar {
+.carousel::-webkit-scrollbar {
   display: none;
 }
 
-#carousel img {
+.carousel img {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #fff;
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  opacity: 0.6;
-  transform: scale(0.99);
-  transition: transform .35s ease, opacity .35s ease;
+  object-position: center;
+  scroll-snap-align: center;
+  padding: 10px;
+  background: #f7f7f7;
 }
 
-#carousel img.active {
-  opacity: 1;
-  transform: scale(1.01);
-}
+/* ========================= */
+/*        THUMB STRIP        */
+/* ========================= */
 
-#carousel img.inactive {
-  opacity: 0.6;
-  transform: scale(0.99);
-}
-
-/* thumbnails */
-
-.thumb-strip,
 #thumbStrip {
   display: flex;
-  gap: 10px;
-  padding: 12px 16px 18px;
+  gap: 8px;
+  padding: 12px 16px;
   overflow-x: auto;
 }
 
-.thumb-strip::-webkit-scrollbar,
-#thumbStrip::-webkit-scrollbar {
-  display: none;
-}
+#thumbStrip::-webkit-scrollbar { display: none; }
 
-.thumb-strip .thumb,
 .thumb {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid #eee;
-  opacity: 0.55;
+  border: 2px solid transparent;
   flex-shrink: 0;
   cursor: pointer;
-  transition: opacity .25s ease, transform .25s ease, border .2s ease;
+  transition: border .2s ease, transform .2s ease;
 }
 
-.thumb-strip .thumb.active,
 .thumb.active {
-  opacity: 1;
-  transform: scale(1.04);
   border-color: #111;
+  transform: scale(1.05);
 }
 
 .thumb img {
@@ -438,167 +303,76 @@ button.secondary:active {
   object-fit: cover;
 }
 
-/* ========================================================= */
-/*                    MODAL INFO — HERO BLOCK                */
-/* ========================================================= */
+/* ========================= */
+/*      PRODUCT CONTENT      */
+/* ========================= */
 
-.modal-info {
-  padding: 32px 22px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+.product-content {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
 }
 
-/* sections rhythm */
-.modal-info section {
-  padding-top: 32px;
-  border-top: 1px solid rgba(0,0,0,0.05);
-}
-
-.modal-info section:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-/* brand — small, editorial */
-.brand-row {
-  font-size: 11px;
+#modalTitle {
+  font-size: 20px;
   font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #8d8d8d;
-  opacity: 0.85;
-  margin-bottom: 4px;
 }
 
-/* title — hero */
-.modal-title {
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: -0.45px;
-  line-height: 1.12;
-  margin: 0 0 14px;
-  color: #111;
-}
-
-/* price — anchor */
-.modal-price {
-  font-size: 28px;
+#modalPrice {
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.25px;
-  margin-bottom: 6px;
-  color: #111;
 }
 
-/* inline stock */
-#modalStockInline {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #8d8d8d;
+#modalPrice.bump {
+  animation: bump .35s ease;
 }
 
-/* ========================================================= */
-/*                     MATERIALS — GRID                      */
-/* ========================================================= */
-
-.materials-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 22px;
-  font-size: 15px;
-  line-height: 1.68;
-  color: #555;
-  letter-spacing: 0.012em;
-  padding-left: 2px;
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); }
+  100% { transform: scale(1); }
 }
 
-.materials-block::before {
-  content: "Details";
-  grid-column: 1 / -1;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #b6b6b6;
-  margin-bottom: 4px;
-}
-
-.materials-block span.key {
-  font-weight: 600;
-  color: #222;
-  padding-left: 16px;
-  position: relative;
-}
-
-.materials-block span.key::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #b0b0b0;
+#modalDesc {
   font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
 }
 
-/* ========================================================= */
-/*                         SIZES GRID                        */
-/* ========================================================= */
+/* ========================= */
+/*           SIZES           */
+/* ========================= */
 
-.sizes-label {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.modal-sizes {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+#modalSizes {
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.modal-sizes .size {
-  height: 50px;
-  border-radius: 14px;
-  background: #f7f7f7;
-  border: 1px solid #e3e3e3;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all .22s cubic-bezier(.25,.1,.25,1);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  cursor: pointer;
-
-  /* анимация появления */
-  opacity: 0;
-  transform: translateY(6px);
-  animation: fadeUp .35s ease forwards;
-}
-
-.modal-sizes .size:hover:not(.disabled) {
+.size {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
   background: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  cursor: pointer;
+  font-size: 14px;
+  transition: .2s;
 }
 
-.modal-sizes .size.active {
+.size.active {
   background: #111;
   color: #fff;
   border-color: #111;
-  box-shadow:
-    0 8px 20px rgba(0,0,0,0.22),
-    inset 0 0 0 2px #000;
-  transform: translateY(-2px);
 }
 
-.modal-sizes .size.disabled {
+.size.disabled {
   opacity: .35;
   cursor: not-allowed;
 }
 
-/* ========================================================= */
-/*                     AVAILABILITY BLOCK                    */
-/* ========================================================= */
+/* ========================= */
+/*        AVAILABILITY       */
+/* ========================= */
 
 #availabilityBlock {
   background: #f7f7f7;
@@ -609,9 +383,9 @@ button.secondary:active {
   font-size: 14px;
 }
 
-/* ========================================================= */
-/*                        ADD TO CART                        */
-/* ========================================================= */
+/* ========================= */
+/*        ADD TO CART        */
+/* ========================= */
 
 .add-row {
   display: grid;
@@ -629,50 +403,9 @@ button.secondary:active {
   text-align: center;
 }
 
-/* fixed actions at bottom */
-
-.modal-actions-fixed {
-  padding: 20px 22px 30px;
-  background: #fff;
-  border-top: 0.5px solid rgba(0,0,0,0.06);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.modal-actions-fixed button {
-  height: 54px;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-}
-/* ========================================================= */
-/*                        DELIVERY BLOCK                     */
-/* ========================================================= */
-
-.delivery-inline {
-  background: #fafafa;
-  border-radius: 16px;
-  padding: 16px 18px;
-  font-size: 14px;
-  line-height: 1.55;
-  color: #444;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-
-.delivery-inline::before {
-  content: "🚚";
-  font-size: 18px;
-  opacity: 0.7;
-}
-
-/* ========================================================= */
-/*                         CART DRAWER                       */
-/* ========================================================= */
+/* ========================= */
+/*          CART DRAWER      */
+/* ========================= */
 
 #cartDrawer {
   position: fixed;
@@ -753,20 +486,65 @@ button.secondary:active {
   font-size: 20px;
   font-weight: 700;
 }
+/* ========================= */
+/*       FLY ANIMATION       */
+/* ========================= */
 
-/* ========================================================= */
-/*                         PROFILE MODAL                     */
-/* ========================================================= */
+.fly {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  transition: transform .7s ease, opacity .7s ease;
+  animation: flyAnim .7s ease forwards;
+}
+
+@keyframes flyAnim {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
+}
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+@media (max-width: 420px) {
+  .card-image {
+    height: 150px;
+  }
+
+  .profile-header .profile-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .profile-postponed-left img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .carousel {
+    height: 260px;
+  }
+}
+
+@media (max-width: 360px) {
+  #cartBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .carousel {
+    height: 240px;
+  }
+}
 
 @keyframes fadeInProfile {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
 .profile-modal .header {
@@ -862,9 +640,9 @@ button.secondary:active {
   display: block;
 }
 
-/* ========================================================= */
-/*                       PROFILE ORDERS                      */
-/* ========================================================= */
+/* ========================= */
+/*      PROFILE ORDERS       */
+/* ========================= */
 
 .profile-order {
   background: #fff;
@@ -897,9 +675,9 @@ button.secondary:active {
   color: var(--muted);
 }
 
-/* ========================================================= */
-/*                     PROFILE POSTPONED                     */
-/* ========================================================= */
+/* ========================= */
+/*     PROFILE POSTPONED     */
+/* ========================= */
 
 .profile-postponed-item {
   background: #fff;
@@ -956,9 +734,10 @@ button.secondary:active {
   color: var(--muted);
   font-size: 15px;
 }
-/* ========================================================= */
-/*                        MYSTERY BOX                        */
-/* ========================================================= */
+
+/* ========================= */
+/*         MYSTERY BOX       */
+/* ========================= */
 
 #mysteryModal {
   position: fixed;
@@ -996,51 +775,575 @@ button.secondary:active {
   margin-bottom: 16px;
 }
 
-/* ========================================================= */
-/*                         SAFE AREA                         */
-/* ========================================================= */
+/* ========================= */
+/*         SAFE AREA         */
+/* ========================= */
 
 .safe-bottom {
   height: env(safe-area-inset-bottom);
 }
+/* ========================= */
+/*   PREMIUM PRODUCT CARD    */
+/* ========================= */
 
-/* ========================================================= */
-/*                         RESPONSIVE                        */
-/* ========================================================= */
-
-@media (max-width: 420px) {
-  .card-image {
-    height: 150px;
-  }
-
-  .profile-header .profile-avatar {
-    width: 56px;
-    height: 56px;
-  }
-
-  .profile-postponed-left img {
-    width: 56px;
-    height: 56px;
-  }
-
-  .carousel,
-  #carousel {
-    height: 260px;
-  }
+/* BRAND · STOCK INLINE */
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 4px;
+  padding: 0 20px;
 }
 
-@media (max-width: 360px) {
-  #cartBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
+.brand-small {
+  font-weight: 500;
+  color: var(--muted);
+}
 
-  .header-actions {
-    gap: 6px;
-  }
+.dot {
+  opacity: 0.6;
+}
 
-  .carousel,
-  #carousel {
-    height: 240px;
-  }
+.stock-inline {
+  color: var(--muted);
+}
+
+/* MODEL */
+.modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  padding: 0 20px;
+  margin: 2px 0 12px;
+}
+
+/* PRICE */
+.modal-price {
+  font-size: 24px;
+  font-weight: 700;
+  padding: 0 20px;
+  margin-bottom: 18px;
+}
+
+/* MATERIALS BLOCK */
+.materials-block {
+  padding: 0 20px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-bottom: 18px;
+}
+
+/* SIZES LABEL */
+.sizes-label {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0 20px;
+  margin-bottom: 6px;
+}
+
+/* DELIVERY */
+.delivery-inline {
+  padding: 0 20px;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ACTION BUTTONS */
+.modal-actions-row {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.modal-cta {
+  width: 100%;
+  font-size: 15px;
+  padding: 12px 18px;
+}
+
+.reserve-btn {
+  width: 100%;
+  font-size: 15px;
+  padding: 12px 18px;
+}
+/* ========================================================= */
+/*        PREMIUM PRODUCT MODAL — LIGHT THEME (WHITE)        */
+/* ========================================================= */
+
+/* BACKDROP */
+#productModal {
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+}
+
+/* MODAL CONTAINER */
+.modal-content.modal-product {
+  background: #fff;
+  color: #111;
+}
+
+/* HEADER */
+.modal-inner-header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+/* SCROLLABLE BODY */
+.modal-body {
+  background: #fff;
+}
+
+/* GALLERY */
+.modal-images {
+  background: #fff;
+}
+
+#carousel img {
+  background: #fff;
+}
+
+/* THUMBNAILS */
+.thumb-strip {
+  background: #fff;
+}
+
+.thumb-strip .thumb {
+  opacity: 0.7;
+}
+
+.thumb-strip .thumb.active {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* PRODUCT INFO */
+.modal-info {
+  background: #fff;
+}
+
+.brand-row {
+  color: #7a7a7a;
+}
+
+.modal-title {
+  color: #111;
+}
+
+.modal-price {
+  color: #111;
+}
+
+.materials-block {
+  color: #555;
+}
+
+/* SIZES */
+.modal-sizes .size {
+  background: #f3f3f3;
+  color: #111;
+}
+
+.modal-sizes .size.active {
+  background: #111;
+  color: #fff;
+}
+
+/* DELIVERY */
+.delivery-inline {
+  color: #7a7a7a;
+}
+
+/* FIXED ACTION BUTTONS */
+.modal-actions-fixed {
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+button.primary {
+  background: #111;
+  color: #fff;
+}
+
+button.secondary {
+  background: #f3f3f3;
+  color: #111;
+}
+/* ===== PERFECT REAL-PHOTO GALLERY ===== */
+
+.modal-images {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px; /* воздух вокруг фото */
+}
+
+#carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+#carousel::-webkit-scrollbar { display: none; }
+
+#carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* ключевой момент */
+  scroll-snap-align: center;
+  background: #fff;
+  padding: 12px; /* ещё воздух */
+}
+/* ========================================================= */
+/*                    GALLERY (REAL PHOTO)                   */
+/* ========================================================= */
+
+.modal-images {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+#carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+#carousel::-webkit-scrollbar { display: none; }
+
+#carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  scroll-snap-align: center;
+  background: #fff;
+  padding: 12px;
+}
+
+/* THUMBNAILS */
+.thumb-strip {
+  padding: 16px 16px 20px;
+  gap: 10px;
+}
+
+.thumb-strip .thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eee;
+  opacity: 0.7;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.thumb-strip .thumb.active {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ========================================================= */
+/*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
+/* ========================================================= */
+
+.modal-info {
+  padding: 34px 22px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.modal-info section:not(:first-child) {
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  padding-top: 28px;
+}
+
+/* BRAND */
+.brand-row {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #8d8d8d;
+  opacity: 0.85;
+  margin-bottom: 2px;
+}
+
+/* TITLE */
+.modal-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.45px;
+  margin: 0 0 14px;
+  color: #111;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: titleFade .55s ease forwards;
+  animation-delay: .05s;
+}
+
+@keyframes titleFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* PRICE */
+.modal-price {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: #111;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: priceFade .55s ease forwards;
+  animation-delay: .12s;
+}
+
+@keyframes priceFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* MATERIALS */
+.materials-block {
+  font-size: 15px;
+  line-height: 1.68;
+  color: #555;
+  letter-spacing: 0.012em;
+  display: grid;
+  gap: 8px;
+  padding-left: 2px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: materialsFade .55s ease forwards;
+  animation-delay: .18s;
+}
+
+@keyframes materialsFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.materials-block::before {
+  content: "Details";
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b6b6b6;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* SIZES */
+.sizes-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.025em;
+  margin-bottom: 12px;
+}
+
+.modal-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: sizesFade .55s ease forwards;
+  animation-delay: .26s;
+}
+
+@keyframes sizesFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-sizes .size {
+  height: 50px;
+  border-radius: 14px;
+  background: #f5f5f5;
+  color: #111;
+  border: 1px solid #e3e3e3;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all .18s ease;
+}
+
+.modal-sizes .size:hover:not(.disabled) {
+  background: #ebebeb;
+}
+
+.modal-sizes .size.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+/* DELIVERY */
+.delivery-inline {
+  font-size: 13px;
+  color: #7a7a7a;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  padding: 12px 16px;
+  background: #f8f8f8;
+  border-radius: 14px;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: deliveryFade .55s ease forwards;
+  animation-delay: .34s;
+}
+
+@keyframes deliveryFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================================= */
+/*                FIXED BUTTONS — BOUTIQUE                   */
+/* ========================================================= */
+
+.modal-actions-fixed {
+  padding: 22px 22px 32px;
+  background: #fff;
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-actions-fixed button {
+  height: 54px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+/* ===== FIX: make product modal scrollable ===== */
+
+.modal-content.modal-product {
+  height: 100vh;              /* модалка занимает весь экран */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;           /* запрещаем скролл контейнера */
+}
+
+.modal-body {
+  flex: 1;                    /* занимает всё оставшееся пространство */
+  overflow-y: auto;           /* ВАЖНО: скроллим только контент */
+  -webkit-overflow-scrolling: touch;
+}
+/* ===== FIX: make gallery photo wider ===== */
+
+.modal-images {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* уменьшили воздух */
+  padding: 6px;
+}
+
+#carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  /* ещё меньше воздуха */
+  padding: 4px;
+}
+/* ===== 1) Мягкая тень под фото (бумажная карточка) ===== */
+
+.modal-images {
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-images::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 10%;
+  width: 80%;
+  height: 18px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0.12) 0%,
+    rgba(0,0,0,0) 70%
+  );
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ===== 2) Динамическая подсветка активного размера ===== */
+
+.modal-sizes .size.active {
+  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
+  transform: translateY(-1px);
+}
+
+/* ===== 3–4) Micro-иконки + editorial-grid для материалов ===== */
+
+.materials-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+
+.materials-block span.key {
+  font-weight: 600;
+  color: #333;
+  padding-left: 18px;
+  position: relative;
+}
+
+.materials-block span.key::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* ===== 5) Плавное “погружение” модалки ===== */
+
+.modal-content.modal-product {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .35s ease, opacity .35s ease;
+}
+
+#productModal.open .modal-content.modal-product {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ===== 6) Мягкий отклик кнопок при нажатии ===== */
+
+button.primary:active,
+button.secondary:active {
+  transform: scale(0.97);
+  filter: brightness(0.92);
 }
