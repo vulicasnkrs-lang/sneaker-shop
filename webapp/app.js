@@ -42,9 +42,11 @@ const els = {
   mysteryPrice: document.getElementById('mysteryPrice'),
   mysteryOk: document.getElementById('mysteryOk'),
 
+  /* CATALOG HEADER */
   profileAvatarHeader: document.getElementById('profileAvatar'),
   cartBtn: document.getElementById('cartBtn'),
 
+  /* PRODUCT MODAL */
   productModal: document.getElementById('productModal'),
   carousel: document.getElementById('carousel'),
   thumbStrip: document.getElementById('thumbStrip'),
@@ -58,20 +60,24 @@ const els = {
   addToCartBtn: document.getElementById('addToCartBtn'),
   reserveBtn: document.getElementById('reserveBtn'),
 
+  /* PRODUCT MODAL HEADER */
   profileAvatarModal: document.getElementById('profileAvatarModal'),
   cartBtnModal: document.getElementById('cartBtnModal'),
 
+  /* OPTIONAL OLD AVAILABILITY (SAFE IF NULL) */
   availabilityBlock: document.getElementById('availabilityBlock'),
   stockCount: document.getElementById('stockCount'),
 
   browserBackBtn: document.getElementById('browserBackBtn'),
 
+  /* CART */
   cartDrawer: document.getElementById('cartDrawer'),
   closeCart: document.getElementById('closeCart'),
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
   checkoutBtn: document.getElementById('checkoutBtn'),
 
+  /* PROFILE */
   profileModal: document.getElementById('profileModal'),
   profileAvatarProfile: document.getElementById('profileAvatarProfile'),
   profileName: document.getElementById('profileName'),
@@ -131,8 +137,16 @@ function initProfileFromTelegram() {
 
   if (user.photo_url) {
     els.profileAvatarHeader.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarHeader.style.backgroundSize = 'cover';
+    els.profileAvatarHeader.style.backgroundPosition = 'center';
+
     els.profileAvatarModal.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarModal.style.backgroundSize = 'cover';
+    els.profileAvatarModal.style.backgroundPosition = 'center';
+
     els.profileAvatarProfile.style.backgroundImage = `url(${user.photo_url})`;
+    els.profileAvatarProfile.style.backgroundSize = 'cover';
+    els.profileAvatarProfile.style.backgroundPosition = 'center';
   }
 }
 
@@ -155,7 +169,6 @@ function renderSkeletons() {
     els.catalog.appendChild(sk);
   }
 }
-
 /* ========================= */
 /*       LOAD PRODUCTS       */
 /* ========================= */
@@ -288,8 +301,23 @@ function cardNode(p) {
     else openProductModal(p);
   });
 
+  node.addEventListener('mousemove', (e) => {
+    const rect = node.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const tiltX = (y / rect.height) * 3;
+    const tiltY = -(x / rect.width) * 3;
+    node.style.transform =
+      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+
+  node.addEventListener('mouseleave', () => {
+    node.style.transform = '';
+  });
+
   return node;
 }
+
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -349,7 +377,7 @@ function openProductModal(p) {
   const imgs = p.images || [];
 
   /* ========================================================= */
-  /* 1) Fade‑галерея: активное фото                            */
+  /* 1) Fade‑галерея: функция активного фото                   */
   /* ========================================================= */
   function setActiveImage(index) {
     const all = carousel.querySelectorAll('img');
@@ -357,6 +385,10 @@ function openProductModal(p) {
       img.classList.toggle('active', i === index);
       img.classList.toggle('inactive', i !== index);
     });
+    // PREMIUM STICKY PRICE
+const priceBlock = els.modalPrice.closest('section');
+priceBlock.classList.add('sticky-price');
+
   }
 
   /* --- GALLERY IMAGES --- */
@@ -365,8 +397,10 @@ function openProductModal(p) {
     img.src = src;
     img.alt = p.title;
     carousel.appendChild(img);
+    observeSections();
   });
 
+  /* активируем первое фото */
   requestAnimationFrame(() => setActiveImage(0));
 
   /* --- THUMBNAILS --- */
@@ -376,10 +410,10 @@ function openProductModal(p) {
     t.innerHTML = `<img src="${src}" alt="">`;
 
     t.addEventListener('click', () => {
-      const width = carousel.clientWidth || 1;
+      const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-      setActiveImage(i);
+      setActiveImage(i);   // 🔥 улучшение
     });
 
     thumbStrip.appendChild(t);
@@ -396,7 +430,7 @@ function openProductModal(p) {
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
 
     updateThumbs(safeIndex);
-    setActiveImage(safeIndex);
+    setActiveImage(safeIndex);  // 🔥 улучшение
   };
 
   function updateThumbs(i) {
@@ -407,7 +441,7 @@ function openProductModal(p) {
 
   /* ========================= */
   /*   PREMIUM CARD FIELDS     */
-/* ========================= */
+  /* ========================= */
 
   els.modalBrand.textContent = p.brand || '';
 
@@ -435,6 +469,9 @@ function openProductModal(p) {
 
   els.modalSizes.innerHTML = '';
 
+  /* ========================================================= */
+  /* 3) Stagger‑анимация размеров                              */
+  /* ========================================================= */
   let delay = 0;
 
   (p.sizes || []).forEach(obj => {
@@ -447,6 +484,7 @@ function openProductModal(p) {
       b.classList.add('disabled');
     }
 
+    /* stagger */
     b.style.opacity = 0;
     b.style.transform = 'translateY(6px)';
     b.style.animation = `fadeUp .35s ease forwards`;
@@ -480,7 +518,7 @@ function openProductModal(p) {
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
-  requestAnimationFrame(() => observeSections());
+requestAnimationFrame(() => observeSections());
 
   /* ========================= */
   /*       ADD TO CART         */
@@ -580,6 +618,7 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
+
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -937,6 +976,7 @@ function cleanupReserved() {
     saveStock();
   }
 }
+
 /* ========================= */
 /*            UTILS          */
 /* ========================= */
@@ -1148,7 +1188,6 @@ function attachEvents() {
     }
   });
 }
-
 function observeSections() {
   const sections = document.querySelectorAll('.modal-info section');
 
@@ -1162,99 +1201,6 @@ function observeSections() {
 
   sections.forEach(s => obs.observe(s));
 }
-
-/* ========================================================= */
-/*      SOFT MOMENTUM SWIPE — SSENSE STYLE                   */
-/* ========================================================= */
-
-(function() {
-  const carousel = document.getElementById('carousel');
-  if (!carousel) return;
-
-  let isDragging = false;
-  let startX = 0;
-  let scrollStart = 0;
-  let velocity = 0;
-  let lastX = 0;
-  let lastTime = 0;
-  let momentumFrame = null;
-
-  function trackVelocity(x) {
-    const now = performance.now();
-    const dx = x - lastX;
-    const dt = now - lastTime || 1;
-    velocity = dx / dt;
-    lastX = x;
-    lastTime = now;
-  }
-
-  /* DRAG START */
-  carousel.addEventListener('touchstart', (e) => {
-    if (!e.touches.length) return;
-
-    isDragging = true;
-    startX = e.touches[0].clientX;
-    scrollStart = carousel.scrollLeft;
-
-    lastX = startX;
-    lastTime = performance.now();
-    velocity = 0;
-
-    if (momentumFrame) cancelAnimationFrame(momentumFrame);
-  });
-
-  /* DRAG MOVE */
-  carousel.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-
-    const x = e.touches[0].clientX;
-    const dx = x - startX;
-
-    trackVelocity(x);
-
-    carousel.scrollLeft = scrollStart - dx;
-  });
-
-  /* DRAG END + MOMENTUM */
-  carousel.addEventListener('touchend', () => {
-    if (!isDragging) return;
-    isDragging = false;
-
-    const decay = 0.95;
-    const threshold = 0.2;
-
-    function momentum() {
-      carousel.scrollLeft -= velocity * 20;
-      velocity *= decay;
-
-      if (Math.abs(velocity) > threshold) {
-        momentumFrame = requestAnimationFrame(momentum);
-      } else {
-        snapToNearest();
-      }
-    }
-
-    momentum();
-  });
-
-  function snapToNearest() {
-    const width = carousel.clientWidth;
-    const index = Math.round(carousel.scrollLeft / width);
-    const target = index * width;
-
-    carousel.classList.add('momentum');
-    carousel.style.transform = `translateX(0)`; // reset transform
-
-    carousel.scrollTo({
-      left: target,
-      behavior: 'smooth'
-    });
-
-    setTimeout(() => {
-      carousel.classList.remove('momentum');
-    }, 450);
-  }
-})();
 
 /* ========================= */
 /*           START           */
