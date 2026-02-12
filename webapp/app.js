@@ -170,155 +170,6 @@ function renderSkeletons() {
   }
 }
 /* ========================= */
-/*       LOAD PRODUCTS       */
-/* ========================= */
-
-async function loadProducts() {
-  try {
-    const res = await fetch('/products.json', { cache: 'no-store' });
-    state.products = await res.json();
-  } catch {
-    state.products = [];
-  }
-
-  state.products.forEach(p => {
-    state.brandSet.add(p.brand);
-    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
-  });
-
-  state.filtered = applyPostponedFilter([...state.products]);
-}
-
-/* ========================= */
-/*    POSTPONED FILTERING    */
-/* ========================= */
-
-function applyPostponedFilter(arr) {
-  const now = Date.now();
-  const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
-  const hiddenIds = active.map(x => x.id);
-  return arr.filter(p => !hiddenIds.includes(p.id));
-}
-
-/* ========================= */
-/*       BUILD FILTERS       */
-/* ========================= */
-
-function buildFilters() {
-  [...state.brandSet].sort().forEach(b => {
-    const opt = document.createElement('option');
-    opt.value = b;
-    opt.textContent = b;
-    els.brandFilter.appendChild(opt);
-  });
-
-  for (let s = 35; s <= 49; s++) {
-    const opt = document.createElement('option');
-    opt.value = s;
-    opt.textContent = String(s);
-    els.sizeFilter.appendChild(opt);
-  }
-}
-
-/* ========================= */
-/*       APPLY FILTERS       */
-/* ========================= */
-
-function applyFilters() {
-  let arr = [...state.products];
-
-  const brand = els.brandFilter.value;
-  const size = els.sizeFilter.value;
-  const search = els.searchInput.value.trim().toLowerCase();
-  const sort = els.sortSelect.value;
-
-  if (brand) arr = arr.filter(p => p.brand === brand);
-
-  if (size) {
-    const s = Number(size);
-    arr = arr.filter(p =>
-      (p.sizes || []).some(obj => obj.size === s && obj.stock > 0)
-    );
-  }
-
-  if (search) arr = arr.filter(p => p.title.toLowerCase().includes(search));
-
-  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
-  if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
-
-  state.filtered = applyPostponedFilter(arr);
-  renderCatalog();
-}
-
-/* ========================= */
-/*       RENDER CATALOG      */
-/* ========================= */
-
-function renderCatalog() {
-  els.catalog.innerHTML = '';
-
-  if (!state.filtered.length) {
-    const empty = document.createElement('div');
-    empty.style.color = '#aeb4c0';
-    empty.style.padding = '20px';
-    empty.textContent = 'Ничего не найдено';
-    els.catalog.appendChild(empty);
-    return;
-  }
-
-  state.filtered.forEach((p, i) => {
-    const node = cardNode(p);
-    node.style.animationDelay = `${i * 40}ms`;
-    els.catalog.appendChild(node);
-  });
-}
-
-/* ========================= */
-/*          CARD NODE        */
-/* ========================= */
-
-function cardNode(p) {
-  const node = document.createElement('div');
-  node.className = 'card';
-  node.dataset.id = p.id;
-
-  const cover = p.images?.[0] || '';
-  const price = formatPrice(p.price);
-
-  node.innerHTML = `
-    <div class="card-image">
-      <img src="${cover}" alt="${p.title}">
-    </div>
-
-    <div class="card-info">
-      <div class="card-title">${p.title}</div>
-      <div class="card-price">${price}</div>
-    </div>
-  `;
-
-  node.addEventListener('click', () => {
-    if (tg) openProductScreen(p.id);
-    else openProductModal(p);
-  });
-
-  node.addEventListener('mousemove', (e) => {
-    const rect = node.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const tiltX = (y / rect.height) * 3;
-    const tiltY = -(x / rect.width) * 3;
-    node.style.transform =
-      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-  });
-
-  node.addEventListener('mouseleave', () => {
-    node.style.transform = '';
-  });
-
-  return node;
-}
-
-/* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
 
@@ -359,6 +210,7 @@ function updateAvailabilityBlock(p, size) {
 
   els.stockCount.textContent = sizeObj.stock;
 }
+
 /* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
@@ -375,14 +227,17 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* --- GALLERY IMAGES --- */
+  /* --- GALLERY IMAGES (UPDATED FOR CINEMATIC + PARALLAX) --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
     img.alt = p.title;
+    img.draggable = false;
     carousel.appendChild(img);
-    observeSections();
   });
+
+  /* ВАЖНО: переносим observeSections() ВНЕ цикла */
+  observeSections();
 
   /* --- THUMBNAILS --- */
   imgs.forEach((src, i) => {
@@ -421,32 +276,24 @@ function openProductModal(p) {
   /*   PREMIUM CARD FIELDS     */
   /* ========================= */
 
-  /* BRAND */
   els.modalBrand.textContent = p.brand || '';
 
-  /* STOCK INLINE */
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
 
-  /* MODEL */
   els.modalTitle.textContent = p.title;
-
-  /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
 
-  /* MATERIALS (A2 expandable object) */
- if (p.materials && typeof p.materials === 'object') {
-  els.modalMaterials.innerHTML = Object.entries(p.materials)
-    .map(([key, value]) =>
-      `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
-    )
-    .join('<br>');
-} else {
-  els.modalMaterials.innerHTML = '';
-}
+  if (p.materials && typeof p.materials === 'object') {
+    els.modalMaterials.innerHTML = Object.entries(p.materials)
+      .map(([key, value]) =>
+        `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
+      )
+      .join('<br>');
+  } else {
+    els.modalMaterials.innerHTML = '';
+  }
 
-
-  /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
 
   /* ========================= */
@@ -499,7 +346,7 @@ function openProductModal(p) {
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
-    const qty = 1; // премиальная карточка — всегда 1 пара
+    const qty = 1;
 
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
@@ -551,45 +398,15 @@ function openProductModal(p) {
       openCart();
     };
   }
-}
 
-/* ========================= */
-/*   HELPERS FOR MATERIALS   */
-/* ========================= */
-
-function beautifyMaterialKey(key) {
-  const map = {
-    upper: 'Верх',
-    sole: 'Подошва',
-    midsole: 'Промежуточная подошва',
-    lining: 'Подкладка',
-    weight: 'Вес'
-  };
-  return map[key] || key.charAt(0).toUpperCase() + key.slice(1);
-}
-
-function pluralPairs(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'пара';
-  if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
-  return 'пар';
-}
-/* ========================= */
-/*    CLOSE PRODUCT MODAL    */
-/* ========================= */
-
-function closeProductModal() {
-  els.productModal.classList.remove('open');
+  /* ========================= */
+  /*   PREMIUM GALLERY INIT    */
+  /* ========================= */
 
   setTimeout(() => {
-    els.productModal.classList.add('hidden');
-  }, 220);
-
-  if (tg) {
-    tg.BackButton.hide();
-    tg.BackButton.onClick(() => {});
-  }
+    initParallaxGallery();
+  }, 60);
 }
-
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -921,7 +738,6 @@ function restoreStock() {
     });
   });
 }
-
 /* ========================= */
 /*     CLEANUP RESERVED      */
 /* ========================= */
@@ -1159,6 +975,11 @@ function attachEvents() {
     }
   });
 }
+
+/* ========================= */
+/*   SECTION OBSERVER        */
+/* ========================= */
+
 function observeSections() {
   const sections = document.querySelectorAll('.modal-info section');
 
@@ -1171,6 +992,81 @@ function observeSections() {
   }, { threshold: 0.2 });
 
   sections.forEach(s => obs.observe(s));
+}
+
+/* ========================================================= */
+/*                PREMIUM PARALLAX ENGINE                    */
+/* ========================================================= */
+
+function initParallaxGallery() {
+  const carousel = document.getElementById("carousel");
+  if (!carousel) return;
+
+  const slides = Array.from(carousel.querySelectorAll("img"));
+  if (slides.length === 0) return;
+
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+
+  /* ACTIVE / INACTIVE STATES */
+  function updateActiveState() {
+    const index = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+
+    slides.forEach((img, i) => {
+      img.classList.remove("active-photo", "inactive-photo");
+      if (i === index) img.classList.add("active-photo");
+      else img.classList.add("inactive-photo");
+    });
+
+    const thumbs = document.querySelectorAll(".thumb");
+    thumbs.forEach((t, i) => {
+      t.classList.toggle("active", i === index);
+    });
+  }
+
+  updateActiveState();
+
+  /* PARALLAX SHIFT */
+  function applyParallax() {
+    const delta = currentX - startX;
+
+    slides.forEach((img) => {
+      img.classList.add("parallax-shift");
+      img.style.transform = `translateX(${delta * 0.12}px) scale(${img.classList.contains("active-photo") ? 1.10 : 1.04})`;
+    });
+  }
+
+  function resetParallax() {
+    slides.forEach((img) => {
+      img.style.transform = "";
+      img.classList.remove("parallax-shift");
+    });
+  }
+
+  /* TOUCH EVENTS */
+  carousel.addEventListener("touchstart", (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    currentX = startX;
+  });
+
+  carousel.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
+    currentX = e.touches[0].clientX;
+    applyParallax();
+  });
+
+  carousel.addEventListener("touchend", () => {
+    isDragging = false;
+    resetParallax();
+    setTimeout(updateActiveState, 120);
+  });
+
+  /* SCROLL EVENT */
+  carousel.addEventListener("scroll", () => {
+    setTimeout(updateActiveState, 80);
+  });
 }
 
 /* ========================= */
