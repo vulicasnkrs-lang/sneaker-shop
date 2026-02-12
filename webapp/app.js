@@ -122,6 +122,26 @@ async function init() {
 }
 
 /* ========================= */
+/*       LOAD PRODUCTS       */
+/* ========================= */
+
+async function loadProducts() {
+  try {
+    const res = await fetch('/products.json', { cache: 'no-store' });
+    state.products = await res.json();
+  } catch {
+    state.products = [];
+  }
+
+  state.products.forEach(p => {
+    state.brandSet.add(p.brand);
+    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
+  });
+
+  state.filtered = applyPostponedFilter([...state.products]);
+}
+
+/* ========================= */
 /*   TELEGRAM PROFILE INIT   */
 /* ========================= */
 
@@ -168,6 +188,135 @@ function renderSkeletons() {
     `;
     els.catalog.appendChild(sk);
   }
+}
+
+/* ========================= */
+/*    POSTPONED FILTERING    */
+/* ========================= */
+
+function applyPostponedFilter(arr) {
+  const now = Date.now();
+  const active = state.postponed.filter(x => new Date(x.until).getTime() > now);
+  const hiddenIds = active.map(x => x.id);
+  return arr.filter(p => !hiddenIds.includes(p.id));
+}
+
+/* ========================= */
+/*       BUILD FILTERS       */
+/* ========================= */
+
+function buildFilters() {
+  [...state.brandSet].sort().forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b;
+    opt.textContent = b;
+    els.brandFilter.appendChild(opt);
+  });
+
+  for (let s = 35; s <= 49; s++) {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = String(s);
+    els.sizeFilter.appendChild(opt);
+  }
+}
+
+/* ========================= */
+/*       APPLY FILTERS       */
+/* ========================= */
+
+function applyFilters() {
+  let arr = [...state.products];
+
+  const brand = els.brandFilter.value;
+  const size = els.sizeFilter.value;
+  const search = els.searchInput.value.trim().toLowerCase();
+  const sort = els.sortSelect.value;
+
+  if (brand) arr = arr.filter(p => p.brand === brand);
+
+  if (size) {
+    const s = Number(size);
+    arr = arr.filter(p =>
+      (p.sizes || []).some(obj => obj.size === s && obj.stock > 0)
+    );
+  }
+
+  if (search) arr = arr.filter(p => p.title.toLowerCase().includes(search));
+
+  if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
+  if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
+
+  state.filtered = applyPostponedFilter(arr);
+  renderCatalog();
+}
+
+/* ========================= */
+/*       RENDER CATALOG      */
+/* ========================= */
+
+function renderCatalog() {
+  els.catalog.innerHTML = '';
+
+  if (!state.filtered.length) {
+    const empty = document.createElement('div');
+    empty.style.color = '#aeb4c0';
+    empty.style.padding = '20px';
+    empty.textContent = 'Ничего не найдено';
+    els.catalog.appendChild(empty);
+    return;
+  }
+
+  state.filtered.forEach((p, i) => {
+    const node = cardNode(p);
+    node.style.animationDelay = `${i * 40}ms`;
+    els.catalog.appendChild(node);
+  });
+}
+
+/* ========================= */
+/*          CARD NODE        */
+/* ========================= */
+
+function cardNode(p) {
+  const node = document.createElement('div');
+  node.className = 'card';
+  node.dataset.id = p.id;
+
+  const cover = p.images?.[0] || '';
+  const price = formatPrice(p.price);
+
+  node.innerHTML = `
+    <div class="card-image">
+      <img src="${cover}" alt="${p.title}">
+    </div>
+
+    <div class="card-info">
+      <div class="card-title">${p.title}</div>
+      <div class="card-price">${price}</div>
+    </div>
+  `;
+
+  node.addEventListener('click', () => {
+    if (tg) openProductScreen(p.id);
+    else openProductModal(p);
+  });
+
+  node.addEventListener('mousemove', (e) => {
+    const rect = node.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const tiltX = (y / rect.height) * 3;
+    const tiltY = -(x / rect.width) * 3;
+    node.style.transform =
+      `translateY(-4px) scale(1.02) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+
+  node.addEventListener('mouseleave', () => {
+    node.style.transform = '';
+  });
+
+  return node;
 }
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
@@ -227,7 +376,7 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* --- GALLERY IMAGES (UPDATED FOR CINEMATIC + PARALLAX) --- */
+  /* --- GALLERY IMAGES (CINEMATIC + PARALLAX READY) --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -236,7 +385,7 @@ function openProductModal(p) {
     carousel.appendChild(img);
   });
 
-  /* ВАЖНО: переносим observeSections() ВНЕ цикла */
+  /* observeSections ВНЕ цикла */
   observeSections();
 
   /* --- THUMBNAILS --- */
@@ -406,6 +555,44 @@ function openProductModal(p) {
   setTimeout(() => {
     initParallaxGallery();
   }, 60);
+}
+
+/* ========================= */
+/*   HELPERS FOR MATERIALS   */
+/* ========================= */
+
+function beautifyMaterialKey(key) {
+  const map = {
+    upper: 'Верх',
+    sole: 'Подошва',
+    midsole: 'Промежуточная подошва',
+    lining: 'Подкладка',
+    weight: 'Вес'
+  };
+  return map[key] || key.charAt(0).toUpperCase() + key.slice(1);
+}
+
+function pluralPairs(n) {
+  if (n % 10 === 1 && n % 100 !== 11) return 'пара';
+  if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
+  return 'пар';
+}
+
+/* ========================= */
+/*    CLOSE PRODUCT MODAL    */
+/* ========================= */
+
+function closeProductModal() {
+  els.productModal.classList.remove('open');
+
+  setTimeout(() => {
+    els.productModal.classList.add('hidden');
+  }, 220);
+
+  if (tg) {
+    tg.BackButton.hide();
+    tg.BackButton.onClick(() => {});
+  }
 }
 /* ========================= */
 /*            CART           */
@@ -738,6 +925,7 @@ function restoreStock() {
     });
   });
 }
+
 /* ========================= */
 /*     CLEANUP RESERVED      */
 /* ========================= */
@@ -763,7 +951,6 @@ function cleanupReserved() {
     saveStock();
   }
 }
-
 /* ========================= */
 /*            UTILS          */
 /* ========================= */
@@ -1009,7 +1196,6 @@ function initParallaxGallery() {
   let currentX = 0;
   let isDragging = false;
 
-  /* ACTIVE / INACTIVE STATES */
   function updateActiveState() {
     const index = Math.round(carousel.scrollLeft / carousel.offsetWidth);
 
@@ -1027,7 +1213,6 @@ function initParallaxGallery() {
 
   updateActiveState();
 
-  /* PARALLAX SHIFT */
   function applyParallax() {
     const delta = currentX - startX;
 
@@ -1044,7 +1229,6 @@ function initParallaxGallery() {
     });
   }
 
-  /* TOUCH EVENTS */
   carousel.addEventListener("touchstart", (e) => {
     isDragging = true;
     startX = e.touches[0].clientX;
@@ -1063,7 +1247,6 @@ function initParallaxGallery() {
     setTimeout(updateActiveState, 120);
   });
 
-  /* SCROLL EVENT */
   carousel.addEventListener("scroll", () => {
     setTimeout(updateActiveState, 80);
   });
