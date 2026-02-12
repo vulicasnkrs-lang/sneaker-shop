@@ -359,7 +359,6 @@ function updateAvailabilityBlock(p, size) {
 
   els.stockCount.textContent = sizeObj.stock;
 }
-
 /* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
@@ -376,21 +375,6 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* ========================================================= */
-  /* 1) Fade‑галерея: функция активного фото                   */
-  /* ========================================================= */
-  function setActiveImage(index) {
-    const all = carousel.querySelectorAll('img');
-    all.forEach((img, i) => {
-      img.classList.toggle('active', i === index);
-      img.classList.toggle('inactive', i !== index);
-    });
-    // PREMIUM STICKY PRICE
-const priceBlock = els.modalPrice.closest('section');
-priceBlock.classList.add('sticky-price');
-
-  }
-
   /* --- GALLERY IMAGES --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
@@ -399,9 +383,6 @@ priceBlock.classList.add('sticky-price');
     carousel.appendChild(img);
     observeSections();
   });
-
-  /* активируем первое фото */
-  requestAnimationFrame(() => setActiveImage(0));
 
   /* --- THUMBNAILS --- */
   imgs.forEach((src, i) => {
@@ -413,7 +394,6 @@ priceBlock.classList.add('sticky-price');
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-      setActiveImage(i);   // 🔥 улучшение
     });
 
     thumbStrip.appendChild(t);
@@ -428,9 +408,7 @@ priceBlock.classList.add('sticky-price');
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
-
     updateThumbs(safeIndex);
-    setActiveImage(safeIndex);  // 🔥 улучшение
   };
 
   function updateThumbs(i) {
@@ -443,24 +421,32 @@ priceBlock.classList.add('sticky-price');
   /*   PREMIUM CARD FIELDS     */
   /* ========================= */
 
+  /* BRAND */
   els.modalBrand.textContent = p.brand || '';
 
+  /* STOCK INLINE */
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
 
+  /* MODEL */
   els.modalTitle.textContent = p.title;
+
+  /* PRICE */
   els.modalPrice.textContent = formatPrice(p.price);
 
-  if (p.materials && typeof p.materials === 'object') {
-    els.modalMaterials.innerHTML = Object.entries(p.materials)
-      .map(([key, value]) =>
-        `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
-      )
-      .join('<br>');
-  } else {
-    els.modalMaterials.innerHTML = '';
-  }
+  /* MATERIALS (A2 expandable object) */
+ if (p.materials && typeof p.materials === 'object') {
+  els.modalMaterials.innerHTML = Object.entries(p.materials)
+    .map(([key, value]) =>
+      `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
+    )
+    .join('<br>');
+} else {
+  els.modalMaterials.innerHTML = '';
+}
 
+
+  /* RESET AVAILABILITY */
   updateAvailabilityBlock(p, null);
 
   /* ========================= */
@@ -468,12 +454,6 @@ priceBlock.classList.add('sticky-price');
   /* ========================= */
 
   els.modalSizes.innerHTML = '';
-
-  /* ========================================================= */
-  /* 3) Stagger‑анимация размеров                              */
-  /* ========================================================= */
-  let delay = 0;
-
   (p.sizes || []).forEach(obj => {
     const b = document.createElement('button');
     b.className = 'size';
@@ -483,13 +463,6 @@ priceBlock.classList.add('sticky-price');
       b.disabled = true;
       b.classList.add('disabled');
     }
-
-    /* stagger */
-    b.style.opacity = 0;
-    b.style.transform = 'translateY(6px)';
-    b.style.animation = `fadeUp .35s ease forwards`;
-    b.style.animationDelay = `${delay}ms`;
-    delay += 40;
 
     b.addEventListener('click', () => {
       if (obj.stock <= 0) return;
@@ -518,7 +491,6 @@ priceBlock.classList.add('sticky-price');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
-requestAnimationFrame(() => observeSections());
 
   /* ========================= */
   /*       ADD TO CART         */
@@ -527,7 +499,7 @@ requestAnimationFrame(() => observeSections());
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
 
-    const qty = 1;
+    const qty = 1; // премиальная карточка — всегда 1 пара
 
     if (!selectedSize) selectedSize = pickFirstSize(p);
 
@@ -601,7 +573,6 @@ function pluralPairs(n) {
   if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
   return 'пар';
 }
-
 /* ========================= */
 /*    CLOSE PRODUCT MODAL    */
 /* ========================= */
