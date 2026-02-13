@@ -26,6 +26,11 @@ html, body {
 
 .hidden { display: none !important; }
 
+/* Когда модалка открыта — замораживаем каталог */
+body.modal-open {
+  overflow: hidden;
+}
+
 /* ========================= */
 /*          BUTTONS          */
 /* ========================= */
@@ -229,10 +234,11 @@ html, body {
 .product-modal {
   width: 100%;
   max-width: 520px;
-  background: #fff;
+  background: rgba(255,255,255,0.92); /* премиальная полупрозрачность */
   border-radius: 22px 22px 0 0;
   overflow: hidden;
   animation: slideUp .35s ease forwards;
+  backdrop-filter: blur(12px); /* эффект дорогого журнала */
 }
 
 @keyframes slideUp {
@@ -409,6 +415,7 @@ html, body {
 /*   НОВЫЙ — В ЧАСТИ 3                                        */
 /* ========================================================= */
 
+
 /* ========================================================= */
 /*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
 /* ========================================================= */
@@ -479,20 +486,20 @@ html, body {
   to { opacity: 1; transform: translateY(0); }
 }
 /* ========================================================= */
-/*                PRODUCT GALLERY — CLEAN                     */
+/*                PRODUCT GALLERY — MAGAZINE EDITION         */
 /* ========================================================= */
 
-/* Внешний контейнер — белый фон, чтобы текст не просвечивал */
+/* Белый слой под сценой — текст читается */
 .modal-images {
   width: 100%;
-  background: #fff;
+  background: #ffffff;
   position: relative;
   overflow: hidden;
   padding: 0;
   margin: 0;
 }
 
-/* Квадратная сцена */
+/* Квадратная сцена — как разворот журнала */
 .gallery-stage {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -500,7 +507,7 @@ html, body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: transparent;
+  background: transparent; /* сцена прозрачная */
   padding: 0;
 }
 
@@ -516,19 +523,18 @@ html, body {
 
 #carousel::-webkit-scrollbar { display: none; }
 
-/* Фото — одинаковая ширина для всех (широкие = вертикальные) */
+/* Фото — одинаковая ширина, мягкие отступы, премиальный воздух */
 #carousel img {
   flex: 0 0 100%;
   width: auto;
   height: 100%;
-  max-width: 75%; /* ← ключ: одинаковая ширина */
+  max-width: 72%; /* широкие = вертикальные */
   object-fit: contain;
   object-position: center;
+  padding: 4%; /* мягкий воздух вокруг фото */
   background: transparent;
   scroll-snap-align: center;
-  transform: none;
-  opacity: 1;
-  transition: opacity .25s ease;
+  transition: opacity .25s ease, transform .25s ease;
 }
 
 #carousel img.inactive-photo {
