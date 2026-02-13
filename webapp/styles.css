@@ -210,7 +210,7 @@ html, body {
 #productModal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.28); /* Light Editorial */
+  background: rgba(0,0,0,0.28); /* лёгкий editorial */
   backdrop-filter: blur(6px);
   z-index: 9999;
   opacity: 0;
@@ -458,10 +458,6 @@ html, body {
     width: 56px;
     height: 56px;
   }
-
-  .carousel {
-    height: 260px;
-  }
 }
 
 @media (max-width: 360px) {
@@ -473,13 +469,9 @@ html, body {
   .header-actions {
     gap: 6px;
   }
-
-  .carousel {
-    height: 240px;
-  }
 }
 /* ========================================================= */
-/*                OBJECT ON STAGE — HERO PHOTO               */
+/*                OBJECT ON STAGE — APPLE STYLE              */
 /* ========================================================= */
 
 /* Внешний контейнер */
@@ -492,15 +484,15 @@ html, body {
   margin: 0;
 }
 
-/* Сцена для фото — фиксированная высота, много воздуха */
+/* Сцена для фото — компактная, с воздухом */
 .gallery-stage {
   width: 100%;
-  height: 44vh; /* ключевой параметр — фото не занимает весь экран */
+  height: 34vh; /* ключевой параметр — фото компактное */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 12px 0; /* воздух сверху и снизу */
+  padding: 10px 0; /* воздух сверху и снизу */
 }
 
 /* Трек карусели */
@@ -518,25 +510,25 @@ html, body {
 /* Фото — компактное, аккуратное, не обрезается */
 #carousel img {
   flex: 0 0 100%;
-  max-height: 40vh;   /* фото всегда меньше сцены */
-  max-width: 88%;     /* воздух по краям */
+  max-height: 28vh;   /* фото всегда меньше сцены */
+  max-width: 80%;     /* воздух по краям */
   height: auto;
   object-fit: contain; /* ничего не режем */
   scroll-snap-align: center;
 
   transform: none;
-  transition: transform .35s ease, opacity .35s ease;
+  opacity: 1;
+  transition: opacity .35s ease;
 }
 
-/* Активное фото — лёгкое увеличение */
+/* Активное фото */
 #carousel img.active-photo {
-  transform: scale(1.02);
   opacity: 1;
 }
 
-/* Неактивные — мягкое затухание */
+/* Неактивные — лёгкое затухание */
 #carousel img.inactive-photo {
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
 /* Параллакс */
@@ -592,7 +584,7 @@ html, body {
   flex-direction: column;
   gap: 28px;
 
-  /* улучшенная читаемость на прозрачном фоне */
+  /* улучшенная читаемость */
   text-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 
