@@ -169,7 +169,6 @@ function initProfileFromTelegram() {
     els.profileAvatarProfile.style.backgroundPosition = 'center';
   }
 }
-
 /* ========================= */
 /*         SKELETONS         */
 /* ========================= */
@@ -318,6 +317,7 @@ function cardNode(p) {
 
   return node;
 }
+
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -359,7 +359,6 @@ function updateAvailabilityBlock(p, size) {
 
   els.stockCount.textContent = sizeObj.stock;
 }
-
 /* ========================= */
 /*       PRODUCT MODAL       */
 /* ========================= */
@@ -376,7 +375,7 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* --- GALLERY IMAGES (CINEMATIC + PARALLAX READY) --- */
+  /* --- GALLERY IMAGES --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
@@ -483,6 +482,8 @@ function openProductModal(p) {
   /*        OPEN MODAL         */
   /* ========================= */
 
+  document.body.classList.add('modal-open'); // заморозка каталога
+
   els.productModal.classList.remove('hidden');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
@@ -587,6 +588,7 @@ function closeProductModal() {
 
   setTimeout(() => {
     els.productModal.classList.add('hidden');
+    document.body.classList.remove('modal-open'); // разморозка каталога
   }, 220);
 
   if (tg) {
@@ -951,6 +953,7 @@ function cleanupReserved() {
     saveStock();
   }
 }
+
 /* ========================= */
 /*            UTILS          */
 /* ========================= */
@@ -1224,36 +1227,4 @@ function initParallaxGallery() {
 
   function resetParallax() {
     slides.forEach((img) => {
-      img.style.transform = "";
-      img.classList.remove("parallax-shift");
-    });
-  }
-
-  carousel.addEventListener("touchstart", (e) => {
-    isDragging = true;
-    startX = e.touches[0].clientX;
-    currentX = startX;
-  });
-
-  carousel.addEventListener("touchmove", (e) => {
-    if (!isDragging) return;
-    currentX = e.touches[0].clientX;
-    applyParallax();
-  });
-
-  carousel.addEventListener("touchend", () => {
-    isDragging = false;
-    resetParallax();
-    setTimeout(updateActiveState, 120);
-  });
-
-  carousel.addEventListener("scroll", () => {
-    setTimeout(updateActiveState, 80);
-  });
-}
-
-/* ========================= */
-/*           START           */
-/* ========================= */
-
-init();
+      img.style.transform =
