@@ -210,7 +210,7 @@ html, body {
 #productModal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.28); /* LIGHT EDITORIAL FIX */
   backdrop-filter: blur(6px);
   z-index: 9999;
   opacity: 0;
@@ -478,104 +478,6 @@ html, body {
     height: 240px;
   }
 }
-
-@keyframes fadeInProfile {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
-.profile-modal .header {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  padding: 18px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.profile-modal .header .brand {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.profile-modal .profile-header {
-  padding: 24px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.profile-modal .profile-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 999px;
-  background: #f3f3f3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  overflow: hidden;
-}
-
-.profile-modal .profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.profile-modal .profile-name {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.profile-modal .profile-username {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.profile-modal .profile-tabs {
-  display: flex;
-  gap: 6px;
-  padding: 14px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-.profile-modal .profile-tab {
-  flex: 1;
-  padding: 10px 0;
-  text-align: center;
-  border-radius: 12px;
-  background: #f3f3f3;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .2s ease;
-}
-
-.profile-modal .profile-tab.active {
-  background: #111;
-  color: #fff;
-}
-
-.profile-modal .profile-content {
-  padding: 20px;
-  display: grid;
-  gap: 20px;
-  max-height: calc(100vh - 220px);
-  overflow-y: auto;
-}
-
-.profile-modal .profile-section {
-  display: none;
-}
-
-.profile-modal .profile-section.active {
-  display: block;
-}
 /* ========================================================= */
 /*            PREMIUM EDITORIAL CINEMATIC GALLERY            */
 /* ========================================================= */
@@ -593,7 +495,7 @@ html, body {
 /* HERO FRAME WRAPPER */
 .gallery-stage {
   width: 100%;
-  aspect-ratio: 1 / 1.35; /* высокий editorial формат */
+  aspect-ratio: 1 / 1.15; /* LIGHT EDITORIAL FIX — было 1/1.35 */
   position: relative;
   overflow: hidden;
   display: flex;
@@ -647,32 +549,31 @@ html, body {
 
 #carousel::-webkit-scrollbar { display: none; }
 
-/* EDITORIAL PHOTO STYLE */
+/* EDITORIAL PHOTO STYLE — LIGHT EDITORIAL FIX */
 #carousel img {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* ключевой момент — editorial hero frame */
+  object-fit: contain; /* было cover */
   object-position: center;
   scroll-snap-align: center;
 
-  /* cinematic crop */
-  transform: scale(1.06);
+  transform: scale(0.96); /* было 1.06 */
   transition: transform .45s ease, opacity .45s ease;
 }
 
-/* ACTIVE / INACTIVE STATES FOR PARALLAX */
+/* ACTIVE / INACTIVE STATES */
 #carousel img.active-photo {
-  transform: scale(1.10);
+  transform: scale(1.02); /* мягкое увеличение */
   opacity: 1;
 }
 
 #carousel img.inactive-photo {
-  transform: scale(1.04);
-  opacity: 0.85;
+  transform: scale(0.94);
+  opacity: 0.9;
 }
 
-/* PARALLAX SHIFT CLASS (JS WILL ADD IT) */
+/* PARALLAX SHIFT */
 #carousel img.parallax-shift {
   transition: transform .1s linear;
 }
@@ -714,6 +615,7 @@ html, body {
   height: 100%;
   object-fit: cover;
 }
+
 /* ========================================================= */
 /*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
 /* ========================================================= */
@@ -723,6 +625,9 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 28px;
+
+  /* LIGHT EDITORIAL FIX — мягкая тень для читаемости */
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 
 .modal-info section:not(:first-child) {
@@ -749,10 +654,13 @@ html, body {
   letter-spacing: -0.45px;
   margin: 0 0 14px;
   color: #111;
+
   opacity: 0;
   transform: translateY(8px);
   animation: titleFade .55s ease forwards;
   animation-delay: .05s;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
 }
 
 @keyframes titleFade {
@@ -766,10 +674,13 @@ html, body {
   letter-spacing: -0.3px;
   margin-bottom: 6px;
   color: #111;
+
   opacity: 0;
   transform: translateY(6px);
   animation: priceFade .55s ease forwards;
   animation-delay: .12s;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
 }
 
 @keyframes priceFade {
@@ -783,12 +694,15 @@ html, body {
   color: #555;
   letter-spacing: 0.012em;
   display: grid;
-  gap: 8px;
-  padding-left: 2px;
+  gap: 10px 20px;
+  grid-template-columns: 1fr 1fr;
+
   opacity: 0;
   transform: translateY(10px);
   animation: materialsFade .55s ease forwards;
   animation-delay: .18s;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
 }
 
 @keyframes materialsFade {
@@ -805,6 +719,22 @@ html, body {
   display: block;
 }
 
+.materials-block span.key {
+  font-weight: 600;
+  color: #333;
+  padding-left: 18px;
+  position: relative;
+}
+
+.materials-block span.key::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
 /* SIZES */
 .sizes-label {
   font-size: 13px;
@@ -818,6 +748,7 @@ html, body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+
   opacity: 0;
   transform: translateY(10px);
   animation: sizesFade .55s ease forwards;
@@ -847,6 +778,8 @@ html, body {
   background: #111;
   color: #fff;
   border-color: #111;
+  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
+  transform: translateY(-1px);
 }
 
 /* DELIVERY */
@@ -859,10 +792,13 @@ html, body {
   background: #f8f8f8;
   border-radius: 14px;
   margin-top: 10px;
+
   opacity: 0;
   transform: translateY(10px);
   animation: deliveryFade .55s ease forwards;
   animation-delay: .34s;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
 }
 
 @keyframes deliveryFade {
@@ -891,7 +827,7 @@ html, body {
 }
 
 /* ========================================================= */
-/*        FIX: make product modal scrollable                 */
+/*        MODAL SCROLL FIX                                   */
 /* ========================================================= */
 
 .modal-content.modal-product {
@@ -899,49 +835,7 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
 
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ========================================================= */
-/*        MICRO-DETAILS & PREMIUM TOUCHES                    */
-/* ========================================================= */
-
-/* Active size highlight */
-.modal-sizes .size.active {
-  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
-  transform: translateY(-1px);
-}
-
-/* Materials grid with bullets */
-.materials-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 20px;
-}
-
-.materials-block span.key {
-  font-weight: 600;
-  color: #333;
-  padding-left: 18px;
-  position: relative;
-}
-
-.materials-block span.key::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #aaa;
-  font-size: 14px;
-}
-
-/* Modal entrance animation */
-.modal-content.modal-product {
   transform: translateY(20px);
   opacity: 0;
   transition: transform .35s ease, opacity .35s ease;
