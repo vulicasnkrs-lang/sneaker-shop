@@ -210,7 +210,7 @@ html, body {
 #productModal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.28); /* LIGHT EDITORIAL FIX */
+  background: rgba(0,0,0,0.28); /* Light Editorial */
   backdrop-filter: blur(6px);
   z-index: 9999;
   opacity: 0;
@@ -479,10 +479,10 @@ html, body {
   }
 }
 /* ========================================================= */
-/*            PREMIUM EDITORIAL CINEMATIC GALLERY            */
+/*                OBJECT ON STAGE — HERO PHOTO               */
 /* ========================================================= */
 
-/* OUTER BLOCK */
+/* Внешний контейнер */
 .modal-images {
   width: 100%;
   background: #fff;
@@ -492,50 +492,18 @@ html, body {
   margin: 0;
 }
 
-/* HERO FRAME WRAPPER */
+/* Сцена для фото — фиксированная высота, много воздуха */
 .gallery-stage {
   width: 100%;
-  aspect-ratio: 1 / 1.15; /* LIGHT EDITORIAL FIX — было 1/1.35 */
-  position: relative;
-  overflow: hidden;
+  height: 44vh; /* ключевой параметр — фото не занимает весь экран */
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  padding: 12px 0; /* воздух сверху и снизу */
 }
 
-/* CINEMATIC VIGNETTE */
-.gallery-stage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,0) 55%,
-    rgba(0,0,0,0.18) 100%
-  );
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* SOFT SHADOW UNDER PHOTO */
-.gallery-stage::after {
-  content: "";
-  position: absolute;
-  bottom: -12px;
-  left: 10%;
-  width: 80%;
-  height: 26px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,0.22) 0%,
-    rgba(0,0,0,0) 70%
-  );
-  filter: blur(12px);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* CAROUSEL TRACK */
+/* Трек карусели */
 #carousel {
   width: 100%;
   height: 100%;
@@ -543,37 +511,35 @@ html, body {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  position: relative;
-  z-index: 1;
 }
 
 #carousel::-webkit-scrollbar { display: none; }
 
-/* EDITORIAL PHOTO STYLE — LIGHT EDITORIAL FIX */
+/* Фото — компактное, аккуратное, не обрезается */
 #carousel img {
   flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* было cover */
-  object-position: center;
+  max-height: 40vh;   /* фото всегда меньше сцены */
+  max-width: 88%;     /* воздух по краям */
+  height: auto;
+  object-fit: contain; /* ничего не режем */
   scroll-snap-align: center;
 
-  transform: scale(0.96); /* было 1.06 */
-  transition: transform .45s ease, opacity .45s ease;
+  transform: none;
+  transition: transform .35s ease, opacity .35s ease;
 }
 
-/* ACTIVE / INACTIVE STATES */
+/* Активное фото — лёгкое увеличение */
 #carousel img.active-photo {
-  transform: scale(1.02); /* мягкое увеличение */
+  transform: scale(1.02);
   opacity: 1;
 }
 
+/* Неактивные — мягкое затухание */
 #carousel img.inactive-photo {
-  transform: scale(0.94);
   opacity: 0.9;
 }
 
-/* PARALLAX SHIFT */
+/* Параллакс */
 #carousel img.parallax-shift {
   transition: transform .1s linear;
 }
@@ -626,7 +592,7 @@ html, body {
   flex-direction: column;
   gap: 28px;
 
-  /* LIGHT EDITORIAL FIX — мягкая тень для читаемости */
+  /* улучшенная читаемость на прозрачном фоне */
   text-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 
@@ -660,7 +626,7 @@ html, body {
   animation: titleFade .55s ease forwards;
   animation-delay: .05s;
 
-  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 
 @keyframes titleFade {
@@ -680,7 +646,7 @@ html, body {
   animation: priceFade .55s ease forwards;
   animation-delay: .12s;
 
-  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 
 @keyframes priceFade {
@@ -702,7 +668,7 @@ html, body {
   animation: materialsFade .55s ease forwards;
   animation-delay: .18s;
 
-  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 
 @keyframes materialsFade {
@@ -798,7 +764,7 @@ html, body {
   animation: deliveryFade .55s ease forwards;
   animation-delay: .34s;
 
-  text-shadow: 0 1px 4px rgba(0,0,0,0.22); /* FIX */
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 
 @keyframes deliveryFade {
