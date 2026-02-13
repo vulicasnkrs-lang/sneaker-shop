@@ -240,73 +240,6 @@ html, body {
   to   { transform: translateY(0); opacity: 1; }
 }
 /* ========================= */
-/*      PRODUCT CONTENT      */
-/* ========================= */
-
-.product-content {
-  padding: 20px;
-  display: grid;
-  gap: 16px;
-}
-
-#modalTitle {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-#modalPrice {
-  font-size: 22px;
-  font-weight: 700;
-}
-
-#modalPrice.bump {
-  animation: bump .35s ease;
-}
-
-@keyframes bump {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-#modalDesc {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-/* ========================= */
-/*           SIZES           */
-/* ========================= */
-
-#modalSizes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.size {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  background: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  transition: .2s;
-}
-
-.size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
-
-.size.disabled {
-  opacity: .35;
-  cursor: not-allowed;
-}
-
-/* ========================= */
 /*        AVAILABILITY       */
 /* ========================= */
 
@@ -470,29 +403,105 @@ html, body {
     gap: 6px;
   }
 }
+
 /* ========================================================= */
-/*                OBJECT ON STAGE — FINAL VERSION            */
+/*   ⚠️ СТАРЫЙ БЛОК ГАЛЕРЕИ ПОЛНОСТЬЮ УДАЛЁН ЗДЕСЬ           */
+/*   НОВЫЙ БУДЕТ ВСТАВЛЕН В ЧАСТИ 3                          */
+/* ========================================================= */
+
+/* ========================================================= */
+/*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
+/* ========================================================= */
+
+.modal-info {
+  padding: 34px 22px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
+}
+
+.modal-info section:not(:first-child) {
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  padding-top: 28px;
+}
+
+/* BRAND */
+.brand-row {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #8d8d8d;
+  opacity: 0.85;
+  margin-bottom: 2px;
+}
+
+/* TITLE */
+.modal-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.45px;
+  margin: 0 0 14px;
+  color: #111;
+
+  opacity: 0;
+  transform: translateY(8px);
+  animation: titleFade .55s ease forwards;
+  animation-delay: .05s;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
+}
+
+@keyframes titleFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* PRICE */
+.modal-price {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: #111;
+
+  opacity: 0;
+  transform: translateY(6px);
+  animation: priceFade .55s ease forwards;
+  animation-delay: .12s;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.22);
+}
+
+@keyframes priceFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+/* ========================================================= */
+/*                PRODUCT GALLERY — CLEAN                     */
 /* ========================================================= */
 
 /* Внешний контейнер */
 .modal-images {
   width: 100%;
-  background: #fff;
+  background: transparent;
   position: relative;
   overflow: hidden;
   padding: 0;
   margin: 0;
 }
 
-/* Сцена для фото — компактная, стабильная */
+/* Квадратная сцена — фон = фон модалки */
 .gallery-stage {
   width: 100%;
-  height: 30vh; /* ключевой параметр */
+  aspect-ratio: 1 / 1; /* квадрат */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 8px 0; /* воздух */
+  background: transparent;
+  padding: 0;
 }
 
 /* Трек карусели */
@@ -507,32 +516,24 @@ html, body {
 
 #carousel::-webkit-scrollbar { display: none; }
 
-/* Фото — компактное, аккуратное, не обрезается */
+/* Фото — без белых полос, без обрезаний */
 #carousel img {
   flex: 0 0 100%;
-  max-height: 24vh;  /* фото всегда меньше сцены */
-  max-width: 75%;    /* много воздуха */
-  height: auto;
-  object-fit: contain; /* ничего не режем */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   object-position: center;
+  background: transparent;
   scroll-snap-align: center;
-
   transform: none;
   opacity: 1;
-  transition: opacity .35s ease;
+  transition: opacity .25s ease;
 }
 
-/* Активное фото */
-#carousel img.active-photo {
-  opacity: 1;
-}
-
-/* Неактивные — лёгкое затухание */
 #carousel img.inactive-photo {
   opacity: 0.85;
 }
 
-/* Параллакс */
 #carousel img.parallax-shift {
   transition: transform .1s linear;
 }
