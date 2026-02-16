@@ -247,9 +247,11 @@ html, body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  transform: translateY(20px);
+  transform: translateY(22px);
   opacity: 0;
-  transition: transform .35s ease, opacity .35s ease;
+  transition:
+    transform .38s cubic-bezier(.25,.46,.45,.94),
+    opacity .38s ease;
 }
 
 #productModal.open .modal-content.modal-product {
@@ -339,70 +341,91 @@ html, body {
 }
 
 /* ========================= */
-/*     EDITORIAL LUXE — INFO BLOCK     */
+/*     ULTIMATE EDITORIAL LUXE — INFO BLOCK     */
 /* ========================= */
 
 .modal-info {
   padding: 26px 22px 36px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 26px;
 }
 
 .modal-info section:not(:first-child) {
   border-top: 1px solid rgba(0,0,0,0.06);
-  padding-top: 22px;
+  padding-top: 26px;
 }
 
-/* BRAND — маленький, уверенный, fashion */
+/* BRAND — ультра‑минимализм, как у SSENSE */
 .brand-row {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #8a8a8a;
-  margin-bottom: 6px;
-  opacity: 0.9;
+  color: #8c8c8c;
+  margin-bottom: 10px;
+  opacity: 0.85;
 }
 
-/* TITLE — крупный, лёгкий, дорогой */
+/* TITLE — главный герой, дорогой, воздушный, журнальный */
 .modal-title {
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: -0.35px;
-  line-height: 1.16;
-  margin: 0 0 10px;
-  color: #111;
-  transform: translateY(2px);
-}
-
-/* PRICE — уверенный, но не кричащий */
-.modal-price {
   font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.25px;
-  margin-bottom: 14px;
-  color: #111;
+  font-weight: 600;
+  letter-spacing: -0.42px;
+  line-height: 1.12;
+  margin: 0 0 14px;
+  color: #0f0f0f;
+  transform: translateY(1px);
+  opacity: 0.98;
+  transition: opacity .35s ease, transform .35s ease;
 }
 
-/* MATERIALS — чистый editorial */
+/* PRICE — уверенный, плотный, fashion‑weight */
+.modal-price {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.22px;
+  margin-bottom: 18px;
+  color: #111;
+  opacity: 0.95;
+}
+
+/* SECTION LABELS — как в Farfetch Black Series */
+.modal-info section::before {
+  content: attr(data-label);
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b6b6b6;
+  margin-bottom: 12px;
+}
+
+/* MATERIALS — чистый editorial, мягкий ритм */
 .materials-block {
   font-size: 14px;
-  line-height: 1.62;
-  color: #555;
+  line-height: 1.68;
+  color: #444;
   display: grid;
-  gap: 6px;
+  gap: 10px;
   padding-left: 2px;
 }
 
-.materials-block::before {
-  content: "Details";
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #b8b8b8;
-  margin-bottom: 8px;
-  display: block;
+/* Bullets — дорогие, минимальные */
+.materials-block span.key {
+  font-weight: 600;
+  color: #2f2f2f;
+  padding-left: 20px;
+  position: relative;
+}
+
+.materials-block span.key::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #a8a8a8;
+  font-size: 15px;
 }
 
 /* ========================= */
@@ -459,32 +482,33 @@ html, body {
 
 .delivery-inline {
   font-size: 13px;
-  color: #7a7a7a;
-  line-height: 1.45;
-  padding: 12px 16px;
-  background: #f8f8f8;
-  border-radius: 12px;
-  margin-top: 6px;
+  color: #6a6a6a;
+  line-height: 1.58;
+  padding: 16px 18px;
+  background: #f7f7f7;
+  border-radius: 14px;
+  margin-top: 12px;
+  border: 1px solid #efefef;
 }
 /* ========================= */
 /*     ULTRA PREMIUM BTNS — FIXED ACTIONS     */
 /* ========================= */
 
 .modal-actions-fixed {
-  padding: 20px 22px 28px;
+  padding: 22px 22px 30px;
   background: #fff;
   border-top: 1px solid rgba(0,0,0,0.06);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
 .modal-actions-fixed button {
-  height: 52px;
+  height: 54px;
   border-radius: 14px;
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.22px;
   transition:
     background .22s ease,
     transform .18s cubic-bezier(.25,.46,.45,.94),
@@ -506,17 +530,17 @@ html, body {
 /*     PREMIUM MICRO DETAILS     */
 /* ========================= */
 
-/* Active size highlight — expensive boutique feel */
+/* Active size highlight — boutique selection */
 .modal-sizes .size.active {
   box-shadow: 0 0 0 2px #111 inset;
   transform: translateY(-1px);
 }
 
-/* Materials bullets — editorial magazine style */
+/* Editorial bullets */
 .materials-block span.key {
   font-weight: 600;
-  color: #333;
-  padding-left: 16px;
+  color: #2f2f2f;
+  padding-left: 20px;
   position: relative;
 }
 
@@ -525,8 +549,8 @@ html, body {
   position: absolute;
   left: 0;
   top: 0;
-  color: #aaa;
-  font-size: 13px;
+  color: #a8a8a8;
+  font-size: 15px;
 }
 
 /* ========================= */
@@ -819,4 +843,3 @@ html, body {
 .profile-modal .profile-section.active {
   display: block;
 }
-
