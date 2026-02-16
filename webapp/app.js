@@ -122,6 +122,26 @@ async function init() {
 }
 
 /* ========================= */
+/*       LOAD PRODUCTS       */
+/* ========================= */
+
+async function loadProducts() {
+  try {
+    const res = await fetch('/products.json', { cache: 'no-store' });
+    state.products = await res.json();
+  } catch {
+    state.products = [];
+  }
+
+  state.products.forEach(p => {
+    state.brandSet.add(p.brand);
+    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
+  });
+
+  state.filtered = applyPostponedFilter([...state.products]);
+}
+
+/* ========================= */
 /*   TELEGRAM PROFILE INIT   */
 /* ========================= */
 
@@ -168,25 +188,6 @@ function renderSkeletons() {
     `;
     els.catalog.appendChild(sk);
   }
-}
-/* ========================= */
-/*       LOAD PRODUCTS       */
-/* ========================= */
-
-async function loadProducts() {
-  try {
-    const res = await fetch('/products.json', { cache: 'no-store' });
-    state.products = await res.json();
-  } catch {
-    state.products = [];
-  }
-
-  state.products.forEach(p => {
-    state.brandSet.add(p.brand);
-    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
-  });
-
-  state.filtered = applyPostponedFilter([...state.products]);
 }
 
 /* ========================= */
@@ -317,7 +318,6 @@ function cardNode(p) {
 
   return node;
 }
-
 /* ========================= */
 /*   PRODUCT SCREEN (TG)     */
 /* ========================= */
@@ -376,32 +376,17 @@ function openProductModal(p) {
 
   const imgs = p.images || [];
 
-  /* ========================================================= */
-  /* 1) Fade‑галерея: функция активного фото                   */
-  /* ========================================================= */
-  function setActiveImage(index) {
-    const all = carousel.querySelectorAll('img');
-    all.forEach((img, i) => {
-      img.classList.toggle('active', i === index);
-      img.classList.toggle('inactive', i !== index);
-    });
-    // PREMIUM STICKY PRICE
-const priceBlock = els.modalPrice.closest('section');
-priceBlock.classList.add('sticky-price');
-
-  }
-
-  /* --- GALLERY IMAGES --- */
+  /* --- GALLERY IMAGES (CINEMATIC + PARALLAX READY) --- */
   imgs.forEach((src) => {
     const img = document.createElement('img');
     img.src = src;
     img.alt = p.title;
+    img.draggable = false;
     carousel.appendChild(img);
-    observeSections();
   });
 
-  /* активируем первое фото */
-  requestAnimationFrame(() => setActiveImage(0));
+  /* observeSections ВНЕ цикла */
+  observeSections();
 
   /* --- THUMBNAILS --- */
   imgs.forEach((src, i) => {
@@ -413,7 +398,6 @@ priceBlock.classList.add('sticky-price');
       const width = carousel.clientWidth;
       carousel.scrollTo({ left: width * i, behavior: 'smooth' });
       updateThumbs(i);
-      setActiveImage(i);   // 🔥 улучшение
     });
 
     thumbStrip.appendChild(t);
@@ -428,9 +412,7 @@ priceBlock.classList.add('sticky-price');
     const width = carousel.clientWidth || 1;
     const index = Math.round(carousel.scrollLeft / width);
     const safeIndex = Math.min(Math.max(index, 0), imgs.length - 1);
-
     updateThumbs(safeIndex);
-    setActiveImage(safeIndex);  // 🔥 улучшение
   };
 
   function updateThumbs(i) {
@@ -468,12 +450,6 @@ priceBlock.classList.add('sticky-price');
   /* ========================= */
 
   els.modalSizes.innerHTML = '';
-
-  /* ========================================================= */
-  /* 3) Stagger‑анимация размеров                              */
-  /* ========================================================= */
-  let delay = 0;
-
   (p.sizes || []).forEach(obj => {
     const b = document.createElement('button');
     b.className = 'size';
@@ -483,13 +459,6 @@ priceBlock.classList.add('sticky-price');
       b.disabled = true;
       b.classList.add('disabled');
     }
-
-    /* stagger */
-    b.style.opacity = 0;
-    b.style.transform = 'translateY(6px)';
-    b.style.animation = `fadeUp .35s ease forwards`;
-    b.style.animationDelay = `${delay}ms`;
-    delay += 40;
 
     b.addEventListener('click', () => {
       if (obj.stock <= 0) return;
@@ -518,7 +487,6 @@ priceBlock.classList.add('sticky-price');
   requestAnimationFrame(() => {
     els.productModal.classList.add('open');
   });
-requestAnimationFrame(() => observeSections());
 
   /* ========================= */
   /*       ADD TO CART         */
@@ -579,6 +547,14 @@ requestAnimationFrame(() => observeSections());
       openCart();
     };
   }
+
+  /* ========================= */
+  /*   PREMIUM GALLERY INIT    */
+  /* ========================= */
+
+  setTimeout(() => {
+    initParallaxGallery();
+  }, 60);
 }
 
 /* ========================= */
@@ -618,7 +594,6 @@ function closeProductModal() {
     tg.BackButton.onClick(() => {});
   }
 }
-
 /* ========================= */
 /*            CART           */
 /* ========================= */
@@ -976,7 +951,6 @@ function cleanupReserved() {
     saveStock();
   }
 }
-
 /* ========================= */
 /*            UTILS          */
 /* ========================= */
@@ -1188,6 +1162,11 @@ function attachEvents() {
     }
   });
 }
+
+/* ========================= */
+/*   SECTION OBSERVER        */
+/* ========================= */
+
 function observeSections() {
   const sections = document.querySelectorAll('.modal-info section');
 
@@ -1200,6 +1179,77 @@ function observeSections() {
   }, { threshold: 0.2 });
 
   sections.forEach(s => obs.observe(s));
+}
+
+/* ========================================================= */
+/*                PREMIUM PARALLAX ENGINE                    */
+/* ========================================================= */
+
+function initParallaxGallery() {
+  const carousel = document.getElementById("carousel");
+  if (!carousel) return;
+
+  const slides = Array.from(carousel.querySelectorAll("img"));
+  if (slides.length === 0) return;
+
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+
+  function updateActiveState() {
+    const index = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+
+    slides.forEach((img, i) => {
+      img.classList.remove("active-photo", "inactive-photo");
+      if (i === index) img.classList.add("active-photo");
+      else img.classList.add("inactive-photo");
+    });
+
+    const thumbs = document.querySelectorAll(".thumb");
+    thumbs.forEach((t, i) => {
+      t.classList.toggle("active", i === index);
+    });
+  }
+
+  updateActiveState();
+
+  function applyParallax() {
+    const delta = currentX - startX;
+
+    slides.forEach((img) => {
+      img.classList.add("parallax-shift");
+      img.style.transform = `translateX(${delta * 0.12}px) scale(${img.classList.contains("active-photo") ? 1.10 : 1.04})`;
+    });
+  }
+
+  function resetParallax() {
+    slides.forEach((img) => {
+      img.style.transform = "";
+      img.classList.remove("parallax-shift");
+    });
+  }
+
+  carousel.addEventListener("touchstart", (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    currentX = startX;
+  });
+
+  carousel.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
+    currentX = e.touches[0].clientX;
+    applyParallax();
+  });
+
+  carousel.addEventListener("touchend", () => {
+    isDragging = false;
+    resetParallax();
+    setTimeout(updateActiveState, 120);
+  });
+
+  carousel.addEventListener("scroll", () => {
+    setTimeout(updateActiveState, 80);
+  });
 }
 
 /* ========================= */
