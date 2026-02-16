@@ -240,106 +240,6 @@ html, body {
   to   { transform: translateY(0); opacity: 1; }
 }
 /* ========================= */
-/*      PRODUCT CONTENT      */
-/* ========================= */
-
-.product-content {
-  padding: 20px;
-  display: grid;
-  gap: 16px;
-}
-
-#modalTitle {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-#modalPrice {
-  font-size: 22px;
-  font-weight: 700;
-}
-
-#modalPrice.bump {
-  animation: bump .35s ease;
-}
-
-@keyframes bump {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-#modalDesc {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.45;
-}
-
-/* ========================= */
-/*           SIZES           */
-/* ========================= */
-
-#modalSizes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.size {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  background: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  transition: .2s;
-}
-
-.size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
-
-.size.disabled {
-  opacity: .35;
-  cursor: not-allowed;
-}
-
-/* ========================= */
-/*        AVAILABILITY       */
-/* ========================= */
-
-#availabilityBlock {
-  background: #f7f7f7;
-  padding: 14px 16px;
-  border-radius: 14px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-}
-
-/* ========================= */
-/*        ADD TO CART        */
-/* ========================= */
-
-.add-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-#modalQty {
-  width: 60px;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  font-size: 15px;
-  text-align: center;
-}
-
-/* ========================= */
 /*          CART DRAWER      */
 /* ========================= */
 
@@ -479,6 +379,10 @@ html, body {
   }
 }
 
+/* ========================= */
+/*           PROFILE         */
+/* ========================= */
+
 @keyframes fadeInProfile {
   from { transform: translateY(20px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
@@ -580,28 +484,29 @@ html, body {
 /*            PREMIUM EDITORIAL CINEMATIC GALLERY            */
 /* ========================================================= */
 
-/* OUTER BLOCK */
 .modal-images {
   width: 100%;
-  background: #fff;
   position: relative;
-  overflow: hidden;
   padding: 0;
   margin: 0;
 }
 
-/* HERO FRAME WRAPPER */
 .gallery-stage {
   width: 100%;
-  aspect-ratio: 1 / 1.35; /* высокий editorial формат */
+  height: 72vh;
   position: relative;
   overflow: hidden;
+  border-radius: 26px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  background: rgba(255,255,255,0.42);
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(255,255,255,0.28);
 }
 
-/* CINEMATIC VIGNETTE */
 .gallery-stage::before {
   content: "";
   position: absolute;
@@ -609,31 +514,29 @@ html, body {
   background: radial-gradient(
     ellipse at center,
     rgba(0,0,0,0) 55%,
-    rgba(0,0,0,0.18) 100%
+    rgba(0,0,0,0.12) 100%
   );
   pointer-events: none;
   z-index: 3;
 }
 
-/* SOFT SHADOW UNDER PHOTO */
 .gallery-stage::after {
   content: "";
   position: absolute;
-  bottom: -12px;
-  left: 10%;
-  width: 80%;
-  height: 26px;
+  bottom: -14px;
+  left: 12%;
+  width: 76%;
+  height: 28px;
   background: radial-gradient(
     ellipse at center,
-    rgba(0,0,0,0.22) 0%,
+    rgba(0,0,0,0.18) 0%,
     rgba(0,0,0,0) 70%
   );
-  filter: blur(12px);
+  filter: blur(14px);
   pointer-events: none;
   z-index: 2;
 }
 
-/* CAROUSEL TRACK */
 #carousel {
   width: 100%;
   height: 100%;
@@ -647,32 +550,28 @@ html, body {
 
 #carousel::-webkit-scrollbar { display: none; }
 
-/* EDITORIAL PHOTO STYLE */
 #carousel img {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* ключевой момент — editorial hero frame */
+  object-fit: contain;
   object-position: center;
   scroll-snap-align: center;
 
-  /* cinematic crop */
-  transform: scale(1.06);
+  transform: scale(1.02);
   transition: transform .45s ease, opacity .45s ease;
 }
 
-/* ACTIVE / INACTIVE STATES FOR PARALLAX */
 #carousel img.active-photo {
-  transform: scale(1.10);
+  transform: scale(1.06);
   opacity: 1;
 }
 
 #carousel img.inactive-photo {
-  transform: scale(1.04);
+  transform: scale(1.00);
   opacity: 0.85;
 }
 
-/* PARALLAX SHIFT CLASS (JS WILL ADD IT) */
 #carousel img.parallax-shift {
   transition: transform .1s linear;
 }
@@ -714,85 +613,69 @@ html, body {
   height: 100%;
   object-fit: cover;
 }
+
 /* ========================================================= */
 /*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
 /* ========================================================= */
 
 .modal-info {
-  padding: 34px 22px 48px;
+  padding: 32px 22px 44px;
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
 
 .modal-info section:not(:first-child) {
-  border-top: 0.5px solid rgba(0,0,0,0.06);
-  padding-top: 28px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding-top: 26px;
 }
 
-/* BRAND */
 .brand-row {
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: #8d8d8d;
-  opacity: 0.85;
-  margin-bottom: 2px;
+  opacity: 0.9;
+  margin-bottom: 4px;
 }
 
-/* TITLE */
 .modal-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 600;
-  line-height: 1.14;
-  letter-spacing: -0.45px;
-  margin: 0 0 14px;
+  line-height: 1.18;
+  letter-spacing: -0.4px;
+  margin: 0 0 10px;
   color: #111;
-  opacity: 0;
-  transform: translateY(8px);
-  animation: titleFade .55s ease forwards;
-  animation-delay: .05s;
 }
 
-@keyframes titleFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* PRICE */
 .modal-price {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.3px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: #111;
-  opacity: 0;
-  transform: translateY(6px);
-  animation: priceFade .55s ease forwards;
-  animation-delay: .12s;
+  transition: transform .25s ease;
 }
 
-@keyframes priceFade {
-  to { opacity: 1; transform: translateY(0); }
+.modal-price.bump {
+  animation: bump .35s ease;
 }
 
-/* MATERIALS */
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
 .materials-block {
   font-size: 15px;
-  line-height: 1.68;
-  color: #555;
-  letter-spacing: 0.012em;
+  line-height: 1.58;
+  color: #444;
   display: grid;
-  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
   padding-left: 2px;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: materialsFade .55s ease forwards;
-  animation-delay: .18s;
-}
-
-@keyframes materialsFade {
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .materials-block::before {
@@ -803,9 +686,29 @@ html, body {
   color: #b6b6b6;
   margin-bottom: 8px;
   display: block;
+  grid-column: 1 / -1;
 }
 
-/* SIZES */
+.materials-block span.key {
+  font-weight: 600;
+  color: #333;
+  padding-left: 16px;
+  position: relative;
+}
+
+.materials-block span.key::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* ========================================================= */
+/*                PRODUCT SIZES — FINAL VERSION              */
+/* ========================================================= */
+
 .sizes-label {
   font-size: 13px;
   font-weight: 600;
@@ -818,18 +721,10 @@ html, body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: sizesFade .55s ease forwards;
-  animation-delay: .26s;
-}
-
-@keyframes sizesFade {
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-sizes .size {
-  height: 50px;
+  height: 48px;
   border-radius: 14px;
   background: #f5f5f5;
   color: #111;
@@ -847,9 +742,19 @@ html, body {
   background: #111;
   color: #fff;
   border-color: #111;
+  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
+  transform: translateY(-1px);
 }
 
-/* DELIVERY */
+.modal-sizes .size.disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+/* ========================================================= */
+/*                     DELIVERY BLOCK                        */
+/* ========================================================= */
+
 .delivery-inline {
   font-size: 13px;
   color: #7a7a7a;
@@ -859,24 +764,15 @@ html, body {
   background: #f8f8f8;
   border-radius: 14px;
   margin-top: 10px;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: deliveryFade .55s ease forwards;
-  animation-delay: .34s;
 }
-
-@keyframes deliveryFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
 /* ========================================================= */
-/*                FIXED BUTTONS — BOUTIQUE                   */
+/*                FIXED BUTTONS — FINAL VERSION              */
 /* ========================================================= */
 
 .modal-actions-fixed {
   padding: 22px 22px 32px;
   background: #fff;
-  border-top: 0.5px solid rgba(0,0,0,0.06);
+  border-top: 1px solid rgba(0,0,0,0.06);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
@@ -890,21 +786,10 @@ html, body {
   letter-spacing: -0.2px;
 }
 
-/* ========================================================= */
-/*        FIX: make product modal scrollable                 */
-/* ========================================================= */
-
-.modal-content.modal-product {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+button.primary:active,
+button.secondary:active {
+  transform: scale(0.97);
+  filter: brightness(0.92);
 }
 
 /* ========================================================= */
@@ -950,11 +835,4 @@ html, body {
 #productModal.open .modal-content.modal-product {
   transform: translateY(0);
   opacity: 1;
-}
-
-/* Button press feedback */
-button.primary:active,
-button.secondary:active {
-  transform: scale(0.97);
-  filter: brightness(0.92);
 }
