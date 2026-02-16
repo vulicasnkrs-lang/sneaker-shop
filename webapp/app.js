@@ -1225,6 +1225,37 @@ function initParallaxGallery() {
     });
   }
 
-  function resetParallax() {
-    slides.forEach((img) => {
-      img.style.transform =
+function resetParallax() {
+  slides.forEach((img) => {
+    img.style.transform = "";
+    img.classList.remove("parallax-shift");
+  });
+  updateActiveState();
+}
+
+carousel.addEventListener("touchstart", (e) => {
+  isDragging = true;
+  startX = e.touches[0].clientX;
+  currentX = startX;
+});
+
+carousel.addEventListener("touchmove", (e) => {
+  if (!isDragging) return;
+  currentX = e.touches[0].clientX;
+  applyParallax();
+});
+
+carousel.addEventListener("touchend", () => {
+  isDragging = false;
+  resetParallax();
+});
+
+carousel.addEventListener("scroll", () => {
+  updateActiveState();
+});
+}
+/* ========================= */
+/*            START          */
+/* ========================= */
+
+init();
