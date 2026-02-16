@@ -743,3 +743,29 @@ button.secondary:active {
     grid-template-columns: 1fr;
   }
 }
+/* ========================= */
+/*     EDITORIAL FIX PATCH   */
+/* ========================= */
+
+/* 1) Модалка — снова прозрачная, воздушная */
+.modal-content.modal-product {
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(18px);
+}
+
+/* 2) Галерея — НЕ белая, а прозрачная с мягким blur */
+.modal-images {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+}
+
+/* 3) Подложка под текст — мягкая, премиальная, НЕ белая плита */
+.modal-info {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(22px);
+}
+
+/* 4) Убираем «грязный» белый фон, который давал серость */
+.gallery-stage {
+  background: transparent;
+}
