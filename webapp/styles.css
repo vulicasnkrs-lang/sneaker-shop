@@ -56,6 +56,11 @@ html, body {
   cursor: pointer;
 }
 
+.secondary.small {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
 .full-width { width: 100%; }
 
 /* Ripple */
@@ -136,6 +141,57 @@ html, body {
 }
 
 /* ========================= */
+/*          MYSTERY BOX      */
+/* ========================= */
+
+.mystery-box {
+  margin: 16px 20px 10px;
+  padding: 16px 16px 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #111 0%, #333 40%, #555 100%);
+  color: #fff;
+  display: grid;
+  gap: 6px;
+}
+
+.mystery-box h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mystery-box p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ========================= */
+/*           FILTERS         */
+/* ========================= */
+
+.filters {
+  padding: 10px 20px 16px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-row input,
+.filter-row select {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid #e2e2e2;
+  font-size: 14px;
+  outline: none;
+}
+
+/* ========================= */
 /*          CATALOG          */
 /* ========================= */
 
@@ -204,8 +260,69 @@ html, body {
 }
 
 /* ========================= */
-/*        PRODUCT MODAL      */
+/*        BASE MODALS        */
 /* ========================= */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+.modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px;
+  max-width: 480px;
+  width: calc(100% - 40px);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-btn {
+  border: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 14px;
+}
+
+/* Mystery modal tweaks */
+#mysteryModal .modal-content {
+  position: relative;
+}
+
+/* Browser back (non-TG) */
+.browser-back {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 9999;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+/* ========================================================= */
+/*        PRODUCT MODAL — PREMIUM GLASS DESIGN               */
+/* ========================================================= */
 
 #productModal {
   position: fixed;
@@ -226,40 +343,220 @@ html, body {
   pointer-events: auto;
 }
 
-.product-modal {
+.modal-content.modal-product {
   width: 100%;
   max-width: 520px;
-  background: #fff;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(22px) saturate(160%);
   border-radius: 22px 22px 0 0;
   overflow: hidden;
-  animation: slideUp .35s ease forwards;
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .35s ease, opacity .35s ease;
 }
 
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-/* ========================= */
-/*      PRODUCT CONTENT      */
-/* ========================= */
-
-.product-content {
-  padding: 20px;
-  display: grid;
-  gap: 16px;
+#productModal.open .modal-content.modal-product {
+  transform: translateY(0);
+  opacity: 1;
 }
 
-#modalTitle {
-  font-size: 20px;
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Внутренний хедер модалки */
+.modal-inner-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(18px);
+}
+
+/* ========================================================= */
+/*        CINEMATIC SAFE‑FRAME — PREMIUM EDITORIAL           */
+/* ========================================================= */
+
+.modal-images {
+  width: 100%;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Высокий журналный кадр */
+.gallery-stage {
+  width: 100%;
+  aspect-ratio: 1 / 1.35;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Виньетка */
+.gallery-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0) 55%,
+    rgba(0,0,0,0.22) 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Мягкая тень */
+.gallery-stage::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 10%;
+  width: 80%;
+  height: 26px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0.22) 0%,
+    rgba(0,0,0,0) 70%
+  );
+  filter: blur(12px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Трек */
+#carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  z-index: 1;
+}
+
+#carousel::-webkit-scrollbar { display: none; }
+
+/* SAFE‑FRAME: cinematic без обрезания обуви */
+#carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  transform: scale(1.12);
+  transition: transform .45s ease, opacity .45s ease;
+
+  scroll-snap-align: center;
+}
+
+#carousel img.active-photo {
+  transform: scale(1.18);
+  opacity: 1;
+}
+
+#carousel img.inactive-photo {
+  transform: scale(1.10);
+  opacity: 0.85;
+}
+
+#carousel img.parallax-shift {
+  transition: transform .1s linear;
+}
+
+/* Миниатюры */
+.thumb-strip {
+  display: flex;
+  gap: 12px;
+  padding: 18px 18px 24px;
+  overflow-x: auto;
+}
+
+.thumb-strip::-webkit-scrollbar { display: none; }
+
+.thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eee;
+  opacity: 0.75;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+.thumb.active {
+  opacity: 1;
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========================================================= */
+/*                PREMIUM TYPOGRAPHY (GLASS)                 */
+/* ========================================================= */
+
+.modal-info {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(22px);
+  padding: 34px 22px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  border-radius: 22px 22px 0 0;
+}
+
+.modal-info section:not(:first-child) {
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  padding-top: 28px;
+}
+
+.brand-row {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.55);
+}
+
+.modal-title {
+  font-size: 28px;
   font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.45px;
+  margin: 0 0 14px;
+  color: #111;
 }
 
-#modalPrice {
-  font-size: 22px;
+.modal-price {
+  font-size: 30px;
   font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: #111;
 }
 
-#modalPrice.bump {
+.modal-price.bump {
   animation: bump .35s ease;
 }
 
@@ -269,79 +566,128 @@ html, body {
   100% { transform: scale(1); }
 }
 
-#modalDesc {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.45;
+.materials-block {
+  font-size: 15px;
+  line-height: 1.68;
+  color: #333;
+  letter-spacing: 0.012em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
 }
 
-/* ========================= */
-/*           SIZES           */
-/* ========================= */
+.materials-block::before {
+  content: "Details";
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b6b6b6;
+  margin-bottom: 8px;
+  display: block;
+}
 
-#modalSizes {
-  display: flex;
-  flex-wrap: wrap;
+.materials-block span.key {
+  font-weight: 600;
+  color: #111;
+  padding-left: 18px;
+  position: relative;
+}
+
+.materials-block span.key::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.sizes-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.025em;
+  margin-bottom: 12px;
+}
+
+.modal-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
-.size {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  background: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  transition: .2s;
+.modal-sizes .size {
+  height: 50px;
+  border-radius: 14px;
+  background: #f5f5f5;
+  color: #111;
+  border: 1px solid #e3e3e3;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all .18s ease;
 }
 
-.size.active {
+.modal-sizes .size:hover:not(.disabled) {
+  background: #ebebeb;
+}
+
+.modal-sizes .size.active {
   background: #111;
   color: #fff;
   border-color: #111;
+  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
+  transform: translateY(-1px);
 }
 
-.size.disabled {
+.modal-sizes .size.disabled {
   opacity: .35;
   cursor: not-allowed;
 }
 
-/* ========================= */
-/*        AVAILABILITY       */
-/* ========================= */
-
-#availabilityBlock {
-  background: #f7f7f7;
-  padding: 14px 16px;
+.delivery-inline {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(18px);
   border-radius: 14px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-}
-
-/* ========================= */
-/*        ADD TO CART        */
-/* ========================= */
-
-.add-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
   margin-top: 10px;
 }
 
-#modalQty {
-  width: 60px;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  font-size: 15px;
-  text-align: center;
+/* ========================================================= */
+/*                FIXED ACTION BUTTONS (GLASS)               */
+/* ========================================================= */
+
+.modal-actions-fixed {
+  padding: 22px 22px 32px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(22px);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-/* ========================= */
-/*          CART DRAWER      */
-/* ========================= */
+.modal-actions-fixed button {
+  height: 54px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  transition: transform .18s ease, filter .18s ease;
+}
+
+button.primary:active,
+button.secondary:active {
+  transform: scale(0.97);
+  filter: brightness(0.92);
+}
+
+/* ========================================================= */
+/*          CART DRAWER + FLY ANIMATION                      */
+/* ========================================================= */
 
 #cartDrawer {
   position: fixed;
@@ -361,17 +707,38 @@ html, body {
   transform: translateX(0);
 }
 
-.cart-header {
-  padding: 20px;
-  font-size: 20px;
+.drawer-header {
+  padding: 16px 18px;
+  font-size: 18px;
   font-weight: 600;
   border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-list {
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+.drawer-footer {
+  padding: 16px 18px 20px;
+  border-top: 1px solid #eee;
+  display: grid;
+  gap: 10px;
+}
+
+.drawer-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .cart-item {
   display: flex;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 16px 18px;
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -411,21 +778,12 @@ html, body {
   cursor: pointer;
 }
 
-.cart-footer {
-  padding: 20px;
-  border-top: 1px solid #eee;
-  display: grid;
-  gap: 12px;
-}
-
 #cartTotal {
   font-size: 20px;
   font-weight: 700;
 }
 
-/* ========================= */
-/*       FLY ANIMATION       */
-/* ========================= */
+/* FLY ANIMATION */
 
 .fly {
   position: fixed;
@@ -439,50 +797,9 @@ html, body {
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
 }
-
 /* ========================= */
-/*        RESPONSIVE         */
+/*        PROFILE MODAL      */
 /* ========================= */
-
-@media (max-width: 420px) {
-  .card-image {
-    height: 150px;
-  }
-
-  .profile-header .profile-avatar {
-    width: 56px;
-    height: 56px;
-  }
-
-  .profile-postponed-left img {
-    width: 56px;
-    height: 56px;
-  }
-
-  .carousel {
-    height: 260px;
-  }
-}
-
-@media (max-width: 360px) {
-  #cartBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  .header-actions {
-    gap: 6px;
-  }
-
-  .carousel {
-    height: 240px;
-  }
-}
-
-@keyframes fadeInProfile {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
 
 .profile-modal .header {
   background: #fff;
@@ -576,385 +893,205 @@ html, body {
 .profile-modal .profile-section.active {
   display: block;
 }
-/* ========================================================= */
-/*            PREMIUM EDITORIAL CINEMATIC GALLERY            */
-/* ========================================================= */
 
-/* OUTER BLOCK */
-.modal-images {
-  width: 100%;
-  background: #fff;
-  position: relative;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-}
+/* ========================= */
+/*          ORDERS           */
+/* ========================= */
 
-/* HERO FRAME WRAPPER */
-.gallery-stage {
-  width: 100%;
-  aspect-ratio: 1 / 1.35; /* высокий editorial формат */
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* CINEMATIC VIGNETTE */
-.gallery-stage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,0) 55%,
-    rgba(0,0,0,0.18) 100%
-  );
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* SOFT SHADOW UNDER PHOTO */
-.gallery-stage::after {
-  content: "";
-  position: absolute;
-  bottom: -12px;
-  left: 10%;
-  width: 80%;
-  height: 26px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,0.22) 0%,
-    rgba(0,0,0,0) 70%
-  );
-  filter: blur(12px);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* CAROUSEL TRACK */
-#carousel {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  z-index: 1;
-}
-
-#carousel::-webkit-scrollbar { display: none; }
-
-/* EDITORIAL PHOTO STYLE */
-#carousel img {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* ключевой момент — editorial hero frame */
-  object-position: center;
-  scroll-snap-align: center;
-
-  /* cinematic crop */
-  transform: scale(1.06);
-  transition: transform .45s ease, opacity .45s ease;
-}
-
-/* ACTIVE / INACTIVE STATES FOR PARALLAX */
-#carousel img.active-photo {
-  transform: scale(1.10);
-  opacity: 1;
-}
-
-#carousel img.inactive-photo {
-  transform: scale(1.04);
-  opacity: 0.85;
-}
-
-/* PARALLAX SHIFT CLASS (JS WILL ADD IT) */
-#carousel img.parallax-shift {
-  transition: transform .1s linear;
-}
-
-/* ========================================================= */
-/*                     PREMIUM THUMBNAILS                    */
-/* ========================================================= */
-
-.thumb-strip {
-  display: flex;
-  gap: 12px;
-  padding: 18px 18px 24px;
-  overflow-x: auto;
-}
-
-.thumb-strip::-webkit-scrollbar { display: none; }
-
-.thumb {
-  width: 68px;
-  height: 68px;
+.profile-order {
+  padding: 14px 12px;
   border-radius: 14px;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid #eee;
-  opacity: 0.75;
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease;
-}
-
-.thumb.active {
-  opacity: 1;
-  transform: scale(1.08);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
-}
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* ========================================================= */
-/*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
-/* ========================================================= */
-
-.modal-info {
-  padding: 34px 22px 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-
-.modal-info section:not(:first-child) {
-  border-top: 0.5px solid rgba(0,0,0,0.06);
-  padding-top: 28px;
-}
-
-/* BRAND */
-.brand-row {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #8d8d8d;
-  opacity: 0.85;
-  margin-bottom: 2px;
-}
-
-/* TITLE */
-.modal-title {
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.14;
-  letter-spacing: -0.45px;
-  margin: 0 0 14px;
-  color: #111;
-  opacity: 0;
-  transform: translateY(8px);
-  animation: titleFade .55s ease forwards;
-  animation-delay: .05s;
-}
-
-@keyframes titleFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* PRICE */
-.modal-price {
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  margin-bottom: 6px;
-  color: #111;
-  opacity: 0;
-  transform: translateY(6px);
-  animation: priceFade .55s ease forwards;
-  animation-delay: .12s;
-}
-
-@keyframes priceFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* MATERIALS */
-.materials-block {
-  font-size: 15px;
-  line-height: 1.68;
-  color: #555;
-  letter-spacing: 0.012em;
+  background: #f7f7f7;
   display: grid;
   gap: 8px;
-  padding-left: 2px;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: materialsFade .55s ease forwards;
-  animation-delay: .18s;
 }
 
-@keyframes materialsFade {
-  to { opacity: 1; transform: translateY(0); }
+.profile-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.materials-block::before {
-  content: "Details";
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #b6b6b6;
-  margin-bottom: 8px;
-  display: block;
-}
-
-/* SIZES */
-.sizes-label {
+.profile-order-date {
   font-size: 13px;
-  font-weight: 600;
-  color: #333;
-  letter-spacing: 0.025em;
-  margin-bottom: 12px;
+  color: var(--muted);
 }
 
-.modal-sizes {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: sizesFade .55s ease forwards;
-  animation-delay: .26s;
-}
-
-@keyframes sizesFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.modal-sizes .size {
-  height: 50px;
-  border-radius: 14px;
-  background: #f5f5f5;
-  color: #111;
-  border: 1px solid #e3e3e3;
+.profile-order-total {
   font-size: 15px;
-  font-weight: 500;
-  transition: all .18s ease;
+  font-weight: 600;
 }
 
-.modal-sizes .size:hover:not(.disabled) {
-  background: #ebebeb;
-}
-
-.modal-sizes .size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
-
-/* DELIVERY */
-.delivery-inline {
-  font-size: 13px;
-  color: #7a7a7a;
-  line-height: 1.45;
-  letter-spacing: 0.01em;
-  padding: 12px 16px;
-  background: #f8f8f8;
-  border-radius: 14px;
-  margin-top: 10px;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: deliveryFade .55s ease forwards;
-  animation-delay: .34s;
-}
-
-@keyframes deliveryFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ========================================================= */
-/*                FIXED BUTTONS — BOUTIQUE                   */
-/* ========================================================= */
-
-.modal-actions-fixed {
-  padding: 22px 22px 32px;
-  background: #fff;
-  border-top: 0.5px solid rgba(0,0,0,0.06);
+.profile-order-items {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 4px;
 }
 
-.modal-actions-fixed button {
-  height: 54px;
-  border-radius: 16px;
+.profile-order-item .title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.profile-order-item .meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ========================= */
+/*       PROFILE POSTPONED   */
+/* ========================= */
+
+.profile-empty {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.profile-postponed-item {
+  padding: 12px 10px;
+  border-radius: 14px;
+  background: #f7f7f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-postponed-left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.profile-postponed-left img {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.profile-postponed-left .title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.profile-postponed-left .meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.profile-postponed-right {
+  text-align: right;
+}
+
+.profile-postponed-right .price {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* ========================= */
+/*        SKELETON CARDS     */
+/* ========================= */
+
+.catalog .card.skeleton {
+  box-shadow: none;
+  cursor: default;
+}
+
+.catalog .card.skeleton .card-image {
+  height: 170px;
+}
+
+/* ========================= */
+/*        MYSTERY MODAL      */
+/* ========================= */
+
+.mystery-title {
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.2px;
+  margin-top: 4px;
 }
 
-/* ========================================================= */
-/*        FIX: make product modal scrollable                 */
-/* ========================================================= */
+.mystery-price {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 4px;
+}
 
-.modal-content.modal-product {
-  height: 100vh;
+.mystery-btn {
+  width: 100%;
+}
+
+/* ========================= */
+/*        SMALL DETAILS      */
+/* ========================= */
+
+#availabilityBlock {
+  background: #f7f7f7;
+  padding: 14px 16px;
+  border-radius: 14px;
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ========================================================= */
-/*        MICRO-DETAILS & PREMIUM TOUCHES                    */
-/* ========================================================= */
-
-/* Active size highlight */
-.modal-sizes .size.active {
-  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
-  transform: translateY(-1px);
-}
-
-/* Materials grid with bullets */
-.materials-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 20px;
-}
-
-.materials-block span.key {
-  font-weight: 600;
-  color: #333;
-  padding-left: 18px;
-  position: relative;
-}
-
-.materials-block span.key::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #aaa;
+  justify-content: space-between;
   font-size: 14px;
 }
 
-/* Modal entrance animation */
-.modal-content.modal-product {
-  transform: translateY(20px);
-  opacity: 0;
-  transition: transform .35s ease, opacity .35s ease;
+#modalQty {
+  width: 60px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  font-size: 15px;
+  text-align: center;
+}
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+@media (max-width: 420px) {
+  .card-image {
+    height: 150px;
+  }
+
+  .profile-modal .profile-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .profile-postponed-left img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .thumb {
+    width: 52px;
+    height: 52px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+  }
+
+  .modal-price {
+    font-size: 26px;
+  }
 }
 
-#productModal.open .modal-content.modal-product {
-  transform: translateY(0);
-  opacity: 1;
-}
+@media (max-width: 360px) {
+  #cartBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
 
-/* Button press feedback */
-button.primary:active,
-button.secondary:active {
-  transform: scale(0.97);
-  filter: brightness(0.92);
+  .header-actions {
+    gap: 6px;
+  }
+
+  .thumb {
+    width: 46px;
+    height: 46px;
+  }
+
+  .modal-actions-fixed {
+    grid-template-columns: 1fr;
+  }
 }
