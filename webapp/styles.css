@@ -4,21 +4,13 @@
 
 :root {
   --bg: #ffffff;
-  --text: #111;
+  --card: #ffffff;
+  --text: #1a1a1a;
   --muted: #7a7a7a;
-  --primary: #111;
-  --border: rgba(255,255,255,0.18);
-
-  /* стеклянный стиль */
-  --glass-bg: rgba(255,255,255,0.55);
-  --glass-strong: rgba(255,255,255,0.72);
-  --glass-blur: blur(22px) saturate(160%);
-
-  /* галерея */
-  --gallery-bg: rgba(255,255,255,0.08);
-  --gallery-blur: blur(14px) saturate(140%);
-
-  /* анимации */
+  --primary: #111111;
+  --border: #e5e5e5;
+  --air-soft: #f7f9fa;
+  --air-shadow: 0 8px 22px rgba(0,0,0,0.06);
   --fade-duration: .45s;
 }
 
@@ -64,6 +56,22 @@ html, body {
   cursor: pointer;
 }
 
+.full-width { width: 100%; }
+
+/* Ripple */
+.primary .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transform: scale(0);
+  animation: rippleAnim .55s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to { transform: scale(3.5); opacity: 0; }
+}
+
 /* ========================= */
 /*         ANIMATIONS        */
 /* ========================= */
@@ -76,6 +84,123 @@ html, body {
 
 @keyframes fadeIn {
   to { opacity: 1; transform: translateY(0); }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+  border-radius: 14px;
+}
+
+@keyframes skeleton {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ========================= */
+/*           HEADER          */
+/* ========================= */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 20px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #f3f3f3;
+  overflow: hidden;
+}
+
+/* ========================= */
+/*          CATALOG          */
+/* ========================= */
+
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 22px;
+  padding: 0 20px 100px;
+}
+
+/* ========================= */
+/*            CARD           */
+/* ========================= */
+
+.card {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--air-shadow);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .22s ease, box-shadow .22s ease;
+  opacity: 0;
+  animation: fadeIn .5s ease forwards;
+}
+
+.card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+
+.card-image {
+  width: 100%;
+  height: 170px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .25s ease;
+}
+
+.card:hover .card-image img {
+  transform: scale(1.06);
+}
+
+.card-info {
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.card-price {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--primary);
 }
 
 /* ========================= */
@@ -101,64 +226,382 @@ html, body {
   pointer-events: auto;
 }
 
-/* стеклянная модалка */
-.modal-content.modal-product {
+.product-modal {
   width: 100%;
   max-width: 520px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
+  background: #fff;
   border-radius: 22px 22px 0 0;
   overflow: hidden;
+  animation: slideUp .35s ease forwards;
+}
 
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+/* ========================= */
+/*      PRODUCT CONTENT      */
+/* ========================= */
+
+.product-content {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+#modalTitle {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#modalPrice {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+#modalPrice.bump {
+  animation: bump .35s ease;
+}
+
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+#modalDesc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ========================= */
+/*           SIZES           */
+/* ========================= */
+
+#modalSizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.size {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: .2s;
+}
+
+.size.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.size.disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+/* ========================= */
+/*        AVAILABILITY       */
+/* ========================= */
+
+#availabilityBlock {
+  background: #f7f7f7;
+  padding: 14px 16px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* ========================= */
+/*        ADD TO CART        */
+/* ========================= */
+
+.add-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+#modalQty {
+  width: 60px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* ========================= */
+/*          CART DRAWER      */
+/* ========================= */
+
+#cartDrawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 360px;
+  max-width: 100%;
   height: 100vh;
+  background: #fff;
+  box-shadow: -6px 0 18px rgba(0,0,0,0.12);
+  transform: translateX(100%);
+  transition: transform .35s ease;
+  z-index: 9999;
+}
+
+#cartDrawer:not(.hidden) {
+  transform: translateX(0);
+}
+
+.cart-header {
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-item img {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.cart-item .meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: #f3f3f3;
+  cursor: pointer;
+}
+
+.remove-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #d33;
+  cursor: pointer;
+}
+
+.cart-footer {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  display: grid;
+  gap: 12px;
+}
+
+#cartTotal {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* ========================= */
+/*       FLY ANIMATION       */
+/* ========================= */
+
+.fly {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  transition: transform .7s ease, opacity .7s ease;
+  animation: flyAnim .7s ease forwards;
+}
+
+@keyframes flyAnim {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
+}
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+@media (max-width: 420px) {
+  .card-image {
+    height: 150px;
+  }
+
+  .profile-header .profile-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .profile-postponed-left img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .carousel {
+    height: 260px;
+  }
+}
+
+@media (max-width: 360px) {
+  #cartBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .carousel {
+    height: 240px;
+  }
+}
+
+@keyframes fadeInProfile {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.profile-modal .header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.profile-modal .header .brand {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.profile-modal .profile-header {
+  padding: 24px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-modal .profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  overflow: hidden;
+}
+
+.profile-modal .profile-info {
   display: flex;
   flex-direction: column;
-
-  transform: translateY(20px);
-  opacity: 0;
-  transition: transform .35s ease, opacity .35s ease;
+  gap: 4px;
 }
 
-#productModal.open .modal-content.modal-product {
-  transform: translateY(0);
-  opacity: 1;
+.profile-modal .profile-name {
+  font-size: 20px;
+  font-weight: 600;
 }
 
-/* scroll area */
-.modal-body {
+.profile-modal .profile-username {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.profile-modal .profile-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-modal .profile-tab {
   flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 12px;
+  background: #f3f3f3;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.profile-modal .profile-tab.active {
+  background: #111;
+  color: #fff;
+}
+
+.profile-modal .profile-content {
+  padding: 20px;
+  display: grid;
+  gap: 20px;
+  max-height: calc(100vh - 220px);
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+}
+
+.profile-modal .profile-section {
+  display: none;
+}
+
+.profile-modal .profile-section.active {
+  display: block;
 }
 /* ========================================================= */
-/*            COMPACT EDITORIAL PRODUCT GALLERY              */
+/*            PREMIUM EDITORIAL CINEMATIC GALLERY            */
 /* ========================================================= */
 
-/* Внешний блок галереи — прозрачный, стеклянный */
+/* OUTER BLOCK */
 .modal-images {
   width: 100%;
-  background: var(--gallery-bg);
-  backdrop-filter: var(--gallery-blur);
+  background: #fff;
   position: relative;
   overflow: hidden;
   padding: 0;
   margin: 0;
 }
 
-/* Рамка для фото — одинаковая для всех ориентаций */
+/* HERO FRAME WRAPPER */
 .gallery-stage {
   width: 100%;
-  aspect-ratio: 4 / 5; /* компактный премиальный формат */
+  aspect-ratio: 1 / 1.35; /* высокий editorial формат */
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: transparent;
 }
 
-/* Мягкая виньетка — премиальный эффект */
+/* CINEMATIC VIGNETTE */
 .gallery-stage::before {
   content: "";
   position: absolute;
@@ -172,7 +615,7 @@ html, body {
   z-index: 3;
 }
 
-/* Мягкая тень под фото */
+/* SOFT SHADOW UNDER PHOTO */
 .gallery-stage::after {
   content: "";
   position: absolute;
@@ -190,10 +633,7 @@ html, body {
   z-index: 2;
 }
 
-/* ========================================================= */
-/*                     CAROUSEL TRACK                        */
-/* ========================================================= */
-
+/* CAROUSEL TRACK */
 #carousel {
   width: 100%;
   height: 100%;
@@ -207,35 +647,38 @@ html, body {
 
 #carousel::-webkit-scrollbar { display: none; }
 
-/* ========================================================= */
-/*                     PHOTO STYLE                           */
-/* ========================================================= */
-
-/* Фото — одинаковое, аккуратное, не обрезается */
+/* EDITORIAL PHOTO STYLE */
 #carousel img {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-
-  object-fit: contain;     /* ничего не режем */
+  object-fit: cover; /* ключевой момент — editorial hero frame */
   object-position: center;
-
-  padding: 10%;            /* воздух вокруг фото */
-
   scroll-snap-align: center;
 
-  opacity: 1;
-  transform: none;
-  transition: opacity .35s ease, transform .35s ease;
+  /* cinematic crop */
+  transform: scale(1.06);
+  transition: transform .45s ease, opacity .45s ease;
 }
 
-/* Параллакс (если используешь JS) */
+/* ACTIVE / INACTIVE STATES FOR PARALLAX */
+#carousel img.active-photo {
+  transform: scale(1.10);
+  opacity: 1;
+}
+
+#carousel img.inactive-photo {
+  transform: scale(1.04);
+  opacity: 0.85;
+}
+
+/* PARALLAX SHIFT CLASS (JS WILL ADD IT) */
 #carousel img.parallax-shift {
   transition: transform .1s linear;
 }
 
 /* ========================================================= */
-/*                     THUMBNAILS                            */
+/*                     PREMIUM THUMBNAILS                    */
 /* ========================================================= */
 
 .thumb-strip {
@@ -247,20 +690,16 @@ html, body {
 
 .thumb-strip::-webkit-scrollbar { display: none; }
 
-/* Миниатюры — компактные, премиальные */
 .thumb {
-  width: 54px;
-  height: 54px;
-  border-radius: 12px;
+  width: 68px;
+  height: 68px;
+  border-radius: 14px;
   overflow: hidden;
-  background: rgba(255,255,255,0.35);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.25);
-
+  background: #fff;
+  border: 1px solid #eee;
   opacity: 0.75;
   flex-shrink: 0;
   cursor: pointer;
-
   transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease;
 }
 
@@ -276,54 +715,33 @@ html, body {
   object-fit: cover;
 }
 /* ========================================================= */
-/*                EDITORIAL TEXT BLOCK (GLASS)               */
+/*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
 /* ========================================================= */
 
-/* Главный текстовый блок — мягкая стеклянная подложка */
 .modal-info {
-  background: var(--glass-strong);          /* 72% белого — читабельно */
-  backdrop-filter: var(--glass-blur);       /* blur 22px + saturate */
   padding: 34px 22px 48px;
   display: flex;
   flex-direction: column;
-  gap: 34px;
-  border-radius: 22px 22px 0 0;
+  gap: 28px;
 }
 
-/* Разделители между блоками */
-.modal-info .info-block + .info-block {
-  border-top: 1px solid rgba(255,255,255,0.35);
+.modal-info section:not(:first-child) {
+  border-top: 0.5px solid rgba(0,0,0,0.06);
   padding-top: 28px;
 }
 
-/* Блоки появляются мягко */
-.info-block {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: infoBlockFade .55s ease forwards;
-}
-
-@keyframes infoBlockFade {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ========================================================= */
-/*                        BRAND                              */
-/* ========================================================= */
-
+/* BRAND */
 .brand-row {
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.55);
+  color: #8d8d8d;
+  opacity: 0.85;
   margin-bottom: 2px;
 }
 
-/* ========================================================= */
-/*                        TITLE                              */
-/* ========================================================= */
-
+/* TITLE */
 .modal-title {
   font-size: 28px;
   font-weight: 600;
@@ -341,10 +759,7 @@ html, body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ========================================================= */
-/*                        PRICE                              */
-/* ========================================================= */
-
+/* PRICE */
 .modal-price {
   font-size: 30px;
   font-weight: 700;
@@ -361,30 +776,15 @@ html, body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.modal-price.bump {
-  animation: bump .35s ease;
-}
-
-@keyframes bump {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-/* ========================================================= */
-/*                       MATERIALS                           */
-/* ========================================================= */
-
+/* MATERIALS */
 .materials-block {
   font-size: 15px;
   line-height: 1.68;
-  color: #333;
+  color: #555;
   letter-spacing: 0.012em;
-
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 20px;
-
+  gap: 8px;
+  padding-left: 2px;
   opacity: 0;
   transform: translateY(10px);
   animation: materialsFade .55s ease forwards;
@@ -405,27 +805,7 @@ html, body {
   display: block;
 }
 
-/* bullets */
-.materials-block span.key {
-  font-weight: 600;
-  color: #111;
-  padding-left: 18px;
-  position: relative;
-}
-
-.materials-block span.key::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #aaa;
-  font-size: 14px;
-}
-
-/* ========================================================= */
-/*                         SIZES                             */
-/* ========================================================= */
-
+/* SIZES */
 .sizes-label {
   font-size: 13px;
   font-weight: 600;
@@ -438,7 +818,6 @@ html, body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-
   opacity: 0;
   transform: translateY(10px);
   animation: sizesFade .55s ease forwards;
@@ -468,32 +847,18 @@ html, body {
   background: #111;
   color: #fff;
   border-color: #111;
-  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
-  transform: translateY(-1px);
 }
 
-.modal-sizes .size.disabled {
-  opacity: .35;
-  cursor: not-allowed;
-}
-
-/* ========================================================= */
-/*                        DELIVERY                           */
-/* ========================================================= */
-
+/* DELIVERY */
 .delivery-inline {
   font-size: 13px;
-  color: #555;
+  color: #7a7a7a;
   line-height: 1.45;
   letter-spacing: 0.01em;
-
   padding: 12px 16px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(18px);
-
+  background: #f8f8f8;
   border-radius: 14px;
   margin-top: 10px;
-
   opacity: 0;
   transform: translateY(10px);
   animation: deliveryFade .55s ease forwards;
@@ -503,114 +868,93 @@ html, body {
 @keyframes deliveryFade {
   to { opacity: 1; transform: translateY(0); }
 }
+
 /* ========================================================= */
-/*                FIXED ACTION BUTTONS (GLASS)               */
+/*                FIXED BUTTONS — BOUTIQUE                   */
 /* ========================================================= */
 
 .modal-actions-fixed {
   padding: 22px 22px 32px;
-  background: var(--glass-strong);
-  backdrop-filter: var(--glass-blur);
-  border-top: 1px solid rgba(255,255,255,0.35);
-
+  background: #fff;
+  border-top: 0.5px solid rgba(0,0,0,0.06);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-
-  position: sticky;
-  bottom: 0;
-  z-index: 20;
 }
 
-/* Кнопки — премиальные, аккуратные */
 .modal-actions-fixed button {
   height: 54px;
   border-radius: 16px;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.2px;
-  transition: transform .18s ease, filter .18s ease;
-}
-
-/* Нажатие */
-button.primary:active,
-button.secondary:active {
-  transform: scale(0.97);
-  filter: brightness(0.92);
 }
 
 /* ========================================================= */
-/*                    MICRO‑DETAILS                          */
+/*        FIX: make product modal scrollable                 */
 /* ========================================================= */
 
-/* Активный размер — премиальный эффект */
+.modal-content.modal-product {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ========================================================= */
+/*        MICRO-DETAILS & PREMIUM TOUCHES                    */
+/* ========================================================= */
+
+/* Active size highlight */
 .modal-sizes .size.active {
   box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
   transform: translateY(-1px);
 }
 
-/* Мягкая тень под модалкой */
+/* Materials grid with bullets */
+.materials-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+
+.materials-block span.key {
+  font-weight: 600;
+  color: #333;
+  padding-left: 18px;
+  position: relative;
+}
+
+.materials-block span.key::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Modal entrance animation */
 .modal-content.modal-product {
-  box-shadow: 0 -8px 32px rgba(0,0,0,0.18);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .35s ease, opacity .35s ease;
 }
 
-/* Скролл внутри модалки */
-.modal-body::-webkit-scrollbar {
-  width: 0;
+#productModal.open .modal-content.modal-product {
+  transform: translateY(0);
+  opacity: 1;
 }
 
-/* ========================================================= */
-/*                        RESPONSIVE                         */
-/* ========================================================= */
-
-@media (max-width: 420px) {
-
-  /* Галерея чуть компактнее */
-  .gallery-stage {
-    aspect-ratio: 4 / 5;
-  }
-
-  /* Миниатюры меньше */
-  .thumb {
-    width: 48px;
-    height: 48px;
-  }
-
-  /* Текст */
-  .modal-title {
-    font-size: 24px;
-  }
-
-  .modal-price {
-    font-size: 26px;
-  }
-
-  /* Кнопки */
-  .modal-actions-fixed button {
-    height: 50px;
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 360px) {
-
-  /* Миниатюры ещё компактнее */
-  .thumb {
-    width: 44px;
-    height: 44px;
-  }
-
-  /* Текст */
-  .modal-title {
-    font-size: 22px;
-  }
-
-  .modal-price {
-    font-size: 24px;
-  }
-
-  /* Кнопки в одну колонку */
-  .modal-actions-fixed {
-    grid-template-columns: 1fr;
-  }
+/* Button press feedback */
+button.primary:active,
+button.secondary:active {
+  transform: scale(0.97);
+  filter: brightness(0.92);
 }
