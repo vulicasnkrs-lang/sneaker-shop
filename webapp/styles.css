@@ -1,6 +1,6 @@
-/* ========================================================= */
-/*                       ROOT + RESET                        */
-/* ========================================================= */
+/* ========================= */
+/*        ROOT + RESET       */
+/* ========================= */
 
 :root {
   --bg: #ffffff;
@@ -14,12 +14,9 @@
   --fade-duration: .45s;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   background: var(--bg);
@@ -27,68 +24,39 @@ body {
   color: var(--text);
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
-/* ========================================================= */
-/*                          BUTTONS                          */
-/* ========================================================= */
+/* ========================= */
+/*          BUTTONS          */
+/* ========================= */
 
-.primary,
-button.primary {
-  background: linear-gradient(180deg, #111 0%, #000 100%);
+.primary {
+  background: #111;
   color: #fff;
   border-radius: 999px;
   border: none;
   padding: 10px 18px;
   font-size: 14px;
   cursor: pointer;
+  transition: background .2s ease, transform .15s ease;
   position: relative;
   overflow: hidden;
-  transition: all .22s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
 }
 
-.primary:hover,
-button.primary:hover {
-  background: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
-}
+.primary:hover { background: #000; transform: translateY(-1px); }
+.primary:active { transform: scale(0.96); }
 
-.primary:active,
-button.primary:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15) inset;
-  filter: brightness(0.92);
-}
-
-.secondary,
-button.secondary {
-  background: #f5f5f5;
+.secondary {
+  background: #f3f3f3;
   color: #111;
   border-radius: 999px;
   border: none;
   padding: 10px 18px;
   font-size: 14px;
   cursor: pointer;
-  transition: all .22s ease;
 }
 
-button.secondary:hover {
-  background: #e9e9e9;
-  transform: translateY(-1px);
-}
-
-button.secondary:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08) inset;
-}
-
-.full-width {
-  width: 100%;
-}
+.full-width { width: 100%; }
 
 /* Ripple */
 .primary .ripple {
@@ -101,15 +69,12 @@ button.secondary:active {
 }
 
 @keyframes rippleAnim {
-  to {
-    transform: scale(3.5);
-    opacity: 0;
-  }
+  to { transform: scale(3.5); opacity: 0; }
 }
 
-/* ========================================================= */
-/*                         ANIMATIONS                        */
-/* ========================================================= */
+/* ========================= */
+/*         ANIMATIONS        */
+/* ========================= */
 
 .fade-in {
   opacity: 0;
@@ -118,75 +83,24 @@ button.secondary:active {
 }
 
 @keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ⭐ ВАЖНО: вынесенная анимация fadeUp */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.skeleton {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+  border-radius: 14px;
 }
 
-/* editorial reveal for sections */
-.modal-info section {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity .45s cubic-bezier(.25,.1,.25,1),
-              transform .45s cubic-bezier(.25,.1,.25,1);
+@keyframes skeleton {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
-.modal-info section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* fly to cart */
-.fly {
-  position: fixed;
-  z-index: 99999;
-  pointer-events: none;
-  transition: transform .7s ease, opacity .7s ease;
-  animation: flyAnim .7s ease forwards;
-}
-
-@keyframes flyAnim {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-120px) scale(0.4);
-  }
-}
-
-/* premium modal reveal */
-@keyframes modalReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.96);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(0) scale(1.02);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* ========================================================= */
-/*                           HEADER                          */
-/* ========================================================= */
+/* ========================= */
+/*           HEADER          */
+/* ========================= */
 
 .header {
   display: flex;
@@ -221,9 +135,9 @@ button.secondary:active {
   overflow: hidden;
 }
 
-/* ========================================================= */
-/*                          CATALOG                          */
-/* ========================================================= */
+/* ========================= */
+/*          CATALOG          */
+/* ========================= */
 
 .catalog {
   display: grid;
@@ -232,9 +146,9 @@ button.secondary:active {
   padding: 0 20px 100px;
 }
 
-/* ========================================================= */
-/*                            CARD                           */
-/* ========================================================= */
+/* ========================= */
+/*            CARD           */
+/* ========================= */
 
 .card {
   position: relative;
@@ -289,9 +203,9 @@ button.secondary:active {
   color: var(--primary);
 }
 
-/* ========================================================= */
-/*                        PRODUCT MODAL                      */
-/* ========================================================= */
+/* ========================= */
+/*        PRODUCT MODAL      */
+/* ========================= */
 
 #productModal {
   position: fixed;
@@ -312,293 +226,89 @@ button.secondary:active {
   pointer-events: auto;
 }
 
-.modal-content.modal-product {
+.product-modal {
   width: 100%;
   max-width: 520px;
   background: #fff;
-  color: #111;
   border-radius: 22px 22px 0 0;
   overflow: hidden;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  transform: translateY(20px);
-  opacity: 0;
-  transition: transform .35s ease, opacity .35s ease;
+  animation: slideUp .35s ease forwards;
 }
 
-#productModal.open .modal-content.modal-product {
-  transform: translateY(0);
-  opacity: 1;
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+/* ========================= */
+/*      PRODUCT CONTENT      */
+/* ========================= */
+
+.product-content {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
 }
 
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background: #fff;
-}
-
-/* header inside modal */
-.modal-inner-header {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-/* ========================================================= */
-/*                     GALLERY — EDGE-TO-EDGE                */
-/* ========================================================= */
-
-.modal-images {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: #fff;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#carousel {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding: 0;
-}
-
-#carousel::-webkit-scrollbar {
-  display: none;
-}
-
-#carousel img {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: #fff;
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  opacity: 0.6;
-  transform: scale(0.99);
-  transition: transform .35s ease, opacity .35s ease;
-}
-
-#carousel img.active {
-  opacity: 1;
-  transform: scale(1.01);
-}
-
-#carousel img.inactive {
-  opacity: 0.6;
-  transform: scale(0.99);
-}
-
-/* thumbnails */
-
-.thumb-strip,
-#thumbStrip {
-  display: flex;
-  gap: 10px;
-  padding: 12px 16px 18px;
-  overflow-x: auto;
-}
-
-.thumb-strip::-webkit-scrollbar,
-#thumbStrip::-webkit-scrollbar {
-  display: none;
-}
-
-.thumb-strip .thumb,
-.thumb {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid #eee;
-  opacity: 0.55;
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: opacity .25s ease, transform .25s ease, border .2s ease;
-}
-
-.thumb-strip .thumb.active,
-.thumb.active {
-  opacity: 1;
-  transform: scale(1.04);
-  border-color: #111;
-}
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ========================================================= */
-/*                    MODAL INFO — HERO BLOCK                */
-/* ========================================================= */
-
-.modal-info {
-  padding: 32px 22px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-/* sections rhythm */
-.modal-info section {
-  padding-top: 32px;
-  border-top: 1px solid rgba(0,0,0,0.05);
-}
-
-.modal-info section:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-/* brand — small, editorial */
-.brand-row {
-  font-size: 11px;
+#modalTitle {
+  font-size: 20px;
   font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #8d8d8d;
-  opacity: 0.85;
-  margin-bottom: 4px;
 }
 
-/* title — hero */
-.modal-title {
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: -0.45px;
-  line-height: 1.12;
-  margin: 0 0 14px;
-  color: #111;
-}
-
-/* price — anchor */
-.modal-price {
-  font-size: 28px;
+#modalPrice {
+  font-size: 22px;
   font-weight: 700;
-  letter-spacing: -0.25px;
-  margin-bottom: 6px;
-  color: #111;
 }
 
-/* inline stock */
-#modalStockInline {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #8d8d8d;
+#modalPrice.bump {
+  animation: bump .35s ease;
 }
 
-/* ========================================================= */
-/*                     MATERIALS — GRID                      */
-/* ========================================================= */
-
-.materials-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 22px;
-  font-size: 15px;
-  line-height: 1.68;
-  color: #555;
-  letter-spacing: 0.012em;
-  padding-left: 2px;
+@keyframes bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); }
+  100% { transform: scale(1); }
 }
 
-.materials-block::before {
-  content: "Details";
-  grid-column: 1 / -1;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #b6b6b6;
-  margin-bottom: 4px;
-}
-
-.materials-block span.key {
-  font-weight: 600;
-  color: #222;
-  padding-left: 16px;
-  position: relative;
-}
-
-.materials-block span.key::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #b0b0b0;
+#modalDesc {
   font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
 }
 
-/* ========================================================= */
-/*                         SIZES GRID                        */
-/* ========================================================= */
+/* ========================= */
+/*           SIZES           */
+/* ========================= */
 
-.sizes-label {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.modal-sizes {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+#modalSizes {
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.modal-sizes .size {
-  height: 50px;
-  border-radius: 14px;
-  background: #f7f7f7;
-  border: 1px solid #e3e3e3;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all .22s cubic-bezier(.25,.1,.25,1);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  cursor: pointer;
-
-  /* анимация появления */
-  opacity: 0;
-  transform: translateY(6px);
-  animation: fadeUp .35s ease forwards;
-}
-
-.modal-sizes .size:hover:not(.disabled) {
+.size {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
   background: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  cursor: pointer;
+  font-size: 14px;
+  transition: .2s;
 }
 
-.modal-sizes .size.active {
+.size.active {
   background: #111;
   color: #fff;
   border-color: #111;
-  box-shadow:
-    0 8px 20px rgba(0,0,0,0.22),
-    inset 0 0 0 2px #000;
-  transform: translateY(-2px);
 }
 
-.modal-sizes .size.disabled {
+.size.disabled {
   opacity: .35;
   cursor: not-allowed;
 }
 
-/* ========================================================= */
-/*                     AVAILABILITY BLOCK                    */
-/* ========================================================= */
+/* ========================= */
+/*        AVAILABILITY       */
+/* ========================= */
 
 #availabilityBlock {
   background: #f7f7f7;
@@ -609,9 +319,9 @@ button.secondary:active {
   font-size: 14px;
 }
 
-/* ========================================================= */
-/*                        ADD TO CART                        */
-/* ========================================================= */
+/* ========================= */
+/*        ADD TO CART        */
+/* ========================= */
 
 .add-row {
   display: grid;
@@ -629,50 +339,9 @@ button.secondary:active {
   text-align: center;
 }
 
-/* fixed actions at bottom */
-
-.modal-actions-fixed {
-  padding: 20px 22px 30px;
-  background: #fff;
-  border-top: 0.5px solid rgba(0,0,0,0.06);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.modal-actions-fixed button {
-  height: 54px;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-}
-/* ========================================================= */
-/*                        DELIVERY BLOCK                     */
-/* ========================================================= */
-
-.delivery-inline {
-  background: #fafafa;
-  border-radius: 16px;
-  padding: 16px 18px;
-  font-size: 14px;
-  line-height: 1.55;
-  color: #444;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-
-.delivery-inline::before {
-  content: "🚚";
-  font-size: 18px;
-  opacity: 0.7;
-}
-
-/* ========================================================= */
-/*                         CART DRAWER                       */
-/* ========================================================= */
+/* ========================= */
+/*          CART DRAWER      */
+/* ========================= */
 
 #cartDrawer {
   position: fixed;
@@ -754,19 +423,65 @@ button.secondary:active {
   font-weight: 700;
 }
 
-/* ========================================================= */
-/*                         PROFILE MODAL                     */
-/* ========================================================= */
+/* ========================= */
+/*       FLY ANIMATION       */
+/* ========================= */
+
+.fly {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  transition: transform .7s ease, opacity .7s ease;
+  animation: flyAnim .7s ease forwards;
+}
+
+@keyframes flyAnim {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
+}
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+@media (max-width: 420px) {
+  .card-image {
+    height: 150px;
+  }
+
+  .profile-header .profile-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .profile-postponed-left img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .carousel {
+    height: 260px;
+  }
+}
+
+@media (max-width: 360px) {
+  #cartBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .carousel {
+    height: 240px;
+  }
+}
 
 @keyframes fadeInProfile {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
 }
 
 .profile-modal .header {
@@ -861,186 +576,385 @@ button.secondary:active {
 .profile-modal .profile-section.active {
   display: block;
 }
-
 /* ========================================================= */
-/*                       PROFILE ORDERS                      */
-/* ========================================================= */
-
-.profile-order {
-  background: #fff;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: var(--air-shadow);
-  display: grid;
-  gap: 12px;
-}
-
-.profile-order-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.profile-order-items {
-  display: grid;
-  gap: 10px;
-}
-
-.profile-order-item .title {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.profile-order-item .meta {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-/* ========================================================= */
-/*                     PROFILE POSTPONED                     */
+/*            PREMIUM EDITORIAL CINEMATIC GALLERY            */
 /* ========================================================= */
 
-.profile-postponed-item {
-  background: #fff;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: var(--air-shadow);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-}
-
-.profile-postponed-left {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.profile-postponed-left img {
-  width: 64px;
-  height: 64px;
-  border-radius: 14px;
-  object-fit: cover;
-}
-
-.profile-postponed-left .title {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.profile-postponed-left .meta {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.profile-postponed-right {
-  text-align: right;
-}
-
-.profile-postponed-right .price {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.profile-postponed-right .secondary.small {
-  padding: 6px 12px;
-  font-size: 13px;
-}
-
-.profile-empty {
-  text-align: center;
-  padding: 40px 0;
-  color: var(--muted);
-  font-size: 15px;
-}
-/* ========================================================= */
-/*                        MYSTERY BOX                        */
-/* ========================================================= */
-
-#mysteryModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#mysteryModal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.mystery-inner {
-  background: #fff;
-  padding: 24px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 360px;
-  text-align: center;
-  animation: fadeInProfile .35s ease forwards;
-}
-
-.mystery-inner img {
+/* OUTER BLOCK */
+.modal-images {
   width: 100%;
-  border-radius: 16px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+/* HERO FRAME WRAPPER */
+.gallery-stage {
+  width: 100%;
+  aspect-ratio: 1 / 1.35; /* высокий editorial формат */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CINEMATIC VIGNETTE */
+.gallery-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0) 55%,
+    rgba(0,0,0,0.18) 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* SOFT SHADOW UNDER PHOTO */
+.gallery-stage::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 10%;
+  width: 80%;
+  height: 26px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,0.22) 0%,
+    rgba(0,0,0,0) 70%
+  );
+  filter: blur(12px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* CAROUSEL TRACK */
+#carousel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  z-index: 1;
+}
+
+#carousel::-webkit-scrollbar { display: none; }
+
+/* EDITORIAL PHOTO STYLE */
+#carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ключевой момент — editorial hero frame */
+  object-position: center;
+  scroll-snap-align: center;
+
+  /* cinematic crop */
+  transform: scale(1.06);
+  transition: transform .45s ease, opacity .45s ease;
+}
+
+/* ACTIVE / INACTIVE STATES FOR PARALLAX */
+#carousel img.active-photo {
+  transform: scale(1.10);
+  opacity: 1;
+}
+
+#carousel img.inactive-photo {
+  transform: scale(1.04);
+  opacity: 0.85;
+}
+
+/* PARALLAX SHIFT CLASS (JS WILL ADD IT) */
+#carousel img.parallax-shift {
+  transition: transform .1s linear;
+}
+
+/* ========================================================= */
+/*                     PREMIUM THUMBNAILS                    */
+/* ========================================================= */
+
+.thumb-strip {
+  display: flex;
+  gap: 12px;
+  padding: 18px 18px 24px;
+  overflow-x: auto;
+}
+
+.thumb-strip::-webkit-scrollbar { display: none; }
+
+.thumb {
+  width: 68px;
+  height: 68px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eee;
+  opacity: 0.75;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: opacity .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+.thumb.active {
+  opacity: 1;
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  margin-bottom: 16px;
+}
+/* ========================================================= */
+/*                BOUTIQUE EDITORIAL TYPOGRAPHY              */
+/* ========================================================= */
+
+.modal-info {
+  padding: 34px 22px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.modal-info section:not(:first-child) {
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  padding-top: 28px;
+}
+
+/* BRAND */
+.brand-row {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #8d8d8d;
+  opacity: 0.85;
+  margin-bottom: 2px;
+}
+
+/* TITLE */
+.modal-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -0.45px;
+  margin: 0 0 14px;
+  color: #111;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: titleFade .55s ease forwards;
+  animation-delay: .05s;
+}
+
+@keyframes titleFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* PRICE */
+.modal-price {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+  color: #111;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: priceFade .55s ease forwards;
+  animation-delay: .12s;
+}
+
+@keyframes priceFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* MATERIALS */
+.materials-block {
+  font-size: 15px;
+  line-height: 1.68;
+  color: #555;
+  letter-spacing: 0.012em;
+  display: grid;
+  gap: 8px;
+  padding-left: 2px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: materialsFade .55s ease forwards;
+  animation-delay: .18s;
+}
+
+@keyframes materialsFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.materials-block::before {
+  content: "Details";
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b6b6b6;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* SIZES */
+.sizes-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.025em;
+  margin-bottom: 12px;
+}
+
+.modal-sizes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: sizesFade .55s ease forwards;
+  animation-delay: .26s;
+}
+
+@keyframes sizesFade {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-sizes .size {
+  height: 50px;
+  border-radius: 14px;
+  background: #f5f5f5;
+  color: #111;
+  border: 1px solid #e3e3e3;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all .18s ease;
+}
+
+.modal-sizes .size:hover:not(.disabled) {
+  background: #ebebeb;
+}
+
+.modal-sizes .size.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+/* DELIVERY */
+.delivery-inline {
+  font-size: 13px;
+  color: #7a7a7a;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  padding: 12px 16px;
+  background: #f8f8f8;
+  border-radius: 14px;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: deliveryFade .55s ease forwards;
+  animation-delay: .34s;
+}
+
+@keyframes deliveryFade {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========================================================= */
-/*                         SAFE AREA                         */
+/*                FIXED BUTTONS — BOUTIQUE                   */
 /* ========================================================= */
 
-.safe-bottom {
-  height: env(safe-area-inset-bottom);
+.modal-actions-fixed {
+  padding: 22px 22px 32px;
+  background: #fff;
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-actions-fixed button {
+  height: 54px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
 }
 
 /* ========================================================= */
-/*                         RESPONSIVE                        */
+/*        FIX: make product modal scrollable                 */
 /* ========================================================= */
 
-@media (max-width: 420px) {
-  .card-image {
-    height: 150px;
-  }
-
-  .profile-header .profile-avatar {
-    width: 56px;
-    height: 56px;
-  }
-
-  .profile-postponed-left img {
-    width: 56px;
-    height: 56px;
-  }
-
-  .carousel,
-  #carousel {
-    height: 260px;
-  }
+.modal-content.modal-product {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-@media (max-width: 360px) {
-  #cartBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
-  .header-actions {
-    gap: 6px;
-  }
+/* ========================================================= */
+/*        MICRO-DETAILS & PREMIUM TOUCHES                    */
+/* ========================================================= */
 
-  .carousel,
-  #carousel {
-    height: 240px;
-  }
+/* Active size highlight */
+.modal-sizes .size.active {
+  box-shadow: 0 0 0 2px #111 inset, 0 4px 12px rgba(0,0,0,0.18);
+  transform: translateY(-1px);
+}
+
+/* Materials grid with bullets */
+.materials-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 20px;
+}
+
+.materials-block span.key {
+  font-weight: 600;
+  color: #333;
+  padding-left: 18px;
+  position: relative;
+}
+
+.materials-block span.key::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Modal entrance animation */
+.modal-content.modal-product {
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform .35s ease, opacity .35s ease;
+}
+
+#productModal.open .modal-content.modal-product {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Button press feedback */
+button.primary:active,
+button.secondary:active {
+  transform: scale(0.97);
+  filter: brightness(0.92);
 }
