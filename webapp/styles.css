@@ -264,6 +264,7 @@ html, body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
+
 /* ========================= */
 /*     COMPACT PREMIUM — HERO PHOTO     */
 /* ========================= */
@@ -302,7 +303,6 @@ html, body {
   scroll-snap-align: center;
   transition: transform .35s ease;
 }
-
 /* ========================= */
 /*     COMPACT PREMIUM — THUMBNAILS     */
 /* ========================= */
@@ -367,7 +367,7 @@ html, body {
   opacity: 0.85;
 }
 
-/* TITLE — главный герой, дорогой, воздушный, журнальный */
+/* TITLE — главный герой, дорогой, журнальный */
 .modal-title {
   font-size: 28px;
   font-weight: 600;
@@ -459,7 +459,7 @@ html, body {
   justify-content: center;
 }
 
-.modal-sizes .size:hover:not(.disabled) {
+.modal-sizes .size:hover:not(.disabled)) {
   background: #f0f0f0;
 }
 
@@ -490,6 +490,7 @@ html, body {
   margin-top: 12px;
   border: 1px solid #efefef;
 }
+
 /* ========================= */
 /*     ULTRA PREMIUM BTNS — FIXED ACTIONS     */
 /* ========================= */
@@ -524,82 +525,6 @@ html, body {
 .modal-actions-fixed .secondary:active {
   transform: translateY(1px) scale(0.97);
   opacity: 0.92;
-}
-
-/* ========================= */
-/*     PREMIUM MICRO DETAILS     */
-/* ========================= */
-
-/* Active size highlight — boutique selection */
-.modal-sizes .size.active {
-  box-shadow: 0 0 0 2px #111 inset;
-  transform: translateY(-1px);
-}
-
-/* Editorial bullets */
-.materials-block span.key {
-  font-weight: 600;
-  color: #2f2f2f;
-  padding-left: 20px;
-  position: relative;
-}
-
-.materials-block span.key::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #a8a8a8;
-  font-size: 15px;
-}
-
-/* ========================= */
-/*     MODAL PHYSICS — PREMIUM     */
-/* ========================= */
-
-.modal-content.modal-product {
-  transform: translateY(22px);
-  opacity: 0;
-  transition:
-    transform .38s cubic-bezier(.25,.46,.45,.94),
-    opacity .38s ease;
-}
-
-#productModal.open .modal-content.modal-product {
-  transform: translateY(0);
-  opacity: 1;
-}
-/* ========================= */
-/*        AVAILABILITY       */
-/* ========================= */
-
-#availabilityBlock {
-  background: #f7f7f7;
-  padding: 14px 16px;
-  border-radius: 14px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-}
-
-/* ========================= */
-/*        ADD TO CART        */
-/* ========================= */
-
-.add-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-#modalQty {
-  width: 60px;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid #e5e5e5;
-  font-size: 15px;
-  text-align: center;
 }
 
 /* ========================= */
@@ -684,62 +609,6 @@ html, body {
 #cartTotal {
   font-size: 20px;
   font-weight: 700;
-}
-
-/* ========================= */
-/*       FLY ANIMATION       */
-/* ========================= */
-
-.fly {
-  position: fixed;
-  z-index: 99999;
-  pointer-events: none;
-  transition: transform .7s ease, opacity .7s ease;
-  animation: flyAnim .7s ease forwards;
-}
-
-@keyframes flyAnim {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
-}
-
-/* ========================= */
-/*        RESPONSIVE         */
-/* ========================= */
-
-@media (max-width: 420px) {
-  .card-image {
-    height: 150px;
-  }
-
-  .profile-header .profile-avatar {
-    width: 56px;
-    height: 56px;
-  }
-
-  .profile-postponed-left img {
-    width: 56px;
-    height: 56px;
-  }
-
-  .carousel {
-    height: 260px;
-  }
-}
-
-@media (max-width: 360px) {
-  #cartBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  .header-actions {
-    gap: 6px;
-  }
-
-  .carousel {
-    height: 240px;
-  }
 }
 
 /* ========================= */
@@ -842,4 +711,125 @@ html, body {
 
 .profile-modal .profile-section.active {
   display: block;
+}
+
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
+
+@media (max-width: 420px) {
+  .card-image {
+    height: 150px;
+  }
+
+  .profile-header .profile-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .profile-postponed-left img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .carousel {
+    height: 260px;
+  }
+}
+
+@media (max-width: 360px) {
+  #cartBtn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .carousel {
+    height: 240px;
+  }
+}
+/* ========================= */
+/*     PREMIUM GLOW BADGE    */
+/* ========================= */
+
+.product-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+/* Glow Capsule — премиальная плашка */
+.stock-badge {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: #111;
+  border-radius: 14px;
+
+  /* мягкое свечение */
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.06),
+    0 0 12px rgba(255,255,255,0.45);
+
+  /* микро‑градиент */
+  background-image: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.55),
+    rgba(240,240,240,0.35)
+  );
+
+  /* анимация появления */
+  opacity: 0;
+  transform: translateY(6px) scale(.96);
+  animation: badgeIn .55s cubic-bezier(.25,.46,.45,.94) forwards;
+}
+
+/* появление с лёгким bounce */
+@keyframes badgeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(.96);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* hover — премиальная тактильность */
+.stock-badge:hover {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.08),
+    0 0 18px rgba(255,255,255,0.55);
+  transition: all .22s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ========================= */
+/*       FLY ANIMATION       */
+/* ========================= */
+
+.fly {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  transition: transform .7s ease, opacity .7s ease;
+  animation: flyAnim .7s ease forwards;
+}
+
+@keyframes flyAnim {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
 }
