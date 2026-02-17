@@ -826,3 +826,58 @@ html, body {
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
 }
+/* ========================= */
+/*   APPLE LIQUID PRESS      */
+/* ========================= */
+
+.modal-sizes .size {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background .22s ease,
+    transform .22s cubic-bezier(.25,.46,.45,.94),
+    box-shadow .28s ease;
+  will-change: transform, box-shadow;
+}
+
+/* эффект «жидкого промина» при нажатии */
+.modal-sizes .size:active:not(.disabled) {
+  transform: scale(0.88);
+  background: #eaeaea;
+  box-shadow:
+    inset 0 0 14px rgba(0,0,0,0.12),
+    0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* активный размер — жидкая капсула */
+.modal-sizes .size.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  box-shadow:
+    inset 0 0 22px rgba(255,255,255,0.18),
+    0 6px 18px rgba(0,0,0,0.22);
+  animation: liquidPop .32s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* мягкий жидкий bounce */
+@keyframes liquidPop {
+  0%   { transform: scale(0.88); }
+  60%  { transform: scale(1.10); }
+  100% { transform: scale(1); }
+}
+.size-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transform: scale(0);
+  animation: sizeRipple .45s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes sizeRipple {
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
