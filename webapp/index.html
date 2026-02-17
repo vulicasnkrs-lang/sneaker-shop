@@ -28,7 +28,7 @@
       <!-- SCROLLABLE BODY -->
       <div class="modal-body">
 
-        <!-- FULLSCREEN GALLERY — NEW PREMIUM STRUCTURE -->
+        <!-- FULLSCREEN GALLERY -->
         <div class="modal-images">
           <div class="gallery-stage">
             <div class="carousel" id="carousel"></div>
@@ -42,20 +42,23 @@
         <div class="modal-info">
           <section class="modal-section modal-main">
 
-            <!-- BRAND + STOCK INLINE -->
-            <div class="brand-row">
+            <!-- OLD BRAND ROW (kept for JS, hidden via CSS) -->
+            <div class="brand-row" style="display:none;">
               <span id="modalBrand" class="brand-small"></span>
               <span class="dot">·</span>
               <span id="modalStockInline" class="stock-inline"></span>
             </div>
 
-            <!-- MODEL -->
-            <h2 id="modalTitle" class="modal-title"></h2>
+            <!-- NEW PREMIUM TITLE ROW -->
+            <div class="product-title-row">
+              <h2 id="modalTitle" class="modal-title"></h2>
+              <div id="stockBadge" class="stock-badge"></div>
+            </div>
 
             <!-- PRICE -->
             <div id="modalPrice" class="modal-price"></div>
 
-            <!-- MATERIALS -->
+            <!-- MATERIALS (DETAILS) -->
             <div id="modalMaterials" class="materials-block"></div>
 
             <!-- SIZES -->
@@ -73,13 +76,12 @@
 
       <!-- FIXED ACTION BUTTONS -->
       <div class="modal-actions-fixed">
-        <button id="addToCartBtn" class="primary modal-cta">В корзину</button>
         <button id="reserveBtn" class="secondary reserve-btn">Забронировать</button>
+        <button id="addToCartBtn" class="primary modal-cta">В корзину</button>
       </div>
 
     </div>
   </div>
-
   <!-- CATALOG VIEW -->
   <div id="catalogView">
 
@@ -164,7 +166,6 @@
   <div id="productView" class="hidden">
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
-
   <!-- PROFILE MODAL -->
   <div id="profileModal" class="modal hidden">
     <div class="modal-content profile-modal">
