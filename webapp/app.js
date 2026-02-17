@@ -451,7 +451,7 @@ els.stockBadge.textContent = `${totalStock} ${pluralPairs(totalStock)}`;
 
   updateAvailabilityBlock(p, null);
 
- /* ========================= */
+/* ========================= */
 /*          SIZES            */
 /* ========================= */
 
@@ -466,32 +466,46 @@ els.modalSizes.innerHTML = '';
     b.classList.add('disabled');
   }
 
- b.addEventListener('click', (event) => {
+  b.addEventListener('click', (event) => {
 
-  // Apple Liquid Ripple
-  const rect = b.getBoundingClientRect();
-  const ripple = document.createElement('span');
-  ripple.className = 'size-ripple';
-  ripple.style.width = ripple.style.height = `${rect.width * 1.6}px`;
-  ripple.style.left = `${event.clientX - rect.left - rect.width * 0.8}px`;
-  ripple.style.top = `${event.clientY - rect.top - rect.width * 0.8}px`;
-  b.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 450);
+    /* ========================= */
+    /*     APPLE LIQUID RIPPLE   */
+    /* ========================= */
+    const rect = b.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'size-ripple';
+    ripple.style.width = ripple.style.height = `${rect.width * 1.6}px`;
+    ripple.style.left = `${event.clientX - rect.left - rect.width * 0.8}px`;
+    ripple.style.top = `${event.clientY - rect.top - rect.width * 0.8}px`;
+    b.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 450);
 
-  if (obj.stock <= 0) return;
+    /* ========================= */
+    /*     SIZE SELECTION LOGIC  */
+    /* ========================= */
 
-  selectedSize = obj.size;
+    if (obj.stock <= 0) return;
 
-  els.modalSizes.querySelectorAll('.size')
-    .forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
+    selectedSize = obj.size;
 
-  updateAvailabilityBlock(p, selectedSize);
+    els.modalSizes.querySelectorAll('.size')
+      .forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
 
-  els.modalPrice.classList.remove('bump');
-  void els.modalPrice.offsetWidth;
-  els.modalPrice.classList.add('bump');
+    updateAvailabilityBlock(p, selectedSize);
+
+    // price bump animation
+    els.modalPrice.classList.remove('bump');
+    void els.modalPrice.offsetWidth;
+    els.modalPrice.classList.add('bump');
+  });
+
+  // sequential fade-in (premium)
+  b.style.animationDelay = `${idx * 40}ms`;
+
+  els.modalSizes.appendChild(b);
 });
+
 
     /* ========================= */
     /*     SIZE SELECTION LOGIC  */
