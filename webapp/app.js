@@ -437,15 +437,17 @@ els.stockBadge.textContent = `${totalStock} ${pluralPairs(totalStock)}`;
   els.modalPrice.textContent = formatPrice(p.price);
 
 
-  if (p.materials && typeof p.materials === 'object') {
-    els.modalMaterials.innerHTML = Object.entries(p.materials)
-      .map(([key, value]) =>
-        `<span class="key">${beautifyMaterialKey(key)}</span>: ${value}`
-      )
-      .join('<br>');
-  } else {
-    els.modalMaterials.innerHTML = '';
-  }
+ if (p.materials && typeof p.materials === 'object') {
+  els.modalMaterials.innerHTML = Object.entries(p.materials)
+    .map(([key, value]) =>
+      `<div class="key">${beautifyMaterialKey(key)}</div>
+       <div class="value">${value}</div>`
+    )
+    .join('');
+} else {
+  els.modalMaterials.innerHTML = '';
+}
+
 
   updateAvailabilityBlock(p, null);
 
