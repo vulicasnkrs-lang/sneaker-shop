@@ -59,6 +59,8 @@ const els = {
   modalSizes: document.getElementById('modalSizes'),
   addToCartBtn: document.getElementById('addToCartBtn'),
   reserveBtn: document.getElementById('reserveBtn'),
+  stockBadge: document.getElementById('stockBadge'),
+
 
   /* PRODUCT MODAL HEADER */
   profileAvatarModal: document.getElementById('profileAvatarModal'),
@@ -432,6 +434,9 @@ function openProductModal(p) {
 
   els.modalTitle.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
+  const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
+els.stockBadge.textContent = `${totalStock} ${pluralPairs(totalStock)}`;
+
 
   if (p.materials && typeof p.materials === 'object') {
     els.modalMaterials.innerHTML = Object.entries(p.materials)
