@@ -506,34 +506,6 @@ els.modalSizes.innerHTML = '';
   els.modalSizes.appendChild(b);
 });
 
-
-    /* ========================= */
-    /*     SIZE SELECTION LOGIC  */
-    /* ========================= */
-
-    if (obj.stock <= 0) return;
-
-    selectedSize = obj.size;
-
-    els.modalSizes.querySelectorAll('.size')
-      .forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-
-    updateAvailabilityBlock(p, selectedSize);
-
-    // price bump animation
-    els.modalPrice.classList.remove('bump');
-    void els.modalPrice.offsetWidth;
-    els.modalPrice.classList.add('bump');
-  });
-
-  // sequential fade-in (premium)
-  b.style.animationDelay = `${idx * 40}ms`;
-
-  els.modalSizes.appendChild(b);
-});
-
-
   /* ========================= */
   /*        OPEN MODAL         */
   /* ========================= */
