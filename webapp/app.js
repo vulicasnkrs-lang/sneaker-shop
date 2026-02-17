@@ -466,19 +466,32 @@ els.modalSizes.innerHTML = '';
     b.classList.add('disabled');
   }
 
-  b.addEventListener('click', (event) => {
+ b.addEventListener('click', (event) => {
 
-    /* ========================= */
-    /*     APPLE LIQUID RIPPLE   */
-    /* ========================= */
-    const rect = b.getBoundingClientRect();
-    const ripple = document.createElement('span');
-    ripple.className = 'size-ripple';
-    ripple.style.width = ripple.style.height = `${rect.width * 1.4}px`;
-    ripple.style.left = `${event.clientX - rect.left - rect.width * 0.7}px`;
-    ripple.style.top = `${event.clientY - rect.top - rect.width * 0.7}px`;
-    b.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 450);
+  // Apple Liquid Ripple
+  const rect = b.getBoundingClientRect();
+  const ripple = document.createElement('span');
+  ripple.className = 'size-ripple';
+  ripple.style.width = ripple.style.height = `${rect.width * 1.6}px`;
+  ripple.style.left = `${event.clientX - rect.left - rect.width * 0.8}px`;
+  ripple.style.top = `${event.clientY - rect.top - rect.width * 0.8}px`;
+  b.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 450);
+
+  if (obj.stock <= 0) return;
+
+  selectedSize = obj.size;
+
+  els.modalSizes.querySelectorAll('.size')
+    .forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+
+  updateAvailabilityBlock(p, selectedSize);
+
+  els.modalPrice.classList.remove('bump');
+  void els.modalPrice.offsetWidth;
+  els.modalPrice.classList.add('bump');
+});
 
     /* ========================= */
     /*     SIZE SELECTION LOGIC  */
