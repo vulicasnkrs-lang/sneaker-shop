@@ -451,39 +451,61 @@ els.stockBadge.textContent = `${totalStock} ${pluralPairs(totalStock)}`;
 
   updateAvailabilityBlock(p, null);
 
-  /* ========================= */
-  /*          SIZES            */
-  /* ========================= */
+ /* ========================= */
+/*          SIZES            */
+/* ========================= */
 
-  els.modalSizes.innerHTML = '';
-  (p.sizes || []).forEach(obj => {
-    const b = document.createElement('button');
-    b.className = 'size';
-    b.textContent = obj.size;
+els.modalSizes.innerHTML = '';
+(p.sizes || []).forEach((obj, idx) => {
+  const b = document.createElement('button');
+  b.className = 'size';
+  b.textContent = obj.size;
 
-    if (obj.stock <= 0) {
-      b.disabled = true;
-      b.classList.add('disabled');
-    }
+  if (obj.stock <= 0) {
+    b.disabled = true;
+    b.classList.add('disabled');
+  }
 
-    b.addEventListener('click', () => {
-      if (obj.stock <= 0) return;
+  b.addEventListener('click', (event) => {
 
-      selectedSize = obj.size;
+    /* ========================= */
+    /*     APPLE LIQUID RIPPLE   */
+    /* ========================= */
+    const rect = b.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'size-ripple';
+    ripple.style.width = ripple.style.height = `${rect.width * 1.4}px`;
+    ripple.style.left = `${event.clientX - rect.left - rect.width * 0.7}px`;
+    ripple.style.top = `${event.clientY - rect.top - rect.width * 0.7}px`;
+    b.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 450);
 
-      els.modalSizes.querySelectorAll('.size')
-        .forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
+    /* ========================= */
+    /*     SIZE SELECTION LOGIC  */
+    /* ========================= */
 
-      updateAvailabilityBlock(p, selectedSize);
+    if (obj.stock <= 0) return;
 
-      els.modalPrice.classList.remove('bump');
-      void els.modalPrice.offsetWidth;
-      els.modalPrice.classList.add('bump');
-    });
+    selectedSize = obj.size;
 
-    els.modalSizes.appendChild(b);
+    els.modalSizes.querySelectorAll('.size')
+      .forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+
+    updateAvailabilityBlock(p, selectedSize);
+
+    // price bump animation
+    els.modalPrice.classList.remove('bump');
+    void els.modalPrice.offsetWidth;
+    els.modalPrice.classList.add('bump');
   });
+
+  // sequential fade-in (premium)
+  b.style.animationDelay = `${idx * 40}ms`;
+
+  els.modalSizes.appendChild(b);
+});
+
 
   /* ========================= */
   /*        OPEN MODAL         */
