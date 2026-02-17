@@ -356,7 +356,7 @@ html, body {
   padding-top: 26px;
 }
 
-/* BRAND — ультра‑минимализм, как у SSENSE */
+/* BRAND — скрытый старый блок */
 .brand-row {
   font-size: 10px;
   font-weight: 500;
@@ -367,7 +367,7 @@ html, body {
   opacity: 0.85;
 }
 
-/* TITLE — главный герой, дорогой, журнальный */
+/* TITLE — главный герой */
 .modal-title {
   font-size: 28px;
   font-weight: 600;
@@ -377,10 +377,9 @@ html, body {
   color: #0f0f0f;
   transform: translateY(1px);
   opacity: 0.98;
-  transition: opacity .35s ease, transform .35s ease;
 }
 
-/* PRICE — уверенный, плотный, fashion‑weight */
+/* PRICE — уверенный, плотный */
 .modal-price {
   font-size: 30px;
   font-weight: 700;
@@ -390,44 +389,18 @@ html, body {
   opacity: 0.95;
 }
 
-/* SECTION LABELS — как в Farfetch Black Series */
-.modal-info section::before {
-  content: attr(data-label);
-  display: block;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #b6b6b6;
-  margin-bottom: 12px;
-}
+/* ========================= */
+/*     ОПИСАНИЕ — табличный премиум     */
+/* ========================= */
 
-/* MATERIALS — чистый editorial, мягкий ритм */
-.materials-block {
-  font-size: 14px;
-  line-height: 1.68;
-  color: #444;
-  display: grid;
-  gap: 10px;
-  padding-left: 2px;
-}
-
-/* Bullets — дорогие, минимальные */
-.materials-block span.key {
+.section-title {
+  font-size: 13px;
   font-weight: 600;
-  color: #2f2f2f;
-  padding-left: 20px;
-  position: relative;
+  color: #555;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
 }
 
-.materials-block span.key::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #a8a8a8;
-  font-size: 15px;
-}
-/* Описание — табличный премиум */
 .materials-block {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -446,13 +419,6 @@ html, body {
 
 .materials-block .value {
   color: #444;
-}
-.section-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #555;
-  margin-bottom: 12px;
-  letter-spacing: 0.3px;
 }
 
 /* ========================= */
@@ -486,7 +452,7 @@ html, body {
   justify-content: center;
 }
 
-.modal-sizes .size:hover:not(.disabled)) {
+.modal-sizes .size:hover:not(.disabled) {
   background: #f0f0f0;
 }
 
