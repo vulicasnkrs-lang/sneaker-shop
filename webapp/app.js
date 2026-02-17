@@ -431,11 +431,10 @@ function openProductModal(p) {
 
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
   els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
+els.stockBadge.textContent = `${totalStock} ${pluralPairs(totalStock)}`;
 
   els.modalTitle.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
-  const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
-els.stockBadge.textContent = `${totalStock} ${pluralPairs(totalStock)}`;
 
 
   if (p.materials && typeof p.materials === 'object') {
