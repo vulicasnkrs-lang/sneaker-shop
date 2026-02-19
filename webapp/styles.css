@@ -356,7 +356,6 @@ html, body {
   padding-top: 26px;
 }
 
-/* BRAND — скрытый старый блок */
 .brand-row {
   font-size: 10px;
   font-weight: 500;
@@ -367,7 +366,6 @@ html, body {
   opacity: 0.85;
 }
 
-/* TITLE — главный герой */
 .modal-title {
   font-size: 28px;
   font-weight: 600;
@@ -379,7 +377,6 @@ html, body {
   opacity: 0.98;
 }
 
-/* PRICE — уверенный, плотный */
 .modal-price {
   font-size: 30px;
   font-weight: 700;
@@ -420,6 +417,7 @@ html, body {
 .materials-block .value {
   color: #444;
 }
+
 /* ========================= */
 /*     COMPACT PREMIUM — SIZES LABEL     */
 /* ========================= */
@@ -436,7 +434,6 @@ html, body {
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
-
 /* ========================= */
 /*     COMPACT PREMIUM — DELIVERY     */
 /* ========================= */
@@ -705,111 +702,102 @@ html, body {
   }
 
   .header-actions {
-    gap: 6px;
-  }
-
-  .carousel {
+    gap: 6px
+      .carousel {
     height: 240px;
   }
 }
 /* ========================= */
-/*  VISIONOS PURE GLASS SIZE */
+/*     INK‑MORPH CAPSULE     */
 /* ========================= */
 
 .modal-sizes .size {
   position: relative;
   overflow: hidden;
-  border-radius: 999px;
   height: 42px;
+  border-radius: 999px;
 
-  /* стеклянный материал */
-  background:
-    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.45), rgba(255,255,255,0.08)),
-    rgba(255,255,255,0.06);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255,255,255,0.55);
+  /* Матовый soft‑touch материал */
+  background: #f4f4f4;
+  border: 1px solid #e5e5e5;
   color: #111;
   font-size: 14px;
   font-weight: 500;
-
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.25),
-    0 10px 30px rgba(0,0,0,0.18);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  /* Глубина + мягкий ореол */
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.04),
+    0 2px 6px rgba(0,0,0,0.06);
+
   transition:
-    background .18s ease,
+    background .22s ease,
     transform .18s cubic-bezier(.25,.46,.45,.94),
-    box-shadow .22s ease,
-    border-color .18s ease;
-  will-change: transform, box-shadow;
+    box-shadow .22s ease;
 }
 
-/* hover (desktop) */
+/* Hover — лёгкое поднятие */
 .modal-sizes .size:hover:not(.disabled) {
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.35),
-    0 12px 34px rgba(0,0,0,0.22);
+    inset 0 0 6px rgba(0,0,0,0.06),
+    0 4px 10px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
 }
 
-/* нажатие — жидкое проминание */
+/* Press — эффект жидкости под поверхностью */
 .modal-sizes .size:active:not(.disabled) {
   transform: scale(0.94);
-  background:
-    radial-gradient(circle at 30% 0%, rgba(255,255,255,0.55), rgba(255,255,255,0.12)),
-    rgba(255,255,255,0.10);
+  background: #e9e9e9;
   box-shadow:
-    inset 0 0 22px rgba(0,0,0,0.28),
-    0 6px 18px rgba(0,0,0,0.25);
+    inset 0 0 14px rgba(0,0,0,0.12),
+    0 2px 8px rgba(0,0,0,0.10);
 }
 
-/* выбранный размер — плотное стекло с внутренним светом */
-.modal-sizes .size.active {
-  color: #fff;
-  border-color: rgba(255,255,255,0.85);
-  background:
-    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.85), rgba(255,255,255,0.18)),
-    rgba(0,0,0,0.55);
-  box-shadow:
-    inset 0 0 26px rgba(255,255,255,0.35),
-    0 12px 34px rgba(0,0,0,0.45);
-  animation: glassMorph .26s cubic-bezier(.25,.46,.45,.94);
-}
-
-/* лёгкая деформация формы при выборе */
-@keyframes glassMorph {
-  0%   { transform: scale(0.94, 0.96); }
-  55%  { transform: scale(1.04, 1.02); }
-  100% { transform: scale(1, 1); }
-}
-
-/* VisionOS‑style light beam ripple */
-.size-ripple {
+/* Внутренний слой для эффекта растекания */
+.size-ink {
   position: absolute;
-  border-radius: 999px;
-  background: radial-gradient(circle at 30% 0%, rgba(255,255,255,0.9), rgba(255,255,255,0));
-  opacity: 0.75;
-  transform: scale(0.2, 0.6);
-  filter: blur(2px);
-  animation: sizeRipple .45s ease-out forwards;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 70%);
+  opacity: 0;
   pointer-events: none;
+  transform: scale(0.2);
 }
 
-@keyframes sizeRipple {
-  to {
-    transform: scale(2.4, 1.1);
-    opacity: 0;
-  }
+/* Анимация растекания */
+@keyframes inkSpread {
+  0%   { opacity: 0.25; transform: scale(0.2); }
+  70%  { opacity: 0.15; transform: scale(1.4); }
+  100% { opacity: 0; transform: scale(1.8); }
 }
 
-/* disabled — стекло «погасло» */
+/* Выбранный размер — плотная чёрная капсула */
+.modal-sizes .size.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+
+  box-shadow:
+    inset 0 0 18px rgba(255,255,255,0.18),
+    0 6px 18px rgba(0,0,0,0.22);
+
+  animation: inkBounce .22s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* Микро‑bounce при выборе */
+@keyframes inkBounce {
+  0%   { transform: scale(0.94); }
+  55%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* Disabled — погашенная капсула */
 .modal-sizes .size.disabled {
   opacity: 0.45;
   box-shadow: none;
-  border-color: rgba(255,255,255,0.25);
+  background: #f1f1f1;
+  border-color: #e0e0e0;
 }
