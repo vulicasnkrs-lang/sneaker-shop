@@ -461,6 +461,7 @@ els.modalSizes.innerHTML = '';
   b.className = 'size';
   b.textContent = obj.size;
 
+  /* disabled */
   if (obj.stock <= 0) {
     b.disabled = true;
     b.classList.add('disabled');
@@ -469,19 +470,23 @@ els.modalSizes.innerHTML = '';
   b.addEventListener('click', (event) => {
 
     /* ========================= */
-    /*     APPLE LIQUID RIPPLE   */
+    /*   VisionOS LIGHT BEAM     */
     /* ========================= */
     const rect = b.getBoundingClientRect();
     const ripple = document.createElement('span');
     ripple.className = 'size-ripple';
-    ripple.style.width = ripple.style.height = `${rect.width * 1.6}px`;
-    ripple.style.left = `${event.clientX - rect.left - rect.width * 0.8}px`;
-    ripple.style.top = `${event.clientY - rect.top - rect.width * 0.8}px`;
+
+    const w = rect.width * 1.8;
+    ripple.style.width = `${w}px`;
+    ripple.style.height = `${w * 0.55}px`;
+    ripple.style.left = `${event.clientX - rect.left - w * 0.5}px`;
+    ripple.style.top = `${event.clientY - rect.top - w * 0.35}px`;
+
     b.appendChild(ripple);
     setTimeout(() => ripple.remove(), 450);
 
     /* ========================= */
-    /*     SIZE SELECTION LOGIC  */
+    /*     SIZE SELECTION        */
     /* ========================= */
 
     if (obj.stock <= 0) return;
@@ -490,21 +495,23 @@ els.modalSizes.innerHTML = '';
 
     els.modalSizes.querySelectorAll('.size')
       .forEach(x => x.classList.remove('active'));
+
     b.classList.add('active');
 
     updateAvailabilityBlock(p, selectedSize);
 
-    // price bump animation
+    /* price bump */
     els.modalPrice.classList.remove('bump');
     void els.modalPrice.offsetWidth;
     els.modalPrice.classList.add('bump');
   });
 
-  // sequential fade-in (premium)
+  /* sequential fade-in */
   b.style.animationDelay = `${idx * 40}ms`;
 
   els.modalSizes.appendChild(b);
 });
+
 
   /* ========================= */
   /*        OPEN MODAL         */
