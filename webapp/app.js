@@ -469,21 +469,23 @@ els.modalSizes.innerHTML = '';
 
   b.addEventListener('click', (event) => {
 
-    /* ========================= */
-    /*   VisionOS LIGHT BEAM     */
-    /* ========================= */
-    const rect = b.getBoundingClientRect();
-    const ripple = document.createElement('span');
-    ripple.className = 'size-ripple';
+   /* ========================= */
+/*      INK‑MORPH PRESS      */
+/* ========================= */
 
-    const w = rect.width * 1.8;
-    ripple.style.width = `${w}px`;
-    ripple.style.height = `${w * 0.55}px`;
-    ripple.style.left = `${event.clientX - rect.left - w * 0.5}px`;
-    ripple.style.top = `${event.clientY - rect.top - w * 0.35}px`;
+// создаём внутренний слой для эффекта жидкости (если ещё нет)
+let ink = b.querySelector('.size-ink');
+if (!ink) {
+  ink = document.createElement('span');
+  ink.className = 'size-ink';
+  b.appendChild(ink);
+}
 
-    b.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 450);
+// запускаем анимацию растекания
+ink.style.animation = 'none';
+void ink.offsetWidth; // reset
+ink.style.animation = 'inkSpread .45s ease-out';
+
 
     /* ========================= */
     /*     SIZE SELECTION        */
