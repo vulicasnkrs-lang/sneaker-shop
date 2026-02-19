@@ -214,7 +214,6 @@ html, body {
   font-weight: 700;
   color: var(--primary);
 }
-
 /* ========================= */
 /*        PRODUCT MODAL      */
 /* ========================= */
@@ -303,6 +302,7 @@ html, body {
   scroll-snap-align: center;
   transition: transform .35s ease;
 }
+
 /* ========================= */
 /*     COMPACT PREMIUM — THUMBNAILS     */
 /* ========================= */
@@ -420,9 +420,8 @@ html, body {
 .materials-block .value {
   color: #444;
 }
-
 /* ========================= */
-/*     COMPACT PREMIUM — SIZES     */
+/*     COMPACT PREMIUM — SIZES LABEL     */
 /* ========================= */
 
 .sizes-label {
@@ -436,37 +435,6 @@ html, body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-}
-
-.modal-sizes .size {
-  height: 40px;
-  border-radius: 10px;
-  background: #fafafa;
-  color: #111;
-  border: 1px solid #e3e3e3;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all .18s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-sizes .size:hover:not(.disabled) {
-  background: #f0f0f0;
-}
-
-.modal-sizes .size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  box-shadow: 0 0 0 2px #111 inset;
-  transform: translateY(-1px);
-}
-
-.modal-sizes .size.disabled {
-  opacity: .35;
-  cursor: not-allowed;
 }
 
 /* ========================= */
@@ -745,199 +713,103 @@ html, body {
   }
 }
 /* ========================= */
-/*     PREMIUM GLOW BADGE    */
+/*  VISIONOS PURE GLASS SIZE */
 /* ========================= */
 
-.product-title-row {
+.modal-sizes .size {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  height: 42px;
+
+  /* стеклянный материал */
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.45), rgba(255,255,255,0.08)),
+    rgba(255,255,255,0.06);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,0.55);
+  color: #111;
+  font-size: 14px;
+  font-weight: 500;
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.25),
+    0 10px 30px rgba(0,0,0,0.18);
+
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 6px;
-}
+  justify-content: center;
 
-/* Glow Capsule — премиальная плашка */
-.stock-badge {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-  color: #111;
-  border-radius: 14px;
-
-  /* мягкое свечение */
-  background: rgba(255,255,255,0.35);
-  backdrop-filter: blur(10px);
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.06),
-    0 0 12px rgba(255,255,255,0.45);
-
-  /* микро‑градиент */
-  background-image: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.55),
-    rgba(240,240,240,0.35)
-  );
-
-  /* анимация появления */
-  opacity: 0;
-  transform: translateY(6px) scale(.96);
-  animation: badgeIn .55s cubic-bezier(.25,.46,.45,.94) forwards;
-}
-
-/* появление с лёгким bounce */
-@keyframes badgeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(6px) scale(.96);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(-2px) scale(1.03);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* hover — премиальная тактильность */
-.stock-badge:hover {
-  transform: translateY(-1px) scale(1.04);
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.08),
-    0 0 18px rgba(255,255,255,0.55);
-  transition: all .22s cubic-bezier(.25,.46,.45,.94);
-}
-
-/* ========================= */
-/*       FLY ANIMATION       */
-/* ========================= */
-
-.fly {
-  position: fixed;
-  z-index: 99999;
-  pointer-events: none;
-  transition: transform .7s ease, opacity .7s ease;
-  animation: flyAnim .7s ease forwards;
-}
-
-@keyframes flyAnim {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: translateY(-120px) scale(0.4); }
-}
-/* ========================= */
-/*   APPLE LIQUID PRESS      */
-/* ========================= */
-
-.modal-sizes .size {
-  position: relative;
-  overflow: hidden;
-  transition:
-    background .22s ease,
-    transform .22s cubic-bezier(.25,.46,.45,.94),
-    box-shadow .28s ease;
-  will-change: transform, box-shadow;
-}
-
-/* эффект «жидкого промина» при нажатии */
-.modal-sizes .size:active:not(.disabled) {
-  transform: scale(0.88);
-  background: #eaeaea;
-  box-shadow:
-    inset 0 0 14px rgba(0,0,0,0.12),
-    0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* активный размер — жидкая капсула */
-.modal-sizes .size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  box-shadow:
-    inset 0 0 22px rgba(255,255,255,0.18),
-    0 6px 18px rgba(0,0,0,0.22);
-  animation: liquidPop .32s cubic-bezier(.25,.46,.45,.94);
-}
-
-/* мягкий жидкий bounce */
-@keyframes liquidPop {
-  0%   { transform: scale(0.88); }
-  60%  { transform: scale(1.10); }
-  100% { transform: scale(1); }
-}
-.size-ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.25);
-  transform: scale(0);
-  animation: sizeRipple .45s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes sizeRipple {
-  to {
-    transform: scale(2.6);
-    opacity: 0;
-  }
-}
-/* ========================= */
-/*   TRUE APPLE LIQUID PRESS */
-/* ========================= */
-
-.modal-sizes .size {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
   transition:
     background .18s ease,
     transform .18s cubic-bezier(.25,.46,.45,.94),
-    box-shadow .22s ease;
+    box-shadow .22s ease,
+    border-color .18s ease;
   will-change: transform, box-shadow;
 }
 
-/* жидкое проминание */
+/* hover (desktop) */
+.modal-sizes .size:hover:not(.disabled) {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.35),
+    0 12px 34px rgba(0,0,0,0.22);
+}
+
+/* нажатие — жидкое проминание */
 .modal-sizes .size:active:not(.disabled) {
-  transform: scale(0.92);
-  background: #e5e5e5;
+  transform: scale(0.94);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(255,255,255,0.55), rgba(255,255,255,0.12)),
+    rgba(255,255,255,0.10);
   box-shadow:
-    inset 0 0 18px rgba(0,0,0,0.18),
-    inset 0 0 6px rgba(0,0,0,0.12),
-    0 4px 10px rgba(0,0,0,0.08);
-}
-
-/* выбранная капсула — плотная, силиконовая */
-.modal-sizes .size.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  box-shadow:
-    inset 0 0 22px rgba(255,255,255,0.22),
-    inset 0 0 12px rgba(0,0,0,0.25),
+    inset 0 0 22px rgba(0,0,0,0.28),
     0 6px 18px rgba(0,0,0,0.25);
-  animation: liquidPressPop .28s cubic-bezier(.25,.46,.45,.94);
 }
 
-/* мягкое возвращение, как у Apple */
-@keyframes liquidPressPop {
-  0%   { transform: scale(0.92); }
-  55%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
+/* выбранный размер — плотное стекло с внутренним светом */
+.modal-sizes .size.active {
+  color: #fff;
+  border-color: rgba(255,255,255,0.85);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.85), rgba(255,255,255,0.18)),
+    rgba(0,0,0,0.55);
+  box-shadow:
+    inset 0 0 26px rgba(255,255,255,0.35),
+    0 12px 34px rgba(0,0,0,0.45);
+  animation: glassMorph .26s cubic-bezier(.25,.46,.45,.94);
 }
 
-/* Apple‑style ripple */
+/* лёгкая деформация формы при выборе */
+@keyframes glassMorph {
+  0%   { transform: scale(0.94, 0.96); }
+  55%  { transform: scale(1.04, 1.02); }
+  100% { transform: scale(1, 1); }
+}
+
+/* VisionOS‑style light beam ripple */
 .size-ripple {
   position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.35);
-  transform: scale(0);
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 0%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  opacity: 0.75;
+  transform: scale(0.2, 0.6);
+  filter: blur(2px);
   animation: sizeRipple .45s ease-out forwards;
   pointer-events: none;
 }
 
 @keyframes sizeRipple {
   to {
-    transform: scale(2.8);
+    transform: scale(2.4, 1.1);
     opacity: 0;
   }
+}
+
+/* disabled — стекло «погасло» */
+.modal-sizes .size.disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  border-color: rgba(255,255,255,0.25);
 }
