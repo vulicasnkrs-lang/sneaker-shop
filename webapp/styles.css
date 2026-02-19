@@ -44,18 +44,10 @@ html, body {
     background .22s ease,
     transform .18s cubic-bezier(.25,.46,.45,.94),
     opacity .22s ease;
-  transform: translateY(0);
 }
 
-.primary:hover {
-  background: #000;
-  transform: translateY(-1px);
-}
-
-.primary:active {
-  transform: translateY(1px) scale(0.97);
-  opacity: 0.92;
-}
+.primary:hover { background: #000; transform: translateY(-1px); }
+.primary:active { transform: translateY(1px) scale(0.97); opacity: 0.92; }
 
 .secondary {
   background: #f5f5f5;
@@ -65,7 +57,6 @@ html, body {
   padding: 16px 20px;
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: -0.25px;
   cursor: pointer;
   transition:
     background .22s ease,
@@ -73,14 +64,8 @@ html, body {
     opacity .22s ease;
 }
 
-.secondary:hover {
-  background: #ececec;
-}
-
-.secondary:active {
-  transform: translateY(1px) scale(0.97);
-  opacity: 0.92;
-}
+.secondary:hover { background: #ececec; }
+.secondary:active { transform: translateY(1px) scale(0.97); opacity: 0.92; }
 
 .full-width { width: 100%; }
 
@@ -136,7 +121,6 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0;
 }
 
 .profile-avatar {
@@ -163,7 +147,6 @@ html, body {
 /* ========================= */
 
 .card {
-  position: relative;
   background: #fff;
   border-radius: 18px;
   box-shadow: var(--air-shadow);
@@ -193,9 +176,7 @@ html, body {
   transition: transform .25s ease;
 }
 
-.card:hover .card-image img {
-  transform: scale(1.06);
-}
+.card:hover .card-image img { transform: scale(1.06); }
 
 .card-info {
   padding: 14px;
@@ -214,6 +195,7 @@ html, body {
   font-weight: 700;
   color: var(--primary);
 }
+
 /* ========================= */
 /*        PRODUCT MODAL      */
 /* ========================= */
@@ -265,15 +247,10 @@ html, body {
 }
 
 /* ========================= */
-/*     COMPACT PREMIUM — HERO PHOTO     */
+/*     HERO PHOTO            */
 /* ========================= */
 
-.modal-images {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
-
+.modal-images { width: 100%; }
 .gallery-stage {
   width: 100%;
   height: 52vh;
@@ -289,7 +266,6 @@ html, body {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
 }
 
 #carousel::-webkit-scrollbar { display: none; }
@@ -302,9 +278,8 @@ html, body {
   scroll-snap-align: center;
   transition: transform .35s ease;
 }
-
 /* ========================= */
-/*     COMPACT PREMIUM — THUMBNAILS     */
+/*     THUMBNAILS            */
 /* ========================= */
 
 .thumb-strip {
@@ -329,10 +304,7 @@ html, body {
   transition: opacity .2s ease, transform .2s ease;
 }
 
-.thumb.active {
-  opacity: 1;
-  transform: scale(1.06);
-}
+.thumb.active { opacity: 1; transform: scale(1.06); }
 
 .thumb img {
   width: 100%;
@@ -341,7 +313,7 @@ html, body {
 }
 
 /* ========================= */
-/*     ULTIMATE EDITORIAL LUXE — INFO BLOCK     */
+/*     INFO BLOCK            */
 /* ========================= */
 
 .modal-info {
@@ -363,31 +335,25 @@ html, body {
   text-transform: uppercase;
   color: #8c8c8c;
   margin-bottom: 10px;
-  opacity: 0.85;
 }
 
 .modal-title {
   font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.42px;
-  line-height: 1.12;
   margin: 0 0 14px;
   color: #0f0f0f;
-  transform: translateY(1px);
-  opacity: 0.98;
 }
 
 .modal-price {
   font-size: 30px;
   font-weight: 700;
-  letter-spacing: -0.22px;
   margin-bottom: 18px;
   color: #111;
-  opacity: 0.95;
 }
 
 /* ========================= */
-/*     ОПИСАНИЕ — табличный премиум     */
+/*     MATERIALS             */
 /* ========================= */
 
 .section-title {
@@ -395,7 +361,6 @@ html, body {
   font-weight: 600;
   color: #555;
   margin-bottom: 12px;
-  letter-spacing: 0.3px;
 }
 
 .materials-block {
@@ -405,21 +370,17 @@ html, body {
   font-size: 14px;
   line-height: 1.55;
   color: #333;
-  padding: 4px 0;
 }
 
 .materials-block .key {
   font-weight: 600;
   color: #111;
-  letter-spacing: -0.2px;
 }
 
-.materials-block .value {
-  color: #444;
-}
+.materials-block .value { color: #444; }
 
 /* ========================= */
-/*     COMPACT PREMIUM — SIZES LABEL     */
+/*     SIZES LABEL           */
 /* ========================= */
 
 .sizes-label {
@@ -429,17 +390,18 @@ html, body {
   margin-bottom: 10px;
 }
 
+/* ========================= */
+/*     SIZES LAYOUT          */
+/* ========================= */
+
 .modal-sizes {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-}
-.modal-sizes .size {
-  padding: 0 18px;
+  gap: 10px;
 }
 
 /* ========================= */
-/*     COMPACT PREMIUM — DELIVERY     */
+/*     DELIVERY              */
 /* ========================= */
 
 .delivery-inline {
@@ -449,12 +411,11 @@ html, body {
   padding: 16px 18px;
   background: #f7f7f7;
   border-radius: 14px;
-  margin-top: 12px;
   border: 1px solid #efefef;
 }
 
 /* ========================= */
-/*     ULTRA PREMIUM BTNS — FIXED ACTIONS     */
+/*     FIXED ACTIONS         */
 /* ========================= */
 
 .modal-actions-fixed {
@@ -471,116 +432,11 @@ html, body {
   border-radius: 14px;
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: -0.22px;
-  transition:
-    background .22s ease,
-    transform .18s cubic-bezier(.25,.46,.45,.94),
-    opacity .22s ease;
-}
-
-.modal-actions-fixed .primary:hover {
-  background: #000;
-  transform: translateY(-1px);
-}
-
-.modal-actions-fixed .primary:active,
-.modal-actions-fixed .secondary:active {
-  transform: translateY(1px) scale(0.97);
-  opacity: 0.92;
 }
 
 /* ========================= */
-/*          CART DRAWER      */
+/*     PROFILE MODAL         */
 /* ========================= */
-
-#cartDrawer {
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 360px;
-  max-width: 100%;
-  height: 100vh;
-  background: #fff;
-  box-shadow: -6px 0 18px rgba(0,0,0,0.12);
-  transform: translateX(100%);
-  transition: transform .35s ease;
-  z-index: 9999;
-}
-
-#cartDrawer:not(.hidden) {
-  transform: translateX(0);
-}
-
-.cart-header {
-  padding: 20px;
-  font-size: 20px;
-  font-weight: 600;
-  border-bottom: 1px solid #eee;
-}
-
-.cart-item {
-  display: flex;
-  gap: 12px;
-  padding: 16px 20px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.cart-item img {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-.cart-item .meta {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.qty-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 6px;
-}
-
-.qty-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  border: none;
-  background: #f3f3f3;
-  cursor: pointer;
-}
-
-.remove-btn {
-  margin-left: auto;
-  background: none;
-  border: none;
-  color: #d33;
-  cursor: pointer;
-}
-
-.cart-footer {
-  padding: 20px;
-  border-top: 1px solid #eee;
-  display: grid;
-  gap: 12px;
-}
-
-#cartTotal {
-  font-size: 20px;
-  font-weight: 700;
-}
-
-/* ========================= */
-/*         PROFILE MODAL     */
-/* ========================= */
-
-@keyframes fadeInProfile {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
 
 .profile-modal .header {
   background: #fff;
@@ -589,12 +445,6 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-}
-
-.profile-modal .header .brand {
-  font-size: 20px;
-  font-weight: 600;
 }
 
 .profile-modal .profile-header {
@@ -611,10 +461,6 @@ html, body {
   height: 72px;
   border-radius: 999px;
   background: #f3f3f3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
   overflow: hidden;
 }
 
@@ -622,16 +468,6 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-
-.profile-modal .profile-name {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.profile-modal .profile-username {
-  font-size: 14px;
-  color: var(--muted);
 }
 
 .profile-modal .profile-tabs {
@@ -651,7 +487,6 @@ html, body {
   border: none;
   font-size: 14px;
   cursor: pointer;
-  transition: background .2s ease;
 }
 
 .profile-modal .profile-tab.active {
@@ -666,51 +501,6 @@ html, body {
   max-height: calc(100vh - 220px);
   overflow-y: auto;
 }
-
-.profile-modal .profile-section {
-  display: none;
-}
-
-.profile-modal .profile-section.active {
-  display: block;
-}
-
-/* ========================= */
-/*        RESPONSIVE         */
-/* ========================= */
-
-@media (max-width: 420px) {
-  .card-image {
-    height: 150px;
-  }
-
-  .profile-header .profile-avatar {
-    width: 56px;
-    height: 56px;
-  }
-
-  .profile-postponed-left img {
-    width: 56px;
-    height: 56px;
-  }
-
-  .carousel {
-    height: 260px;
-  }
-}
-
-@media (max-width: 360px) {
-  #cartBtn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-
-  .header-actions {
-    gap: 6px
-      .carousel {
-    height: 240px;
-  }
-}
 /* ========================= */
 /*     INK‑MORPH CAPSULE     */
 /* ========================= */
@@ -719,9 +509,9 @@ html, body {
   position: relative;
   overflow: hidden;
   height: 42px;
+  padding: 0 18px;
   border-radius: 999px;
 
-  /* Матовый soft‑touch материал */
   background: #f4f4f4;
   border: 1px solid #e5e5e5;
   color: #111;
@@ -732,7 +522,6 @@ html, body {
   align-items: center;
   justify-content: center;
 
-  /* Глубина + мягкий ореол */
   box-shadow:
     inset 0 0 6px rgba(0,0,0,0.04),
     0 2px 6px rgba(0,0,0,0.06);
@@ -741,9 +530,12 @@ html, body {
     background .22s ease,
     transform .18s cubic-bezier(.25,.46,.45,.94),
     box-shadow .22s ease;
+
+  flex: 0 0 auto;
+  min-width: 48px;
 }
 
-/* Hover — лёгкое поднятие */
+/* Hover */
 .modal-sizes .size:hover:not(.disabled) {
   box-shadow:
     inset 0 0 6px rgba(0,0,0,0.06),
@@ -751,7 +543,7 @@ html, body {
   transform: translateY(-1px);
 }
 
-/* Press — эффект жидкости под поверхностью */
+/* Press */
 .modal-sizes .size:active:not(.disabled) {
   transform: scale(0.94);
   background: #e9e9e9;
@@ -760,7 +552,7 @@ html, body {
     0 2px 8px rgba(0,0,0,0.10);
 }
 
-/* Внутренний слой для эффекта растекания */
+/* Ink layer */
 .size-ink {
   position: absolute;
   inset: 0;
@@ -771,14 +563,14 @@ html, body {
   transform: scale(0.2);
 }
 
-/* Анимация растекания */
+/* Ink animation */
 @keyframes inkSpread {
   0%   { opacity: 0.25; transform: scale(0.2); }
   70%  { opacity: 0.15; transform: scale(1.4); }
   100% { opacity: 0; transform: scale(1.8); }
 }
 
-/* Выбранный размер — плотная чёрная капсула */
+/* Active */
 .modal-sizes .size.active {
   background: #111;
   color: #fff;
@@ -791,14 +583,14 @@ html, body {
   animation: inkBounce .22s cubic-bezier(.25,.46,.45,.94);
 }
 
-/* Микро‑bounce при выборе */
+/* Bounce */
 @keyframes inkBounce {
   0%   { transform: scale(0.94); }
   55%  { transform: scale(1.06); }
   100% { transform: scale(1); }
 }
 
-/* Disabled — погашенная капсула */
+/* Disabled */
 .modal-sizes .size.disabled {
   opacity: 0.45;
   box-shadow: none;
