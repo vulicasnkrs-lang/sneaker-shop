@@ -430,10 +430,14 @@ html, body {
 }
 
 .modal-sizes {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
+.modal-sizes .size {
+  padding: 0 18px;
+}
+
 /* ========================= */
 /*     COMPACT PREMIUM — DELIVERY     */
 /* ========================= */
