@@ -363,60 +363,52 @@ html, body {
 .section-title,
 .sizes-label {
   position: relative;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.005em;
-  color: #0d0d0d;
-
-  margin: 34px 0 18px;
+  letter-spacing: 0.015em;
+  color: #0f0f0f;
+  margin: 26px 0 16px;
   padding-left: 2px;
-
-  /* премиальная микро‑тень под текстом */
-  text-shadow: 0 1px 1px rgba(0,0,0,0.06);
-
-  /* мягкое появление */
   opacity: 0;
-  transform: translateY(8px);
-  animation: sectionFade .6s cubic-bezier(.16,.84,.44,1) forwards;
+  transform: translateY(4px);
+  animation: sectionFade .45s ease forwards;
 }
 
-/* VisionOS‑линия сверху */
+/* Мягкая линия сверху — как в VisionOS */
 .section-title::before,
 .sizes-label::before {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  top: -18px;
+  top: -14px;
   height: 1px;
-
   background: linear-gradient(
     to right,
-    rgba(0,0,0,0.12),
-    rgba(0,0,0,0.04),
+    rgba(0,0,0,0.08),
+    rgba(0,0,0,0.02),
     rgba(0,0,0,0)
   );
 }
 
-/* мягкий glow под заголовком */
+/* Лёгкое свечение под текстом — премиальный штрих */
 .section-title::after,
 .sizes-label::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -6px;
-  width: 48px;
-  height: 10px;
-
+  bottom: -2px;
+  width: 32px;
+  height: 6px;
   background: radial-gradient(
     circle,
-    rgba(0,0,0,0.08) 0%,
-    rgba(0,0,0,0) 75%
+    rgba(0,0,0,0.06) 0%,
+    rgba(0,0,0,0) 70%
   );
   pointer-events: none;
 }
 
-/* анимация появления */
+/* Анимация появления */
 @keyframes sectionFade {
   to {
     opacity: 1;
