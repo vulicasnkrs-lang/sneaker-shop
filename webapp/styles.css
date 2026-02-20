@@ -13,7 +13,7 @@
   --air-shadow: 0 8px 22px rgba(0,0,0,0.06);
   --fade-duration: .45s;
 
-  /* VisionOS Glass */
+  /* VisionOS Glass — Soft Glow */
   --glass-bg: rgba(255,255,255,0.55);
   --glass-border: rgba(255,255,255,0.65);
   --glass-inner: rgba(255,255,255,0.35);
@@ -524,7 +524,7 @@ html, body {
   overflow-y: auto;
 }
 /* ========================================================= */
-/*      VISIONOS GLASS CAPSULE — SOFT GLOW (A1‑Lite)         */
+/*   VISIONOS GLASS CAPSULE — DELUXE EDITION (SOFT GLOW)     */
 /* ========================================================= */
 
 .modal-sizes .size {
@@ -538,20 +538,29 @@ html, body {
   border-radius: 999px;
   flex: 0 0 auto;
 
-  /* Стеклянный материал VisionOS */
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  /* Стеклянный фон с микро‑градиентом */
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.62) 0%,
+    rgba(255,255,255,0.50) 100%
+  );
+
+  /* Граница стекла */
+  border: 1px solid rgba(255,255,255,0.65);
+
+  /* Глубина стекла */
   backdrop-filter: blur(14px) saturate(180%);
+
+  /* Внутренний верхний блик */
+  box-shadow:
+    inset 0 1px 6px rgba(255,255,255,0.55),
+    inset 0 -2px 6px rgba(0,0,0,0.06),
+    0 6px 22px rgba(0,0,0,0.08);
 
   /* Текст */
   color: #111;
   font-size: 15px;
   font-weight: 500;
-
-  /* Тени VisionOS */
-  box-shadow:
-    inset 0 0 12px var(--glass-inner),
-    var(--glass-shadow);
 
   display: flex;
   align-items: center;
@@ -563,18 +572,24 @@ html, body {
     box-shadow .25s ease;
 }
 
-/* Hover — мягкое свечение */
+/* Hover — мягкое свечение вокруг */
 .modal-sizes .size:hover:not(.disabled) {
   box-shadow:
-    inset 0 0 14px rgba(255,255,255,0.45),
-    0 8px 26px rgba(0,0,0,0.10);
+    inset 0 1px 8px rgba(255,255,255,0.65),
+    inset 0 -2px 8px rgba(0,0,0,0.08),
+    0 10px 28px rgba(0,0,0,0.12),
+    0 0 18px rgba(255,255,255,0.55); /* внешний glow */
   transform: translateY(-1px);
 }
 
 /* Press — стекло уплотняется */
 .modal-sizes .size:active:not(.disabled) {
   transform: scale(0.94);
-  background: rgba(255,255,255,0.42);
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.50) 0%,
+    rgba(255,255,255,0.38) 100%
+  );
   box-shadow:
     inset 0 0 18px rgba(0,0,0,0.12),
     0 4px 14px rgba(0,0,0,0.12);
@@ -589,7 +604,7 @@ html, body {
   inset: 0;
   border-radius: inherit;
 
-  /* Более мягкое, светлое пятно */
+  /* Более мягкое, светлое пятно под стеклом */
   background: radial-gradient(
     circle,
     rgba(0,0,0,0.10) 0%,
@@ -601,7 +616,6 @@ html, body {
   transform: scale(0.25);
 }
 
-/* Анимация растекания */
 @keyframes inkSpread {
   0%   { opacity: 0.22; transform: scale(0.25); }
   70%  { opacity: 0.14; transform: scale(1.45); }
@@ -624,7 +638,6 @@ html, body {
   animation: inkBounce .22s cubic-bezier(.25,.46,.45,.94);
 }
 
-/* Bounce */
 @keyframes inkBounce {
   0%   { transform: scale(0.94); }
   55%  { transform: scale(1.06); }
