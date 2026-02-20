@@ -430,8 +430,9 @@ function openProductModal(p) {
   els.modalBrand.textContent = p.brand || '';
 
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
-  els.modalStockInline.textContent = `В наличии: ${totalStock} ${pluralPairs(totalStock)}`;
-els.stockBadge.textContent = `${totalStock} ${pluralPairs(totalStock)}`;
+  els.modalStockInline.textContent = `В наличии: ${totalStock} шт.`;
+els.stockBadge.textContent = `${totalStock} шт.`;
+
 
   els.modalTitle.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
@@ -607,13 +608,6 @@ function beautifyMaterialKey(key) {
   };
   return map[key] || key.charAt(0).toUpperCase() + key.slice(1);
 }
-
-function pluralPairs(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'пара';
-  if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'пары';
-  return 'пар';
-}
-
 /* ========================= */
 /*    CLOSE PRODUCT MODAL    */
 /* ========================= */
