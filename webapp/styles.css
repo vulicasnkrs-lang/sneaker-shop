@@ -362,12 +362,58 @@ html, body {
 
 .section-title,
 .sizes-label {
-  font-size: 14px;
+  position: relative;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #111;
-  margin-bottom: 12px;
-  opacity: 0.85;
+  letter-spacing: 0.015em;
+  color: #0f0f0f;
+  margin: 26px 0 16px;
+  padding-left: 2px;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: sectionFade .45s ease forwards;
+}
+
+/* Мягкая линия сверху — как в VisionOS */
+.section-title::before,
+.sizes-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.08),
+    rgba(0,0,0,0.02),
+    rgba(0,0,0,0)
+  );
+}
+
+/* Лёгкое свечение под текстом — премиальный штрих */
+.section-title::after,
+.sizes-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 32px;
+  height: 6px;
+  background: radial-gradient(
+    circle,
+    rgba(0,0,0,0.06) 0%,
+    rgba(0,0,0,0) 70%
+  );
+  pointer-events: none;
+}
+
+/* Анимация появления */
+@keyframes sectionFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .materials-block {
   display: grid;
