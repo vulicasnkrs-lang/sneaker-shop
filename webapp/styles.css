@@ -376,7 +376,7 @@ opacity: 0.88;                    /* ghost‑label эффект */
 
   margin: 26px 0 16px;
   padding-left: 2px;
-  opacity: 0;
+ 
   transform: translateY(4px);
   animation: sectionFade .45s ease forwards;
 }
