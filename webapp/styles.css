@@ -363,14 +363,16 @@ html, body {
 .section-title,
 .sizes-label {
   position: relative;
- font-size: 10px;               /* микро‑люкс */
-font-weight: 450;              /* ультра‑тонко, но уверенно */
-letter-spacing: 0.28em;        /* high‑fashion editorial */
-color: #1c1c1c;                /* глубокий холодный графит */
-text-transform: uppercase;     /* архитектурная строгость */
-font-feature-settings: "cpsp"; /* премиальный spacing для капов */
 
-text-transform: uppercase;
+font-size: 9.5px;                 /* ультра‑микро, уровень The Row */
+font-weight: 430;                 /* ghost‑weight, почти невесомый */
+letter-spacing: 0.32em;           /* high‑fashion editorial extreme */
+color: rgba(0,0,0,0.72);          /* полупрозрачный холодный графит */
+text-transform: uppercase;        /* архитектурная строгость */
+font-feature-settings: "cpsp";    /* премиальный spacing для капов */
+opacity: 0.88;                    /* ghost‑label эффект */
+
+
 
   margin: 26px 0 16px;
   padding-left: 2px;
