@@ -370,9 +370,8 @@ html, body {
   -webkit-font-smoothing: antialiased;
 
   margin: 26px 0 10px;
+  position: relative; /* ВАЖНО: без этого ::before и ::after не работают */
 }
-
-
 
 /* Мягкая линия сверху — как в VisionOS */
 .section-title::before,
@@ -415,6 +414,7 @@ html, body {
     transform: translateY(0);
   }
 }
+
 .materials-block {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -432,6 +432,7 @@ html, body {
 .materials-block .value {
   color: #444;
 }
+
 /* ========================= */
 /*     SIZES LAYOUT          */
 /* ========================= */
