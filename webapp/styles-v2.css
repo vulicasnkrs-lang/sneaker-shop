@@ -356,24 +356,24 @@ html, body {
   color: #111;
 }
 /* ========================= */
-/*     MATERIALS — ULTRA PREMIUM HYBRID */
+/*     MATERIALS — ULTRA PREMIUM+ */
 /* ========================= */
 
 .section-title,
 .sizes-label {
   position: relative;
-  font-size: 14px;                 /* спокойнее, премиальнее */
-  font-weight: 500;                /* уверенно, но не жирно */
-  letter-spacing: 0.006em;         /* аккуратный премиальный трекинг */
-  color: rgba(0,0,0,0.75);         /* глубокий, дорогой тон */
-  margin: 26px 0 16px;
-  padding-left: 1px;               /* оптический баланс */
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.004em;          /* ещё аккуратнее, ещё дороже */
+  color: rgba(0,0,0,0.78);          /* глубокий, но мягкий */
+  margin: 28px 0 18px;              /* больше воздуха */
+  padding-left: 1px;
   opacity: 0;
-  transform: translateY(4px);
-  animation: sectionFade .45s ease forwards;
+  transform: translateY(3px);
+  animation: sectionFade .55s ease forwards; /* мягче, плавнее */
 }
 
-/* Линию НЕ трогаем — оставляем как есть */
+/* Линию НЕ трогаем */
 .section-title::before,
 .sizes-label::before {
   content: "";
@@ -390,40 +390,47 @@ html, body {
   );
 }
 
-/* Убираем свечение — оно делает заголовок тяжёлым */
+/* Убираем свечение */
 .section-title::after,
 .sizes-label::after {
   content: none;
-}
-
-/* Анимация */
-@keyframes sectionFade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Материалы */
 .materials-block {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 10px 18px;
+  gap: 14px 18px;                   /* больше воздуха между парами */
   font-size: 14px;
-  line-height: 1.55;
+  line-height: 1.6;                 /* мягче, премиальнее */
   color: #333;
 }
 
+/* Ключи — плотные, но мягкие */
 .materials-block .key {
-  font-weight: 520;                /* плотнее, но мягко */
-  color: #222;                     /* глубокий, уверенный */
+  font-weight: 520;
+  color: rgba(0,0,0,0.82);          /* глубокий, уверенный */
+  transform: translateY(1px);       /* оптическое выравнивание */
+  opacity: 0;
+  animation: fadeKey .45s ease forwards;
 }
 
+/* Значения — лёгкие, воздушные */
 .materials-block .value {
-  font-weight: 400;                /* лёгкое значение */
-  color: #444;                     /* мягкий серый */
+  font-weight: 400;
+  color: rgba(0,0,0,0.55);          /* мягкий, дорогой серый */
+  opacity: 0;
+  animation: fadeValue .55s ease forwards;
 }
 
+/* Анимации */
+@keyframes fadeKey {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeValue {
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* ========================= */
 /*     SIZES LAYOUT          */
