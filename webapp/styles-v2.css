@@ -360,24 +360,16 @@ html, body {
 /*     MATERIALS             */
 /* ========================= */
 
-.section-title,
-.sizes-label {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
+.section-title {
+  font-size: 17px;
+  font-weight: 500;
   color: rgba(0,0,0,0.92);
   line-height: 1.28;
   -webkit-font-smoothing: antialiased;
 
-  margin: 30px 0 16px;
-  padding-left: 1px;
+  margin: 32px 0 18px;
   position: relative;
   top: 1px;
-
-  opacity: 0;
-  transform: translateY(4px);
-  animation: sectionFade .45s ease forwards;
 }
 
 
