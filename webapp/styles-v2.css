@@ -358,20 +358,20 @@ html, body {
 /* ========================= */
 /*     MATERIALS — ULTRA PREMIUM+ */
 /* ========================= */
-
-.section-title,
+  .section-title,
 .sizes-label {
   position: relative;
   font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.004em;          /* ещё аккуратнее, ещё дороже */
-  color: rgba(0,0,0,0.78);          /* глубокий, но мягкий */
-  margin: 28px 0 18px;              /* больше воздуха */
+  font-weight: 540;                 /* плотнее → заголовок снова виден */
+  letter-spacing: 0.002em;          /* собранный, дорогой */
+  color: rgba(0,0,0,0.88);          /* глубокий, уверенный, премиальный */
+  margin: 28px 0 18px;
   padding-left: 1px;
   opacity: 0;
-  transform: translateY(3px);
-  animation: sectionFade .55s ease forwards; /* мягче, плавнее */
+  transform: translateY(2px);
+  animation: sectionFade .55s ease forwards;
 }
+
 
 /* Линию НЕ трогаем */
 .section-title::before,
