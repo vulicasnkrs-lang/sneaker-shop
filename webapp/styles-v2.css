@@ -355,26 +355,25 @@ html, body {
   margin-bottom: 18px;
   color: #111;
 }
-
 /* ========================= */
-/*     MATERIALS             */
+/*     MATERIALS — ULTRA PREMIUM HYBRID */
 /* ========================= */
 
 .section-title,
 .sizes-label {
   position: relative;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.015em;
-  color: #0f0f0f;
+  font-size: 14px;                 /* спокойнее, премиальнее */
+  font-weight: 500;                /* уверенно, но не жирно */
+  letter-spacing: 0.006em;         /* аккуратный премиальный трекинг */
+  color: rgba(0,0,0,0.75);         /* глубокий, дорогой тон */
   margin: 26px 0 16px;
-  padding-left: 2px;
+  padding-left: 1px;               /* оптический баланс */
   opacity: 0;
   transform: translateY(4px);
   animation: sectionFade .45s ease forwards;
 }
 
-/* Мягкая линия сверху — как в VisionOS */
+/* Линию НЕ трогаем — оставляем как есть */
 .section-title::before,
 .sizes-label::before {
   content: "";
@@ -391,30 +390,21 @@ html, body {
   );
 }
 
-/* Лёгкое свечение под текстом — премиальный штрих */
+/* Убираем свечение — оно делает заголовок тяжёлым */
 .section-title::after,
 .sizes-label::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 32px;
-  height: 6px;
-  background: radial-gradient(
-    circle,
-    rgba(0,0,0,0.06) 0%,
-    rgba(0,0,0,0) 70%
-  );
-  pointer-events: none;
+  content: none;
 }
 
-/* Анимация появления */
+/* Анимация */
 @keyframes sectionFade {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+/* Материалы */
 .materials-block {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -425,13 +415,16 @@ html, body {
 }
 
 .materials-block .key {
-  font-weight: 600;
-  color: #111;
+  font-weight: 520;                /* плотнее, но мягко */
+  color: #222;                     /* глубокий, уверенный */
 }
 
 .materials-block .value {
-  color: #444;
+  font-weight: 400;                /* лёгкое значение */
+  color: #444;                     /* мягкий серый */
 }
+
+
 /* ========================= */
 /*     SIZES LAYOUT          */
 /* ========================= */
