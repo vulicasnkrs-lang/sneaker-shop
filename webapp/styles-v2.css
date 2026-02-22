@@ -360,17 +360,18 @@ html, body {
 /*     MATERIALS             */
 /* ========================= */
 
-.section-title {
-  font-size: 17px;
-  font-weight: 500;
-  color: rgba(0,0,0,0.92);
-  line-height: 1.28;
+.section-title,
+.sizes-label {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: rgba(0,0,0,0.45);
   -webkit-font-smoothing: antialiased;
 
-  margin: 32px 0 18px;
-  position: relative;
-  top: 1px;
+  margin: 26px 0 10px;
 }
+
 
 
 /* Мягкая линия сверху — как в VisionOS */
