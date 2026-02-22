@@ -362,22 +362,21 @@ html, body {
 
 .section-title,
 .sizes-label {
-  font-family: "Georgia", serif;
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
   text-transform: none;
-  color: rgba(0,0,0,0.75);
+  color: rgba(0,0,0,0.82);
+  line-height: 1.35;
   -webkit-font-smoothing: antialiased;
 
-  margin: 26px 0 16px;
-  padding-left: 2px;
+  margin: 28px 0 14px;
+  padding-left: 1px;
 
   opacity: 0;
   transform: translateY(4px);
   animation: sectionFade .45s ease forwards;
 }
-
 
 
 /* Мягкая линия сверху — как в VisionOS */
