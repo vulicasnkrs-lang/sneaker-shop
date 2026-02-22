@@ -363,10 +363,15 @@ html, body {
 .section-title,
 .sizes-label {
   position: relative;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.015em;
-  color: #0f0f0f;
+
+  
+ font-size: 11px;               /* микро‑премиум, но читаемо */
+font-weight: 500;              /* тонко, дорого, уверенно */
+letter-spacing: 0.18em;        /* editorial spacing, но не экстремальный */
+color: #1a1a1a;                /* глубокий графит, не чёрный */
+text-transform: uppercase;     /* архитектурная строгость */
+font-feature-settings: "cpsp"; /* премиальный spacing для капов */
+
   margin: 26px 0 16px;
   padding-left: 2px;
   opacity: 0;
