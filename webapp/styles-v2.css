@@ -364,20 +364,23 @@ html, body {
 .sizes-label {
   position: relative;
 
-  
- font-size: 11px;               /* микро‑премиум, но читаемо */
-font-weight: 500;              /* тонко, дорого, уверенно */
-letter-spacing: 0.18em;        /* editorial spacing, но не экстремальный */
-color: #1a1a1a;                /* глубокий графит, не чёрный */
-text-transform: uppercase;     /* архитектурная строгость */
-font-feature-settings: "cpsp"; /* премиальный spacing для капов */
+.section-title,
+.sizes-label {
+  font-size: 11px;
+  font-weight: 480;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.68);
 
+  position: relative;
   margin: 26px 0 16px;
   padding-left: 2px;
+
   opacity: 0;
   transform: translateY(4px);
   animation: sectionFade .45s ease forwards;
 }
+
 
 /* Мягкая линия сверху — как в VisionOS */
 .section-title::before,
