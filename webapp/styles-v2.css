@@ -356,17 +356,17 @@ html, body {
   color: #111;
 }
 /* ========================= */
-/*     MATERIALS — ULTRA PREMIUM HYBRID++ */
+/*     MATERIALS — ULTRA PREMIUM HYBRID (FIXED HEADERS) */
 /* ========================= */
 
 .section-title,
 .sizes-label {
   position: relative;
   font-size: 14px;
-  font-weight: 560;                 /* плотнее → заголовок снова виден */
-  letter-spacing: 0.002em;          /* собранный, дорогой */
+  font-weight: 560;                 /* сильнее ключей → заголовок виден */
+  letter-spacing: 0.002em;          /* собранный, премиальный */
   color: rgba(0,0,0,0.90);          /* глубокий, уверенный */
-  margin: 28px 0 18px;
+  margin: 28px 0 16px;
   padding-left: 1px;
   opacity: 0;
   transform: translateY(2px);
@@ -394,24 +394,23 @@ html, body {
 .materials-block {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 12px 18px;                   /* чуть больше воздуха */
+  gap: 12px 18px;
   font-size: 14px;
-  line-height: 1.6;                 /* мягче, премиальнее */
+  line-height: 1.6;
   color: #333;
 }
 
 /* Ключи — мягче, чтобы не перебивать заголовок */
 .materials-block .key {
-  font-weight: 500;                 /* мягче, чем 520 */
-  color: rgba(0,0,0,0.78);          /* мягкий, уверенный */
+  font-weight: 500;                 /* меньше, чем 520 */
+  color: rgba(0,0,0,0.78);
 }
 
-/* Значения — лёгкие, воздушные */
+/* Значения — лёгкие */
 .materials-block .value {
   font-weight: 400;
-  color: rgba(0,0,0,0.52);          /* мягкий, дорогой серый */
+  color: rgba(0,0,0,0.52);
 }
-
 
 
 /* ========================= */
