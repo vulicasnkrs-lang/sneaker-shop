@@ -366,7 +366,7 @@ html, body {
   font-weight: 560;                 /* сильнее ключей → заголовок виден */
   letter-spacing: 0.002em;          /* собранный, премиальный */
   color: rgba(0,0,0,0.90);          /* глубокий, уверенный */
-  margin: 28px 0 16px;
+  margin: 32px 0 20px;
   padding-left: 1px;
   opacity: 0;
   transform: translateY(2px);
