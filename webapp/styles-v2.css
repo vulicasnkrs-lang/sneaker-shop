@@ -614,6 +614,94 @@ html, body {
     inset 0 0 18px rgba(0,0,0,0.12),
     0 4px 14px rgba(0,0,0,0.12);
 }
+/* ========================= */
+/*   INLINE SIZE CHART BTN   */
+/* ========================= */
+
+.size-chart-inline-btn {
+  margin-left: auto;
+  margin-top: -4px;
+  font-size: 13px;
+  color: #555;
+  background: none;
+  border: none;
+  padding: 6px 0;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.7;
+  transition: opacity .2s ease;
+  display: block;
+  text-align: right;
+}
+
+.size-chart-inline-btn:hover {
+  opacity: 1;
+}
+/* ========================= */
+/*      SIZE CHART MODAL     */
+/* ========================= */
+
+.size-chart-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.size-chart-modal.hidden {
+  display: none;
+}
+
+.size-chart-window {
+  background: #fff;
+  padding: 26px 28px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+.size-chart-header {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.size-chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 14px 18px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(0,0,0,0.78);
+  margin-bottom: 26px;
+}
+
+.size-chart-grid .label {
+  font-weight: 600;
+  color: rgba(0,0,0,0.85);
+}
+
+.size-chart-grid .values {
+  font-weight: 450;
+  color: rgba(0,0,0,0.65);
+}
+
+.size-chart-close {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
 /* ========================================================= */
 /*      INK‑MORPH — адаптация под стеклянный материал        */
