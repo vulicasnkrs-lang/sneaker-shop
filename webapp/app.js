@@ -361,6 +361,24 @@ function updateAvailabilityBlock(p, size) {
 
   els.stockCount.textContent = sizeObj.stock;
 }
+/* ========================= */ 
+/* STOCK STATUS LOGIC */ 
+/* ========================= */
+function formatStockStatus(totalStock) {
+  if (totalStock === 0) {
+    return 'Нет в наличии';
+  }
+
+  if (totalStock > 7) {
+    return `${totalStock} шт. • В наличии`;
+  }
+
+  if (totalStock >= 4) {
+    return `${totalStock} шт. • Последние размеры`;
+  }
+
+  return `${totalStock} шт. • Осталось мало`;
+}
 
 /* ========================= */
 /*       PRODUCT MODAL       */
@@ -430,8 +448,9 @@ function openProductModal(p) {
   els.modalBrand.textContent = p.brand || '';
 
   const totalStock = (p.sizes || []).reduce((sum, x) => sum + x.stock, 0);
-  els.modalStockInline.textContent = `В наличии: ${totalStock} шт.`;
-els.stockBadge.textContent = `${totalStock} шт.`;
+  els.modalStockInline.textContent = formatStockStatus(totalStock);
+els.stockBadge.textContent = formatStockStatus(totalStock);
+
 
 
   els.modalTitle.textContent = p.title;
