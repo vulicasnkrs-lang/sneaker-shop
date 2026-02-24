@@ -533,6 +533,16 @@ ink.style.animation = 'inkSpread .45s ease-out';
 
   els.modalSizes.appendChild(b);
 });
+// Кнопка "Размерная сетка" справа от размеров
+const sizeChartBtn = document.createElement('button');
+sizeChartBtn.className = 'size-chart-inline-btn';
+sizeChartBtn.textContent = 'Размерная сетка';
+sizeChartBtn.onclick = openSizeChartModal;
+
+// Вставляем кнопку в тот же контейнер, где лежат размеры
+if (els.modalSizes.parentElement) {
+  els.modalSizes.parentElement.appendChild(sizeChartBtn);
+}
 
 
   /* ========================= */
@@ -1304,5 +1314,21 @@ function initParallaxGallery() {
 /* ========================= */
 /*           START           */
 /* ========================= */
+/* ========================= */
+/*     SIZE CHART MODAL      */
+/* ========================= */
+
+function openSizeChartModal() {
+  const m = document.getElementById('sizeChartModal');
+  if (!m) return;
+  m.classList.remove('hidden');
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('size-chart-close')) {
+    const m = document.getElementById('sizeChartModal');
+    if (m) m.classList.add('hidden');
+  }
+});
 
 init();
