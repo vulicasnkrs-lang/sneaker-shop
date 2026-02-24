@@ -151,7 +151,7 @@
     "price": 219,
     "discount": 0,
     "sizes": [
-      { "size": 40, "stock": 2 },
+      { "size": 40, "stock": 0 },
       { "size": 41, "stock": 2 },
       { "size": 42, "stock": 2 },
       { "size": 43, "stock": 2 },
