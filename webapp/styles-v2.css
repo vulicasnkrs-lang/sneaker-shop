@@ -800,3 +800,44 @@ html, body {
   transform: translateY(-1px);
   transition: .22s ease;
 }
+/* ========================= */
+/*   SIZES + CHART WRAPPER   */
+/* ========================= */
+
+.sizes-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+/* ========================= */
+/*   INLINE SIZE CHART BTN   */
+/* ========================= */
+
+.size-chart-inline-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 8px 14px;
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all .25s ease;
+  white-space: nowrap;
+}
+
+.size-chart-inline-btn:hover {
+  background: rgba(255,255,255,0.85);
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.6),
+    0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+.size-chart-inline-btn:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
