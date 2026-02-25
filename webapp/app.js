@@ -474,6 +474,15 @@ els.stockBadge.textContent = formatStockStatus(totalStock);
 /* ========================= */
 /*          SIZES            */
 /* ========================= */
+// Создаём wrapper для размеров + кнопки
+const sizesWrapper = document.createElement('div');
+sizesWrapper.className = 'sizes-wrapper';
+
+// Перемещаем блок размеров внутрь wrapper
+sizesWrapper.appendChild(els.modalSizes);
+
+// Вставляем wrapper обратно в DOM
+els.modalSizes.parentElement.appendChild(sizesWrapper);
 
 els.modalSizes.innerHTML = '';
 (p.sizes || []).forEach((obj, idx) => {
@@ -539,10 +548,8 @@ sizeChartBtn.className = 'size-chart-inline-btn';
 sizeChartBtn.textContent = 'Размерная сетка';
 sizeChartBtn.onclick = openSizeChartModal;
 
-// Вставляем кнопку в тот же контейнер, где лежат размеры
-if (els.modalSizes.parentElement) {
-  els.modalSizes.parentElement.appendChild(sizeChartBtn);
-}
+sizesWrapper.appendChild(sizeChartBtn);
+
 
 
   /* ========================= */
