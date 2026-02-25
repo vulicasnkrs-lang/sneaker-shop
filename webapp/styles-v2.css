@@ -788,7 +788,6 @@ html, body {
   margin-bottom: 18px;
 }
 
-
 /* ========================= */
 /*   INLINE SIZE CHART BTN   */
 /* ========================= */
@@ -799,18 +798,20 @@ html, body {
   color: #111;
   background: rgba(255,255,255,0.65);
   border: 1px solid rgba(0,0,0,0.08);
-  padding: 0 14px; /* ← единственный padding */
+  padding: 0 14px;
   border-radius: 999px;
   backdrop-filter: blur(10px);
   cursor: pointer;
   transition: all .25s ease;
   white-space: nowrap;
 
-  height: 40px; /* ← высота */
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+
+  transform: translateY(-1px); /* ← постоянное выравнивание */
 }
 
 .size-chart-inline-btn:hover {
@@ -818,11 +819,12 @@ html, body {
   box-shadow:
     inset 0 1px 3px rgba(255,255,255,0.6),
     0 4px 12px rgba(0,0,0,0.08);
-  transform: translateY(-1px);
 }
 
 .size-chart-inline-btn:active {
-  transform: scale(0.96);
+  transform: translateY(-1px) scale(0.96); /* ← сохраняем смещение */
   opacity: 0.9;
 }
+
+
 
