@@ -811,7 +811,7 @@ html, body {
   justify-content: center;
   line-height: 1;
 
-  transform: translateY(-1px); /* ← постоянное выравнивание */
+  transform: translateY(-2px); /* ← ключевое выравнивание */
 }
 
 .size-chart-inline-btn:hover {
@@ -822,9 +822,7 @@ html, body {
 }
 
 .size-chart-inline-btn:active {
-  transform: translateY(-1px) scale(0.96); /* ← сохраняем смещение */
+  transform: translateY(-2px) scale(0.96); /* ← сохраняем смещение */
   opacity: 0.9;
 }
-
-
 
