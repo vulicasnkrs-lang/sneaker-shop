@@ -799,12 +799,17 @@ html, body {
   color: #111;
   background: rgba(255,255,255,0.65);
   border: 1px solid rgba(0,0,0,0.08);
-  padding: 0px 14px;
+  padding: 0 14px; /* ← единственный padding */
   border-radius: 999px;
   backdrop-filter: blur(10px);
   cursor: pointer;
   transition: all .25s ease;
   white-space: nowrap;
+
+  height: 40px; /* ← высота */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .size-chart-inline-btn:hover {
@@ -819,10 +824,4 @@ html, body {
   transform: scale(0.96);
   opacity: 0.9;
 }
-.size-chart-inline-btn {
-  height: 40px;
-  padding: 0 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
