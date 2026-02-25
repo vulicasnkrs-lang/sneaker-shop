@@ -819,3 +819,10 @@ html, body {
   transform: scale(0.96);
   opacity: 0.9;
 }
+.size-chart-inline-btn {
+  height: 40px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
