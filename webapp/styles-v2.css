@@ -784,48 +784,77 @@ html, body {
 /* ========================= */
 
 .size-chart-inline-btn {
-  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+
+  height: 40px; /* как у размеров */
+  padding: 0 18px;
+  min-width: 50px;
+  border-radius: 999px;
+
+  /* Мягкое стекло — чуть светлее, чем у размеров */
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.52),
+    rgba(245,245,245,0.42)
+  );
+
+  /* Тонкий премиальный контур */
+  border: 1px solid rgba(0,0,0,0.06);
+
+  /* Мягкий blur — как у размеров, но на 10–15% слабее */
+  backdrop-filter: blur(12px) saturate(170%);
+  -webkit-backdrop-filter: blur(12px) saturate(170%);
+
+  /* Тени — те же, но мягче */
+  box-shadow:
+    inset 0 1px 6px rgba(255,255,255,0.50),
+    inset 0 -2px 6px rgba(0,0,0,0.05),
+    0 4px 12px rgba(0,0,0,0.06);
+
+  color: #111;
+  font-size: 15px;
   font-weight: 500;
-  color: rgba(0,0,0,0.55);
 
-  height: 28px;
-  padding: 0 12px;
-
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.06);
-
-  background: rgba(255,255,255,0.24);
-  backdrop-filter: blur(3px) saturate(140%);
-  -webkit-backdrop-filter: blur(3px) saturate(140%);
-
-  box-shadow:
-    inset 0 1px 2px rgba(255,255,255,0.55),
-    inset 0 -1px 2px rgba(0,0,0,0.04);
-
   cursor: pointer;
-  white-space: nowrap;
-  transition: all .22s cubic-bezier(.25,.46,.45,.94);
+  transition:
+    background .25s ease,
+    transform .22s cubic-bezier(.25,.46,.45,.94),
+    box-shadow .25s ease;
 }
 
 .size-chart-inline-btn:hover {
-  background: rgba(255,255,255,0.38);
-  border-color: rgba(0,0,0,0.10);
-  color: rgba(0,0,0,0.75);
-
   box-shadow:
-    inset 0 1px 3px rgba(255,255,255,0.65),
-    inset 0 -1px 3px rgba(0,0,0,0.06),
-    0 3px 10px rgba(0,0,0,0.04); /* мягкий внешний свет */
-
+    inset 0 1px 8px rgba(255,255,255,0.60),
+    inset 0 -2px 8px rgba(0,0,0,0.07),
+    0 10px 28px rgba(0,0,0,0.10),
+    0 0 18px rgba(255,255,255,0.50);
   transform: translateY(-1px);
 }
 
 .size-chart-inline-btn:active {
-  transform: scale(0.96);
-  opacity: 0.92;
+  transform: scale(0.94);
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.48),
+    rgba(255,255,255,0.34)
+  );
+  box-shadow:
+    inset 0 0 18px rgba(0,0,0,0.10),
+    0 4px 14px rgba(0,0,0,0.10);
 }
+/* ========================= */
+/*        SIZES BLOCK        */
+/* ========================= */
 
+.sizes-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* центрируем кнопку */
+  gap: 10px; /* идеальный воздух */
+  margin-bottom: 18px;
+}
