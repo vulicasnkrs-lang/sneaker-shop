@@ -783,10 +783,11 @@ html, body {
 
 .sizes-wrapper {
   display: flex;
-  align-items: center;
-  gap: 8px; /* расстояние между размерами и кнопкой */
+  align-items: flex-start; /* ← фиксирует baseline-проблему */
+  gap: 8px;
   margin-bottom: 18px;
 }
+
 
 /* ========================= */
 /*   INLINE SIZE CHART BTN   */
@@ -811,7 +812,7 @@ html, body {
   justify-content: center;
   line-height: 1;
 
-  transform: translateY(-2px); /* ← ключевое выравнивание */
+  transform: translateY(-1px); /* ← ключевое выравнивание */
 }
 
 .size-chart-inline-btn:hover {
@@ -822,11 +823,7 @@ html, body {
 }
 
 .size-chart-inline-btn:active {
-  transform: translateY(-2px) scale(0.96); /* ← сохраняем смещение */
+  transform: translateY(-1px) scale(0.96); /* ← сохраняем смещение */
   opacity: 0.9;
-}
-/* Оптическое выравнивание размеров */
-.modal-sizes .size {
-  transform: translateY(1px);
 }
 
