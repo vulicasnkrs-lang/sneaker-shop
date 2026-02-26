@@ -858,3 +858,6 @@ html, body {
   gap: 10px; /* идеальный воздух */
   margin-bottom: 18px;
 }
+.sizes-row {
+  display: inline-flex; /* shrink-to-fit по ширине размеров */
+}
