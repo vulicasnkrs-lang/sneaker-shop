@@ -777,16 +777,6 @@ html, body {
   transform: translateY(-1px);
   transition: .22s ease;
 }
-/* ========================= */
-/*   SIZES + CHART WRAPPER   */
-/* ========================= */
-
-.sizes-wrapper {
-  display: flex;
-  align-items: flex-start; /* фикс baseline */
-  gap: 8px;
-  margin-bottom: 18px;
-}
 
 
 /* ========================= */
@@ -847,5 +837,11 @@ html, body {
 .size-chart-inline-btn:active {
   transform: translateY(-1px) scale(0.96);
   opacity: 0.92;
+}
+.sizes-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* можно 6px если хочешь плотнее */
+  margin-bottom: 18px; /* чтобы сохранить воздух перед доставкой */
 }
 
