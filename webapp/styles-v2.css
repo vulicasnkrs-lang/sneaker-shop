@@ -786,62 +786,46 @@ html, body {
 .size-chart-inline-btn {
   font-size: 13px;
   font-weight: 500;
-  color: rgba(0,0,0,0.75); /* мягче и премиальнее */
+  color: rgba(0,0,0,0.55);
 
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.58),
-    rgba(245,245,245,0.45)
-  );
+  height: 28px;
+  padding: 0 12px;
 
-  border: 1px solid rgba(0,0,0,0.10);
-  padding: 0 14px;
-  border-radius: 999px;
-
-  backdrop-filter: blur(14px) saturate(180%);
-  cursor: pointer;
-  transition: all .25s ease;
-  white-space: nowrap;
-
-  height: 38px; /* легче размеров */
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px; /* расстояние между иконкой и текстом */
-  line-height: 1;
 
-  transform: translateY(-1px); /* идеальное выравнивание */
-}
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
 
-/* Иконка */
-.size-chart-icon {
-  display: block;
-  opacity: 0.75; /* мягче, премиальнее */
-}
+  background: rgba(255,255,255,0.24);
+  backdrop-filter: blur(3px) saturate(140%);
+  -webkit-backdrop-filter: blur(3px) saturate(140%);
 
-/* Hover — мягкое свечение, как у размеров */
-.size-chart-inline-btn:hover {
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.70),
-    rgba(245,245,245,0.55)
-  );
   box-shadow:
-    inset 0 1px 4px rgba(255,255,255,0.6),
-    inset 0 -1px 4px rgba(0,0,0,0.05),
-    0 6px 14px rgba(0,0,0,0.08);
-  transform: translateY(-2px);
+    inset 0 1px 2px rgba(255,255,255,0.55),
+    inset 0 -1px 2px rgba(0,0,0,0.04);
+
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .22s cubic-bezier(.25,.46,.45,.94);
 }
 
-/* Press — мягкое уплотнение */
-.size-chart-inline-btn:active {
-  transform: translateY(-1px) scale(0.96);
-  opacity: 0.92;
+.size-chart-inline-btn:hover {
+  background: rgba(255,255,255,0.38);
+  border-color: rgba(0,0,0,0.10);
+  color: rgba(0,0,0,0.75);
+
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.65),
+    inset 0 -1px 3px rgba(0,0,0,0.06),
+    0 3px 10px rgba(0,0,0,0.04); /* мягкий внешний свет */
+
+  transform: translateY(-1px);
 }
-.sizes-block {
-  display: flex;
-  flex-direction: column;
-  gap: 8px; /* можно 6px если хочешь плотнее */
-  margin-bottom: 18px; /* чтобы сохранить воздух перед доставкой */
+
+.size-chart-inline-btn:active {
+  transform: scale(0.96);
+  opacity: 0.92;
 }
 
