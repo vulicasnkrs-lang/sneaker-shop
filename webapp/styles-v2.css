@@ -850,7 +850,7 @@ html, body {
 /* ========================= */
 
 .sizes-block {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   gap: 10px; /* идеальный воздух */
   margin-bottom: 18px;
