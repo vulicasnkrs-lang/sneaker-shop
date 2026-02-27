@@ -649,25 +649,71 @@ html, body {
   margin-bottom: 18px;
 }
 
+/* ========================================================= */
+/*   VISIONOS GLASS SIZE CHART — PREMIUM LUXE EDITION        */
+/* ========================================================= */
+
 .size-chart-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 14px 18px;
-  font-size: 15px;
-  line-height: 1.55;
-  color: rgba(0,0,0,0.78);
-  margin-bottom: 26px;
+
+  padding: 22px 20px;
+  border-radius: 18px;
+
+  /* Молочно‑стеклянный фон */
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(14px) saturate(160%);
+
+  /* Кристальный верхний блик */
+  position: relative;
+}
+.size-chart-grid::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.85),
+    rgba(255,255,255,0.35),
+    rgba(255,255,255,0)
+  );
+  pointer-events: none;
 }
 
+/* Строки — мягкие, воздушные */
+.size-chart-grid .label,
+.size-chart-grid .values {
+  padding: 6px 0;
+}
+
+/* Тонкие кристальные разделители */
+.size-chart-grid .label:not(:first-child),
+.size-chart-grid .values:not(:first-child) {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Текст — глубокий, но мягкий */
 .size-chart-grid .label {
   font-weight: 600;
-  color: rgba(0,0,0,0.85);
+  color: rgba(0,0,0,0.88);
 }
 
 .size-chart-grid .values {
   font-weight: 450;
   color: rgba(0,0,0,0.65);
 }
+
+/* Hover — лёгкая тактильность */
+.size-chart-grid .label:hover,
+.size-chart-grid .values:hover {
+  color: rgba(0,0,0,0.92);
+  transform: translateY(-1px);
+  transition: .22s ease;
+}
+
 
 .size-chart-close {
   width: 100%;
