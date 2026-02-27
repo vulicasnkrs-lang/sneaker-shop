@@ -369,7 +369,7 @@ function selectSize(size) {
     .forEach(el => el.classList.toggle('active', el.textContent == size));
 
   // luxury spec cards
-  document.querySelectorAll('.size-spec')
+ document.querySelectorAll('#sizeSpecList .size-spec')
     .forEach(el => el.classList.toggle('active', el.dataset.size == size));
 
   updateAvailabilityBlock(currentProduct, size);
@@ -405,7 +405,6 @@ function formatStockStatus(totalStock) {
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
-document.querySelectorAll('.size-spec').forEach(el => el.classList.remove('active'));
 
   const carousel = els.carousel;
   const thumbStrip = els.thumbStrip;
@@ -1350,12 +1349,38 @@ function openSizeChartModal() {
   (currentProduct.sizes || []).forEach(obj => {
     const card = document.createElement('div');
     card.className = 'size-spec';
+    card.dataset.size = obj.eu;
+
     card.innerHTML = `
       <div class="cm">${obj.cm} CM</div>
       <div class="eu">EU ${obj.eu}</div>
     `;
+
+    if (obj.stock <= 0) {
+      card.classList.add('disabled');
+    }
+
+    card.addEventListener('click', () => {
+      if (obj.stock <= 0) return;
+
+      // выбираем размер
+      selectSize(obj.eu);
+
+      // подсветка внутри sizeChartModal
+      specList.querySelectorAll('.size-spec')
+        .forEach(el => el.classList.remove('active'));
+
+      card.classList.add('active');
+    });
+
     specList.appendChild(card);
   });
+
+  // если размер уже выбран — подсветить его
+  if (selectedSize) {
+    const activeCard = specList.querySelector(`[data-size="${selectedSize}"]`);
+    if (activeCard) activeCard.classList.add('active');
+  }
 
   m.classList.remove('hidden');
 }
