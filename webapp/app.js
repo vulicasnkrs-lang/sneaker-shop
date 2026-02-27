@@ -1363,10 +1363,8 @@ function openSizeChartModal() {
     card.addEventListener('click', () => {
       if (obj.stock <= 0) return;
 
-      // выбираем размер
       selectSize(obj.eu);
 
-      // подсветка внутри sizeChartModal
       specList.querySelectorAll('.size-spec')
         .forEach(el => el.classList.remove('active'));
 
@@ -1376,14 +1374,26 @@ function openSizeChartModal() {
     specList.appendChild(card);
   });
 
-  // если размер уже выбран — подсветить его
   if (selectedSize) {
     const activeCard = specList.querySelector(`[data-size="${selectedSize}"]`);
     if (activeCard) activeCard.classList.add('active');
   }
 
   m.classList.remove('hidden');
+  requestAnimationFrame(() => m.classList.add('open'));
 }
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('size-chart-close')) {
+    const m = document.getElementById('sizeChartModal');
+    if (!m) return;
+
+    m.classList.remove('open');
+
+    setTimeout(() => {
+      m.classList.add('hidden');
+    }, 200);
+  }
+});
 
 
 init();
