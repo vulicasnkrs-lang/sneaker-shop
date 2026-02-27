@@ -1,34 +1,36 @@
- {
-  "id": "asics-gel-pickax",
-  "title": "Asics GEL-PICKAX",
-  "brand": "ASICS",
-  "season": "all",
-  "price": 190,
-  "discount": 0,
+[
+  {
+    "id": "asics-gel-pickax",
+    "title": "Asics GEL-PICKAX",
+    "brand": "ASICS",
+    "season": "all",
+    "price": 190,
+    "discount": 0,
 
-  "sizes": [
-    { "eu": 41, "cm": 25.5 },
-    { "eu": 42, "cm": 26.5 },
-    { "eu": 43, "cm": 27.3 },
-    { "eu": 44, "cm": 27.5 },
-    { "eu": 45, "cm": 28.5 }
-  ],
+    "sizes": [
+      { "eu": 41, "cm": 25.5 },
+      { "eu": 42, "cm": 26.5 },
+      { "eu": 43, "cm": 27.3 },
+      { "eu": 44, "cm": 27.5 },
+      { "eu": 45, "cm": 28.5 }
+    ],
 
-  "materials": {
-    "upper": "Сетка + синтетические накладки",
-    "midsole": "Амортизирующая EVA",
-    "outsole": "Резина с трейл‑протектором",
-    "lining": "Текстиль"
-  },
+    "materials": {
+      "upper": "Сетка + синтетические накладки",
+      "midsole": "Амортизирующая EVA",
+      "outsole": "Резина с трейл‑протектором",
+      "lining": "Текстиль"
+    },
 
-  "images": [
-    "/static/images/asics-gel-pickax-main.jpg",
-    "/static/images/asics-gel-pickax-box.jpg",
-    "/static/images/asics-gel-pickax-ground.jpg",
-    "/static/images/asics-gel-pickax-hand.jpg",
-    "/static/images/asics-gel-pickax-sole.jpg"
-  ],
+    "images": [
+      "/static/images/asics-gel-pickax-main.jpg",
+      "/static/images/asics-gel-pickax-box.jpg",
+      "/static/images/asics-gel-pickax-ground.jpg",
+      "/static/images/asics-gel-pickax-hand.jpg",
+      "/static/images/asics-gel-pickax-sole.jpg"
+    ],
 
-  "addedAt": "2026-01-22T12:00:00Z",
-  "popularity": 100
-}
+    "addedAt": "2026-01-22T12:00:00Z",
+    "popularity": 100
+  }
+]
