@@ -325,6 +325,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 26px;
+  align-items: flex-start;
 }
 
 .modal-info section:not(:first-child) {
