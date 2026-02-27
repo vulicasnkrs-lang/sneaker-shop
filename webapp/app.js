@@ -353,7 +353,7 @@ function updateAvailabilityBlock(p, size) {
     return;
   }
 
-  const sizeObj = (p.sizes || []).find(x => x.size === size);
+  const sizeObj = (p.sizes || []).find(x => x.eu === size);
   if (!sizeObj) {
     els.stockCount.textContent = '—';
     return;
@@ -508,35 +508,7 @@ els.modalSizes.innerHTML = '';
   }
 
   b.addEventListener('click', (event) => {
-/* ========================= */
-/*     LUXURY SPEC CARD      */
-/* ========================= */
-
-const specList = document.getElementById('sizeSpecList');
-specList.innerHTML = '';
-
-(p.sizes || []).forEach((obj) => {
-  const card = document.createElement('div');
-  card.className = 'size-spec';
-  card.dataset.size = obj.eu;
-
-  card.innerHTML = `
-    <div class="cm">${obj.cm} CM</div>
-    <div class="eu">EU ${obj.eu}</div>
-  `;
-
-  if (obj.stock <= 0) {
-    card.classList.add('disabled');
-  }
-
-  card.addEventListener('click', () => {
-    if (obj.stock <= 0) return;
-    selectSize(obj.eu);
-  });
-
-  specList.appendChild(card);
-});
-
+    
    /* ========================= */
 /*      INK‑MORPH PRESS      */
 /* ========================= */
@@ -582,6 +554,36 @@ ink.style.animation = 'inkSpread .45s ease-out';
 
   els.modalSizes.appendChild(b);
 });
+  
+/* ========================= */
+/*     LUXURY SPEC CARD      */
+/* ========================= */
+
+const specList = document.getElementById('sizeSpecList');
+specList.innerHTML = '';
+
+(p.sizes || []).forEach((obj) => {
+  const card = document.createElement('div');
+  card.className = 'size-spec';
+  card.dataset.size = obj.eu;
+
+  card.innerHTML = `
+    <div class="cm">${obj.cm} CM</div>
+    <div class="eu">EU ${obj.eu}</div>
+  `;
+
+  if (obj.stock <= 0) {
+    card.classList.add('disabled');
+  }
+
+  card.addEventListener('click', () => {
+    if (obj.stock <= 0) return;
+    selectSize(obj.eu);
+  });
+
+  specList.appendChild(card);
+});
+
 // Кнопка "Размерная сетка" справа от размеров
 const sizeChartBtn = document.createElement('button');
 sizeChartBtn.className = 'size-chart-inline-btn';
@@ -634,11 +636,12 @@ sizeChartBtn.onclick = openSizeChartModal;
         return;
       }
 
-      const sizeObj = (p.sizes || []).find(x => x.size === selectedSize);
-      if (!sizeObj || sizeObj.stock <= 0) {
-        alert('Нет в наличии');
-        return;
-      }
+      const sizeObj = (p.sizes || []).find(x => x.eu === selectedSize);
+if (!sizeObj || sizeObj.stock <= 0) {
+  alert('Нет в наличии');
+  return;
+}
+
 
       sizeObj.stock -= 1;
       saveStock();
@@ -1008,12 +1011,13 @@ function saveStock() {
   const stockMap = {};
   state.products.forEach(p => {
     stockMap[p.id] = (p.sizes || []).map(obj => ({
-      size: obj.eu,
+      eu: obj.eu,
       stock: obj.stock
     }));
   });
   localStorage.setItem('stockMap', JSON.stringify(stockMap));
 }
+
 
 function restoreStock() {
   const raw = localStorage.getItem('stockMap');
