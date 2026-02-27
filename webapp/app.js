@@ -137,7 +137,7 @@ async function loadProducts() {
 
   state.products.forEach(p => {
     state.brandSet.add(p.brand);
-    (p.sizes || []).forEach(obj => state.allSizes.add(obj.size));
+    (p.sizes || []).forEach(obj => state.allSizes.add(obj.eu));
   });
 
   state.filtered = applyPostponedFilter([...state.products]);
@@ -240,7 +240,7 @@ function applyFilters() {
   if (size) {
     const s = Number(size);
     arr = arr.filter(p =>
-      (p.sizes || []).some(obj => obj.size === s && obj.stock > 0)
+      (p.sizes || []).some(obj => obj.eu === s && obj.stock > 0)
     );
   }
 
@@ -361,6 +361,24 @@ function updateAvailabilityBlock(p, size) {
 
   els.stockCount.textContent = sizeObj.stock;
 }
+function selectSize(size) {
+  selectedSize = size;
+
+  // капсулы
+  els.modalSizes.querySelectorAll('.size')
+    .forEach(el => el.classList.toggle('active', el.textContent == size));
+
+  // luxury spec cards
+  document.querySelectorAll('.size-spec')
+    .forEach(el => el.classList.toggle('active', el.dataset.size == size));
+
+  updateAvailabilityBlock(currentProduct, size);
+
+  els.modalPrice.classList.remove('bump');
+  void els.modalPrice.offsetWidth;
+  els.modalPrice.classList.add('bump');
+}
+
 /* ========================= */ 
 /* STOCK STATUS LOGIC */ 
 /* ========================= */
@@ -387,6 +405,7 @@ function formatStockStatus(totalStock) {
 function openProductModal(p) {
   currentProduct = p;
   selectedSize = null;
+document.querySelectorAll('.size-spec').forEach(el => el.classList.remove('active'));
 
   const carousel = els.carousel;
   const thumbStrip = els.thumbStrip;
@@ -480,7 +499,7 @@ els.modalSizes.innerHTML = '';
 (p.sizes || []).forEach((obj, idx) => {
   const b = document.createElement('button');
   b.className = 'size';
-  b.textContent = obj.size;
+  b.textContent = obj.eu;
 
   /* disabled */
   if (obj.stock <= 0) {
@@ -489,6 +508,34 @@ els.modalSizes.innerHTML = '';
   }
 
   b.addEventListener('click', (event) => {
+/* ========================= */
+/*     LUXURY SPEC CARD      */
+/* ========================= */
+
+const specList = document.getElementById('sizeSpecList');
+specList.innerHTML = '';
+
+(p.sizes || []).forEach((obj) => {
+  const card = document.createElement('div');
+  card.className = 'size-spec';
+  card.dataset.size = obj.eu;
+
+  card.innerHTML = `
+    <div class="cm">${obj.cm} CM</div>
+    <div class="eu">EU ${obj.eu}</div>
+  `;
+
+  if (obj.stock <= 0) {
+    card.classList.add('disabled');
+  }
+
+  card.addEventListener('click', () => {
+    if (obj.stock <= 0) return;
+    selectSize(obj.eu);
+  });
+
+  specList.appendChild(card);
+});
 
    /* ========================= */
 /*      INK‑MORPH PRESS      */
@@ -514,7 +561,8 @@ ink.style.animation = 'inkSpread .45s ease-out';
 
     if (obj.stock <= 0) return;
 
-    selectedSize = obj.size;
+    selectSize(obj.eu);
+
 
     els.modalSizes.querySelectorAll('.size')
       .forEach(x => x.classList.remove('active'));
@@ -657,7 +705,7 @@ function closeProductModal() {
 
 function pickFirstSize(p) {
   const obj = (p.sizes || []).find(x => x.stock > 0);
-  return obj ? obj.size : null;
+  return obj ? obj.eu : null;
 }
 
 function addToCart(p, size, qty) {
@@ -960,7 +1008,7 @@ function saveStock() {
   const stockMap = {};
   state.products.forEach(p => {
     stockMap[p.id] = (p.sizes || []).map(obj => ({
-      size: obj.size,
+      size: obj.eu,
       stock: obj.stock
     }));
   });
@@ -977,7 +1025,7 @@ function restoreStock() {
     if (!stockMap[p.id]) return;
 
     (p.sizes || []).forEach(obj => {
-      const saved = stockMap[p.id].find(x => x.size === obj.size);
+      const saved = stockMap[p.id].find(x => x.eu === obj.eu);
       if (saved) obj.stock = saved.stock;
     });
   });
@@ -996,7 +1044,7 @@ function cleanupReserved() {
 
     const p = state.products.find(x => x.id === r.id);
     if (p) {
-      const sizeObj = (p.sizes || []).find(x => x.size === r.size);
+      const sizeObj = (p.sizes || []).find(x => x.eu === r.size);
       if (sizeObj) sizeObj.stock += 1;
     }
 
