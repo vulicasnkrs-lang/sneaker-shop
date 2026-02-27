@@ -555,34 +555,6 @@ ink.style.animation = 'inkSpread .45s ease-out';
   els.modalSizes.appendChild(b);
 });
   
-/* ========================= */
-/*     LUXURY SPEC CARD      */
-/* ========================= */
-
-const specList = document.getElementById('sizeSpecList');
-specList.innerHTML = '';
-
-(p.sizes || []).forEach((obj) => {
-  const card = document.createElement('div');
-  card.className = 'size-spec';
-  card.dataset.size = obj.eu;
-
-  card.innerHTML = `
-    <div class="cm">${obj.cm} CM</div>
-    <div class="eu">EU ${obj.eu}</div>
-  `;
-
-  if (obj.stock <= 0) {
-    card.classList.add('disabled');
-  }
-
-  card.addEventListener('click', () => {
-    if (obj.stock <= 0) return;
-    selectSize(obj.eu);
-  });
-
-  specList.appendChild(card);
-});
 
 // Кнопка "Размерная сетка" справа от размеров
 const sizeChartBtn = document.createElement('button');
@@ -1371,14 +1343,22 @@ function initParallaxGallery() {
 function openSizeChartModal() {
   const m = document.getElementById('sizeChartModal');
   if (!m) return;
+
+  const specList = document.getElementById('sizeSpecList');
+  specList.innerHTML = '';
+
+  (currentProduct.sizes || []).forEach(obj => {
+    const card = document.createElement('div');
+    card.className = 'size-spec';
+    card.innerHTML = `
+      <div class="cm">${obj.cm} CM</div>
+      <div class="eu">EU ${obj.eu}</div>
+    `;
+    specList.appendChild(card);
+  });
+
   m.classList.remove('hidden');
 }
 
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('size-chart-close')) {
-    const m = document.getElementById('sizeChartModal');
-    if (m) m.classList.add('hidden');
-  }
-});
 
 init();
