@@ -1394,6 +1394,19 @@ document.addEventListener('click', (e) => {
     }, 200);
   }
 });
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.size');
+  if (!btn) return;
+
+  const size = btn.textContent.trim();
+  selectSize(size);
+});
+document.addEventListener('click', e => {
+  const card = e.target.closest('.size-spec');
+  if (!card) return;
+
+  selectSize(card.dataset.size);
+});
 
 
 init();
