@@ -62,9 +62,21 @@
             <div class="section-title">Описание</div>
             <div id="modalMaterials" class="materials-block"></div>
 
-            <!-- SIZES -->
-            <div class="sizes-label">Размеры:</div>
-            <div id="modalSizes" class="modal-sizes"></div>
+          <!-- SIZES -->
+<div class="sizes-block">
+
+  <div class="sizes-row">
+    <div id="modalSizes" class="modal-sizes"></div>
+  </div>
+
+  <button class="size-chart-inline-btn" onclick="openSizeChartModal()">
+    Размерная сетка
+  </button>
+
+</div>
+
+
+
 
             <!-- DELIVERY -->
             <div class="delivery-inline">
@@ -192,7 +204,7 @@
         <button class="profile-tab active" data-tab="orders">Покупки</button>
         <button class="profile-tab" data-tab="postponed">Отложенные</button>
       </section>
- 
+
       <main class="profile-content">
         <div id="profileOrders" class="profile-section active"></div>
         <div id="profilePostponed" class="profile-section"></div>
@@ -202,5 +214,16 @@
   </div>
 
   <script src="/app.js?v=9"></script>
+  
+  <div id="sizeChartModal" class="size-chart-modal hidden">
+  <div class="size-chart-window">
+    <div class="size-chart-header">Размерная сетка</div>
+
+<div id="sizeSpecList" class="size-spec-list"></div>
+
+    <button class="size-chart-close">Закрыть</button>
+  </div>
+</div>
+
 </body>
 </html>
