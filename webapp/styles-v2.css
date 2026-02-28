@@ -325,7 +325,6 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 26px;
-  align-items: flex-start;
 }
 
 .modal-info section:not(:first-child) {
@@ -428,7 +427,7 @@ html, body {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 0px; /* воздух между размерами и доставкой */
+  margin-bottom: 22px; /* воздух между размерами и доставкой */
 }
 
 /* ========================= */
@@ -649,71 +648,25 @@ html, body {
   margin-bottom: 18px;
 }
 
-/* ========================================================= */
-/*   VISIONOS GLASS SIZE CHART — PREMIUM LUXE EDITION        */
-/* ========================================================= */
-
 .size-chart-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 14px 18px;
-
-  padding: 22px 20px;
-  border-radius: 18px;
-
-  /* Молочно‑стеклянный фон */
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(14px) saturate(160%);
-
-  /* Кристальный верхний блик */
-  position: relative;
-}
-.size-chart-grid::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    rgba(255,255,255,0.85),
-    rgba(255,255,255,0.35),
-    rgba(255,255,255,0)
-  );
-  pointer-events: none;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(0,0,0,0.78);
+  margin-bottom: 26px;
 }
 
-/* Строки — мягкие, воздушные */
-.size-chart-grid .label,
-.size-chart-grid .values {
-  padding: 6px 0;
-}
-
-/* Тонкие кристальные разделители */
-.size-chart-grid .label:not(:first-child),
-.size-chart-grid .values:not(:first-child) {
-  border-top: 1px solid rgba(0,0,0,0.05);
-}
-
-/* Текст — глубокий, но мягкий */
 .size-chart-grid .label {
   font-weight: 600;
-  color: rgba(0,0,0,0.88);
+  color: rgba(0,0,0,0.85);
 }
 
 .size-chart-grid .values {
   font-weight: 450;
   color: rgba(0,0,0,0.65);
 }
-
-/* Hover — лёгкая тактильность */
-.size-chart-grid .label:hover,
-.size-chart-grid .values:hover {
-  color: rgba(0,0,0,0.92);
-  transform: translateY(-1px);
-  transition: .22s ease;
-}
-
 
 .size-chart-close {
   width: 100%;
@@ -831,77 +784,64 @@ html, body {
 /* ========================= */
 
 .size-chart-inline-btn {
-  position: relative;
-  overflow: hidden;
-
-  height: 42px;
-  padding: 0 26px;
-  min-width: 120px;
-  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0,0,0,0.75); /* мягче и премиальнее */
 
   background: linear-gradient(
     to bottom,
-    rgba(255,255,255,0.68),
-    rgba(240,240,240,0.52)
+    rgba(255,255,255,0.58),
+    rgba(245,245,245,0.45)
   );
 
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.10);
+  padding: 0 14px;
+  border-radius: 999px;
 
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(180%);
+  cursor: pointer;
+  transition: all .25s ease;
+  white-space: nowrap;
 
-  box-shadow:
-    inset 0 1px 6px rgba(255,255,255,0.55),
-    inset 0 -2px 6px rgba(0,0,0,0.06),
-    0 6px 18px rgba(0,0,0,0.12);
-
-  color: #111;
-  font-size: 15px;
-  font-weight: 500;
-
+  height: 38px; /* легче размеров */
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px; /* расстояние между иконкой и текстом */
+  line-height: 1;
 
-  cursor: pointer;
-  transition:
-    background .25s ease,
-    transform .22s cubic-bezier(.25,.46,.45,.94),
-    box-shadow .25s ease;
-
-  align-self: center;
+  transform: translateY(-1px); /* идеальное выравнивание */
 }
 
+/* Иконка */
+.size-chart-icon {
+  display: block;
+  opacity: 0.75; /* мягче, премиальнее */
+}
+
+/* Hover — мягкое свечение, как у размеров */
 .size-chart-inline-btn:hover {
-  box-shadow:
-    inset 0 1px 8px rgba(255,255,255,0.65),
-    inset 0 -2px 8px rgba(0,0,0,0.08),
-    0 12px 28px rgba(0,0,0,0.14);
-  transform: translateY(-1px);
-}
-
-.size-chart-inline-btn:active {
-  transform: scale(0.94);
   background: linear-gradient(
     to bottom,
-    rgba(255,255,255,0.55),
-    rgba(235,235,235,0.42)
+    rgba(255,255,255,0.70),
+    rgba(245,245,245,0.55)
   );
   box-shadow:
-    inset 0 0 18px rgba(0,0,0,0.12),
-    0 4px 14px rgba(0,0,0,0.12);
+    inset 0 1px 4px rgba(255,255,255,0.6),
+    inset 0 -1px 4px rgba(0,0,0,0.05),
+    0 6px 14px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
 }
 
-/* ========================= */
-/*        SIZES BLOCK        */
-/* ========================= */
-
+/* Press — мягкое уплотнение */
+.size-chart-inline-btn:active {
+  transform: translateY(-1px) scale(0.96);
+  opacity: 0.92;
+}
 .sizes-block {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  gap: 10px; /* идеальный воздух */
-  margin-bottom: 18px;
+  gap: 8px; /* можно 6px если хочешь плотнее */
+  margin-bottom: 18px; /* чтобы сохранить воздух перед доставкой */
 }
-.sizes-row {
-  display: inline-flex; /* shrink-to-fit по ширине размеров */
-}
+
