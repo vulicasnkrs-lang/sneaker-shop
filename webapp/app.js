@@ -4,7 +4,7 @@ const tg = window.Telegram?.WebApp || null;
 /* ========================= */
 /*          STATE            */
 /* ========================= */
-
+ 
 const state = {
   products: [],
   filtered: [],
