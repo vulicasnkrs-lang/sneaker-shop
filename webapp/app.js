@@ -555,11 +555,7 @@ ink.style.animation = 'inkSpread .45s ease-out';
 });
   
 
-// Кнопка "Размерная сетка" справа от размеров
-const sizeChartBtn = document.createElement('button');
-sizeChartBtn.className = 'size-chart-inline-btn';
-sizeChartBtn.textContent = 'Размерная сетка';
-sizeChartBtn.onclick = openSizeChartModal;
+
 
 
 
@@ -1363,7 +1359,7 @@ function openSizeChartModal() {
     card.addEventListener('click', () => {
       if (obj.stock <= 0) return;
 
-      selectSize(obj.eu);
+    
 
       specList.querySelectorAll('.size-spec')
         .forEach(el => el.classList.remove('active'));
@@ -1374,10 +1370,7 @@ function openSizeChartModal() {
     specList.appendChild(card);
   });
 
-  if (selectedSize) {
-    const activeCard = specList.querySelector(`[data-size="${selectedSize}"]`);
-    if (activeCard) activeCard.classList.add('active');
-  }
+
 
   m.classList.remove('hidden');
   requestAnimationFrame(() => m.classList.add('open'));
@@ -1394,19 +1387,5 @@ document.addEventListener('click', (e) => {
     }, 200);
   }
 });
-document.addEventListener('click', e => {
-  const btn = e.target.closest('.size');
-  if (!btn) return;
-
-  const size = btn.textContent.trim();
-  selectSize(size);
-});
-document.addEventListener('click', e => {
-  const card = e.target.closest('.size-spec');
-  if (!card) return;
-
-  selectSize(card.dataset.size);
-});
-
 
 init();
