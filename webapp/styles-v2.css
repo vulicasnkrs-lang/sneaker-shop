@@ -825,22 +825,167 @@ html, body {
 /* ========================= */
 
 .sizes-block {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  gap: 10px; /* идеальный воздух */
+  gap: 10px;
   margin-bottom: 18px;
+  width: 100%;
 }
+
 .sizes-row {
   display: flex;
   width: 100%;
 }
 
-
 .modal-sizes {
   display: flex;
-  flex-wrap: nowrap; /* запрещаем перенос */
-  gap: 8px;
+  flex-wrap: wrap;        /* теперь можно переносить плитки */
+  gap: 10px;
 }
+
+/* ========================= */
+/*   VULICA SIZE TILES       */
+/* ========================= */
+
+.modal-sizes .size {
+  position: relative;
+  overflow: hidden;
+
+  flex: 1 0 calc(50% - 10px);   /* две плитки в ряд */
+  max-width: calc(50% - 10px);
+  min-width: 140px;
+
+  height: 68px;
+  padding: 10px 14px;
+  border-radius: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.60),
+    rgba(245,245,245,0.46)
+  );
+  border: 1px solid rgba(0,0,0,0.06);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow:
+    inset 0 1px 6px rgba(255,255,255,0.55),
+    inset 0 -2px 6px rgba(0,0,0,0.06),
+    0 6px 18px rgba(0,0,0,0.08);
+
+  color: #111;
+  cursor: pointer;
+  transition:
+    background .25s ease,
+    transform .22s cubic-bezier(.25,.46,.45,.94),
+    box-shadow .25s ease;
+}
+
+.modal-sizes .size-top,
+.modal-sizes .size-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-sizes .size-eu {
+  font-size: 18px;
+  font-weight: 620;
+  letter-spacing: -0.03em;
+}
+
+.modal-sizes .size-cm {
+  font-size: 13px;
+  font-weight: 480;
+  color: rgba(0,0,0,0.62);
+}
+
+.modal-sizes .size-stock-label {
+  font-size: 12px;
+  font-weight: 480;
+  color: rgba(0,0,0,0.55);
+}
+
+/* индикатор наличия — точки, как сигнал сети */
+
+.size-stock-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.size-stock-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.18);
+  opacity: 0.4;
+}
+
+/* уровни заполненности 0–5 */
+
+.size-stock-0 span {
+  opacity: 0.18;
+}
+
+.size-stock-1 span:nth-child(-n+1),
+.size-stock-2 span:nth-child(-n+2),
+.size-stock-3 span:nth-child(-n+3),
+.size-stock-4 span:nth-child(-n+4),
+.size-stock-5 span:nth-child(-n+5) {
+  opacity: 1;
+  background: #111;
+}
+
+/* hover / active / disabled */
+
+.modal-sizes .size:hover:not(.disabled) {
+  box-shadow:
+    inset 0 1px 8px rgba(255,255,255,0.65),
+    inset 0 -2px 8px rgba(0,0,0,0.08),
+    0 10px 28px rgba(0,0,0,0.12),
+    0 0 18px rgba(255,255,255,0.55);
+  transform: translateY(-1px);
+}
+
+.modal-sizes .size:active:not(.disabled) {
+  transform: scale(0.97);
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.52),
+    rgba(240,240,240,0.40)
+  );
+  box-shadow:
+    inset 0 0 18px rgba(0,0,0,0.12),
+    0 4px 14px rgba(0,0,0,0.12);
+}
+
+.modal-sizes .size.active {
+  background: rgba(17,17,17,0.96);
+  color: #fff;
+  border-color: rgba(17,17,17,0.96);
+  box-shadow:
+    inset 0 0 22px rgba(255,255,255,0.22),
+    0 8px 26px rgba(0,0,0,0.22);
+}
+
+.modal-sizes .size.active .size-cm,
+.modal-sizes .size.active .size-stock-label {
+  color: rgba(255,255,255,0.78);
+}
+
+.modal-sizes .size.disabled {
+  opacity: 0.45;
+  background: rgba(255,255,255,0.35);
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: none;
+  cursor: default;
+}
+
+/* size chart — оставляем как было */
+
 .size-chart-row {
   display: flex;
   justify-content: flex-end;
@@ -851,14 +996,11 @@ html, body {
   font-size: 13px;
   font-weight: 500;
   color: rgba(0,0,0,0.55);
-
   display: flex;
   align-items: center;
   gap: 4px;
-
   cursor: pointer;
   white-space: nowrap;
-
   transition: color .2s ease, transform .2s ease;
 }
 
@@ -877,4 +1019,6 @@ html, body {
   transform: translateX(2px);
   opacity: 0.7;
 }
+
+
 
