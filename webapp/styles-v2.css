@@ -844,39 +844,32 @@ html, body {
 .size-chart-row {
   display: flex;
   justify-content: flex-end;
-  margin-top: 6px;
+  margin-top: 2px;
 }
-.size-chart-link {
-  padding: 6px 12px;
-  border-radius: 999px;
 
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(0,0,0,0.08);
-  backdrop-filter: blur(10px);
+
+.size-chart-link {
+  padding: 3px 6px;
+  border-radius: 6px;
+
+  background: rgba(0,0,0,0.04);
+  border: none;
+  backdrop-filter: none;
 
   font-size: 13px;
   font-weight: 500;
-  color: rgba(0,0,0,0.78);
+  color: rgba(0,0,0,0.55);
 
   cursor: pointer;
   white-space: nowrap;
 
-  transition:
-    background .22s ease,
-    box-shadow .22s ease,
-    transform .18s cubic-bezier(.25,.46,.45,.94);
+  transition: opacity .2s ease;
 }
 
 .size-chart-link:hover {
-  background: rgba(255,255,255,0.8);
-  box-shadow:
-    inset 0 1px 3px rgba(255,255,255,0.7),
-    0 3px 8px rgba(0,0,0,0.08);
-  transform: translateY(-1px);
+  opacity: 0.6;
 }
 
 .size-chart-link:active {
-  transform: scale(0.96);
-  background: rgba(255,255,255,0.7);
+  opacity: 0.4;
 }
-
