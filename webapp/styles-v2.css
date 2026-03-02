@@ -984,41 +984,5 @@ html, body {
   cursor: default;
 }
 
-/* size chart — оставляем как было */
-
-.size-chart-row {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 2px;
-}
-
-.size-chart-link {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(0,0,0,0.55);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: color .2s ease, transform .2s ease;
-}
-
-.size-chart-link::after {
-  content: "→";
-  font-size: 13px;
-  opacity: 0.45;
-}
-
-.size-chart-link:hover {
-  color: rgba(0,0,0,0.75);
-  transform: translateX(1px);
-}
-
-.size-chart-link:active {
-  transform: translateX(2px);
-  opacity: 0.7;
-}
-
 
 
