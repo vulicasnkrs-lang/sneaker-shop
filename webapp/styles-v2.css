@@ -847,29 +847,34 @@ html, body {
   margin-top: 2px;
 }
 
-
 .size-chart-link {
-  padding: 3px 6px;
-  border-radius: 6px;
-
-  background: rgba(0,0,0,0.04);
-  border: none;
-  backdrop-filter: none;
-
   font-size: 13px;
   font-weight: 500;
   color: rgba(0,0,0,0.55);
 
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
   cursor: pointer;
   white-space: nowrap;
 
-  transition: opacity .2s ease;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.size-chart-link::after {
+  content: "→";
+  font-size: 13px;
+  opacity: 0.45;
 }
 
 .size-chart-link:hover {
-  opacity: 0.6;
+  color: rgba(0,0,0,0.75);
+  transform: translateX(1px);
 }
 
 .size-chart-link:active {
-  opacity: 0.4;
+  transform: translateX(2px);
+  opacity: 0.7;
 }
+
