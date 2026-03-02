@@ -364,13 +364,15 @@ function updateAvailabilityBlock(p, size) {
 function selectSize(size) {
   selectedSize = size;
 
-  // капсулы
   els.modalSizes.querySelectorAll('.size')
-    .forEach(el => el.classList.toggle('active', el.textContent == size));
+    .forEach(el =>
+      el.classList.toggle('active', String(el.dataset.eu) === String(size))
+    );
 
-  // luxury spec cards
- document.querySelectorAll('#sizeSpecList .size-spec')
-    .forEach(el => el.classList.toggle('active', el.dataset.size == size));
+  document.querySelectorAll('#sizeSpecList .size-spec')
+    .forEach(el =>
+      el.classList.toggle('active', String(el.dataset.size) === String(size))
+    );
 
   updateAvailabilityBlock(currentProduct, size);
 
@@ -378,6 +380,7 @@ function selectSize(size) {
   void els.modalPrice.offsetWidth;
   els.modalPrice.classList.add('bump');
 }
+
 
 /* ========================= */ 
 /* STOCK STATUS LOGIC */ 
@@ -493,69 +496,73 @@ els.stockBadge.textContent = formatStockStatus(totalStock);
 /*          SIZES            */
 /* ========================= */
 
-
 els.modalSizes.innerHTML = '';
+
 (p.sizes || []).forEach((obj, idx) => {
   const b = document.createElement('button');
   b.className = 'size';
-  b.textContent = obj.eu;
 
-  /* disabled */
+  b.dataset.eu = obj.eu;
+  b.dataset.cm = obj.cm;
+  b.dataset.stock = obj.stock;
+
+  const stockLevel =
+    obj.stock <= 0 ? 0 :
+    obj.stock === 1 ? 1 :
+    obj.stock === 2 ? 2 :
+    obj.stock <= 4 ? 3 :
+    obj.stock <= 7 ? 4 : 5;
+
+  b.innerHTML = `
+    <div class="size-top">
+      <span class="size-eu">${obj.eu}</span>
+      <span class="size-stock-dots size-stock-${stockLevel}">
+        <span></span><span></span><span></span><span></span><span></span>
+      </span>
+    </div>
+    <div class="size-bottom">
+      <span class="size-cm">${obj.cm} см</span>
+      <span class="size-stock-label">
+        ${obj.stock > 0 ? `${obj.stock} шт` : 'Нет в наличии'}
+      </span>
+    </div>
+  `;
+
   if (obj.stock <= 0) {
     b.disabled = true;
     b.classList.add('disabled');
   }
 
   b.addEventListener('click', (event) => {
-    
-   /* ========================= */
-/*      INK‑MORPH PRESS      */
-/* ========================= */
-
-// создаём внутренний слой для эффекта жидкости (если ещё нет)
-let ink = b.querySelector('.size-ink');
-if (!ink) {
-  ink = document.createElement('span');
-  ink.className = 'size-ink';
-  b.appendChild(ink);
-}
-
-// запускаем анимацию растекания
-ink.style.animation = 'none';
-void ink.offsetWidth; // reset
-ink.style.animation = 'inkSpread .45s ease-out';
-
-
-    /* ========================= */
-    /*     SIZE SELECTION        */
-    /* ========================= */
+    // INK‑MORPH
+    let ink = b.querySelector('.size-ink');
+    if (!ink) {
+      ink = document.createElement('span');
+      ink.className = 'size-ink';
+      b.appendChild(ink);
+    }
+    ink.style.animation = 'none';
+    void ink.offsetWidth;
+    ink.style.animation = 'inkSpread .45s ease-out';
 
     if (obj.stock <= 0) return;
 
     selectSize(obj.eu);
 
-
     els.modalSizes.querySelectorAll('.size')
       .forEach(x => x.classList.remove('active'));
-
     b.classList.add('active');
 
-    updateAvailabilityBlock(p, selectedSize);
+    updateAvailabilityBlock(p, obj.eu);
 
-    /* price bump */
     els.modalPrice.classList.remove('bump');
     void els.modalPrice.offsetWidth;
     els.modalPrice.classList.add('bump');
   });
 
-  /* sequential fade-in */
   b.style.animationDelay = `${idx * 40}ms`;
-
   els.modalSizes.appendChild(b);
 });
-  
-
-
 
 
 
