@@ -404,61 +404,44 @@ html, body {
   100% { text-shadow: 0 0 0 rgba(0,0,0,0); }
 }
 
-/* Уменьшенный сток‑пилл — аккуратный маркер */
 /* ========================================================= */
-/*   SIGNATURE STOCK PILL — VULICA PREMIUM GLASS EDITION     */
+/*   VULICA STATUS — PREMIUM MICRO ACCENT                    */
 /* ========================================================= */
 
 .stock-pill {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-
-  border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
 
-  /* Молочно‑кристальный стеклянный фон */
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(14px) saturate(180%);
+  font-size: 13px;
+  font-weight: 520;
+  letter-spacing: -0.01em;
+  color: rgba(0,0,0,0.78);
 
-  /* Кристальный верхний блик */
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.55);
+  padding: 0;
+  background: none;
+  border: none;
 }
 
+/* Живой премиальный штрих */
 .stock-pill::before {
   content: "";
-  position: absolute;
-  top: 0;
-  left: 0; right: 0;
-  height: 40%;
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+
   background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.85),
-    rgba(255,255,255,0.15)
+    180deg,
+    #4fffcf 0%,
+    #2bcfa0 50%,
+    #0f8f6a 100%
   );
-  pointer-events: none;
-}
 
-.stock-pill::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
   box-shadow:
-    inset 0 0 18px rgba(255,255,255,0.45),
-    0 4px 14px rgba(0,0,0,0.12);
-  pointer-events: none;
+    0 0 6px rgba(47,255,200,0.45),
+    inset 0 0 2px rgba(255,255,255,0.65);
 }
 
-/* Текст — глубокий, премиальный */
-.stock-pill {
-  color: rgba(0,0,0,0.82);
-}
 
 /* ========================= */
 /*   MATERIALS — PREMIUM PRO */
