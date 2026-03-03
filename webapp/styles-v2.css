@@ -405,35 +405,35 @@ html, body {
 }
 
 /* ========================================================= */
-/*   VULICA STATUS — PREMIUM MICRO ACCENT                    */
+/*   VULICA STATUS — PREMIUM INLINE GLOW DOT                 */
 /* ========================================================= */
 
 .stock-pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 
   font-size: 13px;
   font-weight: 520;
   letter-spacing: -0.01em;
   color: rgba(0,0,0,0.78);
 
-  padding: 0;
   background: none;
   border: none;
+  padding: 0;
 }
 
-/* Живой премиальный штрих */
-.stock-pill::before {
+/* Живой премиальный глиф между количеством и статусом */
+.stock-pill::after {
   content: "";
-  width: 3px;
-  height: 14px;
-  border-radius: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
 
-  background: linear-gradient(
-    180deg,
+  background: radial-gradient(
+    circle at 30% 30%,
     #4fffcf 0%,
-    #2bcfa0 50%,
+    #2bcfa0 60%,
     #0f8f6a 100%
   );
 
