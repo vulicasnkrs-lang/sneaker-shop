@@ -405,20 +405,59 @@ html, body {
 }
 
 /* Уменьшенный сток‑пилл — аккуратный маркер */
+/* ========================================================= */
+/*   SIGNATURE STOCK PILL — VULICA PREMIUM GLASS EDITION     */
+/* ========================================================= */
+
 .stock-pill {
-  padding: 3px 8px;
-  font-size: 11px;
-  font-weight: 500;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+
   border-radius: 999px;
-  transform: translateY(1px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  background: rgba(255,255,255,0.75);
-  border: 1px solid rgba(0,0,0,0.06);
-  backdrop-filter: blur(8px);
+  /* Молочно‑кристальный стеклянный фон */
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(14px) saturate(180%);
 
+  /* Кристальный верхний блик */
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.55);
+}
+
+.stock-pill::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.85),
+    rgba(255,255,255,0.15)
+  );
+  pointer-events: none;
+}
+
+.stock-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
   box-shadow:
-    inset 0 1px 2px rgba(255,255,255,0.6),
-    0 2px 6px rgba(0,0,0,0.06);
+    inset 0 0 18px rgba(255,255,255,0.45),
+    0 4px 14px rgba(0,0,0,0.12);
+  pointer-events: none;
+}
+
+/* Текст — глубокий, премиальный */
+.stock-pill {
+  color: rgba(0,0,0,0.82);
 }
 
 /* ========================= */
@@ -804,16 +843,22 @@ html, body {
 
   animation: inkBounce .22s cubic-bezier(.25,.46,.45,.94);
 }
-/* --- FIX: читаемость индикатора количества и точек в активной плитке --- */
-
-.modal-sizes .size.active .size-stock-label {
-  color: rgba(255,255,255,0.92); /* яркий, но мягкий белый */
+/* Активная плитка — базовые точки (пустые) */
+.modal-sizes .size.active .size-stock-dots span {
+  background: rgba(255,255,255,0.35);
+  opacity: 0.35;
 }
 
-.modal-sizes .size.active .size-stock-dots span {
-  background: rgba(255,255,255,0.92); /* точки становятся видимыми */
+/* Активная плитка — закрашенные точки по уровню стока */
+.modal-sizes .size.active .size-stock-1 span:nth-child(-n+1),
+.modal-sizes .size.active .size-stock-2 span:nth-child(-n+2),
+.modal-sizes .size.active .size-stock-3 span:nth-child(-n+3),
+.modal-sizes .size.active .size-stock-4 span:nth-child(-n+4),
+.modal-sizes .size.active .size-stock-5 span:nth-child(-n+5) {
+  background: rgba(255,255,255,0.92);
   opacity: 1;
 }
+
 
 @keyframes inkBounce {
   0%   { transform: scale(0.94); }
