@@ -804,6 +804,16 @@ html, body {
 
   animation: inkBounce .22s cubic-bezier(.25,.46,.45,.94);
 }
+/* --- FIX: читаемость индикатора количества и точек в активной плитке --- */
+
+.modal-sizes .size.active .size-stock-label {
+  color: rgba(255,255,255,0.92); /* яркий, но мягкий белый */
+}
+
+.modal-sizes .size.active .size-stock-dots span {
+  background: rgba(255,255,255,0.92); /* точки становятся видимыми */
+  opacity: 1;
+}
 
 @keyframes inkBounce {
   0%   { transform: scale(0.94); }
