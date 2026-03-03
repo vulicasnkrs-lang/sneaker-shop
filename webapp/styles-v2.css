@@ -350,12 +350,77 @@ html, body {
   color: #0f0f0f;
 }
 
-.modal-price {
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: #111;
+/* ========================= */
+/*        HERO PRICE ROW     */
+/* ========================= */
+
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: -2px;
+  margin-bottom: 20px;
+
+  animation: priceRowAppear .55s cubic-bezier(.25,.46,.45,.94);
 }
+
+@keyframes priceRowAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+    filter: blur(4px);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(0) scale(1.01);
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Цена — компактная, плотная, спокойная */
+.modal-price {
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.3px;
+  color: #0f0f0f;
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,0.05),
+    0 3px 8px rgba(0,0,0,0.06);
+}
+
+/* Glow при выборе размера — мягкий, деликатный */
+.modal-price.bump {
+  animation: priceGlow .38s ease;
+}
+
+@keyframes priceGlow {
+  0%   { text-shadow: 0 0 0 rgba(0,0,0,0); }
+  50%  { text-shadow: 0 0 12px rgba(0,0,0,0.18); }
+  100% { text-shadow: 0 0 0 rgba(0,0,0,0); }
+}
+
+/* Уменьшенный сток‑пилл — аккуратный маркер */
+.stock-pill {
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 999px;
+  transform: translateY(1px);
+
+  background: rgba(255,255,255,0.75);
+  border: 1px solid rgba(0,0,0,0.06);
+  backdrop-filter: blur(8px);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.6),
+    0 2px 6px rgba(0,0,0,0.06);
+}
+
 /* ========================= */
 /*   MATERIALS — PREMIUM PRO */
 /* ========================= */
@@ -766,34 +831,6 @@ html, body {
   gap: 10px;
 }
 
-.stock-pill {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #111;
-
-  border-radius: 999px;
-  flex-shrink: 0;
-
-  /* Белая матовая капсула */
-  background: rgba(255,255,255,0.75);
-  border: 1px solid rgba(0,0,0,0.06);
-  backdrop-filter: blur(8px);
-
-  /* Мягкая тень, как у Apple Store */
-  box-shadow:
-    inset 0 1px 2px rgba(255,255,255,0.6),
-    0 2px 6px rgba(0,0,0,0.06);
-}
-
-.stock-pill:hover {
-  background: rgba(255,255,255,0.9);
-  box-shadow:
-    inset 0 1px 3px rgba(255,255,255,0.7),
-    0 3px 8px rgba(0,0,0,0.08);
-  transform: translateY(-1px);
-  transition: .22s ease;
-}
 
 /* ========================= */
 /*        SIZES BLOCK        */
