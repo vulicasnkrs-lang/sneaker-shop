@@ -546,7 +546,8 @@ els.modalSizes.innerHTML = '';
     ink.style.animation = 'inkSpread .45s ease-out';
 
     if (obj.stock <= 0) return;
-    navigator.vibrate?.(10); // лёгкий тактильный тик при выборе размера
+   tg?.HapticFeedback?.impactOccurred('light');
+
 
 
     selectSize(obj.eu);
@@ -584,7 +585,8 @@ els.modalSizes.innerHTML = '';
 
   els.addToCartBtn.onclick = (e) => {
     addRippleEffect(els.addToCartBtn, e);
-navigator.vibrate?.([12, 20, 12]); // двойной уверенный тик
+tg?.HapticFeedback?.impactOccurred('medium');
+
 
     const qty = 1;
 
@@ -608,7 +610,8 @@ navigator.vibrate?.([12, 20, 12]); // двойной уверенный тик
 
   if (els.reserveBtn) {
     els.reserveBtn.onclick = () => {
-      navigator.vibrate?.([20, 30, 20]); // мягкий пульс
+      tg?.HapticFeedback?.notificationOccurred('success');
+
 
       if (!selectedSize) {
         alert('Выберите размер');
