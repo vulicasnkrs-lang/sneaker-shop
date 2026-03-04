@@ -86,8 +86,8 @@ const els = {
   profileUsername: document.getElementById('profileUsername'),
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
-  profilePostponed: document.getElementById('profilePostponed')
-  shareBtn: document.getElementById('shareBtn'),
+  profilePostponed: document.getElementById('profilePostponed'),
+  shareBtn: document.getElementById('shareBtn')
 
 };
 
