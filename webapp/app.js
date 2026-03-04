@@ -87,6 +87,8 @@ const els = {
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
   profilePostponed: document.getElementById('profilePostponed')
+  shareBtn: document.getElementById('shareBtn'),
+
 };
 
 /* ========================= */
@@ -476,6 +478,40 @@ els.stockBadge.textContent = formatStockStatus(totalStock);
 
   els.modalTitle.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
+/* ========================= */
+/*        SHARE BUTTON       */
+/* ========================= */
+
+if (els.shareBtn) {
+  els.shareBtn.onclick = async () => {
+    const url = `https://vulica.snk.rs/product/${p.id}`;
+    const text = `${p.title} — ${formatPrice(p.price)}`;
+
+    // 1) Telegram WebApp share
+    if (tg?.shareUrl) {
+      tg.shareUrl(url, text);
+      return;
+    }
+
+    // 2) Native Web Share API
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: p.title, text, url });
+        return;
+      } catch (e) {
+        console.log('Share cancelled', e);
+      }
+    }
+
+    // 3) Fallback — копирование ссылки
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('Ссылка скопирована');
+    } catch {
+      alert('Не удалось скопировать ссылку');
+    }
+  };
+}
 
 
  if (p.materials && typeof p.materials === 'object') {
