@@ -487,13 +487,15 @@ if (els.shareBtn) {
     const url = `https://vulica.snk.rs/product/${p.id}`;
     const text = `${p.title} — ${formatPrice(p.price)}`;
 
-    // 🔥 1) Если мы в Telegram WebApp → ВСЕГДА Telegram share
+    // 🔥 1) Telegram WebApp → ВСЕГДА Telegram share
     if (tg) {
-      tg.shareUrl(url, text);
+      const shareLink =
+        `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+      tg.openTelegramLink(shareLink);
       return;
     }
 
-    // 2) Если обычный браузер → системное меню
+    // 2) Обычный браузер → системное меню
     if (navigator.share) {
       try {
         await navigator.share({ title: p.title, text, url });
@@ -501,7 +503,7 @@ if (els.shareBtn) {
       } catch (e) {}
     }
 
-    // 3) Фоллбек — копирование ссылки
+    // 3) Фоллбек
     try {
       await navigator.clipboard.writeText(url);
       alert('Ссылка скопирована');
@@ -510,6 +512,7 @@ if (els.shareBtn) {
     }
   };
 }
+
 
 
 
