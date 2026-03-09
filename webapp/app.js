@@ -488,10 +488,9 @@ els.stockBadge.textContent = formatStockStatus(totalStock);
 
 if (els.shareBtn) {
   els.shareBtn.onclick = async () => {
-    const url = `https://vulica.snk.rs/share/product/${p.id}.html`;
+    const url = `https://sneaker-shop-r7fa.onrender.com/share/product/${p.id}.html`;
     const text = `${p.title} — ${formatPrice(p.price)}`;
 
-    // 🔥 1) Telegram WebApp → ВСЕГДА Telegram share
     if (tg) {
       const shareLink =
         `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
@@ -499,7 +498,6 @@ if (els.shareBtn) {
       return;
     }
 
-    // 2) Обычный браузер → системное меню
     if (navigator.share) {
       try {
         await navigator.share({ title: p.title, text, url });
@@ -507,7 +505,6 @@ if (els.shareBtn) {
       } catch (e) {}
     }
 
-    // 3) Фоллбек
     try {
       await navigator.clipboard.writeText(url);
       alert('Ссылка скопирована');
@@ -516,6 +513,7 @@ if (els.shareBtn) {
     }
   };
 }
+
 
 
  if (p.materials && typeof p.materials === 'object') {
