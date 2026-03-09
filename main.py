@@ -77,14 +77,14 @@ async def create_app():
     app.router.add_get("/product.html", product_page)
 
     # Статика
-app.router.add_static("/static/", STATIC_DIR)
+    app.router.add_static("/static/", STATIC_DIR)
 
-# Share-страницы (OG preview)
-SHARE_DIR = os.path.join(WEB_DIR, "share")
-app.router.add_static("/share/", SHARE_DIR)
+    # Share-страницы (OG preview)
+    SHARE_DIR = os.path.join(WEB_DIR, "share")
+    app.router.add_static("/share/", SHARE_DIR)
 
-# Остальные файлы webapp (index.html, product.html, products.json)
-app.router.add_static("/", WEB_DIR)
+    # Остальные файлы webapp (index.html, product.html, products.json)
+    app.router.add_static("/", WEB_DIR)
 
     # API
     app.router.add_get("/healthz", healthz)
@@ -95,6 +95,8 @@ app.router.add_static("/", WEB_DIR)
 
     return app
 
+
+  
 # -----------------------------
 # 5) Запуск веб-сервера
 # -----------------------------
