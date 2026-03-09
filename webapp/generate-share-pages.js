@@ -23,16 +23,19 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;");
 }
 
-// 5) Генерируем HTML для каждого товара
-products.forEach((p) => {
-  const id = p.id;                 // например "asics-gel-pickax"
-  const title = escapeHtml(p.title); // "Asics GEL-PICKAX"
-  const price = `${p.price} BYN`;    // "190 BYN"
+// 5) Домен Render
+const DOMAIN = "https://sneaker-shop-r7fa.onrender.com";
 
-  // Берём первую картинку товара
+// 6) Генерируем HTML для каждого товара
+products.forEach((p) => {
+  const id = p.id;                 
+  const title = escapeHtml(p.title);
+  const price = `${p.price} BYN`;
+
+  // Первая картинка товара
   const image = p.images?.[0]
-    ? `https://vulica.snk.rs${p.images[0]}`
-    : "https://vulica.snk.rs/static/images/default.jpg";
+    ? `${DOMAIN}${p.images[0]}`
+    : `${DOMAIN}/static/images/default.jpg`;
 
   const html = `<!DOCTYPE html>
 <html lang="ru">
@@ -44,7 +47,7 @@ products.forEach((p) => {
   <meta property="og:title" content="${title} — ${price}">
   <meta property="og:description" content="Оригинальная пара. Доставка по РБ.">
   <meta property="og:image" content="${image}">
-  <meta property="og:url" content="https://vulica.snk.rs/share/product/${id}.html">
+  <meta property="og:url" content="${DOMAIN}/share/product/${id}.html">
   <meta name="twitter:card" content="summary_large_image">
 
   <title>${title}</title>
