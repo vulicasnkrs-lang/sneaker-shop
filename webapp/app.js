@@ -105,6 +105,10 @@ let selectedSize = null;
 async function init() {
   renderSkeletons();
   await loadProducts();
+// 🔥 Если WebApp открыт по ссылке с конкретным товаром
+if (tg?.initDataUnsafe?.start_param) {
+  openProductScreen(tg.initDataUnsafe.start_param);
+}
 
   restoreStock();
   cleanupReserved();
@@ -484,7 +488,7 @@ els.stockBadge.textContent = formatStockStatus(totalStock);
 
 if (els.shareBtn) {
   els.shareBtn.onclick = async () => {
-    const url = `https://vulica.snk.rs/product/${p.id}`;
+    const url = `https://vulica.snk.rs/share/product/${p.id}.html`;
     const text = `${p.title} — ${formatPrice(p.price)}`;
 
     // 🔥 1) Telegram WebApp → ВСЕГДА Telegram share
@@ -512,8 +516,6 @@ if (els.shareBtn) {
     }
   };
 }
-
-
 
 
  if (p.materials && typeof p.materials === 'object') {

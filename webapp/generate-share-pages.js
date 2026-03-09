@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 // 1) Читаем products.json
-const productsPath = path.join(__dirname, "static/products.json");
+const productsPath = path.join(__dirname, "products.json");
 const raw = fs.readFileSync(productsPath, "utf8");
 const products = JSON.parse(raw);
 
