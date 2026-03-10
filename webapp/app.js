@@ -488,7 +488,7 @@ els.stockBadge.textContent = formatStockStatus(totalStock);
 
 if (els.shareBtn) {
   els.shareBtn.onclick = async () => {
-    const url = `https://t.me/vulicaSNKRS_bot/app?startapp=${p.id}`;
+  const url = `https://vulica.store/share/product/${p.id}`;
     const text = `${p.title} — ${formatPrice(p.price)}`;
 
     if (tg) {
