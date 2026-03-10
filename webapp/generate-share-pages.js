@@ -24,7 +24,8 @@ function escapeHtml(str) {
 }
 
 // 5) Домен Render
-const DOMAIN = "https://sneaker-shop-r7fa.onrender.com";
+const DOMAIN = "https://www.vulica.store";
+
 
 // 6) Генерируем HTML для каждого товара
 products.forEach((p) => {
