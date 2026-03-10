@@ -19,3 +19,8 @@ services:
         value: https://sneaker-shop-r7fa.onrender.com
       - key: PROMO_CODES
         value: NANOGI10:10,VULICA5:5
+
+routes:
+  - type: rewrite
+    source: /share/product/(.*)
+    destination: /share/product/$1.html
