@@ -21,12 +21,6 @@ async def index(request):
     return web.FileResponse(os.path.join(WEB_DIR, "index.html"))
 
 # -----------------------------
-# 1.1) Страница товара
-# -----------------------------
-async def product_page(request):
-    return web.FileResponse(os.path.join(WEB_DIR, "product.html"))
-
-# -----------------------------
 # 2) Обработчик заказа /order
 # -----------------------------
 async def order_handler(request):
@@ -44,7 +38,7 @@ async def order_handler(request):
     lines.append("")
 
     for i, item in enumerate(data.get("items", []), start=1):
-        lines.append(f"{i}) {item['title']} • {item['brand']} • {item.get('season', '')}")
+        lines.append(f"{i}) {item['title']} • {item['brand']}")
         lines.append(
             f"   Размер: {item['size']}  Кол-во: {item['qty']}  Цена: {item['price']} ₽"
         )
@@ -73,17 +67,10 @@ async def create_app():
     # Главная страница
     app.router.add_get("/", index)
 
-    # Страница товара
-    app.router.add_get("/product.html", product_page)
-
-    # Статика
+    # Статика (картинки, css, js)
     app.router.add_static("/static/", STATIC_DIR)
 
-    # Share-страницы (OG preview)
-    SHARE_DIR = os.path.join(WEB_DIR, "share")
-    app.router.add_static("/share/", SHARE_DIR)
-
-    # Остальные файлы webapp (index.html, product.html, products.json)
+    # Все остальные файлы webapp (index.html, products.json, app.js)
     app.router.add_static("/", WEB_DIR)
 
     # API
@@ -95,8 +82,6 @@ async def create_app():
 
     return app
 
-
-  
 # -----------------------------
 # 5) Запуск веб-сервера
 # -----------------------------
@@ -112,7 +97,6 @@ async def run_web():
 
     log.info(f"WebApp доступен на порту {port}")
 
-    # Веб-сервер должен жить бесконечно
     while True:
         await asyncio.sleep(3600)
 
@@ -121,8 +105,8 @@ async def run_web():
 # -----------------------------
 async def main():
     await asyncio.gather(
-        run_bot(),   # бот ставит webhook и остаётся живым
-        run_web()    # веб-сервер открывает порт
+        run_bot(),
+        run_web()
     )
 
 if __name__ == "__main__":
