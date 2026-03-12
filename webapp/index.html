@@ -196,37 +196,35 @@
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
 
-  <!-- PROFILE MODAL -->
-  <div id="profileModal" class="modal hidden">
-    <div class="modal-content profile-modal">
+<!-- PROFILE MODAL — PREMIUM -->
+<div id="profileModal">
+  <div class="profile-modal">
 
-      <header class="header">
-        <div style="width:40px;"></div>
-        <div class="brand">Профиль</div>
-        <div style="width:40px;"></div>
-      </header>
+    <!-- PREMIUM HEADER -->
+    <section class="profile-header">
+      <div class="profile-avatar" id="profileAvatarProfile"></div>
 
-      <section class="profile-header" id="profileHeader">
-        <div class="profile-avatar" id="profileAvatarProfile"></div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">Гость</div>
+        <div class="profile-username" id="profileUsername"></div>
+      </div>
+    </section>
 
-        <div class="profile-info">
-          <div class="profile-name" id="profileName">Гость</div>
-          <div class="profile-username" id="profileUsername"></div>
-        </div>
-      </section>
+    <!-- PREMIUM TABS -->
+    <section class="profile-tabs">
+      <button class="profile-tab active" data-tab="orders">Покупки</button>
+      <button class="profile-tab" data-tab="postponed">Отложенные</button>
+    </section>
 
-      <section class="profile-tabs">
-        <button class="profile-tab active" data-tab="orders">Покупки</button>
-        <button class="profile-tab" data-tab="postponed">Отложенные</button>
-      </section>
+    <!-- PREMIUM CONTENT -->
+    <main class="profile-content">
+      <div id="profileOrders" class="profile-section active"></div>
+      <div id="profilePostponed" class="profile-section"></div>
+    </main>
 
-      <main class="profile-content">
-        <div id="profileOrders" class="profile-section active"></div>
-        <div id="profilePostponed" class="profile-section"></div>
-      </main>
-
-    </div>
   </div>
+</div>
+
 
   <script src="/app.js?v=9"></script>
 
