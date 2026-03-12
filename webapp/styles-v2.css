@@ -1067,3 +1067,49 @@ html, body {
   background: #f2f2f2;
   opacity: 0.9;
 }
+/* ========================= */
+/*      PROFILE MODAL FIX    */
+/* ========================= */
+
+#profileModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#profileModal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#profileModal .profile-modal {
+  width: 100%;
+  max-width: 520px;
+  background: #fff;
+  border-radius: 22px 22px 0 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  transform: translateY(22px);
+  opacity: 0;
+  transition:
+    transform .38s cubic-bezier(.25,.46,.45,.94),
+    opacity .38s ease;
+}
+
+#profileModal.open .profile-modal {
+  transform: translateY(0);
+  opacity: 1;
+}
