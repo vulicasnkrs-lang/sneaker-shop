@@ -592,90 +592,6 @@ html, body {
   font-weight: 600;
 }
 
-/* ========================= */
-/*     PROFILE MODAL         */
-/* ========================= */
-
-.profile-modal .header {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  padding: 18px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.profile-modal .header .brand {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.profile-modal .profile-header {
-  padding: 24px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.profile-modal .profile-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 999px;
-  background: #f3f3f3;
-  overflow: hidden;
-}
-
-.profile-modal .profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.profile-modal .profile-name {
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.profile-modal .profile-username {
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.profile-modal .profile-tabs {
-  display: flex;
-  gap: 6px;
-  padding: 14px 20px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-}
-
-.profile-modal .profile-tab {
-  flex: 1;
-  padding: 10px 0;
-  text-align: center;
-  border-radius: 12px;
-  background: #f3f3f3;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background .2s ease;
-}
-
-.profile-modal .profile-tab.active {
-  background: #111;
-  color: #fff;
-}
-
-.profile-modal .profile-content {
-  padding: 20px;
-  display: grid;
-  gap: 20px;
-  max-height: calc(100vh - 220px);
-  overflow-y: auto;
-}
-
 
 
 /* ========================= */
@@ -1067,52 +983,7 @@ html, body {
   background: #f2f2f2;
   opacity: 0.9;
 }
-/* ========================= */
-/*      PROFILE MODAL FIX    */
-/* ========================= */
 
-#profileModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-
-#profileModal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-#profileModal .profile-modal {
-  width: 100%;
-  max-width: 520px;
-  background: #fff;
-  border-radius: 22px 22px 0 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-
-  transform: translateY(22px);
-  opacity: 0;
-  transition:
-    transform .38s cubic-bezier(.25,.46,.45,.94),
-    opacity .38s ease;
-}
-
-#profileModal.open .profile-modal {
-  transform: translateY(0);
-  opacity: 1;
-}
 /* ========================= */
 /*   PROFILE — PREMIUM LAYER */
 /* ========================= */
