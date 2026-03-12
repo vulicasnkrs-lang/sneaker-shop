@@ -1,7 +1,6 @@
 services:
-  # BACKEND (бот + API)
   - type: web
-    name: vulica-snkrs-backend
+    name: vulica-snkrs
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: python main.py
@@ -15,21 +14,8 @@ services:
       - key: ADMIN_CHAT_ID
         value: 1426577785
       - key: WEBAPP_URL
-        value: https://www.vulica.store/index.html
+        value: https://sneaker-shop-r7fa.onrender.com/index.html
       - key: BASE_URL
-        value: https://www.vulica.store
+        value: https://sneaker-shop-r7fa.onrender.com
       - key: PROMO_CODES
         value: NANOGI10:10,VULICA5:5
-
-  # FRONTEND (WebApp)
-  - type: static
-    name: vulica-snkrs-webapp
-    staticPublishPath: webapp
-    buildCommand: ""
-    autoDeploy: true
-
-routes:
-  # Rewrite для share/product
-  - type: rewrite
-    source: /share/product/(.*)
-    destination: /share/product/$1.html
