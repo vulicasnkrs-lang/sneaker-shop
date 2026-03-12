@@ -1350,4 +1350,5 @@ function initParallaxGallery() {
   });
 }
 
-init();
+document.addEventListener("DOMContentLoaded", init);
+
