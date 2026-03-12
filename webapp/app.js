@@ -87,7 +87,6 @@ const els = {
   profileTabs: document.querySelectorAll('.profile-tab'),
   profileOrders: document.getElementById('profileOrders'),
   profilePostponed: document.getElementById('profilePostponed'),
-  shareBtn: document.getElementById('shareBtn')
 
 };
 
@@ -482,37 +481,7 @@ els.stockBadge.textContent = formatStockStatus(totalStock);
 
   els.modalTitle.textContent = p.title;
   els.modalPrice.textContent = formatPrice(p.price);
-/* ========================= */
-/*        SHARE BUTTON       */
-/* ========================= */
 
-if (els.shareBtn) {
-  els.shareBtn.onclick = async () => {
-  const url = `https://vulica.store/share/product/${p.id}`;
-    const text = `${p.title} — ${formatPrice(p.price)}`;
-
-    if (tg) {
-      const shareLink =
-        `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
-      tg.openTelegramLink(shareLink);
-      return;
-    }
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: p.title, text, url });
-        return;
-      } catch (e) {}
-    }
-
-    try {
-      await navigator.clipboard.writeText(url);
-      alert('Ссылка скопирована');
-    } catch {
-      alert('Не удалось скопировать ссылку');
-    }
-  };
-}
 
 
 
