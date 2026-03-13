@@ -1130,26 +1130,23 @@ html, body {
   color: rgba(0,0,0,0.55);
 }
 /* ========================================================= */
-/*                VULICA PRIME PROFILE PANEL                 */
+/*                VULICA PRIME CARD PROFILE                  */
 /* ========================================================= */
 
-/* ---------- ROOT CONTAINER ---------- */
+/* ROOT */
 
 #profileModal {
   position: fixed;
   inset: 0;
   z-index: 9999;
-
-  background: #f2f3f5;
+  background: #f3f4f6;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-
   display: none;
   justify-content: center;
   align-items: stretch;
-
   opacity: 0;
-  transition: opacity .28s ease;
+  transition: opacity .26s ease;
 }
 
 #profileModal.open {
@@ -1160,30 +1157,22 @@ html, body {
   width: 100%;
   max-width: 520px;
   height: 100vh;
-
   display: flex;
   flex-direction: column;
-
-  background: #f2f3f5;
+  background: #f3f4f6;
 }
 
-
-/* ========================================================= */
-/*                        TOP BAR                            */
-/* ========================================================= */
+/* TOP BAR */
 
 .profile-topbar {
-  height: 60px;
-  padding: 0 24px;
-
+  height: 56px;
+  padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   background: #ffffff;
   border-bottom: 1px solid rgba(0,0,0,0.06);
-
-  font-size: 15px;
+  font-size: 14px;
   color: #111;
 }
 
@@ -1191,35 +1180,31 @@ html, body {
   border: none;
   background: transparent;
   padding: 6px 0;
-  font-size: 15px;
+  font-size: 14px;
   color: #111;
   cursor: pointer;
 }
 
 .profile-brand-mark {
   font-size: 11px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgba(0,0,0,0.40);
 }
 
-
-/* ========================================================= */
-/*                        HERO PANEL                         */
-/* ========================================================= */
+/* HERO / IDENTITY */
 
 .profile-hero {
-  padding: 28px 24px 22px;
+  padding: 22px 20px 16px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .profile-avatar-large {
-  width: 72px;
-  height: 72px;
-  border-radius: 18px;
-
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
   background: #dfe1e6;
   background-size: cover;
   background-position: center;
@@ -1228,88 +1213,117 @@ html, body {
 .profile-hero-text {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .profile-hero-name {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.4px;
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.25px;
   color: #0f0f0f;
 }
 
 .profile-hero-username {
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(0,0,0,0.55);
 }
 
-.profile-hero-sub {
+.profile-hero-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.profile-level-badge {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(0,0,0,0.70);
+}
+
+.profile-loyalty-tag {
+  font-size: 11px;
+  color: rgba(0,0,0,0.45);
+}
+
+.profile-progress {
+  margin-top: 6px;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.profile-progress-fill {
+  height: 100%;
+  width: 40%; /* динамика из JS */
+  background: #111;
+}
+
+/* LIFETIME VALUE */
+
+.profile-ltv {
+  padding: 0 20px 10px;
   font-size: 12px;
-  color: rgba(0,0,0,0.40);
+  color: rgba(0,0,0,0.55);
 }
 
+/* FINANCIAL PANEL */
 
-/* ========================================================= */
-/*                        STATS GRID                         */
-/* ========================================================= */
-
-.profile-stats-row {
-  padding: 0 24px 6px;
+.profile-finance {
+  padding: 4px 20px 14px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
-.profile-stat {
+.profile-finance-item {
   background: #ffffff;
-  border-radius: 12px;
-  padding: 16px 14px 14px;
-
+  border-radius: 10px;
+  padding: 10px 8px 8px;
+  border: 1px solid rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-
-  border: 1px solid rgba(0,0,0,0.06);
+  gap: 4px;
 }
 
-.profile-stat .label {
-  font-size: 11px;
+.profile-finance-label {
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: rgba(0,0,0,0.45);
 }
 
-.profile-stat .value {
-  font-size: 20px;
-  font-weight: 700;
+.profile-finance-value {
+  font-size: 14px;
+  font-weight: 600;
   color: #111;
 }
 
-
-/* ========================================================= */
-/*                           TABS                             */
-/* ========================================================= */
+/* TABS */
 
 .profile-tabs {
   display: flex;
-  gap: 10px;
-  padding: 20px 24px 0;
+  gap: 8px;
+  padding: 10px 20px 0;
 }
 
 .profile-tab {
   flex: 1;
-  padding: 12px 0;
-
+  padding: 10px 0;
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,0.08);
-
   background: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 550;
   color: rgba(0,0,0,0.55);
-
   cursor: pointer;
-  transition: background .22s ease, color .22s ease, border-color .22s ease;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 
 .profile-tab.active {
@@ -1318,14 +1332,11 @@ html, body {
   border-color: #111;
 }
 
-
-/* ========================================================= */
-/*                         BODY AREA                          */
-/* ========================================================= */
+/* BODY */
 
 .profile-body {
   flex: 1;
-  padding: 22px 24px 30px;
+  padding: 14px 20px 24px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -1338,69 +1349,103 @@ html, body {
   display: block;
 }
 
-
-/* ========================================================= */
-/*                    PRIME ORDER BLOCK                       */
-/* ========================================================= */
+/* ORDER LIST (STRICT, CLEAN) */
 
 .profile-card {
   background: #ffffff;
-  border-radius: 14px;
-  padding: 20px 20px 18px;
-  margin-bottom: 22px;
-
+  border-radius: 12px;
+  padding: 14px 14px 10px;
+  margin-bottom: 14px;
   border: 1px solid rgba(0,0,0,0.06);
-
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 10px;
 }
 
-/* Header: date + total */
 .profile-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  font-size: 14px;
+  font-size: 12px;
   color: rgba(0,0,0,0.55);
 }
 
 .profile-card-total {
-  font-weight: 700;
+  font-weight: 600;
   color: #111;
-  font-size: 15px;
+  font-size: 13px;
 }
 
-/* Items */
 .profile-card-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   padding: 6px 0;
 }
 
 .profile-card-item + .profile-card-item {
   border-top: 1px solid rgba(0,0,0,0.06);
-  padding-top: 14px;
+  padding-top: 10px;
 }
 
 .profile-card-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 550;
   color: rgba(0,0,0,0.92);
   letter-spacing: -0.01em;
 }
 
 .profile-card-meta {
-  font-size: 14px;
+  font-size: 12px;
   color: rgba(0,0,0,0.55);
 }
 
-/* Empty state */
+.profile-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.profile-reorder-btn {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  color: #111;
+  cursor: pointer;
+}
+
+/* LOYALTY BLOCK */
+
+.profile-loyalty {
+  margin-top: 18px;
+  padding: 14px 14px 12px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-loyalty-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(0,0,0,0.55);
+}
+
+.profile-loyalty-item {
+  font-size: 13px;
+  color: rgba(0,0,0,0.75);
+}
+
+/* EMPTY STATE */
+
 .profile-empty {
   text-align: center;
   padding: 40px 0;
-  font-size: 15px;
+  font-size: 14px;
   color: rgba(0,0,0,0.45);
 }
+
