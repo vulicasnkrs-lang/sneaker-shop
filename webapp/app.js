@@ -1175,7 +1175,8 @@ function closeMysteryModal() {
 /* ========================= */
 
 function openProfileModal() {
-  els.profileModal.classList.remove('hidden');
+  els.profileModal.style.display = 'flex';
+
 
   requestAnimationFrame(() => {
     els.profileModal.classList.add('open');
@@ -1195,8 +1196,8 @@ function closeProfileModal() {
   els.profileModal.classList.remove('open');
 
   setTimeout(() => {
-    els.profileModal.classList.add('hidden');
-  }, 200);
+    els.profileModal.style.display = 'none';
+  }, 300);
 
   if (tg) {
     tg.BackButton.hide();
