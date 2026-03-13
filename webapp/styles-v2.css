@@ -1130,7 +1130,7 @@ html, body {
   color: rgba(0,0,0,0.55);
 }
 /* ========================================================= */
-/*                VULICA SIGNATURE PROFILE PANEL             */
+/*                VULICA PRIME PROFILE PANEL                 */
 /* ========================================================= */
 
 /* ---------- ROOT CONTAINER ---------- */
@@ -1140,7 +1140,7 @@ html, body {
   inset: 0;
   z-index: 9999;
 
-  background: #f5f6f8;
+  background: #f2f3f5;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
@@ -1164,7 +1164,7 @@ html, body {
   display: flex;
   flex-direction: column;
 
-  background: #f5f6f8;
+  background: #f2f3f5;
 }
 
 
@@ -1173,31 +1173,34 @@ html, body {
 /* ========================================================= */
 
 .profile-topbar {
-  height: 52px;
-  padding: 0 18px;
+  height: 60px;
+  padding: 0 24px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  font-size: 14px;
-  color: rgba(0,0,0,0.65);
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+
+  font-size: 15px;
+  color: #111;
 }
 
 .profile-back-btn {
   border: none;
   background: transparent;
   padding: 6px 0;
-  font-size: 14px;
-  color: rgba(0,0,0,0.75);
+  font-size: 15px;
+  color: #111;
   cursor: pointer;
 }
 
 .profile-brand-mark {
-  font-size: 12px;
-  letter-spacing: 0.12em;
+  font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.45);
+  color: rgba(0,0,0,0.40);
 }
 
 
@@ -1206,81 +1209,79 @@ html, body {
 /* ========================================================= */
 
 .profile-hero {
-  padding: 18px 20px 10px;
+  padding: 28px 24px 22px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .profile-avatar-large {
-  width: 64px;
-  height: 64px;
-  border-radius: 999px;
-  background: #e2e4ea;
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+
+  background: #dfe1e6;
   background-size: cover;
   background-position: center;
-
-  box-shadow: 0 6px 18px rgba(0,0,0,0.10);
 }
 
 .profile-hero-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .profile-hero-name {
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-  color: #111;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: #0f0f0f;
 }
 
 .profile-hero-username {
-  font-size: 13px;
-  color: rgba(0,0,0,0.50);
+  font-size: 14px;
+  color: rgba(0,0,0,0.55);
 }
 
 .profile-hero-sub {
   font-size: 12px;
   color: rgba(0,0,0,0.40);
-  margin-top: 2px;
 }
 
 
 /* ========================================================= */
-/*                        STATS ROW                          */
+/*                        STATS GRID                         */
 /* ========================================================= */
 
 .profile-stats-row {
-  padding: 10px 20px 4px;
+  padding: 0 24px 6px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 14px;
 }
 
 .profile-stat {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 12px 12px 10px;
-
-  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  border-radius: 12px;
+  padding: 16px 14px 14px;
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+
+  border: 1px solid rgba(0,0,0,0.06);
 }
 
 .profile-stat .label {
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   color: rgba(0,0,0,0.45);
 }
 
 .profile-stat .value {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: #111;
 }
 
@@ -1291,30 +1292,30 @@ html, body {
 
 .profile-tabs {
   display: flex;
-  gap: 8px;
-  padding: 14px 20px 0;
+  gap: 10px;
+  padding: 20px 24px 0;
 }
 
 .profile-tab {
   flex: 1;
-  padding: 10px 0;
+  padding: 12px 0;
 
-  border-radius: 999px;
-  border: none;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.08);
 
-  background: #e3e5ec;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(0,0,0,0.60);
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.55);
 
   cursor: pointer;
-  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  transition: background .22s ease, color .22s ease, border-color .22s ease;
 }
 
 .profile-tab.active {
   background: #111;
   color: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.20);
+  border-color: #111;
 }
 
 
@@ -1324,7 +1325,7 @@ html, body {
 
 .profile-body {
   flex: 1;
-  padding: 14px 20px 24px;
+  padding: 22px 24px 30px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -1339,31 +1340,20 @@ html, body {
 
 
 /* ========================================================= */
-/*                    SIGNATURE ORDER CARD                    */
+/*                    PRIME ORDER BLOCK                       */
 /* ========================================================= */
 
 .profile-card {
   background: #ffffff;
-  border-radius: 18px;
-  padding: 18px 18px 16px;
-  margin-bottom: 18px;
+  border-radius: 14px;
+  padding: 20px 20px 18px;
+  margin-bottom: 22px;
 
-  box-shadow:
-    0 8px 22px rgba(0,0,0,0.06),
-    0 2px 6px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.06);
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
-
-  transition: transform .22s ease, box-shadow .22s ease;
-}
-
-.profile-card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 12px 28px rgba(0,0,0,0.08),
-    0 4px 10px rgba(0,0,0,0.04);
+  gap: 18px;
 }
 
 /* Header: date + total */
@@ -1372,38 +1362,38 @@ html, body {
   justify-content: space-between;
   align-items: center;
 
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(0,0,0,0.55);
 }
 
 .profile-card-total {
-  font-weight: 600;
+  font-weight: 700;
   color: #111;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* Items */
 .profile-card-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   padding: 6px 0;
 }
 
 .profile-card-item + .profile-card-item {
   border-top: 1px solid rgba(0,0,0,0.06);
-  padding-top: 12px;
+  padding-top: 14px;
 }
 
 .profile-card-title {
-  font-size: 15px;
-  font-weight: 550;
+  font-size: 16px;
+  font-weight: 600;
   color: rgba(0,0,0,0.92);
   letter-spacing: -0.01em;
 }
 
 .profile-card-meta {
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(0,0,0,0.55);
 }
 
@@ -1411,6 +1401,6 @@ html, body {
 .profile-empty {
   text-align: center;
   padding: 40px 0;
-  font-size: 14px;
+  font-size: 15px;
   color: rgba(0,0,0,0.45);
 }
