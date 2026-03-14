@@ -209,39 +209,90 @@
         <div class="profile-username" id="profileUsername">@username</div>
 
         <div class="profile-hero-row">
-          <div class="profile-level-badge" id="profileLevel">PRIME CLIENT</div>
-          <div class="profile-loyalty-tag" id="profileLoyalty">BLACK MEMBER</div>
+          <div class="profile-level-badge" id="profileLevel">Премиум‑клиент</div>
+          <div class="profile-loyalty-tag" id="profileLoyalty">Реферальная программа</div>
         </div>
 
         <div class="profile-progress">
           <div class="profile-progress-fill" id="profileProgress"></div>
         </div>
 
-        <div class="profile-ltv" id="profileLTV">Lifetime value: 0 BYN</div>
+        <div class="profile-ltv" id="profileLTV">Вы сэкономили: 0 BYN</div>
       </div>
     </section>
 
     <!-- FINANCIAL PANEL -->
     <section class="profile-finance">
       <div class="profile-finance-item">
-        <div class="profile-finance-label">Balance</div>
-        <div class="profile-finance-value" id="profileBalance">0</div>
+        <div class="profile-finance-label">Баланс</div>
+        <div class="profile-finance-value" id="profileBalance">0 BYN</div>
       </div>
 
       <div class="profile-finance-item">
-        <div class="profile-finance-label">Bonus</div>
-        <div class="profile-finance-value" id="profileBonus">0</div>
+        <div class="profile-finance-label">Бонусы</div>
+        <div class="profile-finance-value" id="profileBonus">0 BYN</div>
       </div>
 
       <div class="profile-finance-item">
-        <div class="profile-finance-label">Orders</div>
+        <div class="profile-finance-label">Заказы</div>
         <div class="profile-finance-value" id="profileOrdersCount">0</div>
       </div>
 
       <div class="profile-finance-item">
-        <div class="profile-finance-label">Spent</div>
-        <div class="profile-finance-value" id="profileSpent">0</div>
+        <div class="profile-finance-label">Потрачено</div>
+        <div class="profile-finance-value" id="profileSpent">0 BYN</div>
       </div>
+    </section>
+
+    <!-- REFERRAL BLOCK -->
+    <section class="profile-referral">
+      <div class="profile-referral-header">
+        <div class="profile-referral-icon">🎁</div>
+        <div>
+          <div class="profile-referral-title">Реферальная программа</div>
+          <div class="profile-referral-sub">Приглашай друзей — получай бонусы</div>
+        </div>
+      </div>
+
+      <div class="profile-referral-status">
+        <span class="profile-status-badge" id="profileStatus">Премиум‑клиент</span>
+        <span class="profile-status-hint" id="profileStatusHint">
+          До следующего уровня осталось 3 друга
+        </span>
+      </div>
+
+      <div class="profile-progress profile-progress-ref">
+        <div class="profile-progress-fill" id="profileRefProgress"></div>
+      </div>
+
+      <div class="profile-referral-stats">
+        <div class="profile-referral-stat">
+          <div class="profile-referral-stat-label">Приглашено</div>
+          <div class="profile-referral-stat-value" id="profileRefInvited">0</div>
+        </div>
+        <div class="profile-referral-stat">
+          <div class="profile-referral-stat-label">Сделали заказ</div>
+          <div class="profile-referral-stat-value" id="profileRefPaid">0</div>
+        </div>
+        <div class="profile-referral-stat">
+          <div class="profile-referral-stat-label">Заработано</div>
+          <div class="profile-referral-stat-value" id="profileRefEarned">0 BYN</div>
+        </div>
+      </div>
+
+      <div class="profile-referral-link-block">
+        <div class="profile-referral-link-label">Ваша ссылка</div>
+        <div class="profile-referral-link-row">
+          <div class="profile-referral-link" id="profileRefLink">
+            https://t.me/vulica_bot?start=ref_xxx
+          </div>
+          <button class="profile-referral-copy" id="copyRefLinkBtn">копировать</button>
+        </div>
+      </div>
+
+      <button class="profile-referral-cta" id="shareRefLinkBtn">
+        Пригласить в Telegram
+      </button>
     </section>
 
     <!-- TABS -->
@@ -256,9 +307,9 @@
       <div id="profilePostponed" class="profile-section"></div>
     </main>
 
-    <!-- LOYALTY BLOCK -->
+    <!-- LOYALTY BLOCK (можно оставить как есть или потом адаптировать под статусы) -->
     <section class="profile-loyalty">
-      <div class="profile-loyalty-title">PRIME BENEFITS</div>
+      <div class="profile-loyalty-title">Преимущества премиум‑клиента</div>
       <div class="profile-loyalty-item">Персональная скидка</div>
       <div class="profile-loyalty-item">Персональный менеджер</div>
       <div class="profile-loyalty-item">Приоритетная доставка</div>
