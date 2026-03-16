@@ -196,103 +196,101 @@
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
 
-<!-- PROFILE MODAL — PREMIUM -->
-<div id="profileModal">
-  <div class="profile-modal">
+<!-- PROFILE MODAL — VULICA HYBRID PREMIUM -->
+<div id="profileModal" class="profile-modal-sheet">
 
-    <!-- HERO / IDENTITY -->
+  <div class="profile-sheet">
+
+    <!-- HERO -->
     <section class="profile-hero">
-      <div class="profile-avatar" id="profileAvatarProfile"></div>
+      <div class="profile-hero-avatar" id="profileAvatarProfile"></div>
 
-      <div class="profile-hero-info">
-        <div class="profile-name" id="profileName">Гость</div>
-        <div class="profile-username" id="profileUsername">@username</div>
+      <div class="profile-hero-text">
+        <div class="profile-hero-name" id="profileName">Гость</div>
+        <div class="profile-hero-username" id="profileUsername">@username</div>
 
-        <div class="profile-hero-row">
-          <div class="profile-level-badge" id="profileLevel">Премиум‑клиент</div>
-          <div class="profile-loyalty-tag" id="profileLoyalty">Реферальная программа</div>
+        <div class="profile-hero-tags">
+          <span class="profile-tag" id="profileLevel">Премиум‑клиент</span>
+          <span class="profile-tag-muted" id="profileLoyalty">Реферальная программа</span>
         </div>
 
         <div class="profile-progress">
           <div class="profile-progress-fill" id="profileProgress"></div>
         </div>
 
-        <div class="profile-ltv" id="profileLTV">Вы сэкономили: 0 BYN</div>
+        <div class="profile-hero-ltv" id="profileLTV">Вы сэкономили: 0 BYN</div>
       </div>
     </section>
 
-    <!-- FINANCIAL PANEL -->
-    <section class="profile-finance">
-      <div class="profile-finance-item">
-        <div class="profile-finance-label">Баланс</div>
-        <div class="profile-finance-value" id="profileBalance">0 BYN</div>
+    <!-- FINANCIAL GRID -->
+    <section class="profile-financial-grid">
+      <div class="pf-card">
+        <div class="pf-label">Баланс</div>
+        <div class="pf-value" id="profileBalance">0 BYN</div>
       </div>
 
-      <div class="profile-finance-item">
-        <div class="profile-finance-label">Бонусы</div>
-        <div class="profile-finance-value" id="profileBonus">0 BYN</div>
+      <div class="pf-card">
+        <div class="pf-label">Бонусы</div>
+        <div class="pf-value" id="profileBonus">0 BYN</div>
       </div>
 
-      <div class="profile-finance-item">
-        <div class="profile-finance-label">Заказы</div>
-        <div class="profile-finance-value" id="profileOrdersCount">0</div>
+      <div class="pf-card">
+        <div class="pf-label">Заказы</div>
+        <div class="pf-value" id="profileOrdersCount">0</div>
       </div>
 
-      <div class="profile-finance-item">
-        <div class="profile-finance-label">Потрачено</div>
-        <div class="profile-finance-value" id="profileSpent">0 BYN</div>
+      <div class="pf-card">
+        <div class="pf-label">Потрачено</div>
+        <div class="pf-value" id="profileSpent">0 BYN</div>
       </div>
     </section>
 
-    <!-- REFERRAL BLOCK -->
-    <section class="profile-referral">
-      <div class="profile-referral-header">
-        <div class="profile-referral-icon">🎁</div>
+    <!-- REFERRAL CARD -->
+    <section class="profile-referral-card">
+
+      <div class="pr-header">
+        <div class="pr-icon">🎁</div>
         <div>
-          <div class="profile-referral-title">Реферальная программа</div>
-          <div class="profile-referral-sub">Приглашай друзей — получай бонусы</div>
+          <div class="pr-title">Реферальная программа</div>
+          <div class="pr-sub">Приглашай друзей — получай бонусы</div>
         </div>
       </div>
 
-      <div class="profile-referral-status">
-        <span class="profile-status-badge" id="profileStatus">Премиум‑клиент</span>
-        <span class="profile-status-hint" id="profileStatusHint">
-          До следующего уровня осталось 3 друга
-        </span>
+      <div class="pr-status-row">
+        <span class="pr-status" id="profileStatus">Премиум‑клиент</span>
+        <span class="pr-hint" id="profileStatusHint">До следующего уровня осталось 3 друга</span>
       </div>
 
-      <div class="profile-progress profile-progress-ref">
+      <div class="profile-progress pr-progress">
         <div class="profile-progress-fill" id="profileRefProgress"></div>
       </div>
 
-      <div class="profile-referral-stats">
-        <div class="profile-referral-stat">
-          <div class="profile-referral-stat-label">Приглашено</div>
-          <div class="profile-referral-stat-value" id="profileRefInvited">0</div>
+      <div class="pr-stats">
+        <div class="pr-stat">
+          <div class="pr-stat-label">Приглашено</div>
+          <div class="pr-stat-value" id="profileRefInvited">0</div>
         </div>
-        <div class="profile-referral-stat">
-          <div class="profile-referral-stat-label">Сделали заказ</div>
-          <div class="profile-referral-stat-value" id="profileRefPaid">0</div>
+
+        <div class="pr-stat">
+          <div class="pr-stat-label">Сделали заказ</div>
+          <div class="pr-stat-value" id="profileRefPaid">0</div>
         </div>
-        <div class="profile-referral-stat">
-          <div class="profile-referral-stat-label">Заработано</div>
-          <div class="profile-referral-stat-value" id="profileRefEarned">0 BYN</div>
+
+        <div class="pr-stat">
+          <div class="pr-stat-label">Заработано</div>
+          <div class="pr-stat-value" id="profileRefEarned">0 BYN</div>
         </div>
       </div>
 
-      <div class="profile-referral-link-block">
-        <div class="profile-referral-link-label">Ваша ссылка</div>
-        <div class="profile-referral-link-row">
-          <div class="profile-referral-link" id="profileRefLink">
-            https://t.me/vulica_bot?start=ref_xxx
-          </div>
-          <button class="profile-referral-copy" id="copyRefLinkBtn">копировать</button>
+      <div class="pr-link-block">
+        <div class="pr-link-label">Ваша ссылка</div>
+        <div class="pr-link-row">
+          <div class="pr-link" id="profileRefLink">https://t.me/vulica_bot?start=ref_xxx</div>
+          <button class="pr-copy" id="copyRefLinkBtn">копировать</button>
         </div>
       </div>
 
-      <button class="profile-referral-cta" id="shareRefLinkBtn">
-        Пригласить в Telegram
-      </button>
+      <button class="pr-cta" id="shareRefLinkBtn">Пригласить в Telegram</button>
     </section>
 
     <!-- TABS -->
@@ -300,23 +298,24 @@
       <button class="profile-tab active" data-tab="orders">Покупки</button>
       <button class="profile-tab" data-tab="postponed">Отложенные</button>
     </section>
-    
-    <!-- CONTENT -->
+
+    <!-- BODY -->
     <main class="profile-body">
       <div id="profileOrders" class="profile-section active"></div>
       <div id="profilePostponed" class="profile-section"></div>
     </main>
 
-    <!-- LOYALTY BLOCK (можно оставить как есть или потом адаптировать под статусы) -->
-    <section class="profile-loyalty">
-      <div class="profile-loyalty-title">Преимущества премиум‑клиента</div>
-      <div class="profile-loyalty-item">Персональная скидка</div>
-      <div class="profile-loyalty-item">Персональный менеджер</div>
-      <div class="profile-loyalty-item">Приоритетная доставка</div>
+    <!-- LOYALTY -->
+    <section class="profile-loyalty-card">
+      <div class="pl-title">Преимущества премиум‑клиента</div>
+      <div class="pl-item">Персональная скидка</div>
+      <div class="pl-item">Персональный менеджер</div>
+      <div class="pl-item">Приоритетная доставка</div>
     </section>
 
   </div>
 </div>
+
 
 
   <script src="/app.js?v=10"></script>
