@@ -956,256 +956,50 @@ html, body {
   cursor: default;
 }
 /* ========================= */
-/*     SHARE BUTTON (COMPETITOR STYLE) */
+/*   PROFILE — VULICA HYBRID */
 /* ========================= */
 
-.share-btn-competitor {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  transition: background .15s ease, opacity .15s ease;
-}
-
-.share-btn-competitor svg {
-  width: 20px;
-  height: 20px;
-  color: #111;
-}
-
-.share-btn-competitor:active {
-  background: #f2f2f2;
-  opacity: 0.9;
-}
-
-/* ========================= */
-/*   PROFILE — PREMIUM LAYER */
-/* ========================= */
-
-#profileModal {
+.profile-modal-sheet {
   position: fixed;
   inset: 0;
-
-  /* глубокий, мягкий, дорогой слой */
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(22px) saturate(180%);
-  -webkit-backdrop-filter: blur(22px) saturate(180%);
-
-  display: flex;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  display: none;
   justify-content: center;
   align-items: flex-end;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .45s cubic-bezier(.25,.46,.45,.94);
-
   z-index: 9999;
+  opacity: 0;
+  transition: opacity .35s ease;
 }
 
-#profileModal.open {
+.profile-modal-sheet.open {
+  display: flex;
   opacity: 1;
-  pointer-events: auto;
 }
-#profileModal .profile-modal {
+
+.profile-sheet {
   width: 100%;
   max-width: 520px;
   height: 92vh;
-
-  background: rgba(255,255,255,0.82);
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
-
+  background: #fff;
   border-radius: 28px 28px 0 0;
-  overflow: hidden;
-
-  transform: translateY(60px);
-  opacity: 0;
-
-  box-shadow:
-    0 -2px 18px rgba(0,0,0,0.06),
-    0 -12px 42px rgba(0,0,0,0.12);
-
-  transition:
-    transform .55s cubic-bezier(.25,.46,.45,.94),
-    opacity .55s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 40px;
 }
 
-#profileModal.open .profile-modal {
-  transform: translateY(0);
-  opacity: 1;
-}
-.profile-header {
-  padding: 32px 26px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(18px) saturate(180%);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.profile-header .profile-avatar {
-  width: 78px;
-  height: 78px;
-  border-radius: 999px;
-  background: #f2f2f2;
-  overflow: hidden;
-  box-shadow:
-    inset 0 1px 4px rgba(255,255,255,0.65),
-    0 4px 14px rgba(0,0,0,0.08);
-}
-
-.profile-name {
-  font-size: 22px;
-  font-weight: 650;
-  letter-spacing: -0.3px;
-}
-
-.profile-username {
-  font-size: 14px;
-  color: rgba(0,0,0,0.45);
-}
-.profile-tabs {
-  display: flex;
-  gap: 8px;
-  padding: 16px 20px;
-  background: transparent;
-}
-
-.profile-tab {
-  flex: 1;
-  padding: 12px 0;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(0,0,0,0.06);
-
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(0,0,0,0.65);
-
-  transition: all .25s ease;
-}
-
-.profile-tab.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.18),
-    inset 0 0 12px rgba(255,255,255,0.22);
-}
-.profile-section .order-item {
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-
-.order-item .date {
-  font-size: 13px;
-  color: rgba(0,0,0,0.45);
-  margin-bottom: 6px;
-}
-
-.order-item .price {
-  font-size: 18px;
-  font-weight: 650;
-  margin-bottom: 6px;
-}
-
-.order-item .title {
-  font-size: 15px;
-  font-weight: 550;
-  color: rgba(0,0,0,0.92);
-}
-
-.order-item .meta {
-  font-size: 13px;
-  color: rgba(0,0,0,0.55);
-}
-/* ========================================================= */
-/*                VULICA PRIME CARD PROFILE                  */
-/* ========================================================= */
-
-/* ROOT */
-
-#profileModal {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #f3f4f6;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: none;
-  justify-content: center;
-  align-items: stretch;
-  opacity: 0;
-  transition: opacity .26s ease;
-}
-
-#profileModal.open {
-  opacity: 1;
-}
-
-.profile-shell {
-  width: 100%;
-  max-width: 520px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #f3f4f6;
-}
-
-/* TOP BAR */
-
-.profile-topbar {
-  height: 56px;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #ffffff;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  font-size: 14px;
-  color: #111;
-}
-
-.profile-back-btn {
-  border: none;
-  background: transparent;
-  padding: 6px 0;
-  font-size: 14px;
-  color: #111;
-  cursor: pointer;
-}
-
-.profile-brand-mark {
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(0,0,0,0.40);
-}
-
-/* HERO / IDENTITY */
-
+/* HERO */
 .profile-hero {
-  padding: 22px 20px 16px;
   display: flex;
-  align-items: center;
   gap: 16px;
+  padding: 26px 22px 18px;
 }
 
-.profile-avatar-large {
+.profile-hero-avatar {
   width: 64px;
   height: 64px;
   border-radius: 16px;
-  background: #dfe1e6;
+  background: #e9eaec;
   background-size: cover;
   background-position: center;
 }
@@ -1220,7 +1014,6 @@ html, body {
   font-size: 20px;
   font-weight: 650;
   letter-spacing: -0.25px;
-  color: #0f0f0f;
 }
 
 .profile-hero-username {
@@ -1228,102 +1021,207 @@ html, body {
   color: rgba(0,0,0,0.55);
 }
 
-.profile-hero-row {
+.profile-hero-tags {
   display: flex;
-  align-items: center;
   gap: 8px;
   margin-top: 4px;
 }
 
-.profile-level-badge {
-  padding: 4px 8px;
+.profile-tag {
+  padding: 3px 8px;
   border-radius: 999px;
   border: 1px solid rgba(0,0,0,0.10);
   font-size: 11px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(0,0,0,0.70);
+  color: rgba(0,0,0,0.75);
 }
 
-.profile-loyalty-tag {
+.profile-tag-muted {
   font-size: 11px;
   color: rgba(0,0,0,0.45);
 }
 
 .profile-progress {
-  margin-top: 6px;
   width: 100%;
   height: 4px;
-  border-radius: 999px;
   background: rgba(0,0,0,0.06);
+  border-radius: 999px;
   overflow: hidden;
+  margin-top: 6px;
 }
 
 .profile-progress-fill {
   height: 100%;
-  width: 40%; /* динамика из JS */
+  width: 40%;
   background: #111;
 }
 
-/* LIFETIME VALUE */
-
-.profile-ltv {
-  padding: 0 20px 10px;
+.profile-hero-ltv {
   font-size: 12px;
   color: rgba(0,0,0,0.55);
+  margin-top: 6px;
 }
 
-/* FINANCIAL PANEL */
-
-.profile-finance {
-  padding: 4px 20px 14px;
+/* FINANCIAL GRID */
+.profile-financial-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+  padding: 0 22px 20px;
 }
 
-.profile-finance-item {
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 10px 8px 8px;
+.pf-card {
+  background: #fff;
   border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+  padding: 10px 8px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.profile-finance-label {
+.pf-label {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: rgba(0,0,0,0.45);
 }
 
-.profile-finance-value {
+.pf-value {
   font-size: 14px;
   font-weight: 600;
   color: #111;
 }
 
-/* TABS */
+/* REFERRAL CARD */
+.profile-referral-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 20px 18px;
+  margin: 0 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
+.pr-header {
+  display: flex;
+  gap: 12px;
+}
+
+.pr-icon {
+  font-size: 22px;
+}
+
+.pr-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.pr-sub {
+  font-size: 13px;
+  color: rgba(0,0,0,0.55);
+}
+
+.pr-status-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pr-status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pr-hint {
+  font-size: 12px;
+  color: rgba(0,0,0,0.55);
+}
+
+.pr-progress {
+  margin-top: -4px;
+}
+
+.pr-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.pr-stat-label {
+  font-size: 12px;
+  color: rgba(0,0,0,0.55);
+}
+
+.pr-stat-value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pr-link-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pr-link-label {
+  font-size: 12px;
+  color: rgba(0,0,0,0.55);
+}
+
+.pr-link-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pr-link {
+  flex: 1;
+  font-size: 13px;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+
+.pr-copy {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pr-cta {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* TABS */
 .profile-tabs {
   display: flex;
   gap: 8px;
-  padding: 10px 20px 0;
+  padding: 0 22px;
 }
 
 .profile-tab {
   flex: 1;
-  padding: 10px 0;
+  padding: 12px 0;
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,0.08);
-  background: #ffffff;
-  font-size: 13px;
+  background: #fff;
+  font-size: 14px;
   font-weight: 550;
   color: rgba(0,0,0,0.55);
-  cursor: pointer;
-  transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 
 .profile-tab.active {
@@ -1333,12 +1231,8 @@ html, body {
 }
 
 /* BODY */
-
 .profile-body {
-  flex: 1;
-  padding: 14px 20px 24px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  padding: 20px 22px;
 }
 
 .profile-section {
@@ -1349,102 +1243,26 @@ html, body {
   display: block;
 }
 
-/* ORDER LIST (STRICT, CLEAN) */
-
-.profile-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 14px 14px 10px;
-  margin-bottom: 14px;
+/* LOYALTY */
+.profile-loyalty-card {
+  background: #fff;
   border: 1px solid rgba(0,0,0,0.06);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.profile-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: rgba(0,0,0,0.55);
-}
-
-.profile-card-total {
-  font-weight: 600;
-  color: #111;
-  font-size: 13px;
-}
-
-.profile-card-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 6px 0;
-}
-
-.profile-card-item + .profile-card-item {
-  border-top: 1px solid rgba(0,0,0,0.06);
-  padding-top: 10px;
-}
-
-.profile-card-title {
-  font-size: 14px;
-  font-weight: 550;
-  color: rgba(0,0,0,0.92);
-  letter-spacing: -0.01em;
-}
-
-.profile-card-meta {
-  font-size: 12px;
-  color: rgba(0,0,0,0.55);
-}
-
-.profile-card-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 4px;
-}
-
-.profile-reorder-btn {
-  border: none;
-  background: transparent;
-  font-size: 12px;
-  font-weight: 500;
-  color: #111;
-  cursor: pointer;
-}
-
-/* LOYALTY BLOCK */
-
-.profile-loyalty {
-  margin-top: 18px;
-  padding: 14px 14px 12px;
-  border-radius: 12px;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 14px;
+  padding: 18px 18px;
+  margin: 0 22px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.profile-loyalty-title {
+.pl-title {
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   color: rgba(0,0,0,0.55);
 }
 
-.profile-loyalty-item {
-  font-size: 13px;
-  color: rgba(0,0,0,0.75);
-}
-
-/* EMPTY STATE */
-
-.profile-empty {
-  text-align: center;
-  padding: 40px 0;
+.pl-item {
   font-size: 14px;
-  color: rgba(0,0,0,0.45);
+  color: rgba(0,0,0,0.75);
 }
