@@ -7,13 +7,13 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="/styles-v2.css?v=3" />
-  <!-- TELEGRAM / OPEN GRAPH -->
-<meta property="og:title" content="vulica.SNKRS — магазин кроссовок" />
-<meta property="og:description" content="Оригинальные кроссовки. Быстрая доставка по РБ. Лучшие цены." />
-<meta property="og:image" content="https://vulica.store/static/images/asics-gel-pickax-box.jpg" />
-<meta property="og:url" content="https://vulica.store" />
-<meta name="twitter:card" content="summary_large_image" />
 
+  <!-- TELEGRAM / OPEN GRAPH -->
+  <meta property="og:title" content="vulica.SNKRS — магазин кроссовок" />
+  <meta property="og:description" content="Оригинальные кроссовки. Быстрая доставка по РБ. Лучшие цены." />
+  <meta property="og:image" content="https://vulica.store/static/images/asics-gel-pickax-box.jpg" />
+  <meta property="og:url" content="https://vulica.store" />
+  <meta name="twitter:card" content="summary_large_image" />
 </head>
 
 <body>
@@ -22,7 +22,6 @@
   <div id="productModal" class="modal hidden">
     <div class="modal-content modal-product">
 
-      <!-- HEADER INSIDE PRODUCT MODAL -->
       <header class="header modal-inner-header">
         <div class="brand">vulica.SNKRS</div>
 
@@ -32,85 +31,65 @@
         </div>
       </header>
 
-      <!-- SCROLLABLE BODY -->
       <div class="modal-body">
 
-        <!-- FULLSCREEN GALLERY -->
         <div class="modal-images">
           <div class="gallery-stage">
             <div class="carousel" id="carousel"></div>
           </div>
         </div>
 
-        <!-- THUMBNAILS -->
         <div class="thumb-strip" id="thumbStrip"></div>
 
-        <!-- PRODUCT INFO -->
         <div class="modal-info">
           <section class="modal-section modal-main">
 
-            <!-- OLD BRAND ROW (kept for JS, hidden via CSS) -->
             <div class="brand-row" style="display:none;">
               <span id="modalBrand" class="brand-small"></span>
               <span class="dot">·</span>
               <span id="modalStockInline" class="stock-inline"></span>
             </div>
 
-            <!-- NEW PREMIUM TITLE ROW -->
-          <div class="modal-title-row">
-  <h2 id="modalTitle" class="modal-title"></h2>
+            <div class="modal-title-row">
+              <h2 id="modalTitle" class="modal-title"></h2>
+            </div>
 
+            <div class="price-row">
+              <div id="modalPrice" class="modal-price"></div>
+              <div id="stockBadge" class="stock-pill"></div>
+            </div>
 
-</div>
-
-
-<div class="price-row">
-  <div id="modalPrice" class="modal-price"></div>
-  <div id="stockBadge" class="stock-pill"></div>
-</div>
-
-
-            <!-- MATERIALS (DETAILS) -->
             <div class="section-title">Описание</div>
             <div id="modalMaterials" class="materials-block"></div>
-            
-<!-- SIZES -->
-<div class="sizes-label">Размеры</div>
 
-<div class="sizes-block">
+            <div class="sizes-label">Размеры</div>
 
-  <!-- Строка размеров — только размеры -->
-  <div class="sizes-row">
-    <div id="modalSizes" class="modal-sizes"></div>
-  </div>
+            <div class="sizes-block">
+              <div class="sizes-row">
+                <div id="modalSizes" class="modal-sizes"></div>
+              </div>
+            </div>
 
-</div>
+            <div class="delivery-inline">
+              <span class="delivery-icon">🚚</span>
+              <span class="delivery-text">
+                Доставка по РБ 2–3 дня<br>
+                Возврат 14 дней
+              </span>
+            </div>
 
-<!-- DELIVERY -->
-<div class="delivery-inline">
-  <span class="delivery-icon">🚚</span>
-  <span class="delivery-text">
-    Доставка по РБ 2–3 дня<br>
-    Возврат 14 дней
-  </span>
-</div>
+          </section>
+        </div>
+      </div>
 
-          </section> <!-- закрываем modal-section -->
-        </div> <!-- закрываем modal-info -->
-      </div> <!-- закрываем modal-body -->
-
-      <!-- FIXED ACTION BUTTONS -->
       <div class="modal-actions-fixed">
         <button id="reserveBtn" class="secondary reserve-btn">Забронировать</button>
         <button id="addToCartBtn" class="primary modal-cta">В корзину</button>
       </div>
 
-    </div> <!-- закрываем modal-content modal-product -->
-  </div> <!-- закрываем productModal -->
+    </div>
+  </div>
 
-
-
-         
   <!-- CATALOG VIEW -->
   <div id="catalogView">
 
@@ -123,14 +102,12 @@
       </div>
     </header>
 
-    <!-- MYSTERY BOX -->
     <section class="mystery-box" id="mysteryBox">
       <h2>🎁 Тайная коробка дня</h2>
       <p>Открой, чтобы узнать пару дня</p>
       <button id="openMysteryBtn" class="primary">Открыть</button>
     </section>
 
-    <!-- FILTERS -->
     <section class="filters" id="filtersSection">
       <div class="filter-row">
         <input id="searchInput" type="text" placeholder="Поиск модели..." />
@@ -152,10 +129,8 @@
       </div>
     </section>
 
-    <!-- CATALOG -->
     <main class="catalog" id="catalog"></main>
 
-    <!-- MYSTERY MODAL -->
     <div class="modal hidden" id="mysteryModal">
       <div class="modal-content" style="max-width: 420px; text-align:center;">
         <button id="closeMystery" class="close-btn">×</button>
@@ -171,7 +146,6 @@
       </div>
     </div>
 
-    <!-- CART DRAWER -->
     <div class="drawer hidden" id="cartDrawer">
       <div class="drawer-header">
         <strong>Корзина</strong>
@@ -191,80 +165,79 @@
 
   </div>
 
-  <!-- PRODUCT VIEW (Telegram SPA) -->
+  <!-- PRODUCT VIEW -->
   <div id="productView" class="hidden">
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
 
-<div id="profileModal" class="profile-modal-sheet">
- <div class="profile-sheet">
+  <!-- PROFILE MODAL (VULICA SIGNATURE MIX) -->
+  <div id="profileModal" class="profile-modal-sheet hidden">
+    <div class="profile-sheet">
+      <div class="vulica-ref">
 
-  <div class="profile-label">VULICA / REFERRAL CENTER</div>
+        <div class="vulica-header">
+          <div class="vulica-header-top">VULICA</div>
+          <div class="vulica-header-sub">REFERRAL CENTER</div>
+        </div>
 
-  <section class="profile-hero">
-    <div class="profile-hero-avatar" id="profileAvatar"></div>
-    <div class="profile-hero-text">
-      <div class="profile-hero-name" id="profileName">Гость</div>
-      <div class="profile-hero-username" id="profileUsername">@username</div>
-    </div>
-  </section>
+        <div class="vulica-hero">
+          <div class="vulica-hero-avatar" id="profileAvatarProfile"></div>
+          <div class="vulica-hero-text">
+            <div class="vulica-hero-title">Вы в клубе VULICA</div>
+            <div class="vulica-hero-username" id="profileUsername">@username</div>
+          </div>
+        </div>
 
-  <section class="profile-bonus-card">
-    <div class="profile-bonus-label">Ваши бонусы</div>
-    <div class="profile-bonus-value" id="bonusValue">48 BYN</div>
-    <div class="profile-bonus-hint">Можно оплатить до 50% заказа</div>
-  </section>
+        <div class="vulica-card glass vulica-bonus-card">
+          <div class="vulica-bonus-value" id="bonusValue">48 BYN</div>
+          <div class="vulica-bonus-label">ваши бонусы</div>
+          <div class="vulica-bonus-hint">можно оплатить до 50% заказа</div>
+        </div>
 
-  <section class="profile-offer">
-    <div class="profile-offer-title">Пригласи друга — получи 12 BYN</div>
-    <div class="profile-offer-sub">Друг получит 10 BYN на первую покупку</div>
-  </section>
+        <div class="vulica-offer">
+          <div class="vulica-offer-title">ПРИГЛАСИ ДРУГА — ПОЛУЧИ 12 BYN</div>
+          <div class="vulica-offer-sub">Друг получит 10 BYN на покупку</div>
+        </div>
 
-  <button class="profile-primary-cta" id="inviteBtn">
-    Пригласить друга
-  </button>
+        <button class="vulica-cta" id="inviteBtn">ПРИГЛАСИТЬ ДРУГА</button>
 
-  <section class="profile-ref-link-card">
-    <div class="profile-ref-link-label">Ваша ссылка</div>
-    <div class="profile-ref-link-row">
-      <div class="profile-ref-link" id="refLink">
-        https://t.me/vulica_bot?start=ref_xxx
+        <div class="vulica-card vulica-link-card">
+          <div class="vulica-link-label">Ваша ссылка</div>
+          <div class="vulica-link-row">
+            <div class="vulica-link" id="refLink">https://t.me/vulica_bot?start=ref_xxx</div>
+            <button class="vulica-link-copy" id="copyRefLinkBtn">копировать</button>
+          </div>
+        </div>
+
+        <div class="vulica-stats">
+          <div class="vulica-stat">
+            <div class="vulica-stat-value" id="statInvited">12</div>
+            <div class="vulica-stat-label">Приглашено</div>
+          </div>
+          <div class="vulica-stat">
+            <div class="vulica-stat-value" id="statOrdered">4</div>
+            <div class="vulica-stat-label">Заказали</div>
+          </div>
+          <div class="vulica-stat">
+            <div class="vulica-stat-value" id="statEarned">48 BYN</div>
+            <div class="vulica-stat-label">Заработано</div>
+          </div>
+        </div>
+
+        <div class="vulica-how">
+          <div class="vulica-how-title">КАК ЭТО РАБОТАЕТ</div>
+          <div class="vulica-how-step">1 — Отправь ссылку</div>
+          <div class="vulica-how-step">2 — Друг делает заказ</div>
+          <div class="vulica-how-step">3 — Ты получаешь бонусы</div>
+        </div>
+
+        <div class="vulica-card glass vulica-gift-card">
+          Пригласи ещё 3 друзей и получи подарок 🎁
+        </div>
+
       </div>
-      <button class="profile-ref-copy" id="copyRefLinkBtn">копировать</button>
     </div>
-  </section>
-
-  <section class="profile-stats-row">
-    <div class="profile-stat">
-      <div class="profile-stat-value" id="statInvited">12</div>
-      <div class="profile-stat-label">Приглашено</div>
-    </div>
-    <div class="profile-stat">
-      <div class="profile-stat-value" id="statOrdered">4</div>
-      <div class="profile-stat-label">Сделали заказ</div>
-    </div>
-    <div class="profile-stat">
-      <div class="profile-stat-value" id="statEarned">48 BYN</div>
-      <div class="profile-stat-label">Заработано</div>
-    </div>
-  </section>
-
-  <section class="profile-how">
-    <div class="profile-how-title">Как это работает</div>
-    <div class="profile-how-step">1 — Отправь ссылку другу</div>
-    <div class="profile-how-step">2 — Друг делает заказ</div>
-    <div class="profile-how-step">3 — Ты получаешь бонусы</div>
-  </section>
-
-  <section class="profile-gift-card">
-    Пригласи ещё 3 друзей и получи подарок 🎁
-  </section>
-
-</div>
-
-
-
-
+  </div>
 
   <script src="/app.js?v=10"></script>
 
