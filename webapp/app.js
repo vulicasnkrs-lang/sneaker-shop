@@ -84,6 +84,9 @@ const els = {
   profileAvatarProfile: document.getElementById('profileAvatarProfile'),
   profileName: document.getElementById('profileName'),
   profileUsername: document.getElementById('profileUsername'),
+  profileTabs: document.querySelectorAll('.profile-tab'),
+  profileOrders: document.getElementById('profileOrders'),
+  profilePostponed: document.getElementById('profilePostponed'),
 
 };
 
@@ -114,7 +117,10 @@ if (tg?.initDataUnsafe?.start_param) {
   renderCatalog();
   attachEvents();
   initProfileFromTelegram();
- 
+  renderProfileSections();
+  renderProfileOrders();
+  renderProfilePostponed();
+
   if (tg) {
     tg.expand();
     tg.MainButton.text = 'Оформить заказ';
@@ -808,6 +814,126 @@ function updateCartBadge() {
   els.cartBtnModal.textContent = formatPrice(cartTotal());
 }
 
+/* ========================= */
+/*       PROFILE SECTIONS    */
+/* ========================= */
+
+function switchProfileTab(tab) {
+  const sections = {
+    orders: els.profileOrders,
+    postponed: els.profilePostponed
+  };
+
+  Object.values(sections).forEach(s => s.classList.remove('active'));
+  if (sections[tab]) sections[tab].classList.add('active');
+}
+
+function renderProfileSections() {
+  switchProfileTab('orders');
+}
+
+/* ========================= */
+/*          ORDERS           */
+/* ========================= */
+
+function renderProfileOrders() {
+  els.profileOrders.innerHTML = '';
+
+  if (!state.orders.length) {
+    const empty = document.createElement('div');
+    empty.className = 'profile-empty';
+    empty.textContent = 'Покупок пока нет';
+    els.profileOrders.appendChild(empty);
+    return;
+  }
+
+  const sorted = [...state.orders].sort((a, b) => new Date(b.ts) - new Date(a.ts));
+
+  sorted.forEach(order => {
+    const node = document.createElement('div');
+    node.className = 'profile-order';
+
+    const date = new Date(order.ts);
+    const dateStr = date.toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+    node.innerHTML = `
+      <div class="profile-order-header">
+        <div class="profile-order-date">${dateStr}</div>
+        <div class="profile-order-total">${formatPrice(order.total)}</div>
+      </div>
+      <div class="profile-order-items">
+        ${order.items.map(it => `
+          <div class="profile-order-item">
+            <div class="title">${it.title}</div>
+            <div class="meta">Размер ${it.size} • ${it.qty} шт.</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    els.profileOrders.appendChild(node);
+  });
+}
+
+/* ========================= */
+/*       PROFILE POSTPONED   */
+/* ========================= */
+
+function renderProfilePostponed() {
+  els.profilePostponed.innerHTML = '';
+
+  cleanupPostponed();
+
+  if (!state.postponed.length) {
+    const empty = document.createElement('div');
+    empty.className = 'profile-empty';
+    empty.textContent = 'Отложенных пар нет';
+    els.profilePostponed.appendChild(empty);
+    return;
+  }
+
+  state.postponed.forEach(entry => {
+    const p = state.products.find(x => x.id === entry.id);
+    if (!p) return;
+
+    const node = document.createElement('div');
+    node.className = 'profile-postponed-item';
+
+    const cover = p.images?.[0] || '';
+    const untilDate = new Date(entry.until);
+    const diffMs = untilDate.getTime() - Date.now();
+    const daysLeft = Math.max(1, Math.ceil(diffMs / 86400000));
+
+    node.innerHTML = `
+      <div class="profile-postponed-left">
+        <img src="${cover}" alt="${p.title}">
+        <div>
+          <div class="title">${p.title}</div>
+          <div class="meta">${p.brand}</div>
+          <div class="meta">Ещё ~${daysLeft} дн.</div>
+        </div>
+      </div>
+      <div class="profile-postponed-right">
+        <div class="price">${formatPrice(p.price)}</div>
+        <button class="secondary small" data-id="${p.id}">Вернуть в каталог</button>
+      </div>
+    `;
+
+    node.querySelector('button').addEventListener('click', () => {
+      state.postponed = state.postponed.filter(x => x.id !== p.id);
+      savePostponed();
+      state.filtered = applyPostponedFilter([...state.products]);
+      renderCatalog();
+      renderProfilePostponed();
+    });
+
+    els.profilePostponed.appendChild(node);
+  });
+}
 
 /* ========================= */
 /*          CHECKOUT         */
@@ -842,6 +968,7 @@ async function checkout() {
     if (res.ok) {
       state.orders.push(order);
       saveOrders();
+      renderProfileOrders();
 
       tg?.showPopup({
         title: 'Заказ',
@@ -1099,11 +1226,24 @@ function attachEvents() {
 
   els.profileAvatarHeader.addEventListener('click', () => {
     openProfileModal();
-  
+    renderProfileSections();
+    renderProfileOrders();
+    renderProfilePostponed();
   });
 
   els.profileAvatarModal.addEventListener('click', () => {
     openProfileModal();
+    renderProfileSections();
+    renderProfileOrders();
+    renderProfilePostponed();
+  });
+
+  els.profileTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      els.profileTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      switchProfileTab(tab.dataset.tab);
+    });
   });
 
   if (!tg) {
@@ -1212,4 +1352,3 @@ function initParallaxGallery() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
-
