@@ -197,146 +197,69 @@
   </div>
 
 <div id="profileModal" class="profile-modal-sheet">
-  <div class="profile-sheet">
+ <div class="profile-sheet">
 
-    <!-- HERO -->
-    <section class="profile-hero">
-      <div class="profile-hero-avatar" id="profileAvatarProfile"></div>
+  <div class="profile-label">VULICA / REFERRAL CENTER</div>
 
-      <div class="profile-hero-text">
-        <div class="profile-hero-name" id="profileName">Гость</div>
-        <div class="profile-hero-username" id="profileUsername">@username</div>
+  <section class="profile-hero">
+    <div class="profile-hero-avatar" id="profileAvatar"></div>
+    <div class="profile-hero-text">
+      <div class="profile-hero-name" id="profileName">Гость</div>
+      <div class="profile-hero-username" id="profileUsername">@username</div>
+    </div>
+  </section>
 
-        <div class="profile-hero-tags">
-          <span class="profile-tag" id="profileLevel">Премиум‑клиент</span>
-          <span class="profile-tag-muted" id="profileLoyalty">Реферальная программа</span>
-        </div>
+  <section class="profile-bonus-card">
+    <div class="profile-bonus-label">Ваши бонусы</div>
+    <div class="profile-bonus-value" id="bonusValue">48 BYN</div>
+    <div class="profile-bonus-hint">Можно оплатить до 50% заказа</div>
+  </section>
 
-        <div class="profile-progress">
-          <div class="profile-progress-fill" id="profileProgress"></div>
-        </div>
+  <section class="profile-offer">
+    <div class="profile-offer-title">Пригласи друга — получи 12 BYN</div>
+    <div class="profile-offer-sub">Друг получит 10 BYN на первую покупку</div>
+  </section>
 
-        <div class="profile-hero-ltv" id="profileLTV">Вы сэкономили: 0 BYN</div>
+  <button class="profile-primary-cta" id="inviteBtn">
+    Пригласить друга
+  </button>
+
+  <section class="profile-ref-link-card">
+    <div class="profile-ref-link-label">Ваша ссылка</div>
+    <div class="profile-ref-link-row">
+      <div class="profile-ref-link" id="refLink">
+        https://t.me/vulica_bot?start=ref_xxx
       </div>
-    </section>
+      <button class="profile-ref-copy" id="copyRefLinkBtn">копировать</button>
+    </div>
+  </section>
 
-    <!-- FINANCIAL GRID -->
-    <section class="profile-financial-grid">
-      <div class="pf-card">
-        <div class="pf-label">Баланс</div>
-        <div class="pf-value" id="profileBalance">0 BYN</div>
-      </div>
+  <section class="profile-stats-row">
+    <div class="profile-stat">
+      <div class="profile-stat-value" id="statInvited">12</div>
+      <div class="profile-stat-label">Приглашено</div>
+    </div>
+    <div class="profile-stat">
+      <div class="profile-stat-value" id="statOrdered">4</div>
+      <div class="profile-stat-label">Сделали заказ</div>
+    </div>
+    <div class="profile-stat">
+      <div class="profile-stat-value" id="statEarned">48 BYN</div>
+      <div class="profile-stat-label">Заработано</div>
+    </div>
+  </section>
 
-      <div class="pf-card">
-        <div class="pf-label">Бонусы</div>
-        <div class="pf-value" id="profileBonus">0 BYN</div>
-      </div>
+  <section class="profile-how">
+    <div class="profile-how-title">Как это работает</div>
+    <div class="profile-how-step">1 — Отправь ссылку другу</div>
+    <div class="profile-how-step">2 — Друг делает заказ</div>
+    <div class="profile-how-step">3 — Ты получаешь бонусы</div>
+  </section>
 
-      <div class="pf-card">
-        <div class="pf-label">Заказы</div>
-        <div class="pf-value" id="profileOrdersCount">0</div>
-      </div>
+  <section class="profile-gift-card">
+    Пригласи ещё 3 друзей и получи подарок 🎁
+  </section>
 
-      <div class="pf-card">
-        <div class="pf-label">Потрачено</div>
-        <div class="pf-value" id="profileSpent">0 BYN</div>
-      </div>
-    </section>
-
-    <!-- REFERRAL PANEL -->
-    <section class="profile-referral-card">
-
-      <div class="pr-header">
-        <div class="pr-icon">🎁</div>
-        <div>
-          <div class="pr-title">Реферальная программа</div>
-          <div class="pr-sub">Приглашай друзей — получай бонусы</div>
-        </div>
-      </div>
-
-      <div class="pr-divider"></div>
-
-      <div class="pr-status-row">
-        <span class="pr-status" id="profileStatus">Премиум‑клиент</span>
-        <span class="pr-hint" id="profileStatusHint">До следующего уровня осталось 3 друга</span>
-      </div>
-
-      <div class="profile-progress pr-progress">
-        <div class="profile-progress-fill" id="profileRefProgress"></div>
-      </div>
-
-      <div class="pr-divider"></div>
-
-      <div class="pr-stats">
-        <div class="pr-stat">
-          <div class="pr-stat-label">Приглашено</div>
-          <div class="pr-stat-value" id="profileRefInvited">0</div>
-        </div>
-
-        <div class="pr-stat">
-          <div class="pr-stat-label">Сделали заказ</div>
-          <div class="pr-stat-value" id="profileRefPaid">0</div>
-        </div>
-
-        <div class="pr-stat">
-          <div class="pr-stat-label">Заработано</div>
-          <div class="pr-stat-value" id="profileRefEarned">0 BYN</div>
-        </div>
-      </div>
-
-      <div class="pr-divider"></div>
-
-      <div class="pr-link-block">
-        <div class="pr-link-label">Ваша ссылка</div>
-        <div class="pr-link-row">
-          <div class="pr-link" id="profileRefLink">https://t.me/vulica_bot?start=ref_xxx</div>
-          <button class="pr-copy" id="copyRefLinkBtn">копировать</button>
-        </div>
-      </div>
-
-      <button class="pr-cta" id="shareRefLinkBtn">Пригласить в Telegram</button>
-    </section>
-
-    <!-- TABS -->
-    <section class="profile-tabs">
-      <button class="profile-tab active" data-tab="orders">Покупки</button>
-      <button class="profile-tab" data-tab="postponed">Отложенные</button>
-    </section>
-
-    <!-- BODY -->
-    <main class="profile-body">
-      <div id="profileOrders" class="profile-section active">
-
-        <!-- TEMPLATE CARD (JS will clone this) -->
-        <div class="order-card template" style="display:none;">
-          <div class="order-card-thumb"></div>
-          <div class="order-card-info">
-            <div class="order-card-title"></div>
-            <div class="order-card-meta"></div>
-            <div class="order-card-price"></div>
-            <div class="order-card-date"></div>
-          </div>
-        </div>
-
-      </div>
-
-      <div id="profilePostponed" class="profile-section">
-
-        <!-- TEMPLATE CARD -->
-        <div class="order-card template" style="display:none;">
-          <div class="order-card-thumb"></div>
-          <div class="order-card-info">
-            <div class="order-card-title"></div>
-            <div class="order-card-meta"></div>
-            <div class="order-card-price"></div>
-            <div class="order-card-date"></div>
-          </div>
-        </div>
-
-      </div>
-    </main>
-
-  </div>
 </div>
 
 
