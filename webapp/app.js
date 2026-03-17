@@ -114,10 +114,7 @@ if (tg?.initDataUnsafe?.start_param) {
   renderCatalog();
   attachEvents();
   initProfileFromTelegram();
-  renderProfileSections();
-  renderProfileOrders();
-  renderProfilePostponed();
-
+ 
   if (tg) {
     tg.expand();
     tg.MainButton.text = 'Оформить заказ';
@@ -845,7 +842,6 @@ async function checkout() {
     if (res.ok) {
       state.orders.push(order);
       saveOrders();
-      renderProfileOrders();
 
       tg?.showPopup({
         title: 'Заказ',
@@ -1103,9 +1099,7 @@ function attachEvents() {
 
   els.profileAvatarHeader.addEventListener('click', () => {
     openProfileModal();
-    renderProfileSections();
-    renderProfileOrders();
-    renderProfilePostponed();
+  
   });
 
   els.profileAvatarModal.addEventListener('click', () => {
