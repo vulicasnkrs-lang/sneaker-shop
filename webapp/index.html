@@ -243,7 +243,7 @@
       </div>
     </section>
 
-    <!-- REFERRAL CARD -->
+    <!-- REFERRAL PANEL -->
     <section class="profile-referral-card">
 
       <div class="pr-header">
@@ -305,20 +305,40 @@
 
     <!-- BODY -->
     <main class="profile-body">
-      <div id="profileOrders" class="profile-section active"></div>
-      <div id="profilePostponed" class="profile-section"></div>
-    </main>
+      <div id="profileOrders" class="profile-section active">
 
-    <!-- LOYALTY -->
-    <section class="profile-loyalty-card">
-      <div class="pl-title">Преимущества премиум‑клиента</div>
-      <div class="pl-item">Персональная скидка</div>
-      <div class="pl-item">Персональный менеджер</div>
-      <div class="pl-item">Приоритетная доставка</div>
-    </section>
+        <!-- TEMPLATE CARD (JS will clone this) -->
+        <div class="order-card template" style="display:none;">
+          <div class="order-card-thumb"></div>
+          <div class="order-card-info">
+            <div class="order-card-title"></div>
+            <div class="order-card-meta"></div>
+            <div class="order-card-price"></div>
+            <div class="order-card-date"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="profilePostponed" class="profile-section">
+
+        <!-- TEMPLATE CARD -->
+        <div class="order-card template" style="display:none;">
+          <div class="order-card-thumb"></div>
+          <div class="order-card-info">
+            <div class="order-card-title"></div>
+            <div class="order-card-meta"></div>
+            <div class="order-card-price"></div>
+            <div class="order-card-date"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
 
   </div>
 </div>
+
 
 
 
