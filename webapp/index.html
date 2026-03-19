@@ -196,81 +196,46 @@
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
 
-<!-- PROFILE MODAL — ASCII PREMIUM -->
 <div id="profileModal">
-  <div class="profile-ascii-shell">
+  <div class="ascii-profile">
 
-    <!-- HEADER LINE -->
-    <header class="profile-ascii-top">
-      <div class="profile-ascii-title">ПРОФИЛЬ КЛИЕНТА</div>
-      <div class="profile-ascii-brand">vulica.SNKRS</div>
-    </header>
+    <div class="ascii-header">
+      <span>ПРОФИЛЬ КЛИЕНТА:</span>
+      <span class="ascii-brand">vulica.SNKRS</span>
+    </div>
 
-    <!-- USER ROW -->
-    <section class="profile-ascii-identity">
-      <div id="profileAvatarProfile" class="profile-ascii-avatar"></div>
-      <div class="profile-ascii-user">
-        <div id="profileName" class="profile-ascii-name">Гость</div>
-        <div id="profileUsername" class="profile-ascii-username">@username</div>
+    <div class="ascii-line"></div>
+
+    <!-- БАЛАНС -->
+    <div class="ascii-box">
+      <div class="ascii-left">БАЛАНС</div>
+      <div class="ascii-right" id="profileBalance">35 BYN</div>
+    </div>
+
+    <!-- РЕФЕРАЛЫ -->
+    <div class="ascii-box">
+      <div class="ascii-left">РЕФЕРАЛЫ</div>
+      <div class="ascii-right" id="profileReferrals">0</div>
+    </div>
+
+    <!-- РЕФЕРАЛЬНАЯ ССЫЛКА -->
+    <div class="ascii-box ascii-ref">
+      <div class="ascii-left">РЕФЕРАЛЬНАЯ ССЫЛКА</div>
+      <div class="ascii-right">
+        <div id="profileReferralLink" class="ascii-link">t.me/vulicaSNKRS_bot?start=ref_xxxxx</div>
+        <button id="profileReferralCopyBtn" class="ascii-copy">СКОПИРОВАТЬ</button>
       </div>
-    </section>
+    </div>
 
-    <!-- GRID: BALANCE / BONUS / ORDERS / SPENT -->
-    <section class="profile-ascii-grid">
-      <div class="profile-ascii-card">
-        <div class="profile-ascii-label">БАЛАНС</div>
-        <div class="profile-ascii-value" id="profileBalance">0 BYN</div>
-      </div>
+    <div class="ascii-section-title">КАК ЭТО РАБОТАЕТ</div>
+    <div class="ascii-line"></div>
 
-      <div class="profile-ascii-card">
-        <div class="profile-ascii-label">БОНУСЫ</div>
-        <div class="profile-ascii-value" id="profileBonus">0 BYN</div>
-      </div>
-
-      <div class="profile-ascii-card">
-        <div class="profile-ascii-label">ЗАКАЗЫ</div>
-        <div class="profile-ascii-value" id="profileOrdersCount">0</div>
-      </div>
-
-      <div class="profile-ascii-card">
-        <div class="profile-ascii-label">ПОТРАЧЕНО</div>
-        <div class="profile-ascii-value" id="profileSpent">0 BYN</div>
-      </div>
-    </section>
-
-    <!-- REFERRAL LINK -->
-    <section class="profile-ascii-referral">
-      <div class="profile-ascii-ref-label">РЕФЕРАЛЬНАЯ ССЫЛКА</div>
-      <div class="profile-ascii-ref-row">
-        <div class="profile-ascii-ref-link">
-          t.me/vulicaSNKRS_bot?start=ref_xxxxxx
-        </div>
-        <button class="profile-ascii-ref-copy">СКОПИРОВАТЬ</button>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="profile-ascii-how">
-      <div class="profile-ascii-how-title">КАК ЭТО РАБОТАЕТ</div>
-      <ul class="profile-ascii-how-list">
-        <li>+10 BYN за покупку по твоей ссылке</li>
-        <li>–10 BYN приглашённому на первый заказ</li>
-        <li>До 50% заказа можно оплатить бонусами</li>
-        <li>Начисление автоматически после покупки</li>
-      </ul>
-    </section>
-
-    <!-- TABS (оставляем для логики заказов/отложенных) -->
-    <section class="profile-ascii-tabs">
-      <button class="profile-tab active" data-tab="orders">Покупки</button>
-      <button class="profile-tab" data-tab="postponed">Отложенные</button>
-    </section>
-
-    <!-- BODY: ORDERS / POSTPONED -->
-    <main class="profile-ascii-body">
-      <div id="profileOrders" class="profile-section active"></div>
-      <div id="profilePostponed" class="profile-section"></div>
-    </main>
+    <ul class="ascii-how">
+      <li>+10 BYN за покупку</li>
+      <li>–10 BYN приглашённому</li>
+      <li>До 50% заказа можно оплатить бонусами</li>
+      <li>Автоматическое начисление</li>
+    </ul>
 
   </div>
 </div>
