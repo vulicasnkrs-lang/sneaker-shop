@@ -1657,15 +1657,12 @@ html, body {
   color: rgba(0,0,0,0.75);
   line-height: 1.55;
 }
-/* ============================================================
-   SNS + GRAPHITE TEAL — SUPER DESIGNER PROFILE
-   ============================================================ */
+/* ============ PROFILE MODAL — BASE ============ */
 
-/* МОДАЛ ПРОФИЛЯ — фон, blur, премиальность */
 #profileModal {
   position: fixed;
   inset: 0;
-  background: rgba(245,247,249,0.92);
+  background: rgba(245,247,249,0.94);
   backdrop-filter: blur(18px) saturate(160%);
   display: none;
   justify-content: center;
@@ -1681,94 +1678,121 @@ html, body {
   opacity: 1;
 }
 
-/* ОСНОВНОЙ БЛОК */
 .profile-shell {
   width: 100%;
   max-width: 520px;
   background: #ffffff;
-  padding: 28px 26px 40px;
-  border-radius: 0 0 28px 28px;
+  padding: 26px 22px 34px;
+  border-radius: 0 0 26px 26px;
   box-shadow:
-    0 18px 40px rgba(0,0,0,0.08),
-    0 6px 18px rgba(0,0,0,0.05);
-  animation: fadeUp .35s ease both;
+    0 18px 40px rgba(15,23,42,0.16),
+    0 6px 18px rgba(15,23,42,0.08);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", sans-serif;
+  animation: profileFadeUp .32s ease-out both;
 }
 
-/* ВЕРТИКАЛЬНАЯ ЛИНИЯ — SNS SIGNATURE */
-.profile-shell {
-  position: relative;
-}
+/* ============ HEADER ============ */
 
-.profile-shell::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 24px;
-  bottom: 24px;
-  width: 3px;
-  background: #1b7f86; /* Graphite Teal */
-  border-radius: 999px;
-}
-
-/* HEADER ROW → превращаем в аватар + имя */
-.profile-header-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 26px;
-}
-
-/* АВАТАР */
-.profile-header-row::before {
-  content: "";
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: url('https://i.imgur.com/0y0y0y0.png') center/cover;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-  flex-shrink: 0;
-}
-
-/* ТЕКСТОВАЯ ЧАСТЬ */
-.profile-title {
-  font-size: 22px;
-  font-weight: 720;
-  letter-spacing: -0.2px;
-  color: #111;
-}
-
-.profile-brand {
-  background: #1b7f86;
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-top: 4px;
-  display: inline-block;
-}
-
-/* КАРТОЧКИ */
-.profile-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 18px 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 22px rgba(15,23,42,0.08);
-  border: 1px solid rgba(15,23,42,0.06);
-  animation: fadeUp .35s ease both;
-}
-
-/* РЯД В КАРТОЧКЕ */
-.profile-card-row {
+.profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 22px;
 }
 
-/* ЛЕЙБЛ */
+.profile-header-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 10px 24px rgba(15,23,42,0.25);
+}
+
+.profile-header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 720;
+  letter-spacing: -0.2px;
+  color: #0f172a;
+}
+
+.profile-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #f9fafb;
+}
+
+.profile-status {
+  margin-top: 3px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.profile-brand-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+/* ============ CARDS ============ */
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(15,23,42,0.06);
+  box-shadow: 0 10px 26px rgba(15,23,42,0.08);
+}
+
+.profile-card--primary {
+  box-shadow: 0 14px 32px rgba(15,23,42,0.16);
+}
+
+.profile-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #e5f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.profile-card-body {
+  flex: 1;
+}
+
 .profile-card-label {
   font-size: 11px;
   font-weight: 600;
@@ -1777,80 +1801,88 @@ html, body {
   color: #9ca3af;
 }
 
-/* ЗНАЧЕНИЕ */
 .profile-card-value {
-  font-size: 22px;
+  margin-top: 3px;
+  font-size: 21px;
   font-weight: 720;
-  color: #111827;
+  color: #0f172a;
 }
 
-/* ССЫЛКА */
+/* ============ REF LINK ============ */
+
+.profile-card--link {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
 .profile-ref-row {
-  margin-top: 10px;
+  margin-top: 6px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 }
 
 .profile-ref-link {
   flex: 1;
   background: #f3f4f6;
-  padding: 8px 12px;
   border-radius: 10px;
+  padding: 7px 10px;
   font-size: 13px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
   color: #111827;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* КНОПКА КОПИРОВАНИЯ */
 .profile-ref-copy {
-  background: #1b7f86;
-  color: #fff;
+  background: #0f172a;
+  color: #f9fafb;
   border: none;
-  padding: 8px 14px;
+  padding: 7px 11px;
   border-radius: 10px;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(27,127,134,0.35);
+  box-shadow: 0 8px 20px rgba(15,23,42,0.35);
   transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
 }
 
 .profile-ref-copy:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 3px 10px rgba(27,127,134,0.4);
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 0 4px 12px rgba(15,23,42,0.45);
   opacity: 0.9;
 }
 
-/* КАК ЭТО РАБОТАЕТ */
+/* ============ HOW IT WORKS ============ */
+
 .profile-section-title {
-  margin-top: 26px;
+  margin-top: 20px;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: #9ca3af;
 }
 
 .profile-how {
-  margin-top: 10px;
-  padding-left: 20px;
+  margin-top: 8px;
+  padding-left: 18px;
   font-size: 14px;
   color: #4b5563;
   line-height: 1.7;
 }
 
 .profile-how li::marker {
-  color: #1b7f86;
+  color: #0f172a;
 }
 
-/* АНИМАЦИЯ */
-@keyframes fadeUp {
+/* ============ ANIMATION ============ */
+
+@keyframes profileFadeUp {
   from {
     opacity: 0;
     transform: translateY(8px);
