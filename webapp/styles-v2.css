@@ -1658,7 +1658,7 @@ html, body {
   line-height: 1.55;
 }
 /* ========================================================= */
-/*   VULICA.SNKRS — PREMIUM EDITORIAL v1.0                   */
+/*   VULICA.SNKRS — PREMIUM EDITORIAL A1 (Amber Soft)        */
 /* ========================================================= */
 
 #profileModal {
@@ -1697,20 +1697,32 @@ html, body {
   to   { transform: translateY(0); opacity: 1; }
 }
 
-/* HEADER */
-.profile-header-row {
+/* HEADER WITH AVATAR */
+.profile-header-block {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 32px;
-  border-bottom: 1px solid rgba(0,0,0,0.12);
-  padding-bottom: 14px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.profile-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #ddd;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.profile-header-text {
+  display: flex;
+  flex-direction: column;
 }
 
 .profile-title {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 750;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.3px;
   color: #111;
 }
 
@@ -1719,6 +1731,13 @@ html, body {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(0,0,0,0.45);
+}
+
+/* SECTION DIVIDER */
+.profile-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.12);
+  margin: 22px 0;
 }
 
 /* CARD — PREMIUM EDITORIAL */
@@ -1755,6 +1774,15 @@ html, body {
 
 .profile-card-value {
   font-size: 22px;
+  font-weight: 700;
+  color: #111;
+}
+
+/* AMBER SOFT BADGE */
+.profile-card-value.badge {
+  background: #f4d39a;
+  padding: 4px 10px;
+  border-radius: 8px;
   font-weight: 700;
   color: #111;
 }
