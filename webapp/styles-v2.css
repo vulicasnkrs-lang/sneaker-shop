@@ -1129,10 +1129,10 @@ html, body {
   font-size: 13px;
   color: rgba(0,0,0,0.55);
 }
-/* ====== BASE ====== */
+/* ===== BASE ===== */
 #profileView {
-  padding: 20px 16px 32px;
-  background: #f7f7f7;
+  padding: 24px 16px 40px;
+  background: #f6f7f9;
   color: #111;
   font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
 }
@@ -1145,65 +1145,83 @@ html, body {
   margin: 0 auto;
 }
 
-/* ====== TOP CARD ====== */
+
+/* ===== CARD BASE ===== */
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 18px;
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+
+/* ===== TOP ===== */
 .profile-top-card {
-  background: #ffffff;
-  padding: 22px 18px;
-  border-radius: 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   text-align: center;
+  padding: 10px 0 4px;
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
 .profile-top-title {
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 4px;
 }
 
 .profile-top-sub {
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
+  color: #8a8a8f;
 }
 
-/* ====== BALANCE ====== */
+
+/* ===== BALANCE (ГЛАВНЫЙ ВАУ БЛОК) ===== */
 .profile-balance-big {
+  border-radius: 24px;
+  padding: 24px 20px;
   text-align: center;
-  padding: 4px 0 0;
+  background: linear-gradient(180deg, #ffffff, #f2f3f6);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .balance-amount {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 4px;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
 .balance-sub {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 6px;
+  font-size: 12px;
+  color: #9a9aa0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
 }
 
 .balance-hint {
+  margin-top: 8px;
   font-size: 14px;
-  color: #0a7cff;
   font-weight: 600;
+  color: #111;
 }
 
-/* ====== BLOCK CARDS ====== */
+
+/* ===== BLOCKS ===== */
 .profile-block-card {
-  background: #ffffff;
-  padding: 18px 16px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .block-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: #444;
+  font-size: 12px;
+  color: #9a9aa0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .block-value-big {
@@ -1212,50 +1230,51 @@ html, body {
 }
 
 .block-hint {
-  font-size: 14px;
-  color: #777;
-  line-height: 1.45;
+  font-size: 13px;
+  color: #7a7a80;
 }
 
-/* ====== INVITE ====== */
+
+/* ===== INVITE ===== */
 .block-link {
-  font-size: 14px;
-  background: #f3f3f3;
-  padding: 10px 12px;
+  font-size: 13px;
+  background: #f3f4f6;
+  padding: 12px;
   border-radius: 12px;
-  word-break: break-all;
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .invite-copy-btn {
-  background: #0a7cff;
+  background: #111;
   color: #fff;
   border: none;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 15px;
+  padding: 13px;
+  border-radius: 14px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.15s;
+  transition: 0.2s;
+}
+
+.invite-copy-btn:hover {
+  opacity: 0.9;
 }
 
 .invite-copy-btn:active {
   transform: scale(0.97);
 }
 
-/* ====== BENEFITS ====== */
+
+/* ===== BENEFITS ===== */
 .profile-benefit-header {
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 16px;
-  font-size: 17px;
-  font-weight: 700;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .profile-benefits {
   list-style: none;
-  padding: 0 4px;
+  padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -1263,8 +1282,17 @@ html, body {
 }
 
 .profile-benefits li {
-  font-size: 15px;
-  line-height: 1.45;
-  display: flex;
-  gap: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+
+/* ===== MICRO WOW ===== */
+.card {
+  transition: 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
 }
