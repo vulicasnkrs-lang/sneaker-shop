@@ -197,40 +197,40 @@
   </div>
 
 <div id="profileModal">
-  <div class="ascii-profile">
+  <div class="profile-shell">
 
-    <div class="ascii-header">
-      <span>ПРОФИЛЬ КЛИЕНТА:</span>
-      <span class="ascii-brand">vulica.SNKRS</span>
+    <div class="profile-header-row">
+      <div class="profile-title">ПРОФИЛЬ КЛИЕНТА</div>
+      <div class="profile-brand">vulica.SNKRS</div>
     </div>
 
-    <div class="ascii-line"></div>
-
-    <!-- БАЛАНС -->
-    <div class="ascii-box">
-      <div class="ascii-left">БАЛАНС</div>
-      <div class="ascii-right" id="profileBalance">35 BYN</div>
-    </div>
-
-    <!-- РЕФЕРАЛЫ -->
-    <div class="ascii-box">
-      <div class="ascii-left">РЕФЕРАЛЫ</div>
-      <div class="ascii-right" id="profileReferrals">0</div>
-    </div>
-
-    <!-- РЕФЕРАЛЬНАЯ ССЫЛКА -->
-    <div class="ascii-box ascii-ref">
-      <div class="ascii-left">РЕФЕРАЛЬНАЯ ССЫЛКА</div>
-      <div class="ascii-right">
-        <div id="profileReferralLink" class="ascii-link">t.me/vulicaSNKRS_bot?start=ref_xxxxx</div>
-        <button id="profileReferralCopyBtn" class="ascii-copy">СКОПИРОВАТЬ</button>
+    <div class="profile-card">
+      <div class="profile-card-row">
+        <div class="profile-card-label">БАЛАНС</div>
+        <div class="profile-card-value" id="profileBalance">35 BYN</div>
       </div>
     </div>
 
-    <div class="ascii-section-title">КАК ЭТО РАБОТАЕТ</div>
-    <div class="ascii-line"></div>
+    <div class="profile-card">
+      <div class="profile-card-row">
+        <div class="profile-card-label">РЕФЕРАЛЫ</div>
+        <div class="profile-card-value" id="profileReferrals">0</div>
+      </div>
+    </div>
 
-    <ul class="ascii-how">
+    <div class="profile-card">
+      <div class="profile-card-label">РЕФЕРАЛЬНАЯ ССЫЛКА</div>
+      <div class="profile-ref-row">
+        <div class="profile-ref-link" id="profileReferralLink">
+          t.me/vulicaSNKRS_bot?start=ref_xxxxx
+        </div>
+        <button class="profile-ref-copy" id="profileReferralCopyBtn">СКОПИРОВАТЬ</button>
+      </div>
+    </div>
+
+    <div class="profile-section-title">КАК ЭТО РАБОТАЕТ</div>
+
+    <ul class="profile-how">
       <li>+10 BYN за покупку</li>
       <li>–10 BYN приглашённому</li>
       <li>До 50% заказа можно оплатить бонусами</li>
@@ -239,6 +239,7 @@
 
   </div>
 </div>
+
 
 
 
