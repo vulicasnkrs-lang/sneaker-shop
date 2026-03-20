@@ -1657,13 +1657,15 @@ html, body {
   color: rgba(0,0,0,0.75);
   line-height: 1.55;
 }
-/* ================= SNS + GRAPHITE TEAL PROFILE ================= */
+/* ============================================================
+   SNS + GRAPHITE TEAL — SUPER DESIGNER PROFILE
+   ============================================================ */
 
-/* Модал оставляем как есть, только фон чуть технологичнее */
+/* МОДАЛ ПРОФИЛЯ — фон, blur, премиальность */
 #profileModal {
   position: fixed;
   inset: 0;
-  background: rgba(245,247,249,0.9);
+  background: rgba(245,247,249,0.92);
   backdrop-filter: blur(18px) saturate(160%);
   display: none;
   justify-content: center;
@@ -1679,7 +1681,7 @@ html, body {
   opacity: 1;
 }
 
-/* Основной контейнер */
+/* ОСНОВНОЙ БЛОК */
 .profile-shell {
   width: 100%;
   max-width: 520px;
@@ -1689,105 +1691,84 @@ html, body {
   box-shadow:
     0 18px 40px rgba(0,0,0,0.08),
     0 6px 18px rgba(0,0,0,0.05);
+  animation: fadeUp .35s ease both;
 }
 
-/* Лэйаут с вертикальной линией */
-.profile-layout {
-  display: flex;
+/* ВЕРТИКАЛЬНАЯ ЛИНИЯ — SNS SIGNATURE */
+.profile-shell {
+  position: relative;
 }
 
-.profile-line {
+.profile-shell::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 24px;
+  bottom: 24px;
   width: 3px;
-  border-radius: 999px;
   background: #1b7f86; /* Graphite Teal */
-  margin-right: 22px;
+  border-radius: 999px;
 }
 
-/* Основной контент */
-.profile-main {
-  flex: 1;
-}
-
-/* HEADER: аватар + имя + статус */
-.profile-header {
+/* HEADER ROW → превращаем в аватар + имя */
+.profile-header-row {
   display: flex;
   align-items: center;
+  gap: 16px;
   margin-bottom: 26px;
 }
 
-.profile-avatar {
+/* АВАТАР */
+.profile-header-row::before {
+  content: "";
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  object-fit: cover;
-  margin-right: 16px;
+  background: url('https://i.imgur.com/0y0y0y0.png') center/cover;
   box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  flex-shrink: 0;
 }
 
-.profile-header-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-name-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.profile-name {
+/* ТЕКСТОВАЯ ЧАСТЬ */
+.profile-title {
   font-size: 22px;
   font-weight: 720;
   letter-spacing: -0.2px;
   color: #111;
 }
 
-.profile-badge {
+.profile-brand {
   background: #1b7f86;
   color: #fff;
-  padding: 3px 9px;
+  padding: 4px 10px;
   border-radius: 999px;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.profile-status {
   margin-top: 4px;
-  font-size: 13px;
-  color: #6b7280;
+  display: inline-block;
 }
 
-/* Карточки (баланс / рефералы / ссылка) */
+/* КАРТОЧКИ */
 .profile-card {
   background: #ffffff;
   border-radius: 16px;
-  padding: 16px 18px;
-  margin-bottom: 14px;
-  display: flex;
-  gap: 14px;
-  align-items: center;
+  padding: 18px 20px;
+  margin-bottom: 16px;
   box-shadow: 0 8px 22px rgba(15,23,42,0.08);
   border: 1px solid rgba(15,23,42,0.06);
+  animation: fadeUp .35s ease both;
 }
 
-.profile-card-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 12px;
-  background: #e3f1f2;
+/* РЯД В КАРТОЧКЕ */
+.profile-card-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  color: #1b7f86;
-  font-size: 16px;
 }
 
-.profile-card-body {
-  flex: 1;
-}
-
+/* ЛЕЙБЛ */
 .profile-card-label {
   font-size: 11px;
   font-weight: 600;
@@ -1796,56 +1777,40 @@ html, body {
   color: #9ca3af;
 }
 
+/* ЗНАЧЕНИЕ */
 .profile-card-value {
-  margin-top: 3px;
   font-size: 22px;
   font-weight: 720;
   color: #111827;
 }
 
-.profile-card-value .byn {
-  font-size: 13px;
-  margin-left: 4px;
-  opacity: 0.7;
-}
-
-/* Рефералы чуть легче визуально */
-.profile-card--light {
-  box-shadow: 0 4px 14px rgba(15,23,42,0.05);
-}
-
-/* Карточка ссылки */
-.profile-card--link {
-  flex-direction: column;
-  align-items: flex-start;
-}
-
+/* ССЫЛКА */
 .profile-ref-row {
-  margin-top: 8px;
-  width: 100%;
+  margin-top: 10px;
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
 }
 
 .profile-ref-link {
   flex: 1;
   background: #f3f4f6;
+  padding: 8px 12px;
   border-radius: 10px;
-  padding: 6px 10px;
   font-size: 13px;
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: "JetBrains Mono", monospace;
   color: #111827;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* КНОПКА КОПИРОВАНИЯ */
 .profile-ref-copy {
   background: #1b7f86;
   color: #fff;
   border: none;
-  padding: 7px 13px;
+  padding: 8px 14px;
   border-radius: 10px;
   font-size: 11px;
   font-weight: 600;
@@ -1862,9 +1827,9 @@ html, body {
   opacity: 0.9;
 }
 
-/* Блок "Как это работает" */
+/* КАК ЭТО РАБОТАЕТ */
 .profile-section-title {
-  margin-top: 22px;
+  margin-top: 26px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -1873,8 +1838,8 @@ html, body {
 }
 
 .profile-how {
-  margin-top: 8px;
-  padding-left: 18px;
+  margin-top: 10px;
+  padding-left: 20px;
   font-size: 14px;
   color: #4b5563;
   line-height: 1.7;
@@ -1884,14 +1849,8 @@ html, body {
   color: #1b7f86;
 }
 
-/* Лёгкая анимация появления */
-.profile-shell,
-.profile-card,
-.profile-header {
-  animation: profileFadeUp .32s ease-out both;
-}
-
-@keyframes profileFadeUp {
+/* АНИМАЦИЯ */
+@keyframes fadeUp {
   from {
     opacity: 0;
     transform: translateY(8px);
