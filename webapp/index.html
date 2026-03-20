@@ -199,29 +199,24 @@
 <div id="profileModal">
   <div class="profile-shell">
 
-    <!-- HEADER: аватар + имя + статус -->
+    <!-- HEADER -->
     <div class="profile-header">
-      <div class="profile-header-main">
-        <img class="profile-avatar" src="https://vulica.store/static/images/asics-gel-pickax-box.jpg" alt="avatar" />
-        <div class="profile-header-text">
-          <div class="profile-name-row">
-            <div class="profile-name">vulica.SNKRS</div>
-            <span class="profile-badge">PROFILE</span>
-          </div>
-          <div class="profile-status">Постоянный клиент</div>
-        </div>
+      <img class="profile-avatar" src="https://vulica.store/static/images/asics-gel-pickax-box.jpg" alt="avatar" />
+
+      <div class="profile-header-text">
+        <div class="profile-name">vulica.SNKRS</div>
+        <div class="profile-status">Постоянный клиент</div>
       </div>
-      <div class="profile-brand-tag">vulica.SNKRS</div>
+
+      <div class="profile-brand-tag">PROFILE</div>
     </div>
 
     <!-- BALANCE -->
-    <div class="profile-card profile-card--primary">
+    <div class="profile-card">
       <div class="profile-card-icon">💳</div>
       <div class="profile-card-body">
         <div class="profile-card-label">БАЛАНС</div>
-        <div class="profile-card-value">
-          <span id="profileBalance">35 BYN</span>
-        </div>
+        <div class="profile-card-value" id="profileBalance">35 BYN</div>
       </div>
     </div>
 
@@ -230,14 +225,12 @@
       <div class="profile-card-icon">👥</div>
       <div class="profile-card-body">
         <div class="profile-card-label">РЕФЕРАЛЫ</div>
-        <div class="profile-card-value">
-          <span id="profileReferrals">0</span>
-        </div>
+        <div class="profile-card-value" id="profileReferrals">0</div>
       </div>
     </div>
 
     <!-- REF LINK -->
-    <div class="profile-card profile-card--link">
+    <div class="profile-card">
       <div class="profile-card-icon">🔗</div>
       <div class="profile-card-body">
         <div class="profile-card-label">РЕФЕРАЛЬНАЯ ССЫЛКА</div>
@@ -245,7 +238,7 @@
           <div class="profile-ref-link" id="profileReferralLink">
             t.me/vulicaSNKRS_bot?start=ref_xxxxx
           </div>
-          <button class="profile-ref-copy" id="profileReferralCopyBtn">СКОПИРОВАТЬ</button>
+          <button class="profile-ref-copy" id="profileReferralCopyBtn">Скопировать</button>
         </div>
       </div>
     </div>
@@ -261,7 +254,6 @@
 
   </div>
 </div>
-
 
 
   <script src="/app.js?v=10"></script>
