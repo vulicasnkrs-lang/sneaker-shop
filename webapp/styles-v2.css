@@ -1658,13 +1658,14 @@ html, body {
   line-height: 1.55;
 }
 /* ========================================================= */
-/*   VULICA.SNKRS — BRUTAL MINIMAL SIGNATURE PROFILE         */
+/*   VULICA.SNKRS — MODERN EDITORIAL PREMIUM PROFILE         */
 /* ========================================================= */
 
 #profileModal {
   position: fixed;
   inset: 0;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(18px);
   display: none;
   justify-content: center;
   align-items: flex-start;
@@ -1683,8 +1684,11 @@ html, body {
   width: 100%;
   max-width: 520px;
   background: #fff;
-  border-radius: 0;
   padding: 32px 24px 48px;
+  border-radius: 0 0 28px 28px;
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.08),
+    0 4px 12px rgba(0,0,0,0.04);
 }
 
 /* HEADER */
@@ -1692,29 +1696,35 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 32px;
-  border-bottom: 2px solid #000;
+  margin-bottom: 28px;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
   padding-bottom: 12px;
 }
 
 .profile-title {
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: -0.4px;
-  color: #000;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #111;
 }
 
 .profile-brand {
   font-size: 12px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #000;
+  color: rgba(0,0,0,0.45);
 }
 
-/* CARD — BRUTAL STYLE */
+/* CARD — EDITORIAL PREMIUM */
 .profile-card {
-  padding: 18px 0;
-  border-bottom: 1px solid #000;
+  background: #fafafa;
+  border-radius: 18px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    0 2px 6px rgba(0,0,0,0.04);
 }
 
 .profile-card-row {
@@ -1724,17 +1734,17 @@ html, body {
 }
 
 .profile-card-label {
-  font-size: 13px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 600;
-  color: #000;
+  color: rgba(0,0,0,0.45);
 }
 
 .profile-card-value {
   font-size: 20px;
-  font-weight: 800;
-  color: #000;
+  font-weight: 700;
+  color: #111;
 }
 
 /* REFERRAL */
@@ -1747,38 +1757,43 @@ html, body {
 
 .profile-ref-link {
   font-size: 14px;
-  font-weight: 600;
-  color: #000;
+  color: rgba(0,0,0,0.75);
   max-width: 240px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .profile-ref-copy {
-  background: #000;
+  background: #111;
   color: #fff;
   border: none;
-  padding: 10px 16px;
+  padding: 8px 16px;
+  border-radius: 10px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  text-transform: uppercase;
+  transition: transform .15s ease, opacity .15s ease;
+}
+
+.profile-ref-copy:active {
+  transform: scale(0.96);
+  opacity: 0.85;
 }
 
 /* HOW IT WORKS */
 .profile-section-title {
-  margin-top: 32px;
-  margin-bottom: 12px;
+  margin-top: 28px;
+  margin-bottom: 10px;
   font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #000;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(0,0,0,0.55);
 }
 
 .profile-how {
   padding-left: 20px;
   font-size: 15px;
-  color: #000;
+  color: rgba(0,0,0,0.75);
   line-height: 1.6;
-  font-weight: 600;
+  font-weight: 500;
 }
