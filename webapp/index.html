@@ -199,37 +199,59 @@
 <div id="profileModal">
   <div class="profile-shell">
 
-    <div class="profile-header-row">
-      <div class="profile-title">ПРОФИЛЬ КЛИЕНТА</div>
-      <div class="profile-brand">vulica.SNKRS</div>
-    </div>
-
-    <div class="profile-card">
-      <div class="profile-card-row">
-        <div class="profile-card-label">БАЛАНС</div>
-        <div class="profile-card-value" id="profileBalance">35 BYN</div>
-      </div>
-    </div>
-
-    <div class="profile-card">
-      <div class="profile-card-row">
-        <div class="profile-card-label">РЕФЕРАЛЫ</div>
-        <div class="profile-card-value" id="profileReferrals">0</div>
-      </div>
-    </div>
-
-    <div class="profile-card">
-      <div class="profile-card-label">РЕФЕРАЛЬНАЯ ССЫЛКА</div>
-      <div class="profile-ref-row">
-        <div class="profile-ref-link" id="profileReferralLink">
-          t.me/vulicaSNKRS_bot?start=ref_xxxxx
+    <!-- HEADER: аватар + имя + статус -->
+    <div class="profile-header">
+      <div class="profile-header-main">
+        <img class="profile-avatar" src="https://vulica.store/static/images/asics-gel-pickax-box.jpg" alt="avatar" />
+        <div class="profile-header-text">
+          <div class="profile-name-row">
+            <div class="profile-name">vulica.SNKRS</div>
+            <span class="profile-badge">PROFILE</span>
+          </div>
+          <div class="profile-status">Постоянный клиент</div>
         </div>
-        <button class="profile-ref-copy" id="profileReferralCopyBtn">СКОПИРОВАТЬ</button>
+      </div>
+      <div class="profile-brand-tag">vulica.SNKRS</div>
+    </div>
+
+    <!-- BALANCE -->
+    <div class="profile-card profile-card--primary">
+      <div class="profile-card-icon">💳</div>
+      <div class="profile-card-body">
+        <div class="profile-card-label">БАЛАНС</div>
+        <div class="profile-card-value">
+          <span id="profileBalance">35 BYN</span>
+        </div>
       </div>
     </div>
 
-    <div class="profile-section-title">КАК ЭТО РАБОТАЕТ</div>
+    <!-- REFERRALS -->
+    <div class="profile-card">
+      <div class="profile-card-icon">👥</div>
+      <div class="profile-card-body">
+        <div class="profile-card-label">РЕФЕРАЛЫ</div>
+        <div class="profile-card-value">
+          <span id="profileReferrals">0</span>
+        </div>
+      </div>
+    </div>
 
+    <!-- REF LINK -->
+    <div class="profile-card profile-card--link">
+      <div class="profile-card-icon">🔗</div>
+      <div class="profile-card-body">
+        <div class="profile-card-label">РЕФЕРАЛЬНАЯ ССЫЛКА</div>
+        <div class="profile-ref-row">
+          <div class="profile-ref-link" id="profileReferralLink">
+            t.me/vulicaSNKRS_bot?start=ref_xxxxx
+          </div>
+          <button class="profile-ref-copy" id="profileReferralCopyBtn">СКОПИРОВАТЬ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="profile-section-title">КАК ЭТО РАБОТАЕТ</div>
     <ul class="profile-how">
       <li>+10 BYN за покупку</li>
       <li>–10 BYN приглашённому</li>
@@ -239,7 +261,6 @@
 
   </div>
 </div>
-
 
 
 
