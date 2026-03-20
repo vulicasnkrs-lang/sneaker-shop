@@ -1535,122 +1535,125 @@ html, body {
   font-size: 14px;
   line-height: 1.55;
 }
-/* ========================================================= */
-/*           VULICA ASCII PREMIUM — BEAUTIFIED               */
-/* ========================================================= */
-
-.ascii-profile {
-  font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
-  white-space: pre-wrap; /* сохраняет ASCII, но позволяет переносы */
-  background: #ffffff;
-  border-radius: 26px 26px 0 0;
-  padding: 32px 24px 48px;
-  line-height: 1.55;
-  font-size: 14px;
-  color: #0f0f0f;
-
-  /* Премиальная глубина */
-  box-shadow:
-    0 -6px 18px rgba(0,0,0,0.06),
-    0 -18px 42px rgba(0,0,0,0.12);
+#profileModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(22px) saturate(180%);
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+  opacity: 0;
+  transition: opacity .35s ease;
+  z-index: 9999;
 }
 
-/* Верхняя строка */
-.ascii-profile .ascii-header {
+#profileModal.open {
+  display: flex;
+  opacity: 1;
+}
+
+.profile-shell {
+  width: 100%;
+  max-width: 520px;
+  height: 92vh;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(24px) saturate(200%);
+  border-radius: 28px 28px 0 0;
+  padding: 28px 22px 40px;
+  overflow-y: auto;
+}
+
+/* HEADER */
+.profile-header-row {
   display: flex;
   justify-content: space-between;
-  font-size: 15px;
+  margin-bottom: 26px;
+}
+
+.profile-title {
+  font-size: 18px;
   font-weight: 650;
-  letter-spacing: -0.2px;
-  margin-bottom: 6px;
+  letter-spacing: -0.3px;
 }
 
-/* Горизонтальная линия */
-.ascii-profile .ascii-line {
-  height: 1px;
-  background: #000;
-  margin: 6px 0 22px;
+.profile-brand {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.45);
 }
 
-/* Блоки с ASCII‑рамками */
-.ascii-profile .ascii-box {
-  background: #fafafa;
-  border-radius: 14px;
-  padding: 18px 20px;
-  margin-bottom: 22px;
-
-  /* создаём эффект настоящей ASCII‑рамки */
-  position: relative;
-  font-weight: 600;
-  letter-spacing: -0.2px;
-
+/* CARD */
+.profile-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  border: 1px solid rgba(0,0,0,0.06);
   box-shadow:
-    inset 0 0 0 1px #000,
-    0 4px 14px rgba(0,0,0,0.06);
+    inset 0 1px 4px rgba(255,255,255,0.65),
+    0 4px 14px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
 }
 
-/* имитация ASCII‑рамки */
-.ascii-profile .ascii-box::before,
-.ascii-profile .ascii-box::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0;
-  height: 1px;
-  background: #000;
-}
-
-.ascii-profile .ascii-box::before {
-  top: 0;
-}
-
-.ascii-profile .ascii-box::after {
-  bottom: 0;
-}
-
-/* Реферальная ссылка */
-.ascii-profile .ascii-ref .ascii-right {
-  margin-top: 12px;
+.profile-card-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.ascii-profile .ascii-link {
+.profile-card-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(0,0,0,0.45);
+}
+
+.profile-card-value {
+  font-size: 18px;
+  font-weight: 650;
+  color: #111;
+}
+
+/* REFERRAL */
+.profile-ref-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-ref-link {
+  font-size: 14px;
+  color: rgba(0,0,0,0.75);
   max-width: 240px;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 500;
 }
 
-/* Кнопка копирования */
-.ascii-profile .ascii-copy {
-  border: 1px solid #000;
-  background: #fff;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
+.profile-ref-copy {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
   font-size: 12px;
-  font-weight: 650;
-  transition: background .15s ease, transform .15s ease;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.ascii-profile .ascii-copy:active {
-  background: #f0f0f0;
-  transform: scale(0.97);
-}
-
-/* Заголовок секции */
-.ascii-profile .ascii-section-title {
-  font-size: 15px;
-  font-weight: 650;
+/* HOW IT WORKS */
+.profile-section-title {
   margin-top: 26px;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  color: rgba(0,0,0,0.65);
 }
 
-/* Список */
-.ascii-profile .ascii-how {
-  margin: 0;
+.profile-how {
   padding-left: 20px;
   font-size: 14px;
+  color: rgba(0,0,0,0.75);
   line-height: 1.55;
 }
