@@ -7,13 +7,13 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="/styles-v2.css?v=2" />
-  <!-- TELEGRAM / OPEN GRAPH -->
-<meta property="og:title" content="vulica.SNKRS — магазин кроссовок" />
-<meta property="og:description" content="Оригинальные кроссовки. Быстрая доставка по РБ. Лучшие цены." />
-<meta property="og:image" content="https://vulica.store/static/images/asics-gel-pickax-box.jpg" />
-<meta property="og:url" content="https://vulica.store" />
-<meta name="twitter:card" content="summary_large_image" />
 
+  <!-- TELEGRAM / OPEN GRAPH -->
+  <meta property="og:title" content="vulica.SNKRS — магазин кроссовок" />
+  <meta property="og:description" content="Оригинальные кроссовки. Быстрая доставка по РБ. Лучшие цены." />
+  <meta property="og:image" content="https://vulica.store/static/images/asics-gel-pickax-box.jpg" />
+  <meta property="og:url" content="https://vulica.store" />
+  <meta name="twitter:card" content="summary_large_image" />
 </head>
 
 <body>
@@ -22,7 +22,6 @@
   <div id="productModal" class="modal hidden">
     <div class="modal-content modal-product">
 
-      <!-- HEADER INSIDE PRODUCT MODAL -->
       <header class="header modal-inner-header">
         <div class="brand">vulica.SNKRS</div>
 
@@ -32,85 +31,65 @@
         </div>
       </header>
 
-      <!-- SCROLLABLE BODY -->
       <div class="modal-body">
 
-        <!-- FULLSCREEN GALLERY -->
         <div class="modal-images">
           <div class="gallery-stage">
             <div class="carousel" id="carousel"></div>
           </div>
         </div>
 
-        <!-- THUMBNAILS -->
         <div class="thumb-strip" id="thumbStrip"></div>
 
-        <!-- PRODUCT INFO -->
         <div class="modal-info">
           <section class="modal-section modal-main">
 
-            <!-- OLD BRAND ROW (kept for JS, hidden via CSS) -->
             <div class="brand-row" style="display:none;">
               <span id="modalBrand" class="brand-small"></span>
               <span class="dot">·</span>
               <span id="modalStockInline" class="stock-inline"></span>
             </div>
 
-            <!-- NEW PREMIUM TITLE ROW -->
-          <div class="modal-title-row">
-  <h2 id="modalTitle" class="modal-title"></h2>
+            <div class="modal-title-row">
+              <h2 id="modalTitle" class="modal-title"></h2>
+            </div>
 
+            <div class="price-row">
+              <div id="modalPrice" class="modal-price"></div>
+              <div id="stockBadge" class="stock-pill"></div>
+            </div>
 
-</div>
-
-
-<div class="price-row">
-  <div id="modalPrice" class="modal-price"></div>
-  <div id="stockBadge" class="stock-pill"></div>
-</div>
-
-
-            <!-- MATERIALS (DETAILS) -->
             <div class="section-title">Описание</div>
             <div id="modalMaterials" class="materials-block"></div>
-            
-<!-- SIZES -->
-<div class="sizes-label">Размеры</div>
 
-<div class="sizes-block">
+            <div class="sizes-label">Размеры</div>
 
-  <!-- Строка размеров — только размеры -->
-  <div class="sizes-row">
-    <div id="modalSizes" class="modal-sizes"></div>
-  </div>
+            <div class="sizes-block">
+              <div class="sizes-row">
+                <div id="modalSizes" class="modal-sizes"></div>
+              </div>
+            </div>
 
-</div>
+            <div class="delivery-inline">
+              <span class="delivery-icon">🚚</span>
+              <span class="delivery-text">
+                Доставка по РБ 2–3 дня<br>
+                Возврат 14 дней
+              </span>
+            </div>
 
-<!-- DELIVERY -->
-<div class="delivery-inline">
-  <span class="delivery-icon">🚚</span>
-  <span class="delivery-text">
-    Доставка по РБ 2–3 дня<br>
-    Возврат 14 дней
-  </span>
-</div>
+          </section>
+        </div>
+      </div>
 
-          </section> <!-- закрываем modal-section -->
-        </div> <!-- закрываем modal-info -->
-      </div> <!-- закрываем modal-body -->
-
-      <!-- FIXED ACTION BUTTONS -->
       <div class="modal-actions-fixed">
         <button id="reserveBtn" class="secondary reserve-btn">Забронировать</button>
         <button id="addToCartBtn" class="primary modal-cta">В корзину</button>
       </div>
 
-    </div> <!-- закрываем modal-content modal-product -->
-  </div> <!-- закрываем productModal -->
+    </div>
+  </div>
 
-
-
-         
   <!-- CATALOG VIEW -->
   <div id="catalogView">
 
@@ -123,14 +102,12 @@
       </div>
     </header>
 
-    <!-- MYSTERY BOX -->
     <section class="mystery-box" id="mysteryBox">
       <h2>🎁 Тайная коробка дня</h2>
       <p>Открой, чтобы узнать пару дня</p>
       <button id="openMysteryBtn" class="primary">Открыть</button>
     </section>
 
-    <!-- FILTERS -->
     <section class="filters" id="filtersSection">
       <div class="filter-row">
         <input id="searchInput" type="text" placeholder="Поиск модели..." />
@@ -152,10 +129,8 @@
       </div>
     </section>
 
-    <!-- CATALOG -->
     <main class="catalog" id="catalog"></main>
 
-    <!-- MYSTERY MODAL -->
     <div class="modal hidden" id="mysteryModal">
       <div class="modal-content" style="max-width: 420px; text-align:center;">
         <button id="closeMystery" class="close-btn">×</button>
@@ -171,7 +146,6 @@
       </div>
     </div>
 
-    <!-- CART DRAWER -->
     <div class="drawer hidden" id="cartDrawer">
       <div class="drawer-header">
         <strong>Корзина</strong>
@@ -191,142 +165,105 @@
 
   </div>
 
-  <!-- PRODUCT VIEW (Telegram SPA) -->
+  <!-- PRODUCT VIEW -->
   <div id="productView" class="hidden">
     <button id="browserBackBtn" class="browser-back hidden">← Назад</button>
   </div>
 
-<!-- PROFILE VIEW -->
-<div class="profile-shell">
+  <!-- PROFILE VIEW (NEW, CORRECT) -->
+  <div id="profileView" class="hidden">
+    <div class="profile-shell">
 
-  <!-- HEADER -->
-  <div class="profile-header-card">
-    <div>
-      <div class="profile-title">vulica.SNKRS</div>
-      <div class="profile-sub">твой сникер-аккаунт 👟</div>
-    </div>
-
-    <div class="profile-avatar-big">VS</div>
-  </div>
-
-  <!-- BALANCE CARD -->
-  <div class="balance-card">
-
-    <div class="balance-label">BALANCE</div>
-
-    <div class="balance-main">
-      <div class="balance-value" id="balanceAmount">35 BYN</div>
-      <img src="/static/shoe.png" class="balance-shoe" />
-    </div>
-
-    <div class="balance-status">
-      <span class="dot"></span>
-      доступно сейчас
-    </div>
-
-    <div class="balance-divider"></div>
-
-    <div class="balance-hint">
-      ⚡ экономишь на каждом дропе
-    </div>
-
-  </div>
-
-  <!-- FRIENDS ROW -->
-  <div class="friends-row">
-    <div class="friends-left">
-      👥 0 друзей
-    </div>
-
-    <div class="friends-right">
-      <div class="friends-bonus">+10 BYN</div>
-      <div class="friends-sub">за каждого друга</div>
-    </div>
-
-    <div class="arrow">›</div>
-  </div>
-
-  <!-- INVITE -->
-  <div class="invite-card">
-
-    <div class="invite-label">ТВОЯ ИНВАЙТ ССЫЛКА</div>
-
-    <div class="invite-row">
-      <div class="invite-link">
-        t.me/vulicaSNKRS_bot?start=...
+      <div class="profile-header-card">
+        <div>
+          <div class="profile-title">vulica.SNKRS</div>
+          <div class="profile-sub">твой сникер-аккаунт 👟</div>
+        </div>
+        <div class="profile-avatar-big">VS</div>
       </div>
 
-      <button class="copy-btn">📋</button>
-    </div>
+      <div class="balance-card">
+        <div class="balance-label">BALANCE</div>
 
-    <button class="invite-main-btn">
-      ⚡ Скопировать и пригласить
-    </button>
+        <div class="balance-main">
+          <div class="balance-value" id="balanceAmount">35 BYN</div>
+          <img src="/static/shoe.png" class="balance-shoe" />
+        </div>
 
-  </div>
-
-  <!-- BONUS SPLIT -->
-  <div class="bonus-split">
-
-    <div class="bonus-item plus">
-      <div class="value">+10 BYN</div>
-      <div class="sub">тебе</div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="bonus-item minus">
-      <div class="value">−10 BYN</div>
-      <div class="sub">другу</div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="bonus-item">
-      <div class="value">до 50%</div>
-      <div class="sub">можно оплатить</div>
-    </div>
-
-  </div>
-
-  <!-- QUICK START -->
-  <div class="quick-start">
-    <div class="qs-icon">✨</div>
-
-    <div class="qs-text">
-      <div class="qs-title">Быстрый старт 💡</div>
-      <div class="qs-sub">
-        Пригласи 2–3 друга и экономь ~20–30 BYN
+        <div class="balance-status">доступно сейчас</div>
+        <div class="balance-hint">⚡ экономишь на каждом дропе</div>
       </div>
-    </div>
 
-    <div class="arrow">›</div>
+      <div class="friends-row">
+        <div class="friends-left">👥 0 друзей</div>
+        <div class="friends-right">
+          <div class="friends-bonus">+10 BYN</div>
+          <div class="friends-sub">за каждого друга</div>
+        </div>
+        <div class="arrow">›</div>
+      </div>
+
+      <div class="invite-card">
+        <div class="invite-label">ТВОЯ ИНВАЙТ ССЫЛКА</div>
+
+        <div class="invite-row">
+          <div class="invite-link">t.me/vulicaSNKRS_bot?start=...</div>
+          <button class="copy-btn">📋</button>
+        </div>
+
+        <button class="invite-main-btn">⚡ Скопировать и пригласить</button>
+      </div>
+
+      <div class="bonus-split">
+        <div class="bonus-item plus">
+          <div class="value">+10 BYN</div>
+          <div class="sub">тебе</div>
+        </div>
+
+        <div class="bonus-item minus">
+          <div class="value">−10 BYN</div>
+          <div class="sub">другу</div>
+        </div>
+
+        <div class="bonus-item">
+          <div class="value">до 50%</div>
+          <div class="sub">можно оплатить</div>
+        </div>
+      </div>
+
+      <div class="quick-start">
+        <div class="qs-icon">✨</div>
+
+        <div class="qs-text">
+          <div class="qs-title">Быстрый старт 💡</div>
+          <div class="qs-sub">Пригласи 2–3 друга и экономь ~20–30 BYN</div>
+        </div>
+
+        <div class="arrow">›</div>
+      </div>
+
+      <div class="features-row">
+        <div class="feature">
+          <div class="icon">🚚</div>
+          <div class="title">Доставка</div>
+          <div class="sub">по РБ 2–3 дня</div>
+        </div>
+
+        <div class="feature">
+          <div class="icon">🛡</div>
+          <div class="title">Возврат</div>
+          <div class="sub">14 дней</div>
+        </div>
+
+        <div class="feature">
+          <div class="icon">⚡</div>
+          <div class="title">Начисление</div>
+          <div class="sub">мгновенно</div>
+        </div>
+      </div>
+
+    </div>
   </div>
-
-  <!-- BOTTOM FEATURES -->
-  <div class="features-row">
-
-    <div class="feature">
-      <div class="icon">🚚</div>
-      <div class="title">Доставка</div>
-      <div class="sub">по РБ 2–3 дня</div>
-    </div>
-
-    <div class="feature">
-      <div class="icon">🛡</div>
-      <div class="title">Возврат</div>
-      <div class="sub">14 дней</div>
-    </div>
-
-    <div class="feature">
-      <div class="icon">⚡</div>
-      <div class="title">Начисление</div>
-      <div class="sub">мгновенно</div>
-    </div>
-
-  </div>
-
-</div>
 
   <script src="/app.js?v=10"></script>
 
