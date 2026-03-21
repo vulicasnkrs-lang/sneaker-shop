@@ -1137,6 +1137,9 @@ html, body {
 .profile-shell {
   padding: 20px 16px 40px;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* HEADER */
@@ -1177,6 +1180,9 @@ html, body {
   border: none;
   padding: 0;
   margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .balance-label {
@@ -1193,7 +1199,7 @@ html, body {
 }
 
 .balance-value {
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
   color: #111;
 }
@@ -1230,7 +1236,7 @@ html, body {
   align-items: center;
   padding: 14px 0;
   border-bottom: 1px solid #eee;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .friends-left {
@@ -1240,7 +1246,7 @@ html, body {
 .friends-right {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 }
 
 .friends-bonus {
@@ -1249,7 +1255,7 @@ html, body {
 }
 
 .friends-sub {
-  color: #7a7a7a;
+  color: #777;
   font-size: 14px;
 }
 
@@ -1280,7 +1286,7 @@ html, body {
 }
 
 .invite-link {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #111;
   word-break: break-all;
