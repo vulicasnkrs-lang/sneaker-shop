@@ -1130,19 +1130,16 @@ html, body {
   color: rgba(0,0,0,0.55);
 }
 /* ============================
-   PROFILE VIEW — EXACT STYLE
+   PROFILE — EXACT LIKE PHOTO
    ============================ */
 
-/* SHELL */
+/* GLOBAL CLEANUP */
 .profile-shell {
-  padding: 22px 16px 40px;
-  max-width: 480px;
-  margin: 0 auto;
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
-  color: #111;
+  padding: 20px 16px 40px;
+  background: #fff;
 }
 
-/* HEADER CARD */
+/* HEADER */
 .profile-header-card {
   display: flex;
   justify-content: space-between;
@@ -1162,25 +1159,14 @@ html, body {
 }
 
 .profile-avatar-big {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #111;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
+  display: none; /* на фото аватара нет */
 }
 
-/* BALANCE CARD */
+/* BALANCE — NO CARD, NO BORDER */
 .balance-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px 16px 20px;
-  border: 1px solid #eee;
-  margin-bottom: 18px;
+  border: none;
+  padding: 0;
+  margin-bottom: 22px;
 }
 
 .balance-label {
@@ -1197,111 +1183,73 @@ html, body {
 }
 
 .balance-value {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
 }
 
 .balance-shoe {
-  width: 42px;
+  width: 40px;
   opacity: 0.9;
 }
 
 .balance-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   font-size: 14px;
   color: #666;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .balance-status .dot {
-  width: 6px;
-  height: 6px;
-  background: #0a7cff;
-  border-radius: 50%;
+  display: none; /* на фото точки нет */
 }
 
 .balance-divider {
-  height: 1px;
-  background: #eee;
-  margin: 14px 0;
+  display: none; /* на фото нет разделителя */
 }
 
 .balance-hint {
   font-size: 14px;
   color: #0a7cff;
+  margin-top: 6px;
 }
 
-/* FRIENDS ROW */
+/* FRIENDS ROW — INLINE LIKE PHOTO */
 .friends-row {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 14px 0;
   border-bottom: 1px solid #eee;
   font-size: 15px;
-}
-
-.friends-left {
-  color: #333;
 }
 
 .friends-right {
   text-align: right;
 }
 
-.friends-bonus {
-  font-weight: 600;
-}
-
-.friends-sub {
-  font-size: 13px;
-  color: #777;
-}
-
 .arrow {
   font-size: 20px;
   color: #bbb;
-  margin-left: 10px;
 }
 
-/* INVITE CARD */
+/* INVITE — NO CARD BORDER */
 .invite-card {
-  border: 1px solid #eee;
-  border-radius: 16px;
-  padding: 16px;
-  margin-top: 18px;
+  border: none;
+  padding: 0;
+  margin-top: 20px;
 }
 
 .invite-label {
   font-size: 12px;
   color: #999;
   letter-spacing: 0.08em;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .invite-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background: #f6f6f6;
   padding: 10px 12px;
   border-radius: 12px;
   margin-bottom: 12px;
-}
-
-.invite-link {
-  font-size: 13px;
-  color: #555;
-  word-break: break-all;
-}
-
-.copy-btn {
-  border: none;
-  background: none;
-  font-size: 18px;
-  cursor: pointer;
 }
 
 .invite-main-btn {
@@ -1313,21 +1261,18 @@ html, body {
   border-radius: 12px;
   font-size: 15px;
   font-weight: 600;
-  cursor: pointer;
 }
 
-/* BONUS SPLIT */
+/* BONUS SPLIT — INLINE LIKE PHOTO */
 .bonus-split {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   margin-top: 20px;
-  border: 1px solid #eee;
-  border-radius: 16px;
-  padding: 14px 0;
+  border: none;
+  padding: 0;
 }
 
 .bonus-item {
-  flex: 1;
   text-align: center;
 }
 
@@ -1341,27 +1286,16 @@ html, body {
   color: #777;
 }
 
-.bonus-item.plus .value {
-  color: #0a7cff;
-}
-
-.bonus-item.minus .value {
-  color: #d33;
-}
-
 .bonus-split .divider {
-  width: 1px;
-  background: #eee;
-  height: 32px;
+  display: none; /* на фото нет вертикальных линий */
 }
 
-/* QUICK START */
+/* QUICK START — SIMPLE TEXT BLOCK */
 .quick-start {
+  padding: 18px 0;
+  border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid #eee;
-  margin-top: 20px;
 }
 
 .qs-icon {
@@ -1383,7 +1317,7 @@ html, body {
   margin-left: auto;
 }
 
-/* FEATURES ROW */
+/* FEATURES — INLINE LIKE PHOTO */
 .features-row {
   display: flex;
   justify-content: space-between;
@@ -1392,12 +1326,10 @@ html, body {
 
 .feature {
   text-align: center;
-  flex: 1;
 }
 
 .feature .icon {
   font-size: 20px;
-  margin-bottom: 4px;
 }
 
 .feature .title {
