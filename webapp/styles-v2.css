@@ -1148,8 +1148,9 @@ html, body {
 }
 
 .profile-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .profile-sub {
@@ -1159,10 +1160,19 @@ html, body {
 }
 
 .profile-avatar-big {
-  display: none; /* на фото аватара нет */
+  font-size: 32px;
+  background-color: #f3f3f3;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  font-weight: 600;
 }
 
-/* BALANCE — NO CARD, NO BORDER */
+/* BALANCE */
 .balance-card {
   border: none;
   padding: 0;
@@ -1183,8 +1193,9 @@ html, body {
 }
 
 .balance-value {
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 700;
+  color: #111;
 }
 
 .balance-shoe {
@@ -1199,11 +1210,11 @@ html, body {
 }
 
 .balance-status .dot {
-  display: none; /* на фото точки нет */
+  display: none;
 }
 
 .balance-divider {
-  display: none; /* на фото нет разделителя */
+  display: none;
 }
 
 .balance-hint {
@@ -1212,7 +1223,7 @@ html, body {
   margin-top: 6px;
 }
 
-/* FRIENDS ROW — INLINE LIKE PHOTO */
+/* FRIENDS ROW */
 .friends-row {
   display: flex;
   justify-content: space-between;
@@ -1222,8 +1233,24 @@ html, body {
   font-size: 15px;
 }
 
+.friends-left {
+  color: #111;
+}
+
 .friends-right {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.friends-bonus {
+  color: #111;
+  font-weight: 600;
+}
+
+.friends-sub {
+  color: #7a7a7a;
+  font-size: 14px;
 }
 
 .arrow {
@@ -1231,7 +1258,7 @@ html, body {
   color: #bbb;
 }
 
-/* INVITE — NO CARD BORDER */
+/* INVITE */
 .invite-card {
   border: none;
   padding: 0;
@@ -1252,6 +1279,35 @@ html, body {
   margin-bottom: 12px;
 }
 
+.invite-link {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  word-break: break-all;
+  flex: 1;
+  padding-right: 10px;
+}
+
+.copy-btn {
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.copy-btn:hover {
+  background-color: #ececec;
+}
+
+.copy-btn:active {
+  background-color: #e5e5e5;
+}
+
 .invite-main-btn {
   width: 100%;
   background: #111;
@@ -1263,7 +1319,7 @@ html, body {
   font-weight: 600;
 }
 
-/* BONUS SPLIT — INLINE LIKE PHOTO */
+/* BONUS SPLIT */
 .bonus-split {
   display: flex;
   justify-content: space-between;
@@ -1287,10 +1343,10 @@ html, body {
 }
 
 .bonus-split .divider {
-  display: none; /* на фото нет вертикальных линий */
+  display: none;
 }
 
-/* QUICK START — SIMPLE TEXT BLOCK */
+/* QUICK START */
 .quick-start {
   padding: 18px 0;
   border-bottom: 1px solid #eee;
@@ -1317,7 +1373,7 @@ html, body {
   margin-left: auto;
 }
 
-/* FEATURES — INLINE LIKE PHOTO */
+/* FEATURES */
 .features-row {
   display: flex;
   justify-content: space-between;
