@@ -983,171 +983,42 @@ html, body {
   background: #f2f2f2;
   opacity: 0.9;
 }
-
 /* ========================= */
-/*   PROFILE — PREMIUM LAYER */
+/*      PROFILE — LAYOUT     */
 /* ========================= */
 
-#profileModal {
-  position: fixed;
-  inset: 0;
-
-  /* глубокий, мягкий, дорогой слой */
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(22px) saturate(180%);
-  -webkit-backdrop-filter: blur(22px) saturate(180%);
-
+#profileView {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .45s cubic-bezier(.25,.46,.45,.94);
-
-  z-index: 9999;
+  padding: 16px 12px 24px;
+  background: #f3f4f6;
 }
 
-#profileModal.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-#profileModal .profile-modal {
-  width: 100%;
-  max-width: 520px;
-  height: 92vh;
-
-  background: rgba(255,255,255,0.82);
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
-
-  border-radius: 28px 28px 0 0;
-  overflow: hidden;
-
-  transform: translateY(60px);
-  opacity: 0;
-
-  box-shadow:
-    0 -2px 18px rgba(0,0,0,0.06),
-    0 -12px 42px rgba(0,0,0,0.12);
-
-  transition:
-    transform .55s cubic-bezier(.25,.46,.45,.94),
-    opacity .55s ease;
-}
-
-#profileModal.open .profile-modal {
-  transform: translateY(0);
-  opacity: 1;
-}
-.profile-header {
-  padding: 32px 26px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(18px) saturate(180%);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.profile-header .profile-avatar {
-  width: 78px;
-  height: 78px;
-  border-radius: 999px;
-  background: #f2f2f2;
-  overflow: hidden;
-  box-shadow:
-    inset 0 1px 4px rgba(255,255,255,0.65),
-    0 4px 14px rgba(0,0,0,0.08);
-}
-
-.profile-name {
-  font-size: 22px;
-  font-weight: 650;
-  letter-spacing: -0.3px;
-}
-
-.profile-username {
-  font-size: 14px;
-  color: rgba(0,0,0,0.45);
-}
-.profile-tabs {
-  display: flex;
-  gap: 8px;
-  padding: 16px 20px;
-  background: transparent;
-}
-
-.profile-tab {
-  flex: 1;
-  padding: 12px 0;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(0,0,0,0.06);
-
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(0,0,0,0.65);
-
-  transition: all .25s ease;
-}
-
-.profile-tab.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.18),
-    inset 0 0 12px rgba(255,255,255,0.22);
-}
-.profile-section .order-item {
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-
-.order-item .date {
-  font-size: 13px;
-  color: rgba(0,0,0,0.45);
-  margin-bottom: 6px;
-}
-
-.order-item .price {
-  font-size: 18px;
-  font-weight: 650;
-  margin-bottom: 6px;
-}
-
-.order-item .title {
-  font-size: 15px;
-  font-weight: 550;
-  color: rgba(0,0,0,0.92);
-}
-
-.order-item .meta {
-  font-size: 13px;
-  color: rgba(0,0,0,0.55);
-}
-/* ============================
-   PROFILE — EXACT LIKE PHOTO
-   ============================ */
-
-/* GLOBAL CLEANUP */
 .profile-shell {
-  padding: 20px 16px 40px;
-  background: #fff;
+  width: 100%;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
-/* HEADER */
+/* ========================= */
+/*        PROFILE CARD       */
+/* ========================= */
+
+.profile-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px 16px 20px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.06);
+}
+
+/* ========================= */
+/*          HEADER           */
+/* ========================= */
+
 .profile-header-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 22px;
+  padding: 4px 2px 0;
 }
 
 .profile-title {
@@ -1162,24 +1033,11 @@ html, body {
   margin-top: 2px;
 }
 
-.profile-avatar-big {
-  font-size: 32px;
-  background-color: #f3f3f3;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #111;
-  font-weight: 600;
-}
+/* ========================= */
+/*          BALANCE          */
+/* ========================= */
 
-/* BALANCE */
 .balance-card {
-  border: none;
-  padding: 0;
-  margin-bottom: 22px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1189,7 +1047,6 @@ html, body {
   font-size: 12px;
   color: #999;
   letter-spacing: 0.1em;
-  margin-bottom: 6px;
 }
 
 .balance-main {
@@ -1212,31 +1069,22 @@ html, body {
 .balance-status {
   font-size: 14px;
   color: #666;
-  margin-top: 6px;
-}
-
-.balance-status .dot {
-  display: none;
-}
-
-.balance-divider {
-  display: none;
 }
 
 .balance-hint {
   font-size: 14px;
   color: #0a7cff;
-  margin-top: 6px;
 }
 
-/* FRIENDS ROW */
+/* ========================= */
+/*          FRIENDS          */
+/* ========================= */
+
 .friends-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .friends-left {
@@ -1244,19 +1092,17 @@ html, body {
 }
 
 .friends-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  text-align: right;
 }
 
 .friends-bonus {
-  color: #111;
   font-weight: 600;
+  color: #111;
 }
 
 .friends-sub {
+  font-size: 13px;
   color: #777;
-  font-size: 14px;
 }
 
 .arrow {
@@ -1264,12 +1110,9 @@ html, body {
   color: #bbb;
 }
 
-/* INVITE */
-.invite-card {
-  border: none;
-  padding: 0;
-  margin-top: 20px;
-}
+/* ========================= */
+/*           INVITE          */
+/* ========================= */
 
 .invite-label {
   font-size: 12px;
@@ -1283,15 +1126,17 @@ html, body {
   padding: 10px 12px;
   border-radius: 12px;
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
 }
 
 .invite-link {
   font-size: 14px;
   font-weight: 600;
   color: #111;
-  word-break: break-all;
   flex: 1;
   padding-right: 10px;
+  word-break: break-all;
 }
 
 .copy-btn {
@@ -1303,15 +1148,6 @@ html, body {
   font-weight: 600;
   color: #111;
   cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.copy-btn:hover {
-  background-color: #ececec;
-}
-
-.copy-btn:active {
-  background-color: #e5e5e5;
 }
 
 .invite-main-btn {
@@ -1325,22 +1161,19 @@ html, body {
   font-weight: 600;
 }
 
-/* BONUS SPLIT */
+/* ========================= */
+/*        BONUS SPLIT        */
+/* ========================= */
+
 .bonus-split {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
-  border: none;
-  padding: 0;
-}
-
-.bonus-item {
   text-align: center;
 }
 
 .bonus-item .value {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .bonus-item .sub {
@@ -1348,21 +1181,18 @@ html, body {
   color: #777;
 }
 
-.bonus-split .divider {
-  display: none;
-}
+/* ========================= */
+/*        QUICK START        */
+/* ========================= */
 
-/* QUICK START */
 .quick-start {
-  padding: 18px 0;
-  border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .qs-icon {
   font-size: 20px;
-  margin-right: 12px;
 }
 
 .qs-title {
@@ -1379,19 +1209,45 @@ html, body {
   margin-left: auto;
 }
 
-/* FEATURES */
+/* ========================= */
+/*         FEATURES          */
+/* ========================= */
+
 .features-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
-}
-
-.feature {
   text-align: center;
 }
 
-.feature .icon {
-  font-size: 20px;
+.feature {
+  flex: 1;
+}
+
+.icon {
+  width: 26px;
+  height: 26px;
+  margin: 0 auto 6px;
+  display: block;
+  filter: grayscale(1);
+  opacity: 0.9;
+}
+
+/* Delivery */
+.icon-delivery::before {
+  content: "📦";
+  font-size: 26px;
+}
+
+/* Return */
+.icon-return::before {
+  content: "↩︎";
+  font-size: 26px;
+}
+
+/* Bolt */
+.icon-bolt::before {
+  content: "⚡";
+  font-size: 26px;
 }
 
 .feature .title {
@@ -1403,3 +1259,4 @@ html, body {
   font-size: 12px;
   color: #777;
 }
+
