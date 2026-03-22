@@ -171,14 +171,14 @@
   </div>
 
   <!-- PROFILE VIEW (NEW, CORRECT) -->
- <div id="profileView" class="hidden">
+<div id="profileView" class="hidden">
   <div class="profile-shell">
 
     <!-- HEADER -->
     <div class="profile-header-card">
       <div>
         <div class="profile-title">vulica.SNKRS</div>
-        <div class="profile-sub">твой сникер-аккаунт 👟</div>
+        <div class="profile-sub">твой сникер-аккаунт</div>
       </div>
     </div>
 
@@ -192,12 +192,12 @@
       </div>
 
       <div class="balance-status">доступно сейчас</div>
-      <div class="balance-hint">⚡ экономишь на каждом дропе</div>
+      <div class="balance-hint">экономишь на каждом дропе</div>
     </div>
 
     <!-- FRIENDS -->
     <div class="friends-row profile-card">
-      <div class="friends-left">👥 0 друзей</div>
+      <div class="friends-left">0 друзей</div>
       <div class="friends-right">
         <div class="friends-bonus">+10 BYN</div>
         <div class="friends-sub">за каждого друга</div>
@@ -214,7 +214,7 @@
         <button class="copy-btn">📋</button>
       </div>
 
-      <button class="invite-main-btn">⚡ Скопировать и пригласить</button>
+      <button class="invite-main-btn">Скопировать и пригласить</button>
     </div>
 
     <!-- BONUS SPLIT -->
@@ -237,10 +237,15 @@
 
     <!-- QUICK START -->
     <div class="quick-start profile-card">
-      <div class="qs-icon">✨</div>
+      <div class="qs-icon">
+        <!-- Sparkle SVG -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L13.8 8.2L20 10L13.8 11.8L12 18L10.2 11.8L4 10L10.2 8.2L12 2Z" fill="#111"/>
+        </svg>
+      </div>
 
       <div class="qs-text">
-        <div class="qs-title">Быстрый старт 💡</div>
+        <div class="qs-title">Быстрый старт</div>
         <div class="qs-sub">Пригласи 2–3 друга и экономь ~20–30 BYN</div>
       </div>
 
@@ -250,20 +255,37 @@
     <!-- FEATURES -->
     <div class="features-row profile-card">
 
+      <!-- DELIVERY -->
       <div class="feature">
-        <div class="icon icon-delivery"></div>
+        <div class="icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M3 7H15V17H3V7Z M15 10H19L21 13V17H15V10Z" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/>
+            <circle cx="7" cy="17" r="2" fill="#111"/>
+            <circle cx="17" cy="17" r="2" fill="#111"/>
+          </svg>
+        </div>
         <div class="title">Доставка</div>
         <div class="sub">по РБ 2–3 дня</div>
       </div>
 
+      <!-- RETURN -->
       <div class="feature">
-        <div class="icon icon-return"></div>
+        <div class="icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M4 12L9 7V10H17C19.2 10 21 11.8 21 14C21 16.2 19.2 18 17 18H9" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <div class="title">Возврат</div>
         <div class="sub">14 дней</div>
       </div>
 
+      <!-- FLASH -->
       <div class="feature">
-        <div class="icon icon-bolt"></div>
+        <div class="icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M13 2L3 14H11L9 22L19 10H11L13 2Z" fill="#111"/>
+          </svg>
+        </div>
         <div class="title">Начисление</div>
         <div class="sub">мгновенно</div>
       </div>
@@ -272,6 +294,7 @@
 
   </div>
 </div>
+
 
 
   <script src="/app.js?v=10"></script>
