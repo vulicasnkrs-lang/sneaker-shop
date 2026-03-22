@@ -1191,8 +1191,8 @@ html, body {
   gap: 12px;
 }
 
-.qs-icon {
-  font-size: 20px;
+.qs-icon svg {
+  display: block;
 }
 
 .qs-title {
@@ -1223,31 +1223,9 @@ html, body {
   flex: 1;
 }
 
-.icon {
-  width: 26px;
-  height: 26px;
-  margin: 0 auto 6px;
+.feature .icon svg {
   display: block;
-  filter: grayscale(1);
-  opacity: 0.9;
-}
-
-/* Delivery */
-.icon-delivery::before {
-  content: "📦";
-  font-size: 26px;
-}
-
-/* Return */
-.icon-return::before {
-  content: "↩︎";
-  font-size: 26px;
-}
-
-/* Bolt */
-.icon-bolt::before {
-  content: "⚡";
-  font-size: 26px;
+  margin: 0 auto 6px;
 }
 
 .feature .title {
