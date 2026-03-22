@@ -171,99 +171,108 @@
   </div>
 
   <!-- PROFILE VIEW (NEW, CORRECT) -->
-  <div id="profileView" class="hidden">
-    <div class="profile-shell">
+ <div id="profileView" class="hidden">
+  <div class="profile-shell">
 
-      <div class="profile-header-card">
-        <div>
-          <div class="profile-title">vulica.SNKRS</div>
-          <div class="profile-sub">твой сникер-аккаунт 👟</div>
-        </div>
-        <div class="profile-avatar-big">VS</div>
+    <!-- HEADER -->
+    <div class="profile-header-card">
+      <div>
+        <div class="profile-title">vulica.SNKRS</div>
+        <div class="profile-sub">твой сникер-аккаунт 👟</div>
+      </div>
+    </div>
+
+    <!-- BALANCE -->
+    <div class="balance-card profile-card">
+      <div class="balance-label">BALANCE</div>
+
+      <div class="balance-main">
+        <div class="balance-value" id="balanceAmount">35 BYN</div>
+        <img src="/static/shoe.png" class="balance-shoe" />
       </div>
 
-      <div class="balance-card">
-        <div class="balance-label">BALANCE</div>
+      <div class="balance-status">доступно сейчас</div>
+      <div class="balance-hint">⚡ экономишь на каждом дропе</div>
+    </div>
 
-        <div class="balance-main">
-          <div class="balance-value" id="balanceAmount">35 BYN</div>
-          <img src="/static/shoe.png" class="balance-shoe" />
-        </div>
+    <!-- FRIENDS -->
+    <div class="friends-row profile-card">
+      <div class="friends-left">👥 0 друзей</div>
+      <div class="friends-right">
+        <div class="friends-bonus">+10 BYN</div>
+        <div class="friends-sub">за каждого друга</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
 
-        <div class="balance-status">доступно сейчас</div>
-        <div class="balance-hint">⚡ экономишь на каждом дропе</div>
+    <!-- INVITE -->
+    <div class="invite-card profile-card">
+      <div class="invite-label">ТВОЯ ИНВАЙТ ССЫЛКА</div>
+
+      <div class="invite-row">
+        <div class="invite-link">t.me/vulicaSNKRS_bot?start=...</div>
+        <button class="copy-btn">📋</button>
       </div>
 
-      <div class="friends-row">
-        <div class="friends-left">👥 0 друзей</div>
-        <div class="friends-right">
-          <div class="friends-bonus">+10 BYN</div>
-          <div class="friends-sub">за каждого друга</div>
-        </div>
-        <div class="arrow">›</div>
+      <button class="invite-main-btn">⚡ Скопировать и пригласить</button>
+    </div>
+
+    <!-- BONUS SPLIT -->
+    <div class="bonus-split profile-card">
+      <div class="bonus-item plus">
+        <div class="value">+10 BYN</div>
+        <div class="sub">тебе</div>
       </div>
 
-      <div class="invite-card">
-        <div class="invite-label">ТВОЯ ИНВАЙТ ССЫЛКА</div>
-
-        <div class="invite-row">
-          <div class="invite-link">t.me/vulicaSNKRS_bot?start=...</div>
-          <button class="copy-btn">📋</button>
-        </div>
-
-        <button class="invite-main-btn">⚡ Скопировать и пригласить</button>
+      <div class="bonus-item minus">
+        <div class="value">−10 BYN</div>
+        <div class="sub">другу</div>
       </div>
 
-      <div class="bonus-split">
-        <div class="bonus-item plus">
-          <div class="value">+10 BYN</div>
-          <div class="sub">тебе</div>
-        </div>
+      <div class="bonus-item">
+        <div class="value">до 50%</div>
+        <div class="sub">можно оплатить</div>
+      </div>
+    </div>
 
-        <div class="bonus-item minus">
-          <div class="value">−10 BYN</div>
-          <div class="sub">другу</div>
-        </div>
+    <!-- QUICK START -->
+    <div class="quick-start profile-card">
+      <div class="qs-icon">✨</div>
 
-        <div class="bonus-item">
-          <div class="value">до 50%</div>
-          <div class="sub">можно оплатить</div>
-        </div>
+      <div class="qs-text">
+        <div class="qs-title">Быстрый старт 💡</div>
+        <div class="qs-sub">Пригласи 2–3 друга и экономь ~20–30 BYN</div>
       </div>
 
-      <div class="quick-start">
-        <div class="qs-icon">✨</div>
+      <div class="arrow">›</div>
+    </div>
 
-        <div class="qs-text">
-          <div class="qs-title">Быстрый старт 💡</div>
-          <div class="qs-sub">Пригласи 2–3 друга и экономь ~20–30 BYN</div>
-        </div>
+    <!-- FEATURES -->
+    <div class="features-row profile-card">
 
-        <div class="arrow">›</div>
+      <div class="feature">
+        <div class="icon icon-delivery"></div>
+        <div class="title">Доставка</div>
+        <div class="sub">по РБ 2–3 дня</div>
       </div>
 
-      <div class="features-row">
-        <div class="feature">
-          <div class="icon">🚚</div>
-          <div class="title">Доставка</div>
-          <div class="sub">по РБ 2–3 дня</div>
-        </div>
+      <div class="feature">
+        <div class="icon icon-return"></div>
+        <div class="title">Возврат</div>
+        <div class="sub">14 дней</div>
+      </div>
 
-        <div class="feature">
-          <div class="icon">🛡</div>
-          <div class="title">Возврат</div>
-          <div class="sub">14 дней</div>
-        </div>
-
-        <div class="feature">
-          <div class="icon">⚡</div>
-          <div class="title">Начисление</div>
-          <div class="sub">мгновенно</div>
-        </div>
+      <div class="feature">
+        <div class="icon icon-bolt"></div>
+        <div class="title">Начисление</div>
+        <div class="sub">мгновенно</div>
       </div>
 
     </div>
+
   </div>
+</div>
+
 
   <script src="/app.js?v=10"></script>
 
