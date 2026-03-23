@@ -1098,10 +1098,11 @@ html, body {
 
 .friends-row {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  align-items: center;
   font-size: 15px;
 }
+
 
 .friends-left {
   color: #111;
@@ -1169,9 +1170,10 @@ html, body {
 
 .bonus-split {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  justify-content: space-between;
+  align-items: center;
 }
+
 
 .bonus-item .value {
   font-size: 15px;
@@ -1205,9 +1207,10 @@ html, body {
 
 .features-row {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  justify-content: space-between;
+  gap: 12px;
 }
+
 
 .feature {
   display: flex;
