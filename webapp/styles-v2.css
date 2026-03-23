@@ -1067,8 +1067,8 @@ html, body {
 
 .balance-main {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 6px;
 }
 
 .balance-value {
@@ -1078,33 +1078,30 @@ html, body {
 }
 
 .balance-shoe {
-  width: 32px;
+  width: 28px;
   opacity: 0.9;
+  transform: translateY(1px);
 }
-
 
 .balance-status {
   font-size: 14px;
   color: #555;
-  background: #f2f2f2;
+  background: #f3f3f3;
   padding: 4px 10px;
   border-radius: 8px;
   width: fit-content;
 }
 
+.balance-divider {
+  height: 1px;
+  background: #eee;
+  margin: 4px 0;
+}
 
 .balance-hint {
   font-size: 14px;
   font-weight: 600;
   color: #444;
-}
-
-
-.balance-divider {
-  height: 1px;
-  background: #eee;
-  margin-top: 4px;
-  margin-bottom: 4px;
 }
 
 
