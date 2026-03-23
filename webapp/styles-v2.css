@@ -1191,15 +1191,31 @@ html, body {
 
 .bonus-split {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* три части по горизонтали */
   align-items: center;
+  gap: 12px; /* как на референсе — лёгкий воздух между частями */
 }
 
-
-.bonus-item .value {
+.bonus-item {
   font-size: 15px;
   font-weight: 600;
+  white-space: nowrap; /* чтобы строки не переносились */
+}
+
+/* зелёный */
+.bonus-you {
+  color: #1a9f3b;
+}
+
+/* красный */
+.bonus-friend {
+  color: #d93025;
+}
+
+/* чёрный + меньше вес */
+.bonus-limit {
   color: #111;
+  font-weight: 500;
 }
 
 /* ========================= */
