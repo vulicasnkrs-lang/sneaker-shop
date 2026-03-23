@@ -1056,7 +1056,7 @@ html, body {
 .balance-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .balance-label {
@@ -1078,19 +1078,21 @@ html, body {
 }
 
 .balance-shoe {
-  width: 40px;
+  width: 32px;
   opacity: 0.9;
 }
 
+
 .balance-status {
   font-size: 14px;
-  color: #666;
+  color: #777;
 }
 
 .balance-hint {
   font-size: 14px;
-  color: #0a7cff;
+  color: #555; /* мягкий серый */
 }
+
 
 /* ========================= */
 /*          FRIENDS          */
