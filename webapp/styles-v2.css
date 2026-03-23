@@ -1105,10 +1105,6 @@ html, body {
 }
 
 
-/* ========================= */
-/*          FRIENDS          */
-/* ========================= */
-
 .friends-row {
   display: flex;
   justify-content: space-between;
@@ -1116,9 +1112,21 @@ html, body {
   font-size: 15px;
 }
 
-
 .friends-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: #111;
+}
+
+.friends-icon {
+  font-size: 18px;      /* идеальный размер */
+  line-height: 1;
+  transform: translateY(1px); /* baseline alignment */
+}
+
+.friends-count {
+  font-weight: 600;
 }
 
 .friends-right {
