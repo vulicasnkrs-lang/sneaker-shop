@@ -1085,12 +1085,25 @@ html, body {
 
 .balance-status {
   font-size: 14px;
+  color: #555;
+  background: #f2f2f2;
+  padding: 4px 10px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+
+.balance-hint {
+  font-size: 13px;
   color: #777;
 }
 
-.balance-hint {
-  font-size: 14px;
-  color: #555; /* мягкий серый */
+
+.balance-divider {
+  height: 1px;
+  background: #eee;
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 
 
