@@ -1317,33 +1317,143 @@ html, body {
 }
 
 /* ========================= */
-/*         FEATURES          */
+/*      FEATURES ULTRA       */
 /* ========================= */
 
 .features-row {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
+
+  padding: 18px 14px;
 }
 
-
+/* колонка */
 .feature {
+  flex: 1;
+
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: center;
+
+  text-align: center;
+
+  transition: all 0.18s ease;
 }
 
-.feature .icon {
-  font-size: 22px;
+/* ========================= */
+/*   GLASS ICON (APPLE STYLE)*/
+/* ========================= */
+
+.feature-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 8px;
+
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(0,0,0,0.04);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -2px 6px rgba(0,0,0,0.05),
+    0 6px 14px rgba(0,0,0,0.06);
+
+  transition: all 0.2s ease;
 }
 
-.feature .title {
+/* SVG стиль */
+.feature-icon svg {
+  width: 20px;
+  height: 20px;
+
+  stroke: #111;
+  stroke-width: 1.6;
+  fill: none;
+
+  opacity: 0.9;
+}
+
+/* lightning fill */
+.feature:nth-child(5) .feature-icon svg {
+  fill: #111;
+  stroke: none;
+}
+
+/* ========================= */
+/* TEXT                      */
+/* ========================= */
+
+.feature-title {
   font-size: 14px;
   font-weight: 600;
+  color: #111;
 }
 
-.feature .sub {
+.feature-sub {
   font-size: 12px;
-  color: #777;
+  color: #8e8e93;
+  margin-top: 2px;
 }
 
+/* ========================= */
+/* DIVIDER                   */
+/* ========================= */
+
+.feature-separator {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0),
+    rgba(0,0,0,0.12),
+    rgba(0,0,0,0)
+  );
+}
+
+/* ========================= */
+/* INTERACTIONS (TELEGRAM)   */
+/* ========================= */
+
+.feature:active {
+  transform: scale(0.9);
+  opacity: 0.7;
+}
+
+.feature:active .feature-icon {
+  transform: scale(0.92);
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,0.08),
+    0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* hover (desktop) */
+.feature:hover {
+  transform: translateY(-2px);
+}
+
+/* ========================= */
+/* APPEAR ANIMATION          */
+/* ========================= */
+
+.feature {
+  animation: featureIn 0.4s ease;
+}
+
+@keyframes featureIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
