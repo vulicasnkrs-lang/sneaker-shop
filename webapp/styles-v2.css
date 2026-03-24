@@ -1193,8 +1193,10 @@ html, body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 0; /* выше */
+  padding: 8px 0;
+  margin: 8px 0; /* ← ключ */
 }
+
 
 .bonus-item {
   font-size: 15px;
