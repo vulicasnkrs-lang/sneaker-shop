@@ -1192,40 +1192,47 @@ html, body {
 .bonus-split {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  margin: 8px 0;
-  min-height: 32px; /* ключ */
+  justify-content: space-between;
+  padding: 14px 16px;
 }
 
-.bonus-item {
-  font-size: 15px;
-  font-weight: 600;
-  white-space: nowrap;
-  line-height: 1.35; /* выше */
+.bonus-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
 }
 
+.bonus-value {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* подписи снизу */
+.bonus-label {
+  font-size: 13px;
+  color: #8e8e93;
+}
+
+/* разделители */
 .bonus-separator {
   width: 1px;
-  height: 24px; /* выше */
-  background-color: #e5e5e5;
+  height: 32px;
+  background: #e5e5e5;
 }
 
-
-/* зелёный */
+/* цвета */
 .bonus-you {
   color: #1a9f3b;
 }
 
-/* красный */
 .bonus-friend {
   color: #d93025;
 }
 
-/* чёрный, мягче */
 .bonus-limit {
   color: #111;
-  opacity: 0.85;
 }
 
 
