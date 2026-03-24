@@ -1191,15 +1191,24 @@ html, body {
 
 .bonus-split {
   display: flex;
-  justify-content: space-between; /* три части по горизонтали */
   align-items: center;
-  gap: 12px; /* как на референсе — лёгкий воздух между частями */
+  gap: 12px;            /* расстояние между текстом и линиями */
+  padding: 6px 0;       /* делает блок выше — как на референсе */
 }
 
+/* общий стиль текста */
 .bonus-item {
   font-size: 15px;
   font-weight: 600;
-  white-space: nowrap; /* чтобы строки не переносились */
+  white-space: nowrap;
+  line-height: 1.1;     /* плотная форма */
+}
+
+/* вертикальные разделители */
+.bonus-separator {
+  width: 1px;
+  height: 16px;         /* высота как на референсе */
+  background-color: #e5e5e5;
 }
 
 /* зелёный */
@@ -1212,11 +1221,12 @@ html, body {
   color: #d93025;
 }
 
-/* чёрный + меньше вес */
+/* чёрный, мягче */
 .bonus-limit {
   color: #111;
-  font-weight: 500;
+  opacity: 0.85;
 }
+
 
 /* ========================= */
 /*        QUICK START        */
