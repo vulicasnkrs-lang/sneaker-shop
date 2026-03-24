@@ -1192,24 +1192,23 @@ html, body {
 .bonus-split {
   display: flex;
   align-items: center;
-  gap: 12px;            /* расстояние между текстом и линиями */
-  padding: 6px 0;       /* делает блок выше — как на референсе */
+  gap: 12px;
+  padding: 8px 0; /* выше */
 }
 
-/* общий стиль текста */
 .bonus-item {
   font-size: 15px;
   font-weight: 600;
   white-space: nowrap;
-  line-height: 1.1;     /* плотная форма */
+  line-height: 1.25; /* выше */
 }
 
-/* вертикальные разделители */
 .bonus-separator {
   width: 1px;
-  height: 16px;         /* высота как на референсе */
+  height: 20px; /* выше */
   background-color: #e5e5e5;
 }
+
 
 /* зелёный */
 .bonus-you {
