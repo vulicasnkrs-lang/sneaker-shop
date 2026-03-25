@@ -1079,18 +1079,66 @@ function attachEvents() {
       closeProductModal();
     });
   }
-
-    window.addEventListener('keydown', (e) => {
+  window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeCart();
       closeProductModal();
       closeMysteryModal();
-      // профиля как модалки больше нет — ничего не закрываем
     }
   });
 
-}
+ 
+  /* ========================= */
+  /*      INVITE MAIN BTN      */
+  /* ========================= */
 
+  const inviteBtn = document.querySelector('.invite-main-btn');
+
+  if (inviteBtn) {
+    inviteBtn.addEventListener('click', async (e) => {
+      addRippleEffect(inviteBtn, e);
+
+      const text = document.querySelector('.invite-link')?.textContent;
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+
+        tg?.HapticFeedback?.impactOccurred('medium');
+
+        inviteBtn.textContent = '✅ Скопировано';
+
+        setTimeout(() => {
+          inviteBtn.textContent = '⚡ Скопировать и пригласить';
+        }, 1500);
+
+      } catch {
+        alert('Ошибка');
+      }
+    });
+  }
+
+  /* ========================= */
+  /*       QUICK START TAP     */
+  /* ========================= */
+
+  const quickStart = document.querySelector('.quick-start');
+
+  if (quickStart) {
+    quickStart.addEventListener('click', () => {
+      tg?.HapticFeedback?.impactOccurred('light');
+
+      const inviteBlock = document.querySelector('.invite-card');
+      if (inviteBlock) {
+        inviteBlock.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    });
+  }
+}
+   
 /* ========================= */
 /*   SECTION OBSERVER        */
 /* ========================= */
@@ -1179,5 +1227,49 @@ function initParallaxGallery() {
     setTimeout(updateActiveState, 80);
   });
 }
+
+/* ========================= */
+/*   GLOBAL CLICK HANDLER    */
+/* ========================= */
+
+document.addEventListener('click', async (e) => {
+
+  /* COPY BTN */
+  const copyBtn = e.target.closest('.copy-btn');
+  if (copyBtn) {
+    const text = document.querySelector('.invite-link')?.textContent;
+    if (!text) return;
+
+    try {
+      await navigator.clipboard.writeText(text);
+
+      tg?.HapticFeedback?.notificationOccurred('success');
+
+      copyBtn.innerHTML = `
+        <svg viewBox="0 0 24 24">
+          <path d="M5 13L9 17L19 7"/>
+        </svg>
+      `;
+
+      copyBtn.classList.add('copied');
+
+      setTimeout(() => {
+        copyBtn.innerHTML = `
+          <svg viewBox="0 0 24 24">
+            <path d="M9 9H19V19H9Z"/>
+            <path d="M5 5H15V15H5Z"/>
+          </svg>
+        `;
+        copyBtn.classList.remove('copied');
+      }, 1500);
+
+    } catch {
+      alert('Ошибка копирования');
+    }
+
+    return;
+  }
+
+});
 
 document.addEventListener("DOMContentLoaded", init);
