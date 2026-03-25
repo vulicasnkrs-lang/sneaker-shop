@@ -198,12 +198,11 @@
 
 
    <!-- FRIENDS -->
-<div class="profile-card friends-row">
+<div class="profile-card friends-row" id="friendsCard">
 
   <div class="friends-left">
 
     <div class="friends-icon">
-      <!-- USERS ICON -->
       <svg viewBox="0 0 24 24">
         <path d="M16 11C17.66 11 19 9.66 19 8C19 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11Z"/>
         <path d="M8 11C9.66 11 11 9.66 11 8C11 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11Z"/>
@@ -213,16 +212,19 @@
     </div>
 
     <div class="friends-text">
-      <div class="friends-count">0 друзей</div>
+      <div class="friends-count" id="friendsCount">0 друзей</div>
       <div class="friends-sub">твоя сеть</div>
     </div>
 
   </div>
 
   <div class="friends-right">
-    +10 BYN<br>
-    <span>за каждого</span>
+    <div class="friends-bonus pulse">+10 BYN</div>
+    <div class="friends-bonus-sub">за каждого друга</div>
   </div>
+
+  <!-- shimmer overlay -->
+  <div class="friends-shimmer"></div>
 
 </div>
 
