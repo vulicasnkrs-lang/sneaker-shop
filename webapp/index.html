@@ -183,19 +183,30 @@
     </div>
 
 <!-- BALANCE -->
-<div class="profile-card balance-card">
-  <div class="balance-label">BALANCE</div>
+<div class="profile-card balance-card" id="balanceCard">
+
+  <div class="balance-top">
+    <div class="balance-label">BALANCE</div>
+    <div class="balance-chip">● доступно</div>
+  </div>
 
   <div class="balance-main">
-    <div class="balance-value">35 BYN</div>
+    <div class="balance-value" id="balanceValue">35</div>
+    <div class="balance-currency">BYN</div>
+
     <img src="/static/images/shoe.png" class="balance-shoe" />
   </div>
 
-  <div class="balance-status">доступно сейчас</div>
   <div class="balance-divider"></div>
-  <div class="balance-hint">🔥 экономь на каждом дропе</div>
-</div>
 
+  <div class="balance-bottom">
+    <div class="balance-hint">🔥 экономь на каждом дропе</div>
+  </div>
+
+  <!-- glow -->
+  <div class="balance-glow"></div>
+
+</div>
 
    <!-- FRIENDS -->
 <div class="profile-card friends-row" id="friendsCard">
