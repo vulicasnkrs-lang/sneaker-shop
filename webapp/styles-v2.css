@@ -1104,75 +1104,75 @@ html, body {
   color: #444;
 }
 
-
 /* ========================= */
-/*        FRIENDS ULTRA      */
+/*        FRIENDS GOD        */
 /* ========================= */
 
 .friends-row {
+  position: relative;
+  overflow: hidden;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   padding: 14px;
 
-  border-radius: 16px;
+  border-radius: 18px;
 
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(14px);
 
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.04);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.8),
-    0 4px 14px rgba(0,0,0,0.06);
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 6px 18px rgba(0,0,0,0.06);
 
   transition: all 0.18s ease;
 }
 
-/* левая часть */
+/* ========================= */
+/* LEFT                      */
+/* ========================= */
+
 .friends-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* иконка */
 .friends-icon {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-
-  background: #f4f4f6;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  background: linear-gradient(180deg, #f7f7f8, #ececef);
+
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.7),
-    0 3px 8px rgba(0,0,0,0.05);
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    0 4px 10px rgba(0,0,0,0.06);
 }
 
 .friends-icon svg {
   width: 18px;
   height: 18px;
-
   stroke: #111;
-  stroke-width: 1.5;
+  stroke-width: 1.6;
   fill: none;
 }
 
-/* текст */
-.friends-text {
-  display: flex;
-  flex-direction: column;
-}
+/* ========================= */
+/* TEXT                      */
+/* ========================= */
 
 .friends-count {
   font-size: 15px;
   font-weight: 600;
-  color: #111;
 }
 
 .friends-sub {
@@ -1180,30 +1180,87 @@ html, body {
   color: #8e8e93;
 }
 
-/* правая часть */
+/* ========================= */
+/* RIGHT                     */
+/* ========================= */
+
 .friends-right {
   text-align: right;
-
-  font-size: 15px;
-  font-weight: 700;
-  color: #111;
-
-  line-height: 1.2;
 }
 
-.friends-right span {
+.friends-bonus {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.friends-bonus-sub {
   font-size: 12px;
-  font-weight: 500;
   color: #8e8e93;
+}
+
+/* ========================= */
+/* 💚 PULSE                  */
+/* ========================= */
+
+.pulse {
+  position: relative;
+}
+
+.pulse::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+
+  border-radius: 10px;
+  background: rgba(26,159,59,0.15);
+
+  opacity: 0;
+  animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.1); }
+}
+
+/* ========================= */
+/* ✨ SHIMMER                */
+/* ========================= */
+
+.friends-shimmer {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255,255,255,0.6) 40%,
+    transparent 60%
+  );
+
+  transform: translateX(-100%);
+  animation: shimmer 1.4s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* ========================= */
 /* INTERACTION               */
 /* ========================= */
 
+.friends-row:hover {
+  transform: translateY(-1px);
+}
+
 .friends-row:active {
-  transform: scale(0.97);
-  opacity: 0.8;
+  transform: scale(0.96);
+  opacity: 0.85;
 }
 
 
